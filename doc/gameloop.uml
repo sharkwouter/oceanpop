@@ -5,9 +5,9 @@ start
 
 :Generate board;
 :Remove matches from board;
-:Start drawing board;
 
 while (Game is running?) is (yes)
+    :Start drawing new board;
     repeat
         :Player moves selection;
         :Player selects gem;
