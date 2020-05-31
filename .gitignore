@@ -34,6 +34,8 @@ match-theory
 
 # IDEs and text editors
 .vscode
+.idea/
 
 # Build directories
 build/
+cmake-build-debug/
