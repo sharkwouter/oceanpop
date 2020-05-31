@@ -1,9 +1,10 @@
 #include <iostream>
 #include <stdexcept>
 #include "Window.hpp"
+#include "StateManager.hpp"
 #include "utils.hpp"
 
-void handle_input(Window &window) {
+void handle_input(Window &window, StateManager &stateManager) {
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
         switch (event.type) {
@@ -15,11 +16,15 @@ void handle_input(Window &window) {
 
 void run() {
     Window window("Match Theory", 800, 600);
+    StateManager stateManager;
 
     while (!window.should_close) {
-        handle_input(window);
+        handle_input(window, stateManager);
+
+        stateManager.update();
+
         window.clear();
-        // Draw here
+        stateManager.draw();
         window.present();
     }
 }
