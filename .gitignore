@@ -34,3 +34,6 @@ match-theory
 
 # IDEs and text editors
 .vscode
+
+# Build directories
+build/
