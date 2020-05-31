@@ -31,3 +31,6 @@
 *.out
 *.app
 match-theory
+
+# IDEs and text editors
+.vscode
