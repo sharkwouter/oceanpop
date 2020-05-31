@@ -19,16 +19,6 @@ Window::Window(const std::string &title, int width, int height) {
     this->should_close = false;
 }
 
-void Window::handle_input() {
-    SDL_Event event;
-    while (SDL_PollEvent(&event)) {
-        switch (event.type) {
-        case SDL_QUIT:
-            this->should_close = true;
-        }
-    }
-}
-
 void Window::clear() {
     SDL_RenderClear(this->renderer);
 }

@@ -11,7 +11,6 @@ public:
     bool should_close;
 
     Window(const std::string &title, int width, int height);
-    void handle_input();
     void clear();
     void present();
     ~Window();
