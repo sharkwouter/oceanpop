@@ -9,6 +9,7 @@ Match Theory is a match 3 game. The player moves gems to make matches of 3 or mo
 ## Game Loop
 
 This is how the basic game loop will look like approximately:
+
 ![](/doc/gameloop.png)
 
 ## Game Rules
