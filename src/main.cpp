@@ -16,7 +16,7 @@ void handle_input(Window &window, StateManager &stateManager) {
 
 void run() {
     Window window("Match Theory", 800, 600);
-    StateManager stateManager = StateManager();
+    StateManager stateManager;
 
     while (!window.should_close) {
         handle_input(window, stateManager);
