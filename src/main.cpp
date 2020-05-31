@@ -5,6 +5,12 @@
 
 void run() {
     Window window("Match Theory", 800, 600);
+
+    while (!window.should_close) {
+        window.handle_input();
+        window.update();
+        window.draw();
+    }
 }
 
 int main() {
