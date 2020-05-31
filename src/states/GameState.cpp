@@ -1,5 +1,4 @@
 #include "GameState.hpp"
-#include "../utils.hpp"
 
 GameState::GameState() : board(Board(0,0, 8,7 )){
 }

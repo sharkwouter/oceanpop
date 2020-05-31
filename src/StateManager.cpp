@@ -1,7 +1,6 @@
 #include "StateManager.hpp"
 
 StateManager::StateManager() {
-    currentState = GameState();
 }
 
 void StateManager::update() {
