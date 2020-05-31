@@ -5,7 +5,7 @@ StateManager::StateManager() {
 }
 
 void StateManager::update() {
-    currentState.update();
+    this->currentState.update();
 }
 
 void StateManager::draw() {
