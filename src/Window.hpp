@@ -4,8 +4,7 @@
 #include <SDL.h>
 #include <string>
 
-class Window
-{
+class Window {
 public:
     SDL_Window *window;
     SDL_Renderer *renderer;
@@ -13,8 +12,8 @@ public:
 
     Window(const std::string &title, int width, int height);
     void handle_input();
-    void update();
-    void draw();
+    void clear();
+    void present();
     ~Window();
 };
 

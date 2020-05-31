@@ -8,8 +8,9 @@ void run() {
 
     while (!window.should_close) {
         window.handle_input();
-        window.update();
-        window.draw();
+        window.clear();
+        // Draw here
+        window.present();
     }
 }
 

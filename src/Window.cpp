@@ -29,12 +29,11 @@ void Window::handle_input() {
     }
 }
 
-void Window::update() {
-    // Do nothing.
+void Window::clear() {
+    SDL_RenderClear(this->renderer);
 }
 
-void Window::draw() {
-    SDL_RenderClear(this->renderer);
+void Window::present() {
     SDL_RenderPresent(this->renderer);
 }
 
