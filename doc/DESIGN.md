@@ -15,6 +15,6 @@ This is how the basic game loop will look like approximately:
 ## Game Rules
 
 The game has the following rules:
-- Gems can be moved either horizontall or vertically, not both.
+- Gems can be moved either horizontally or vertically, not both.
 - Gems can only be moved by making matches.
 - Gems can be moved as far as the player would like.
