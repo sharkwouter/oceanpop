@@ -5,7 +5,7 @@
 #include <stdexcept>
 
 inline void panic(const std::string &reason) {
-    throw new std::runtime_error(reason.c_str());
+    throw std::runtime_error(reason.c_str());
 }
 
 inline void todo() {
