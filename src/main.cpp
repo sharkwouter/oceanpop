@@ -3,6 +3,7 @@
 #include "Window.hpp"
 #include "StateManager.hpp"
 #include "utils.hpp"
+#include "constants.hpp"
 
 void handle_input(Window &window, StateManager &stateManager) {
     SDL_Event event;
@@ -15,7 +16,7 @@ void handle_input(Window &window, StateManager &stateManager) {
 }
 
 void run() {
-    Window window("Match Theory", 800, 600);
+    Window window("Match Theory", SCREEN_WIDTH, SCREEN_HEIGHT);
     StateManager stateManager;
 
     while (!window.should_close) {

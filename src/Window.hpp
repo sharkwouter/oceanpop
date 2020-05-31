@@ -11,9 +11,10 @@ public:
     bool should_close;
 
     Window(const std::string &title, int width, int height);
+    ~Window();
+
     void clear();
     void present();
-    ~Window();
 };
 
 #endif // WINDOW_HPP
