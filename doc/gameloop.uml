@@ -1,0 +1,29 @@
+@startuml
+title Game loop
+
+start
+
+:Generate board;
+:Remove matches from board;
+:Draw board;
+
+while (Game is running?) is (yes)
+repeat
+:Player moves selection;
+:Player selects gem;
+:Player moves selected gem;
+:Player confirms gem placement;
+repeat while (Location valid?) is (no)
+
+while (Matches found?) is (yes)
+:Count matches;
+:Add score;
+:Remove matches from board;
+:Fill empty spaces with random gems;
+endwhile (no)
+
+endwhile (no)
+
+stop
+
+@enduml
