@@ -4,15 +4,17 @@
 #include <vector>
 #include "Gem.hpp"
 
+
 class Board {
 private:
+    int width;
+    int height;
     std::vector<std::vector<Gem>> gems;
 public:
-    Board(int x, int y, int width, int height);
-    ~Board();
+    Board(int starting_point_x, int starting_point_y, int width, int height);
 
     void update();
-    void draw();
+    void draw(SDL_Renderer *renderer);
 };
 
 #endif // BOARD_HPP
