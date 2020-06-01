@@ -3,23 +3,17 @@
 
 #include <SDL.h>
 
-enum class GemType {
-    RED,
-    GREEN,
-    BLUE
-};
-
 class Gem {
 private:
     SDL_Texture *texture;
-    SDL_Rect rect;
+    SDL_Rect src;
+    int x;
+    int y;
 public:
-    Gem(int x, int y, GemType type, SDL_Renderer *renderer);
-    ~Gem();
+    Gem(int x, int y, SDL_Texture *texture, SDL_Rect &src, int dst_x, int dst_y);
 
     void update();
     void draw(SDL_Renderer *renderer);
-    void set_position(int x, int y);
 };
 
 #endif // GEM_HPP

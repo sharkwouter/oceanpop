@@ -1,46 +1,21 @@
 #include "Gem.hpp"
 #include "utils.hpp"
 
-Gem::Gem(int x, int y, GemType type, SDL_Renderer *renderer) {
-    SDL_Surface *img = nullptr;
-    switch (type) {
-    case GemType::RED:
-        img = SDL_LoadBMP("../assets/images/gems.png");
-        break;
-    case GemType::GREEN:
-        img = SDL_LoadBMP("../assets/images/gems.png");
-        break;
-    case GemType::BLUE:
-        img = SDL_LoadBMP("../assets/images/gems.png");
-        break;
-    }
-
-    if (img == nullptr) {
-        panic("couldn't load bmp file: " + std::string(SDL_GetError()));
-    }
-
-    this->texture = SDL_CreateTextureFromSurface(renderer, img);
-    SDL_FreeSurface(img);
-
-    if (this->texture == nullptr) {
-        panic("couldn't create texture from surface: " + std::string(SDL_GetError()));
-    }
-
-    SDL_QueryTexture(this->texture, nullptr, nullptr, &this->rect.w, &this->rect.h);
-
-    this->rect.x = x;
-    this->rect.y = y;
+Gem::Gem(int x, int y, SDL_Texture *texture, SDL_Rect &src, int dst_x, int dst_y) {
+    this->texture = texture;
+    this->src = src;
+    this->x = dst_x;
+    this->y = dst_y;
 }
+
+void Gem::update() {}
 
 void Gem::draw(SDL_Renderer *renderer) {
-    SDL_RenderCopy(renderer, this->texture, nullptr, &this->rect);
-}
+    SDL_Rect dst;
+    dst.x = this->x;
+    dst.y = this->y;
+    dst.w = this->src.w;
+    dst.h = this->src.h;
 
-void Gem::set_position(int x, int y) {
-    this->rect.x = x;
-    this->rect.y = y;
-}
-
-Gem::~Gem() {
-    SDL_DestroyTexture(this->texture);
+    SDL_RenderCopy(renderer, this->texture, &this->src, &dst);
 }
