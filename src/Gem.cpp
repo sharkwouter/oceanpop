@@ -1,7 +1,7 @@
 #include "Gem.hpp"
 #include "utils.hpp"
 
-Gem::Gem(int x, int y, SDL_Texture *texture, SDL_Rect &src, int dst_x, int dst_y) {
+Gem::Gem(int dst_x, int dst_y, SDL_Texture *texture, SDL_Rect &src) {
     this->texture = texture;
     this->src = src;
     this->x = dst_x;

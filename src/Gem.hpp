@@ -10,7 +10,7 @@ private:
     int x;
     int y;
 public:
-    Gem(int x, int y, SDL_Texture *texture, SDL_Rect &src, int dst_x, int dst_y);
+    Gem(int dst_x, int dst_y, SDL_Texture *texture, SDL_Rect &src);
 
     void update();
     void draw(SDL_Renderer *renderer);
