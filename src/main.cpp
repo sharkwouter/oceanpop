@@ -17,15 +17,15 @@ void handle_input(Window &window, StateManager &stateManager) {
 
 void run() {
     Window window("Match Theory", SCREEN_WIDTH, SCREEN_HEIGHT);
-    StateManager stateManager;
+    StateManager state_manager;
 
     while (!window.should_close) {
-        handle_input(window, stateManager);
+        handle_input(window, state_manager);
 
-        stateManager.update();
+        state_manager.update();
 
         window.clear();
-        stateManager.draw();
+        state_manager.draw();
         window.present();
     }
 }
