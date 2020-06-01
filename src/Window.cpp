@@ -1,9 +1,14 @@
+#include <SDL_image.h>
 #include "Window.hpp"
 #include "utils.hpp"
 
 Window::Window(const std::string &title, int width, int height) {
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0) {
         panic("couldn't init SDL: " + std::string(SDL_GetError()));
+    }
+
+    if ((IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG) != IMG_INIT_PNG) {
+        panic("couldn't init SDL_image: " + std::string(IMG_GetError()));
     }
 
     this->window = SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, SDL_WINDOW_SHOWN);
