@@ -11,7 +11,7 @@ public:
     ~StateManager();
 
     void update();
-    void draw();
+    void draw(SDL_Renderer *renderer);
 };
 
 #endif // STATEMANAGER_HPP

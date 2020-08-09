@@ -27,7 +27,7 @@ void run() {
         state_manager.update();
 
         window.clear();
-        state_manager.draw();
+        state_manager.draw(window.renderer);
         window.present();
     }
 }

@@ -4,7 +4,7 @@
 class BaseState {
 public:
     virtual void update() = 0;
-    virtual void draw() = 0;
+    virtual void draw(SDL_Renderer *renderer) = 0;
 };
 
 #endif // BASESTATE_HPP
