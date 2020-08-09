@@ -5,7 +5,7 @@
 #include "TextureManager.hpp"
 #include "utils.hpp"
 #include "constants.hpp"
-#include "GameState.hpp"
+#include "states/GameState.hpp"
 
 void handle_input(Window &window, StateManager &stateManager) {
     SDL_Event event;
