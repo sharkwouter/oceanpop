@@ -4,7 +4,6 @@
 #include <vector>
 #include "Gem.hpp"
 
-
 class Board {
 private:
     int width;
