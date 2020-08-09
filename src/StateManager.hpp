@@ -1,8 +1,8 @@
 #ifndef STATEMANAGER_HPP
 #define STATEMANAGER_HPP
 
-#include "states/BaseState.hpp"
 #include <SDL.h>
+#include "states/BaseState.hpp"
 
 class StateManager {
 private:

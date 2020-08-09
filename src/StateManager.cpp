@@ -8,11 +8,6 @@ void StateManager::update() {
     this->currentState->update();
 }
 
-<<<<<<< HEAD
 void StateManager::draw(SDL_Renderer *renderer) {
-    this->currentState.draw(renderer);
-=======
-void StateManager::draw() {
-    this->currentState->draw();
->>>>>>> origin/master
+    this->currentState->draw(renderer);
 }
