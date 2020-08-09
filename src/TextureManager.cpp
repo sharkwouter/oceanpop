@@ -2,6 +2,8 @@
 #include "TextureManager.hpp"
 #include "utils.hpp"
 
+TextureManager::TextureManager() {}
+
 TextureManager::~TextureManager() {
     for (auto &pair : this->textures) {
         if (pair.second != nullptr) {

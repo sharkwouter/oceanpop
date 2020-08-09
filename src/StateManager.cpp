@@ -1,5 +1,9 @@
 #include "StateManager.hpp"
 
+StateManager::StateManager() {}
+
+StateManager::~StateManager() {}
+
 void StateManager::update() {
     this->currentState.update();
 }

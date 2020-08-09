@@ -35,9 +35,8 @@ void run() {
 int main() {
     try {
         run();
-    } catch (std::runtime_error &e) {
-        std::cerr << "Panicked at '" << e.what() << "'." << std::endl;
-        return EXIT_FAILURE;
+    } catch (...) {
+        std::rethrow_exception(std::current_exception());
     }
 
     return EXIT_SUCCESS;
