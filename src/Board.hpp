@@ -5,7 +5,6 @@
 #include <SDL.h>
 #include "Gem.hpp"
 
-
 class Board {
 private:
     int width;

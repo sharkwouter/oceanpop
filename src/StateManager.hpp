@@ -1,13 +1,14 @@
 #ifndef STATEMANAGER_HPP
 #define STATEMANAGER_HPP
 
-#include "states/GameState.hpp"
+#include "states/BaseState.hpp"
+#include <SDL.h>
 
 class StateManager {
 private:
-    GameState currentState;
+    BaseState *currentState;
 public:
-    StateManager();
+    StateManager(BaseState *initial_state);
     ~StateManager();
 
     void update();
