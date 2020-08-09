@@ -25,6 +25,7 @@ Window::Window(const std::string &title, int width, int height) {
 }
 
 void Window::clear() {
+    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
     SDL_RenderClear(this->renderer);
 }
 
