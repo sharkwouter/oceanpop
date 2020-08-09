@@ -1,6 +1,7 @@
 #ifndef STATEMANAGER_HPP
 #define STATEMANAGER_HPP
 
+#include <SDL.h>
 #include "states/BaseState.hpp"
 
 class StateManager {
@@ -11,7 +12,7 @@ public:
     ~StateManager();
 
     void update();
-    void draw();
+    void draw(SDL_Renderer *renderer);
 };
 
 #endif // STATEMANAGER_HPP
