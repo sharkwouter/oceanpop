@@ -1,6 +1,7 @@
 #ifndef GAMESTATE_HPP
 #define GAMESTATE_HPP
 
+#include <SDL.h>
 #include "BaseState.hpp"
 #include "../Board.hpp"
 
@@ -12,7 +13,7 @@ public:
     ~GameState();
 
     void update();
-    void draw();
+    void draw(SDL_Renderer *renderer);
 };
 
 #endif // GAMESTATE_HPP
