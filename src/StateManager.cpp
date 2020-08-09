@@ -1,7 +1,8 @@
 #include "StateManager.hpp"
 
-StateManager::StateManager() {
-}
+StateManager::StateManager() {}
+
+StateManager::~StateManager() {}
 
 void StateManager::update() {
     this->currentState.update();
@@ -9,8 +10,4 @@ void StateManager::update() {
 
 void StateManager::draw() {
     this->currentState.draw();
-}
-
-StateManager::~StateManager() {
-
 }

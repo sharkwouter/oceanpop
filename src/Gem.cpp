@@ -1,22 +1,21 @@
 #include "Gem.hpp"
 #include "utils.hpp"
 
-Gem::Gem(int x, int y, GemType type) {
-    todo();
+Gem::Gem(int dst_x, int dst_y, SDL_Texture *texture, SDL_Rect &src) {
+    this->texture = texture;
+    this->src = src;
+    this->x = dst_x;
+    this->y = dst_y;
 }
 
-void Gem::update() {
-    todo();
-}
+void Gem::update() {}
 
-void Gem::draw() {
-    todo();
-}
+void Gem::draw(SDL_Renderer *renderer) {
+    SDL_Rect dst;
+    dst.x = this->x;
+    dst.y = this->y;
+    dst.w = this->src.w;
+    dst.h = this->src.h;
 
-void Gem::set_position(int x, int y) {
-    todo();
-}
-
-Gem::~Gem() {
-
+    SDL_RenderCopy(renderer, this->texture, &this->src, &dst);
 }

@@ -2,7 +2,9 @@
 #include <stdexcept>
 #include "Window.hpp"
 #include "StateManager.hpp"
+#include "TextureManager.hpp"
 #include "utils.hpp"
+#include "constants.hpp"
 
 void handle_input(Window &window, StateManager &stateManager) {
     SDL_Event event;
@@ -15,16 +17,17 @@ void handle_input(Window &window, StateManager &stateManager) {
 }
 
 void run() {
-    Window window("Match Theory", 800, 600);
-    StateManager stateManager;
+    Window window("Match Theory", SCREEN_WIDTH, SCREEN_HEIGHT);
+    StateManager state_manager;
+    TextureManager texture_manager;
 
     while (!window.should_close) {
-        handle_input(window, stateManager);
+        handle_input(window, state_manager);
 
-        stateManager.update();
+        state_manager.update();
 
         window.clear();
-        stateManager.draw();
+        state_manager.draw();
         window.present();
     }
 }
@@ -32,9 +35,8 @@ void run() {
 int main() {
     try {
         run();
-    } catch (std::runtime_error &e) {
-        std::cerr << "Panicked at '" << e.what() << "'." << std::endl;
-        return EXIT_FAILURE;
+    } catch (...) {
+        std::rethrow_exception(std::current_exception());
     }
 
     return EXIT_SUCCESS;

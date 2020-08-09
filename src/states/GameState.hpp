@@ -1,10 +1,10 @@
-#ifndef BASESTATE_HPP
-#define BASESTATE_HPP
+#ifndef GAMESTATE_HPP
+#define GAMESTATE_HPP
 
+#include "BaseState.hpp"
 #include "../Board.hpp"
 
-class GameState
-{
+class GameState : public BaseState {
 private:
     Board board;
 public:
@@ -15,4 +15,4 @@ public:
     void draw();
 };
 
-#endif // BASESTATE_HPP
+#endif // GAMESTATE_HPP

@@ -3,8 +3,7 @@
 
 #include "states/GameState.hpp"
 
-class StateManager
-{
+class StateManager {
 private:
     GameState currentState;
 public:

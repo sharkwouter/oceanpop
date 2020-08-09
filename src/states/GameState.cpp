@@ -1,14 +1,9 @@
 #include "GameState.hpp"
 
-GameState::GameState() : board(Board(0, 0, 8, 7)){
-}
+GameState::GameState() : board(Board(0, 0, 8, 7)) {}
 
-void GameState::update() {
-}
+GameState::~GameState() {}
 
-void GameState::draw() {
-}
+void GameState::update() {}
 
-GameState::~GameState() {
-
-}
+void GameState::draw() {}
