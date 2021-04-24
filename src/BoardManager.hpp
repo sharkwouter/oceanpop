@@ -5,6 +5,7 @@
 #include "Board.hpp"
 #include "constants.hpp"
 #include "Gem.hpp"
+#include "TextureManager.hpp"
 
 class BoardManager {
 
@@ -16,8 +17,12 @@ private:
     int end_x;
     int end_y;
 
+    std::string image_gems = "images/gems.png";
+
+    TextureManager textures;
+
 public:
-    BoardManager(int x, int y, int width, int height);
+    BoardManager(SDL_Renderer *renderer, int x, int y, int width, int height);
 
     void update();
     void draw(SDL_Renderer *renderer);

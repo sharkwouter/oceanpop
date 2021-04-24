@@ -19,7 +19,7 @@ void handle_input(Window &window, StateManager &stateManager) {
 
 void run() {
     Window window("Match Theory", SCREEN_WIDTH, SCREEN_HEIGHT);
-    StateManager state_manager(new GameState());
+    StateManager state_manager(new GameState(window.renderer));
     TextureManager texture_manager;
 
     while (!window.should_close) {

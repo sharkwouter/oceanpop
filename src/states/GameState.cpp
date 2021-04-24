@@ -1,7 +1,7 @@
 #include "GameState.hpp"
 
-GameState::GameState() : board(0, 0, 8, 7) {
-    
+GameState::GameState(SDL_Renderer *renderer) : board(renderer, 0, 0, 8, 7) {
+
 }
 
 GameState::~GameState() {}

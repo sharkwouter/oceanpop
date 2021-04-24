@@ -1,11 +1,14 @@
 #include "BoardManager.hpp"
 
-BoardManager::BoardManager(int x, int y, int width, int height) : board(width, height) {
+BoardManager::BoardManager(SDL_Renderer *renderer, int x, int y, int width, int height) : board(width, height) {
     this->start_x = x;
     this->start_y = y;
 
     this->end_x = GEM_SIZE * this->board.getWidth() + this->start_x;
     this->end_y = GEM_SIZE * this->board.getHeight() + this->start_y;
+
+
+    textures.add_texture(image_gems, renderer);
 }
 
 void BoardManager::update() {
@@ -36,39 +39,51 @@ void BoardManager::draw(SDL_Renderer *renderer) {
 
     for (int y = 0; y < this->board.getHeight(); y++) {
         for (int x = 0; x < this->board.getWidth(); x++) {
+            SDL_Rect srcrect;
+            srcrect.w = 32;
+            srcrect.h = 32;
+
             switch (this->board.gems[y][x]) {
                 case RED:
-                    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+                    srcrect.x = 374;
+                    srcrect.y = 70;
                     break;
                 case ORANGE:
-                    SDL_SetRenderDrawColor(renderer, 255, 255, 0, 255);
+                    srcrect.x = 374;
+                    srcrect.y = 169;
                     break;
                 case GREEN:
-                    SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
+                    srcrect.x = 169;
+                    srcrect.y = 136;
                     break;
                 case BLUE:
-                    SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
+                    srcrect.x = 169;
+                    srcrect.y = 169;
                     break;
                 case PURPLE:
-                    SDL_SetRenderDrawColor(renderer, 255, 0, 255, 255);
+                    srcrect.x = 169;
+                    srcrect.y = 268;
                     break;
                 case GRAY:
-                    SDL_SetRenderDrawColor(renderer, 100, 100, 100, 255);
+                    srcrect.x = 374;
+                    srcrect.y = 202;
                     break;
                 case BROWN:
-                    SDL_SetRenderDrawColor(renderer, 255, 200, 200, 255);
+                    srcrect.x = 169;
+                    srcrect.y = 37;
                     break;
                 default:
-                    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+                    srcrect.x = 4;
+                    srcrect.y = 4;
                     break;
             }
 
-            SDL_Rect rect;
-            rect.x = GEM_SIZE * x + this->start_x + 1;
-            rect.y = GEM_SIZE * y + this->start_y + 1;
-            rect.w = GEM_SIZE - 1;
-            rect.h = GEM_SIZE - 1;
-            SDL_RenderFillRect(renderer, &rect);
+            SDL_Rect dstrect;
+            dstrect.x = GEM_SIZE * x + this->start_x + 1;
+            dstrect.y = GEM_SIZE * y + this->start_y + 1;
+            dstrect.w = GEM_SIZE - 1;
+            dstrect.h = GEM_SIZE - 1;
+            SDL_RenderCopy(renderer, textures.get(image_gems), &srcrect, &dstrect);
         }
     }
 }

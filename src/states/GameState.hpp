@@ -9,7 +9,7 @@ class GameState : public BaseState {
 private:
     BoardManager board;
 public:
-    GameState();
+    GameState(SDL_Renderer *renderer);
     ~GameState();
 
     void update();
