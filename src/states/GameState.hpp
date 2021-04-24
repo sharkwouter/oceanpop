@@ -3,11 +3,11 @@
 
 #include <SDL.h>
 #include "BaseState.hpp"
-#include "../Board.hpp"
+#include "../BoardManager.hpp"
 
 class GameState : public BaseState {
 private:
-    Board board;
+    BoardManager board;
 public:
     GameState();
     ~GameState();
