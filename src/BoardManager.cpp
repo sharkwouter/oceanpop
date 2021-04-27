@@ -44,31 +44,31 @@ void BoardManager::draw(SDL_Renderer *renderer) {
             srcrect.h = 32;
 
             switch (this->board.gems[y][x]) {
-                case RED:
+                case Gem::RED:
                     srcrect.x = 374;
                     srcrect.y = 70;
                     break;
-                case ORANGE:
+                case Gem::ORANGE:
                     srcrect.x = 374;
                     srcrect.y = 169;
                     break;
-                case GREEN:
+                case Gem::GREEN:
                     srcrect.x = 169;
                     srcrect.y = 136;
                     break;
-                case BLUE:
+                case Gem::BLUE:
                     srcrect.x = 169;
                     srcrect.y = 169;
                     break;
-                case PURPLE:
+                case Gem::PURPLE:
                     srcrect.x = 169;
                     srcrect.y = 268;
                     break;
-                case GRAY:
+                case Gem::GRAY:
                     srcrect.x = 374;
                     srcrect.y = 202;
                     break;
-                case BROWN:
+                case Gem::BROWN:
                     srcrect.x = 169;
                     srcrect.y = 37;
                     break;

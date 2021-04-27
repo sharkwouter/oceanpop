@@ -1,7 +1,7 @@
 #ifndef GEM_HPP
 #define GEM_HPP
 
-enum Gem {
+enum class Gem {
         RED,
         ORANGE,
         GREEN,

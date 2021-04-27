@@ -7,7 +7,7 @@ Board::Board(int width, int height) {
         this->gems[y].reserve(width);
         for (int x = 0; x < width; x++) {
             // TODO: Add gems.
-            this->gems[y].push_back((Gem) (rand() % NUMBER_OF_COLORS));
+            this->gems[y].push_back((Gem) (rand() % (int) Gem::NUMBER_OF_COLORS));
         }
     }
 }
