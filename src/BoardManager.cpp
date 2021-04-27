@@ -1,5 +1,8 @@
 #include "BoardManager.hpp"
 
+#include <iostream>
+#include <string>
+
 BoardManager::BoardManager(SDL_Renderer *renderer, int x, int y, int width, int height) : board(width, height) {
     this->start_x = x;
     this->start_y = y;
@@ -10,6 +13,20 @@ BoardManager::BoardManager(SDL_Renderer *renderer, int x, int y, int width, int 
 
     textures.add_texture(image_gems, renderer);
 }
+
+void BoardManager::handleEvents(std::vector<Event> events) {
+    for (Event e: events) {
+        switch (e) {
+            case Event::LEFT:
+            std::cout << "left" << std::endl;
+                break;
+            
+            default:
+                break;
+        }
+    }
+}
+
 
 void BoardManager::update() {
 }

@@ -1,11 +1,13 @@
 #ifndef BOARDMANAGER_HPP
 #define BOARDMANAGER_HPP
 
+#include <vector>
 #include <SDL.h>
 #include "Board.hpp"
 #include "constants.hpp"
 #include "Gem.hpp"
 #include "TextureManager.hpp"
+#include "Event.hpp"
 
 class BoardManager {
 
@@ -24,6 +26,7 @@ private:
 public:
     BoardManager(SDL_Renderer *renderer, int x, int y, int width, int height);
 
+    void handleEvents(std::vector<Event> events);
     void update();
     void draw(SDL_Renderer *renderer);
 
