@@ -19,6 +19,9 @@ private:
     int end_x;
     int end_y;
 
+    int selected_x;
+    int selected_y;
+
     std::string image_gems = "images/gems.png";
 
     TextureManager textures;
