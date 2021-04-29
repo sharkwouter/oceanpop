@@ -84,6 +84,7 @@ void BoardManager::draw(SDL_Renderer *renderer) {
         );
     }
 
+    // Draw the gems
     for (int y = 0; y < this->board.getHeight(); y++) {
         for (int x = 0; x < this->board.getWidth(); x++) {
             SDL_Rect srcrect;
