@@ -8,6 +8,10 @@ void StateManager::update() {
     this->currentState->update();
 }
 
+void StateManager::handleEvents(std::vector<Event> events) {
+    this->currentState->handleEvents(events);
+}
+
 void StateManager::draw(SDL_Renderer *renderer) {
     this->currentState->draw(renderer);
 }
