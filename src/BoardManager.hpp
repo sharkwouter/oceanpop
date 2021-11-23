@@ -8,6 +8,7 @@
 #include "Gem.hpp"
 #include "TextureManager.hpp"
 #include "Event.hpp"
+#include "Action.hpp"
 
 class BoardManager {
 
@@ -22,12 +23,16 @@ private:
     int selected_x;
     int selected_y;
 
+    SDL_Point picked;
+
     std::string image_gems = "images/gems.png";
 
     TextureManager textures;
 
+    Action current_action;
+
 public:
-    BoardManager(SDL_Renderer *renderer, int x, int y, int width, int height);
+    BoardManager(SDL_Renderer *renderer, int x, int y);
 
     void handleEvents(std::vector<Event> events);
     void update();
