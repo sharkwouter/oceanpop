@@ -46,5 +46,8 @@ Event EventManager::getEventFromKeyboard(SDL_Keycode key) {
             case SDLK_ESCAPE:
                 return Event::MENU;
                 break;
+            default:
+                return Event::OTHER;
+                break;
         }
 }
