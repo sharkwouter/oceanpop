@@ -105,10 +105,10 @@ void Board::swap(SDL_Point p1, SDL_Point p2) {
 
 }
 
-int Board::getWidth() {
-    return gems.size();
-}
-
 int Board::getHeight() {
     return gems[0].size();
+}
+
+int Board::getWidth() {
+    return gems.size();
 }
