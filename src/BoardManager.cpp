@@ -7,8 +7,8 @@ BoardManager::BoardManager(SDL_Renderer *renderer, int x, int y, int width, int 
     this->start_x = x;
     this->start_y = y;
 
-    this->end_x = GEM_SIZE * width + this->start_x;
-    this->end_y = GEM_SIZE * height + this->start_y;
+    this->end_x = GEM_SIZE * this->board.getWidth() + this->start_x;
+    this->end_y = GEM_SIZE * this->board.getHeight() + this->start_y;
 
     this->selected_x = 3;
     this->selected_y = 3;
