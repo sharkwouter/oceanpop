@@ -9,6 +9,9 @@ class Board {
 
 private:
     std::vector<std::vector<Gem>> gems;
+
+    bool isWithinBounds(SDL_Point point);
+    bool typeWouldMatchOnPoint(Gem type, SDL_Point point);
 public:
     Board(int width, int height);
 
@@ -18,7 +21,7 @@ public:
 
     bool hasEmpty();
 
-    void swap(SDL_Point p1, SDL_Point p2);
+    bool swap(SDL_Point p1, SDL_Point p2);
 
     int getWidth();
     int getHeight();

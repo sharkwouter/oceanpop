@@ -36,6 +36,19 @@ void BoardManager::handleEvents(std::vector<Event> events) {
             case Event::DOWN:
                 selected_y += 1;
                 break;
+            case Event::CONFIRM:
+                if (this->current_action == Action::PICKING) {
+                    this->picked = {selected_x, selected_y};
+                    this->current_action = Action::MOVING;
+                } else if (this->current_action == Action::MOVING) {
+                    if (this->board.swap(picked, {selected_x, selected_y})) {
+                        this->current_action = Action::FALLING;
+                    } else {
+                        this->current_action = Action::PICKING;
+                    }
+                        
+                }
+                break;
             default:
                 break;
         }
@@ -45,7 +58,7 @@ void BoardManager::handleEvents(std::vector<Event> events) {
 
 void BoardManager::update() {
     if (selected_x < 0) {
-        selected_x =  - 1;
+        selected_x =  this->board.getWidth() - 1;
     } else if (selected_x >= this->board.getWidth()) {
         selected_x = 0;
     } else if (selected_y < 0) {
@@ -62,6 +75,7 @@ void BoardManager::update() {
                 this->current_action = Action::MATCHING;
             break;
         case Action::MATCHING:
+            SDL_Delay(DROP_TIMER);
             int score = this->board.match();
             if (score > 0) {
                 this->current_action = Action::FALLING;
@@ -82,6 +96,18 @@ void BoardManager::draw(SDL_Renderer *renderer) {
 
     SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
     SDL_RenderFillRect(renderer, &selrect);
+
+    // Draw picked rectangle
+    if (this->current_action == Action::MOVING) {
+        SDL_Rect pickrect;
+        pickrect.x = GEM_SIZE * picked.x + this->start_x;
+        pickrect.y = GEM_SIZE * picked.y + this->start_y;
+        pickrect.w = GEM_SIZE;
+        pickrect.h = GEM_SIZE;
+
+        SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
+        SDL_RenderFillRect(renderer, &pickrect);
+    }
 
     // Draw board lines
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
