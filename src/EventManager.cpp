@@ -127,7 +127,7 @@ void EventManager::closeDisconnectedGameControllers() {
 }
 
 void EventManager::closeAllGameControllers() {
-    for (int i = 0; i < gameControllers.size(); i++) {
+    for (int i = 0; i < int(gameControllers.size()); i++) {
         SDL_Log("Removing controller: %s", SDL_GameControllerName(gameControllers[i]));
         SDL_GameControllerClose(gameControllers[i]);
         gameControllers[i] = NULL;
