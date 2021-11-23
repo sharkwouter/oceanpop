@@ -105,7 +105,13 @@ bool Board::hasEmpty() {
     return false;
 }
 
-bool Board::swap(SDL_Point p1, SDL_Point p2) { 
+bool Board::swap(SDL_Point p1, SDL_Point p2) {
+    // Make sure the swapped gems are on the same line
+    if (p1.x != p2.x && p1.y != p2.y) {
+        return false;
+    }
+
+    // Make sure the positions are on the board
     if (!isWithinBounds(p1) || !isWithinBounds(p2)) {
         return false;
     }
