@@ -1,18 +1,16 @@
 #ifndef BOARD_HPP
 #define BOARD_HPP
 
-#include <array>
+#include <vector>
 #include <SDL.h>
-#include "constants.hpp"
-#include "GemArray.hpp"
 #include "Gem.hpp"
 
 class Board {
 
 private:
-    Gem gems[BOARD_WIDTH][BOARD_HEIGHT];
+    std::vector<std::vector<Gem>> gems;
 public:
-    Board();
+    Board(int width, int height);
 
     int match();
 
@@ -22,7 +20,10 @@ public:
 
     void swap(SDL_Point p1, SDL_Point p2);
 
-    GemArray getGems(){return gems;};
+    int getWidth();
+    int getHeight();
+
+    std::vector<std::vector<Gem>> getGems(){return gems;};
 };
 
 #endif // BOARD_HPP

@@ -1,11 +1,12 @@
 #include "Board.hpp"
 
-#include <vector>
-
-Board::Board() {
-    for (int x = 0; x < BOARD_WIDTH; x++) {
-        for (int y = 0; y < BOARD_HEIGHT; y++) {
-            this->gems[x][y] = Gem::EMPTY;
+Board::Board(int width, int height) {
+   this->gems.reserve(width);
+    for (int x = 0; x < width; x++) {
+        this->gems.push_back(std::move(std::vector<Gem>()));
+        this->gems[x].reserve(height);
+        for (int y = 0; y < height; y++) {
+            this->gems[x].push_back(Gem::EMPTY);
         }
     }
 }
@@ -13,10 +14,10 @@ Board::Board() {
 
 int Board::match() {
     std::vector<SDL_Point> to_remove;
-    for (int x = 0; x < BOARD_WIDTH; x++) {
+    for (int x = 0; x < getWidth(); x++) {
         Gem last = Gem::EMPTY;
         int matches = 0;
-        for (int y = 0; y < BOARD_HEIGHT; y++) {
+        for (int y = 0; y < getHeight(); y++) {
             if (this->gems[x][y] == last) {
                 if (last != Gem::EMPTY) {
                     matches++;
@@ -24,7 +25,7 @@ int Board::match() {
                     matches = 0;
                     continue;
                 }
-                if (y == (BOARD_HEIGHT - 1) && matches > 1) {
+                if (y == (getHeight() - 1) && matches > 1) {
                     for (matches; matches >= 0; matches--) {
                         to_remove.push_back(SDL_Point{x,y-matches});
                     }
@@ -40,14 +41,14 @@ int Board::match() {
         }
     }
 
-    for (int y = 0; y < BOARD_HEIGHT; y++) {
+    for (int y = 0; y < getHeight(); y++) {
         Gem last = Gem::EMPTY;
         int matches = 0;
-        for (int x = 0; x < BOARD_WIDTH; x++) {
+        for (int x = 0; x < getWidth(); x++) {
             if (this->gems[x][y] == last) {
                 if (last != Gem::EMPTY)
                     matches++;
-                if (x == (BOARD_WIDTH - 1) && matches > 1) {
+                if (x == (getWidth() - 1) && matches > 1) {
                     for (matches; matches >= 0; matches--) {
                         to_remove.push_back(SDL_Point{x,y-matches});
                     }
@@ -74,8 +75,8 @@ int Board::match() {
 }
 
 void Board::fillEmpty() {
-    for (int x = 0; x < BOARD_WIDTH; x++) {
-        for (int y = (BOARD_HEIGHT - 1); y >= 0; y--) {
+    for (int x = 0; x < getWidth(); x++) {
+        for (int y = (getHeight() - 1); y >= 0; y--) {
             if (this->gems[x][y] != Gem::EMPTY)
                 continue;
             
@@ -90,8 +91,8 @@ void Board::fillEmpty() {
 }
 
 bool Board::hasEmpty() {
-    for (int x = 0; x < BOARD_WIDTH; x++) {
-        for (int y = 0; y < BOARD_HEIGHT; y++) {
+    for (int x = 0; x < getWidth(); x++) {
+        for (int y = 0; y < getHeight(); y++) {
             if (this->gems[x][y] == Gem::EMPTY) {
                 return true;
             }
@@ -102,4 +103,12 @@ bool Board::hasEmpty() {
 
 void Board::swap(SDL_Point p1, SDL_Point p2) {
 
+}
+
+int Board::getWidth() {
+    return gems.size();
+}
+
+int Board::getHeight() {
+    return gems[0].size();
 }

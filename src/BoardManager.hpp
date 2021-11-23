@@ -32,7 +32,7 @@ private:
     Action current_action;
 
 public:
-    BoardManager(SDL_Renderer *renderer, int x, int y);
+    BoardManager(SDL_Renderer *renderer, int x, int y, int width, int height);
 
     void handleEvents(std::vector<Event> events);
     void update();
