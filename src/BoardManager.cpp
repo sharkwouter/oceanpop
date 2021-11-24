@@ -158,31 +158,31 @@ void BoardManager::draw(SDL_Renderer *renderer) {
             switch (this->board.getGems()[x][y]) {
                 case Gem::RED:
                     style = 0;
-                    color = {230, 0, 0};
+                    color = {230, 0, 0, 255};
                     break;
                 case Gem::ORANGE:
                     style = 2;
-                    color = {255, 128, 0};
+                    color = {255, 128, 0, 255};
                     break;
                 case Gem::GREEN:
                     style = 5;
-                    color = {0, 153, 0};
+                    color = {0, 153, 0, 255};
                     break;
                 case Gem::BLUE:
                     style = 4;
-                    color = {0, 102, 204};
+                    color = {0, 102, 204, 255};
                     break;
                 case Gem::PURPLE:
                     style = 2;
-                    color = {153, 0, 153};
+                    color = {153, 0, 153, 255};
                     break;
                 case Gem::GRAY:
                     style = 1;
-                    color = {192, 192, 192};
+                    color = {192, 192, 192, 255};
                     break;
                 case Gem::BROWN:
                     style = 3;
-                    color = {153, 76, 0};
+                    color = {153, 76, 0, 255};
                     break;
                 default:
                     continue;
