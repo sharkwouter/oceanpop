@@ -38,17 +38,23 @@ void BoardManager::handleEvents(std::vector<Event> events) {
                 break;
             case Event::CONFIRM:
                 if (this->current_action == Action::PICKING) {
-                    this->picked = selected;
+                    this->picked = this->selected;
                     this->current_action = Action::MOVING;
                 } else if (this->current_action == Action::MOVING) {
                     if (this->board.swap(picked, selected)) {
                         this->current_action = Action::FALLING;
                     } else {
+                        this->selected = this->picked;
                         this->current_action = Action::PICKING;
                     }
                         
                 }
                 break;
+            case Event::CANCEL:
+                if (this->current_action == Action::MOVING) {
+                    this->selected = this->picked;
+                    this->current_action = Action::PICKING;
+                }
             default:
                 break;
         }
