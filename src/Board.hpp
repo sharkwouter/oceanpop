@@ -11,7 +11,9 @@ private:
     std::vector<std::vector<Gem>> gems;
 
     bool isWithinBounds(SDL_Point point);
-    bool typeWouldMatchOnPoint(Gem type, SDL_Point point);
+    int getMatches(std::vector<std::vector<Gem>> gems, std::vector<SDL_Point> * matchedGems);
+    std::vector<std::vector<Gem>> getGemsCopy();
+    std::vector<std::vector<Gem>> getGemsAfterSwap(std::vector<std::vector<Gem>> gems, SDL_Point p1, SDL_Point p2);
 public:
     Board(int width, int height);
 

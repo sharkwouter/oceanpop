@@ -19,63 +19,45 @@ Board::Board(int width, int height) {
 }
 
 int Board::match() {
-    std::vector<SDL_Point> to_remove;
+    std::vector<SDL_Point> matchedGems;
+    int matchesFound = getMatches(this->gems, &matchedGems);
+
+    for (SDL_Point p : matchedGems) {
+            this->gems[p.x][p.y] = Gem::EMPTY;
+    }
+
+    return matchesFound;
+}
+
+int Board::getMatches(std::vector<std::vector<Gem>> gems, std::vector<SDL_Point> * matchedGems=nullptr){
+    int matchesFound = 0;
+
     for (int x = 0; x < getWidth(); x++) {
-        Gem last = Gem::EMPTY;
-        int matches = 0;
-        for (int y = 0; y < getHeight(); y++) {
-            if (this->gems[x][y] == last) {
-                if (last != Gem::EMPTY) {
-                    matches++;
-                } else {
-                    matches = 0;
-                    continue;
+        for (int y = 0; y < getHeight() - 2; y++) {
+            if (gems[x][y] == gems[x][y+1] && gems[x][y] == gems[x][y+2]) {
+                if (matchedGems != nullptr) {
+                    matchedGems->push_back({x,y});
+                    matchedGems->push_back({x,y+1});
+                    matchedGems->push_back({x,y+2});
                 }
-                if (y == (getHeight() - 1) && matches > 1) {
-                    for (; matches >= 0; matches--) {
-                        to_remove.push_back(SDL_Point{x,y-matches});
-                    }
-                }
-            } else {
-                if (matches > 1) {
-                    for (; matches >= 0; matches--) {
-                        to_remove.push_back(SDL_Point{x,y-1-matches});
-                    }
-                }
+                matchesFound++;
             }
-            last = this->gems[x][y];
+        }
+    }
+    for (int y = 0; y < getHeight(); y++) {
+        for (int x = 0; x < getWidth() - 2; x++) {
+            if (gems[x][y] == gems[x+1][y] && gems[x][y] == gems[x+2][y]) {
+                if (matchedGems != nullptr) {
+                    matchedGems->push_back({x,y});
+                    matchedGems->push_back({x+1,y});
+                    matchedGems->push_back({x+2,y});
+                }
+                matchesFound++;
+            }
         }
     }
 
-    for (int y = 0; y < getHeight(); y++) {
-        Gem last = Gem::EMPTY;
-        int matches = 0;
-        for (int x = 0; x < getWidth(); x++) {
-            if (this->gems[x][y] == last) {
-                if (last != Gem::EMPTY)
-                    matches++;
-                if (x == (getWidth() - 1) && matches > 1) {
-                    for (; matches >= 0; matches--) {
-                        to_remove.push_back(SDL_Point{x,y-matches});
-                    }
-                    matches = 0;
-                }
-            } else {
-                if (matches > 1) {
-                    for (; matches >= 0; matches--) {
-                        to_remove.push_back(SDL_Point{x-1-matches,y});
-                    }
-                }
-                matches = 0;
-            }
-            last = this->gems[x][y];
-        }
-    }
-    for (SDL_Point p : to_remove) {
-        this->gems[p.x][p.y] = Gem::EMPTY;
-    }
-    
-    return to_remove.size();
+    return matchesFound;
 }
 
 void Board::fillEmpty() {
@@ -84,6 +66,7 @@ void Board::fillEmpty() {
             if (this->gems[x][y] != Gem::EMPTY)
                 continue;
             
+            // Make the gem above us fall
             if (y > 0) {
                 this->gems[x][y] = this->gems[x][y-1];
                 this->gems[x][y-1] = Gem::EMPTY;
@@ -116,66 +99,22 @@ bool Board::swap(SDL_Point p1, SDL_Point p2) {
         return false;
     }
     
-    bool shouldSwap = false;
-
-    Gem type1 = this->gems[p1.x][p1.y];
-    Gem type2 = this->gems[p2.x][p2.y];
-
-    
-    if (typeWouldMatchOnPoint(type1, p2)) {
-        shouldSwap = true;
-    } else if (typeWouldMatchOnPoint(type2, p1)) {
-        shouldSwap = true;
+    std::vector<std::vector<Gem>> swappedGems = getGemsAfterSwap(this->gems, p1, p2);
+    if (getMatches(swappedGems) > 0) {
+        this->gems = swappedGems;
+        return true;
+    } else {
+        return false;
     }
-
-    if (shouldSwap) {
-        this->gems[p1.x][p1.y] = type2;
-        this->gems[p2.x][p2.y] = type1;
-    }
-
-    return shouldSwap;
 }
 
-bool Board::typeWouldMatchOnPoint(Gem type, SDL_Point point) {
-    // Check horizontal
-    int matchingGems = 0;
-    for (int x = std::max(0, (point.x - 2)); x < std::min(getWidth(), point.x + 3); x++) {
-        if (x == point.x) {
-            matchingGems++;
-        } else if (this->gems[x][point.y] == type) {
-            matchingGems++;
-        } else if (x < point.x){
-            matchingGems = 0;
-        } else {
-            break;
-        }
-    }
-    if (matchingGems > 2) {
-        return true;
-    }
+std::vector<std::vector<Gem>> Board::getGemsAfterSwap(std::vector<std::vector<Gem>> gems, SDL_Point p1, SDL_Point p2) {
+    Gem type1 = gems[p1.x][p1.y];
+    gems[p1.x][p1.y] = gems[p2.x][p2.y];
+    gems[p2.x][p2.y] = type1;
 
-    // Check vertical
-    matchingGems = 0;
-    for (int y = std::max(0, (point.y - 2)); y < std::min(getHeight(), point.y + 3); y++) {
-        if (y == point.y) {
-            matchingGems++;
-            continue;
-        }
-        if (this->gems[point.x][y] == type) {
-            matchingGems++;
-        } else if (y < point.y){
-            matchingGems = 0;
-        } else {
-            break;
-        }
-    }
-    if (matchingGems > 2) {
-        return true;
-    }
-
-    return false;
+    return gems;
 }
-
 
 bool Board::isWithinBounds(SDL_Point point) {
     bool result = true;
@@ -188,6 +127,19 @@ bool Board::isWithinBounds(SDL_Point point) {
         result = false;
     }
     return result;
+}
+
+std::vector<std::vector<Gem>> Board::getGemsCopy() {
+    std::vector<std::vector<Gem>> copy;
+    copy.reserve(getWidth());
+    for (int x = 0; x < getWidth(); x++) {
+        copy.push_back(std::move(std::vector<Gem>()));
+        copy[x].reserve(getHeight());
+        for (int y = 0; y < getHeight(); y++) {
+            copy[x].push_back(this->gems[x][y]);
+        }
+    }
+    return copy;
 }
 
 int Board::getHeight() {
