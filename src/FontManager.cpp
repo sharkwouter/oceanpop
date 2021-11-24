@@ -13,7 +13,7 @@ FontManager::~FontManager() {
 
 void FontManager::load() {
     font = TTF_OpenFont("assets/fonts/2K4sRegular.ttf", FONT_SIZE);
-    font_title = TTF_OpenFont("assets/fonts/MetroMaestroRegular.ttf", FONT_SIZE_TITLE);
+    font_title = TTF_OpenFont("assets/fonts/2K4sRegular.ttf", FONT_SIZE_TITLE);
     if (font == NULL || font_title == NULL) {
         panic("Couldn't load font: " + std::string(TTF_GetError()));
     }

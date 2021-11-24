@@ -233,9 +233,20 @@ void BoardManager::drawGems(SDL_Renderer * renderer) {
 void BoardManager::drawScore(SDL_Renderer * renderer) {
     // Generate texture with text
     SDL_Color textColor = {255, 255, 255, 255};
-    SDL_Texture * text_moves_title = fonts.getTexture(renderer, "Moves", false, textColor);
-    SDL_Texture * text_moves = fonts.getTexture(renderer, "5", true, textColor);
-    SDL_Texture * text_score = fonts.getTexture(renderer, "50/1500", true, textColor);
+    SDL_Texture * text_moves = fonts.getTexture(renderer, "5 moves left", false, textColor);
+    SDL_Texture * text_score = fonts.getTexture(renderer, "50/1500", false, textColor);
 
-    //SDL_RenderCopy(renderer, text_moves_title, NULL, NULL);
+    // Render moves
+    SDL_Rect rect_moves = {start_x, end_y, 0, 0};
+    SDL_QueryTexture(text_moves, NULL, NULL, &rect_moves.w, &rect_moves.h);
+    rect_moves.x += GEM_SIZE * 2 - rect_moves.w/2;
+    rect_moves.y += GEM_SIZE/2 - rect_moves.h/2;
+    SDL_RenderCopy(renderer, text_moves, NULL, &rect_moves);
+
+    // Render score
+    SDL_Rect rect_score = {end_x, end_y, 0, 0};
+    SDL_QueryTexture(text_score, NULL, NULL, &rect_score.w, &rect_score.h);
+    rect_score.x -= GEM_SIZE * 2 + rect_score.w/2;
+    rect_score.y += GEM_SIZE/2 - rect_score.h/2;
+    SDL_RenderCopy(renderer, text_score, NULL, &rect_score);
 }
