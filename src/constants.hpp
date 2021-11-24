@@ -14,9 +14,9 @@ inline constexpr int SCREEN_WIDTH = 480;
 inline constexpr int SCREEN_HEIGHT = 272;
 inline constexpr int GEM_SIZE = 32;
 #else
-inline constexpr int SCREEN_WIDTH = 769;
-inline constexpr int SCREEN_HEIGHT = 673;
-inline constexpr int GEM_SIZE = 96;
+inline constexpr int SCREEN_WIDTH = 1920;
+inline constexpr int SCREEN_HEIGHT = 1080;
+inline constexpr int GEM_SIZE = 128;
 #endif
 
 #endif // CONSTANTS_HPP

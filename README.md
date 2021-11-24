@@ -51,3 +51,6 @@ The copy the ``match-theory.vpk`` file to the Vita and install it to be able to 
 
 ## Attribution
 Thanks to [Buch](https://opengameart.org/users/buch) for making the gem sprites used.
+
+### assets/images/background.jpg
+Photo by Pixabay from Pexels

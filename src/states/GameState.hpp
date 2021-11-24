@@ -9,6 +9,9 @@
 class GameState : public BaseState {
 private:
     BoardManager board;
+    TextureManager textures;
+
+    std::string background_image = "images/background.jpg";
 public:
     GameState(SDL_Renderer *renderer);
     ~GameState();
