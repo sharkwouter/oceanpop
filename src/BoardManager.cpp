@@ -7,8 +7,8 @@ BoardManager::BoardManager(SDL_Renderer *renderer, int x, int y, int width, int 
     this->start_x = x;
     this->start_y = y;
 
-    this->end_x = GEM_SIZE * this->board.getWidth() + this->start_x;
-    this->end_y = GEM_SIZE * this->board.getHeight() + this->start_y;
+    this->end_x = this->start_x + GEM_SIZE * this->board.getWidth();
+    this->end_y = this->start_y + GEM_SIZE * this->board.getHeight();
 
     this->selected.x = width / 2;
     this->selected.y = height / 2;
@@ -134,7 +134,7 @@ void BoardManager::draw(SDL_Renderer *renderer) {
         SDL_RenderDrawLine(
                 renderer,
                 current_x,
-                this->start_x,
+                this->start_y,
                 current_x,
                 this->end_y
                 );
@@ -143,7 +143,7 @@ void BoardManager::draw(SDL_Renderer *renderer) {
         int current_y = this->start_y + y * GEM_SIZE;
         SDL_RenderDrawLine(
                 renderer,
-                this->start_y,
+                this->start_x,
                 current_y,
                 this->end_x,
                 current_y

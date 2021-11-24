@@ -2,6 +2,8 @@
 #define CONSTANTS_HPP
 
 inline constexpr int DROP_TIMER = 250;
+inline constexpr int BOARD_WIDTH = 8;
+inline constexpr int BOARD_HEIGHT = 7;
 
 #if defined(__vita__)
 inline constexpr int SCREEN_WIDTH = 960;
