@@ -65,6 +65,26 @@ if (VITA)
 		    FILE platform/vita/sce_sys sce_sys
 		    FILE assets/images images
 	)
+ELSEIF(PLATFORM_PSP)
+     set(SDL2_INCLUDE_DIR "${PSPDEV}/psp/include/SDL2")
+
+     target_include_directories(match-theory PRIVATE
+          ${SDL2_INCLUDE_DIR}
+     )
+
+     target_link_libraries(match-theory PRIVATE SDL2_image SDL2 png jpeg z GLU GL pspvram pspvfpu psphprm pspdisplay pspgu pspge pspdebug pspaudio)
+
+     create_pbp_file(
+          TARGET match-theory
+          ICON_PATH NULL
+          BACKGROUND_PATH NULL
+          PREVIEW_PATH NULL
+          TITLE Match-Theory
+          BUILD_PRX
+     )
+
+     file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/assets/images
+               DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 ELSE()
      include(FindPkgConfig)
 
