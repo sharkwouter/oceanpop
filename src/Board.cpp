@@ -110,8 +110,19 @@ bool Board::swap(SDL_Point p1, SDL_Point p2) {
 
 std::vector<std::vector<Gem>> Board::getGemsAfterSwap(std::vector<std::vector<Gem>> gems, SDL_Point p1, SDL_Point p2) {
     Gem type1 = gems[p1.x][p1.y];
-    gems[p1.x][p1.y] = gems[p2.x][p2.y];
-    gems[p2.x][p2.y] = type1;
+    if (p1.y == p2.y) {
+        int direction = ((p2.x - p1.x) > 0) ? 1 : -1;
+        for (int i = p1.x + direction; i != p2.x + direction; i+=direction) {
+            gems[i-direction][p1.y] = gems[i][p1.y];
+            gems[i][p1.y] = type1;
+        }
+    } else if (p1.x == p2.x) {
+        int direction = ((p2.y - p1.y) > 0) ? 1 : -1;
+        for (int i = p1.y + direction; i != p2.y + direction; i+=direction) {
+            gems[p1.x][i-direction] = gems[p1.x][i];
+            gems[p2.x][i] = type1;
+        }
+    }
 
     return gems;
 }
