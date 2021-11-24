@@ -233,8 +233,8 @@ void BoardManager::drawGems(SDL_Renderer * renderer) {
 void BoardManager::drawScore(SDL_Renderer * renderer) {
     // Generate texture with text
     SDL_Color textColor = {255, 255, 255, 255};
-    SDL_Texture * text_moves = fonts.getTexture(renderer, "5 moves left", false, textColor);
-    SDL_Texture * text_score = fonts.getTexture(renderer, "50/1500", false, textColor);
+    SDL_Texture * text_moves = fonts.getTexture(renderer, std::to_string(moves) + " moves left", false, textColor);
+    SDL_Texture * text_score = fonts.getTexture(renderer, std::to_string(score) + "/" + std::to_string(required_score), false, textColor);
 
     // Render moves
     SDL_Rect rect_moves = {start_x, end_y, 0, 0};

@@ -25,6 +25,8 @@ private:
     SDL_Point picked;
 
     int score = 0;
+    int required_score = 1500;
+    int moves = 5;
 
     std::string image_gems = "assets/images/gems.png";
 
