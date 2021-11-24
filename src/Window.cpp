@@ -1,4 +1,5 @@
 #include <SDL_image.h>
+#include <SDL_ttf.h>
 #include "Window.hpp"
 #include "utils.hpp"
 
@@ -11,6 +12,10 @@ Window::Window(const std::string &title, int width, int height) {
         panic("couldn't init SDL_image: " + std::string(IMG_GetError()));
     }
 
+     if (TTF_Init() == -1) {
+        panic("couldn't init SDL_ttf: " + std::string(TTF_GetError()));
+    }
+
     this->window = SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, SDL_WINDOW_SHOWN);
     if (this->window == nullptr) {
         panic("couldn't create window: " + std::string(SDL_GetError()));
@@ -20,6 +25,9 @@ Window::Window(const std::string &title, int width, int height) {
     if (this->renderer == nullptr) {
         panic("couldn't create renderer: " + std::string(SDL_GetError()));
     }
+
+    // Make the use of transparancy possible
+    SDL_SetRenderDrawBlendMode(this->renderer, SDL_BLENDMODE_BLEND);
 
     this->should_close = false;
 }

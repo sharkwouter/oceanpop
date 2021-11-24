@@ -1,19 +1,20 @@
 #ifndef FONTMANAGER_HPP
 #define FONTMANAGER_HPP
 
-#include <map>
 #include <string>
 #include <SDL.h>
+#include <SDL_ttf.h>
 
 class FontManager {
 private:
-    std::map<std::string, SDL_Texture*> textures;
+    TTF_Font * font_title;
+    TTF_Font * font;
 public:
     FontManager();
     ~FontManager();
 
-    void add_font(const std::string &file, SDL_Renderer *renderer);
-    SDL_Texture *get(const std::string &file);
+    void load();
+    SDL_Texture * getTexture(SDL_Renderer *renderer, std::string text, bool title, SDL_Color color);
 };
 
 #endif // FONTMANAGER_HPP

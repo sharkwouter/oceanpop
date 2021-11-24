@@ -2,6 +2,7 @@
 #define CONSTANTS_HPP
 
 inline constexpr int DROP_TIMER = 250;
+
 inline constexpr int BOARD_WIDTH = 8;
 inline constexpr int BOARD_HEIGHT = 7;
 
@@ -18,5 +19,8 @@ inline constexpr int SCREEN_WIDTH = 1920;
 inline constexpr int SCREEN_HEIGHT = 1080;
 inline constexpr int GEM_SIZE = 128;
 #endif
+
+inline constexpr int FONT_SIZE = GEM_SIZE/2;
+inline constexpr int FONT_SIZE_TITLE = GEM_SIZE;
 
 #endif // CONSTANTS_HPP

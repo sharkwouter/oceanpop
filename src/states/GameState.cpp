@@ -1,6 +1,6 @@
 #include "GameState.hpp"
 
-GameState::GameState(SDL_Renderer *renderer) : board(renderer, (SCREEN_WIDTH-GEM_SIZE*BOARD_WIDTH)/2, 0, BOARD_WIDTH, BOARD_HEIGHT), textures() {
+GameState::GameState(SDL_Renderer *renderer) : board(renderer, (SCREEN_WIDTH-GEM_SIZE*BOARD_WIDTH)/2, (SCREEN_HEIGHT-GEM_SIZE*(BOARD_HEIGHT+1))/2, BOARD_WIDTH, BOARD_HEIGHT), textures() {
     textures.add_texture(background_image, renderer);
 }
 

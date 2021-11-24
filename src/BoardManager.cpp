@@ -13,6 +13,8 @@ BoardManager::BoardManager(SDL_Renderer *renderer, int x, int y, int width, int 
     this->selected.x = width / 2;
     this->selected.y = height / 2;
 
+    fonts.load();
+
     textures.add_texture(image_gems, renderer);
 
     this->current_action = Action::FALLING;
@@ -105,27 +107,41 @@ void BoardManager::update() {
 }
 
 void BoardManager::draw(SDL_Renderer *renderer) {
-    // Draw selection rectangle
-    SDL_Rect selrect;
-    selrect.x = GEM_SIZE * selected.x + this->start_x;
-    selrect.y = GEM_SIZE * selected.y + this->start_y;
-    selrect.w = GEM_SIZE;
-    selrect.h = GEM_SIZE;
+    drawBoard(renderer);
+    drawCursor(renderer);
+    drawScore(renderer);
+    drawGems(renderer);
+}
 
-    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
-    SDL_RenderFillRect(renderer, &selrect);
-
+void BoardManager::drawCursor(SDL_Renderer * renderer) {
     // Draw picked rectangle
     if (this->current_action == Action::MOVING) {
         SDL_Rect pickrect;
-        pickrect.x = GEM_SIZE * picked.x + this->start_x;
-        pickrect.y = GEM_SIZE * picked.y + this->start_y;
-        pickrect.w = GEM_SIZE;
-        pickrect.h = GEM_SIZE;
+        pickrect.x = GEM_SIZE * picked.x + this->start_x + 1;
+        pickrect.y = GEM_SIZE * picked.y + this->start_y + 1;
+        pickrect.w = GEM_SIZE - 1;
+        pickrect.h = GEM_SIZE - 1;
 
-        SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
+        SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
         SDL_RenderFillRect(renderer, &pickrect);
     }
+
+    // Draw selection rectangle
+    SDL_Rect selrect;
+    selrect.x = GEM_SIZE * selected.x + this->start_x + 1;
+    selrect.y = GEM_SIZE * selected.y + this->start_y + 1;
+    selrect.w = GEM_SIZE - 1;
+    selrect.h = GEM_SIZE - 1;
+
+    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+    SDL_RenderFillRect(renderer, &selrect);
+}
+
+void BoardManager::drawBoard(SDL_Renderer * renderer) {
+    // Draw background rectangle
+    SDL_Rect background = {this->start_x, this->start_y, this->board.getWidth() * GEM_SIZE, (this->board.getHeight() + 1) * GEM_SIZE};
+    SDL_SetRenderDrawColor(renderer, 51, 153, 255, 128);
+    SDL_RenderFillRect(renderer, &background);
 
     // Draw board lines
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
@@ -150,6 +166,13 @@ void BoardManager::draw(SDL_Renderer *renderer) {
         );
     }
 
+    // Draw lines around scoreboard
+    SDL_RenderDrawLine(renderer,this->start_x,this->end_y + 1,this->start_x,this->end_y + GEM_SIZE);
+    SDL_RenderDrawLine(renderer,this->end_x,this->end_y + 1,this->end_x,this->end_y + GEM_SIZE );
+    SDL_RenderDrawLine(renderer,this->start_x,this->end_y + GEM_SIZE,this->end_x,this->end_y + GEM_SIZE);
+}
+
+void BoardManager::drawGems(SDL_Renderer * renderer) {
     // Draw the gems
     for (int x = 0; x < this->board.getWidth(); x++) {
         for (int y = 0; y < this->board.getHeight(); y++) {
@@ -205,4 +228,14 @@ void BoardManager::draw(SDL_Renderer *renderer) {
             SDL_RenderCopy(renderer, textures.get(image_gems), &srcrect, &dstrect);
         }
     }
+}
+
+void BoardManager::drawScore(SDL_Renderer * renderer) {
+    // Generate texture with text
+    SDL_Color textColor = {255, 255, 255, 255};
+    SDL_Texture * text_moves_title = fonts.getTexture(renderer, "Moves", false, textColor);
+    SDL_Texture * text_moves = fonts.getTexture(renderer, "5", true, textColor);
+    SDL_Texture * text_score = fonts.getTexture(renderer, "50/1500", true, textColor);
+
+    //SDL_RenderCopy(renderer, text_moves_title, NULL, NULL);
 }
