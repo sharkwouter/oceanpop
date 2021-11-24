@@ -63,7 +63,7 @@ if (VITA)
 		    VERSION ${VITA_VERSION}
 		    NAME ${VITA_APPNAME}
 		    FILE platform/vita/sce_sys sce_sys
-		    FILE assets assets
+		    FILE assets/images images
 	)
 ELSE()
      include(FindPkgConfig)
