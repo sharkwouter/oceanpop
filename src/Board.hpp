@@ -13,7 +13,6 @@ private:
     bool isWithinBounds(SDL_Point point);
     int getMatches(std::vector<std::vector<Gem>> gems, std::vector<SDL_Point> * matchedGems);
     std::vector<std::vector<Gem>> getGemsCopy();
-    std::vector<std::vector<Gem>> getGemsAfterSwap(std::vector<std::vector<Gem>> gems, SDL_Point p1, SDL_Point p2);
 public:
     Board(int width, int height);
 
@@ -29,6 +28,7 @@ public:
     int getHeight();
 
     std::vector<std::vector<Gem>> getGems(){return gems;};
+    std::vector<std::vector<Gem>> getGemsAfterSwap(std::vector<std::vector<Gem>> gems, SDL_Point p1, SDL_Point p2);
 };
 
 #endif // BOARD_HPP
