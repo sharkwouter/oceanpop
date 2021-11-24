@@ -191,12 +191,16 @@ void BoardManager::drawBoard(SDL_Renderer * renderer) {
 }
 
 void BoardManager::drawGems(SDL_Renderer * renderer) {
+    std::vector<std::vector<Gem>> gems = this->board.getGems();
+    if (this->current_action == Action::MOVING) {
+        gems = this->board.getGemsAfterSwap(gems, this->picked, this->selected);
+    }
     // Draw the gems
     for (int x = 0; x < this->board.getWidth(); x++) {
         for (int y = 0; y < this->board.getHeight(); y++) {
             int style = 0;
             SDL_Color color;
-            switch (this->board.getGems()[x][y]) {
+            switch (gems[x][y]) {
                 case Gem::RED:
                     style = 0;
                     color = {230, 0, 0, 255};
