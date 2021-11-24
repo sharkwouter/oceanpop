@@ -13,9 +13,7 @@ BoardManager::BoardManager(SDL_Renderer *renderer, int x, int y, int width, int 
     this->selected.x = width / 2;
     this->selected.y = height / 2;
 
-    #ifndef __PSP__
-        textures.add_texture(image_gems, renderer);
-    #endif
+    textures.add_texture(image_gems, renderer);
 
     this->current_action = Action::FALLING;
 }
@@ -155,75 +153,56 @@ void BoardManager::draw(SDL_Renderer *renderer) {
     // Draw the gems
     for (int x = 0; x < this->board.getWidth(); x++) {
         for (int y = 0; y < this->board.getHeight(); y++) {
-            SDL_Rect srcrect;
-            srcrect.w = 32;
-            srcrect.h = 32;
-
+            int style = 0;
+            SDL_Color color;
             switch (this->board.getGems()[x][y]) {
                 case Gem::RED:
-                    srcrect.x = 374;
-                    srcrect.y = 70;
-                    #ifdef __PSP__
-                        SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
-                    #endif
+                    style = 0;
+                    color = {230, 0, 0};
                     break;
                 case Gem::ORANGE:
-                    srcrect.x = 374;
-                    srcrect.y = 169;
-                    #ifdef __PSP__
-                        SDL_SetRenderDrawColor(renderer, 255, 128, 0, 255);
-                    #endif
+                    style = 2;
+                    color = {255, 128, 0};
                     break;
                 case Gem::GREEN:
-                    srcrect.x = 169;
-                    srcrect.y = 136;
-                    #ifdef __PSP__
-                        SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
-                    #endif
+                    style = 5;
+                    color = {0, 153, 0};
                     break;
                 case Gem::BLUE:
-                    srcrect.x = 169;
-                    srcrect.y = 169;
-                    #ifdef __PSP__
-                        SDL_SetRenderDrawColor(renderer, 0, 0, 255, 255);
-                    #endif
+                    style = 4;
+                    color = {0, 102, 204};
                     break;
                 case Gem::PURPLE:
-                    srcrect.x = 169;
-                    srcrect.y = 268;
-                    #ifdef __PSP__
-                        SDL_SetRenderDrawColor(renderer, 255, 0, 255, 255);
-                    #endif
+                    style = 2;
+                    color = {153, 0, 153};
                     break;
                 case Gem::GRAY:
-                    srcrect.x = 374;
-                    srcrect.y = 202;
-                    #ifdef __PSP__
-                        SDL_SetRenderDrawColor(renderer, 128, 128, 128, 255);
-                    #endif
+                    style = 1;
+                    color = {192, 192, 192};
                     break;
                 case Gem::BROWN:
-                    srcrect.x = 169;
-                    srcrect.y = 37;
-                    #ifdef __PSP__
-                        SDL_SetRenderDrawColor(renderer, 102, 51, 0, 255);
-                    #endif
+                    style = 3;
+                    color = {153, 76, 0};
                     break;
                 default:
                     continue;
                     break;
             }
 
+            SDL_Rect srcrect;
+            srcrect.x = 32 * style;
+            srcrect.y = 0;
+            srcrect.w = 32;
+            srcrect.h = 32;
+
             SDL_Rect dstrect;
             dstrect.x = GEM_SIZE * x + this->start_x + 5;
             dstrect.y = GEM_SIZE * y + this->start_y + 5;
             dstrect.w = GEM_SIZE - 10;
             dstrect.h = GEM_SIZE - 10;
-            #ifdef __PSP__
-                SDL_RenderFillRect(renderer,&dstrect);
-            #else
-                SDL_RenderCopy(renderer, textures.get(image_gems), &srcrect, &dstrect);
-            #endif
+
+            SDL_SetTextureColorMod(textures.get(image_gems), color.r, color.g, color.b);
+            SDL_RenderCopy(renderer, textures.get(image_gems), &srcrect, &dstrect);
         }
     }
 }
