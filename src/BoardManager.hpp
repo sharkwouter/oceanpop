@@ -24,9 +24,9 @@ private:
     SDL_Point selected;
     SDL_Point picked;
 
-    int score = 0;
-    int required_score = 1500;
-    int moves = 5;
+    int score;
+    int required_score;
+    int moves;
 
     std::string image_gems = "assets/images/gems.png";
 
@@ -36,12 +36,17 @@ private:
 
     Action current_action;
 
+    void addScore(int matches);
+
     void moveCursor(int x, int y);
 
     void drawCursor(SDL_Renderer * renderer);
     void drawBoard(SDL_Renderer * renderer);
     void drawScore(SDL_Renderer * renderer);
     void drawGems(SDL_Renderer * renderer);
+
+    void init();
+    void reset();
 public:
     BoardManager(SDL_Renderer *renderer, int x, int y, int width, int height);
 

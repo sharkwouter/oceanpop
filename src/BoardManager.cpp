@@ -17,7 +17,19 @@ BoardManager::BoardManager(SDL_Renderer *renderer, int x, int y, int width, int 
 
     textures.add_texture(image_gems, renderer);
 
-    this->current_action = Action::FALLING;
+    init();
+}
+
+void BoardManager::init() {
+    this->score = 0;
+    this->moves = 10;
+    this->required_score = 300;
+    this->current_action = Action::PICKING;
+}
+
+void BoardManager::reset() {
+    this->board = Board(this->board.getWidth(), this->board.getHeight());
+    init();
 }
 
 void BoardManager::handleEvents(std::vector<Event> events) {
@@ -86,6 +98,10 @@ void BoardManager::moveCursor(int x, int y) {
     this->selected = newSelected;
 }
 
+void BoardManager::addScore(int matches) {
+    this->score += 10*matches*(matches+1)/2;
+}
+
 void BoardManager::update() {
     switch (this->current_action) {
         case Action::FALLING:
@@ -96,10 +112,12 @@ void BoardManager::update() {
             break;
         case Action::MATCHING:
             SDL_Delay(DROP_TIMER);
-            int score = this->board.match();
-            if (score > 0) {
+            int matches = this->board.match();
+            if (matches > 0) {
+                addScore(matches);
                 this->current_action = Action::FALLING;
             } else {
+                this->moves--;
                 this->current_action = Action::PICKING;
             }
             break;
