@@ -5,7 +5,7 @@
 #include <SDL.h>
 #include "Board.hpp"
 #include "constants.hpp"
-#include "Gem.hpp"
+#include "Shell.hpp"
 #include "TextureManager.hpp"
 #include "FontManager.hpp"
 #include "Event.hpp"
@@ -28,13 +28,15 @@ private:
     int required_score;
     int moves;
 
-    std::string image_gems = "assets/images/gems.png";
+    std::string image_shells = "assets/images/shells.png";
 
     TextureManager textures;
 
     FontManager fonts;
 
     Action current_action;
+
+    std::vector<std::vector<Shell>> preview;
 
     void addScore(int matches);
 
@@ -43,9 +45,7 @@ private:
     void drawCursor(SDL_Renderer * renderer);
     void drawBoard(SDL_Renderer * renderer);
     void drawScore(SDL_Renderer * renderer);
-    void drawGems(SDL_Renderer * renderer);
-
-    std::vector<std::vector<Gem>> preview;
+    void drawShells(SDL_Renderer * renderer);
 
     void init();
     void reset();

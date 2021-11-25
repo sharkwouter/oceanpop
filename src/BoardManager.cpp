@@ -15,7 +15,7 @@ BoardManager::BoardManager(SDL_Renderer *renderer, int x, int y, int width, int 
 
     fonts.load();
 
-    textures.add_texture(image_gems, renderer);
+    textures.add_texture(image_shells, renderer);
 
     init();
 }
@@ -131,7 +131,7 @@ void BoardManager::draw(SDL_Renderer *renderer) {
     drawBoard(renderer);
     drawCursor(renderer);
     drawScore(renderer);
-    drawGems(renderer);
+    drawShells(renderer);
 }
 
 void BoardManager::drawCursor(SDL_Renderer * renderer) {
@@ -193,64 +193,30 @@ void BoardManager::drawBoard(SDL_Renderer * renderer) {
     SDL_RenderDrawLine(renderer,this->start_x,this->end_y + GEM_SIZE,this->end_x,this->end_y + GEM_SIZE);
 }
 
-void BoardManager::drawGems(SDL_Renderer * renderer) {
-    std::vector<std::vector<Gem>> gems = this->board.getGems();
+void BoardManager::drawShells(SDL_Renderer * renderer) {
+    std::vector<std::vector<Shell>> shells = this->board.getGems();
     if (this->current_action == Action::MOVING) {
-        gems = this->preview;
+        shells = this->preview;
     }
-    // Draw the gems
+    // Draw the shells
     for (int x = 0; x < this->board.getWidth(); x++) {
         for (int y = 0; y < this->board.getHeight(); y++) {
-            int style = 0;
             SDL_Color color;
-            switch (gems[x][y]) {
-                case Gem::RED:
-                    style = 0;
-                    color = {230, 0, 0, 255};
-                    break;
-                case Gem::ORANGE:
-                    style = 2;
-                    color = {255, 128, 0, 255};
-                    break;
-                case Gem::GREEN:
-                    style = 5;
-                    color = {0, 153, 0, 255};
-                    break;
-                case Gem::BLUE:
-                    style = 4;
-                    color = {0, 102, 204, 255};
-                    break;
-                case Gem::PURPLE:
-                    style = 2;
-                    color = {153, 0, 153, 255};
-                    break;
-                case Gem::GRAY:
-                    style = 1;
-                    color = {192, 192, 192, 255};
-                    break;
-                case Gem::BROWN:
-                    style = 3;
-                    color = {153, 76, 0, 255};
-                    break;
-                default:
-                    continue;
-                    break;
-            }
+            Shell shell = shells[x][y];
 
             SDL_Rect srcrect;
-            srcrect.x = 32 * style;
+            srcrect.x = GEM_SIZE * (int) shells[x][y];
             srcrect.y = 0;
-            srcrect.w = 32;
-            srcrect.h = 32;
+            srcrect.w = GEM_SIZE;
+            srcrect.h = GEM_SIZE;
 
             SDL_Rect dstrect;
-            dstrect.x = GEM_SIZE * x + this->start_x + 5;
-            dstrect.y = GEM_SIZE * y + this->start_y + 5;
-            dstrect.w = GEM_SIZE - 10;
-            dstrect.h = GEM_SIZE - 10;
+            dstrect.x = GEM_SIZE * x + this->start_x;
+            dstrect.y = GEM_SIZE * y + this->start_y;
+            dstrect.w = GEM_SIZE;
+            dstrect.h = GEM_SIZE;
 
-            SDL_SetTextureColorMod(textures.get(image_gems), color.r, color.g, color.b);
-            SDL_RenderCopy(renderer, textures.get(image_gems), &srcrect, &dstrect);
+            SDL_RenderCopy(renderer, textures.get(image_shells), &srcrect, &dstrect);
         }
     }
 }
@@ -274,4 +240,7 @@ void BoardManager::drawScore(SDL_Renderer * renderer) {
     rect_score.x -= GEM_SIZE * 2 + rect_score.w/2;
     rect_score.y += GEM_SIZE/2 - rect_score.h/2;
     SDL_RenderCopy(renderer, text_score, NULL, &rect_score);
+
+    SDL_DestroyTexture(text_moves);
+    SDL_DestroyTexture(text_score);
 }
