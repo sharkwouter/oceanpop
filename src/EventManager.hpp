@@ -8,10 +8,17 @@ class EventManager {
 
 private:
     Event getEventFromKeyboard(SDL_Keycode key);
+    Event getEventFromControllerButton(Uint32 button);
 
-    SDL_Event event;
+    void openGameController(Sint32);
+    void closeDisconnectedGameControllers();
+    void closeAllGameControllers();
+
+    std::vector<SDL_GameController*> gameControllers;
 
 public:
+    ~EventManager();
+
     std::vector<Event> getEvents(Window &window);
 
 };

@@ -8,7 +8,8 @@ enum class Event {
     RIGHT,
     UP,
     DOWN,
-    MENU
+    MENU,
+    OTHER
 };
 
 #endif // EVENT_HPP
