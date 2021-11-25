@@ -103,6 +103,12 @@ void BoardManager::moveCursor(int x, int y) {
 
 void BoardManager::addScore(int matches) {
     this->score += 10*matches*(matches+1)/2;
+    score_updated = true;
+}
+
+void BoardManager::decreaseMoves() {
+    moves--;
+    moves_updated = true;
 }
 
 void BoardManager::update() {
@@ -120,7 +126,7 @@ void BoardManager::update() {
                 addScore(matches);
                 this->current_action = Action::FALLING;
             } else {
-                this->moves--;
+                decreaseMoves();
                 this->current_action = Action::PICKING;
             }
             break;
@@ -223,9 +229,14 @@ void BoardManager::drawShells(SDL_Renderer * renderer) {
 
 void BoardManager::drawScore(SDL_Renderer * renderer) {
     // Generate texture with text
-    SDL_Color textColor = {255, 255, 255, 255};
-    SDL_Texture * text_moves = fonts.getTexture(renderer, std::to_string(moves) + " moves left", false, textColor);
-    SDL_Texture * text_score = fonts.getTexture(renderer, std::to_string(score) + "/" + std::to_string(required_score), false, textColor);
+    if (moves_updated) {
+        text_moves = fonts.getTexture(renderer, std::to_string(moves) + " moves left", false, {255, 255, 255, 255});
+        moves_updated = false;
+    }
+    if (score_updated) {
+        text_score = fonts.getTexture(renderer, std::to_string(score) + "/" + std::to_string(required_score), false, {255, 255, 255, 255});
+        score_updated = false;
+    }
 
     // Render moves
     SDL_Rect rect_moves = {start.x, end.y, 0, 0};
@@ -240,7 +251,4 @@ void BoardManager::drawScore(SDL_Renderer * renderer) {
     rect_score.x -= GEM_SIZE * 2 + rect_score.w/2;
     rect_score.y += GEM_SIZE/2 - rect_score.h/2;
     SDL_RenderCopy(renderer, text_score, NULL, &rect_score);
-
-    SDL_DestroyTexture(text_moves);
-    SDL_DestroyTexture(text_score);
 }

@@ -23,7 +23,10 @@ private:
 
     int score;
     int required_score;
+    bool score_updated = true;
+
     int moves;
+    bool moves_updated = true;
 
     std::string image_shells = "assets/images/shells.png";
 
@@ -35,7 +38,11 @@ private:
 
     std::vector<std::vector<Shell>> preview;
 
+    SDL_Texture * text_moves;
+    SDL_Texture * text_score;
+
     void addScore(int matches);
+    void decreaseMoves();
 
     void moveCursor(int x, int y);
 
