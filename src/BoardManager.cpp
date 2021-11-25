@@ -53,7 +53,7 @@ void BoardManager::handleEvents(std::vector<Event> events) {
             case Event::CONFIRM:
                 if (this->current_action == Action::PICKING) {
                     this->picked = this->selected;
-                    this->preview = this->board.getGems();
+                    this->preview = this->board.getShells();
                     this->current_action = Action::MOVING;
                 } else if (this->current_action == Action::MOVING) {
                     if (this->board.swap(picked, selected)) {
@@ -95,7 +95,7 @@ void BoardManager::moveCursor(int x, int y) {
             return;
         }
         // Update preview to draw
-        this->preview = this->board.getGemsAfterSwap(this->board.getGems(), this->picked, newSelected);
+        this->preview = this->board.getShellsAfterSwap(this->board.getShells(), this->picked, newSelected);
     }
 
     this->selected = newSelected;
@@ -104,6 +104,11 @@ void BoardManager::moveCursor(int x, int y) {
 void BoardManager::addScore(int matches) {
     this->score += 10*matches*(matches+1)/2;
     score_updated = true;
+}
+
+void BoardManager::increaseMoves() {
+    moves++;
+    moves_updated = true;
 }
 
 void BoardManager::decreaseMoves() {
@@ -120,17 +125,32 @@ void BoardManager::update() {
                 this->current_action = Action::MATCHING;
             break;
         case Action::MATCHING:
-            SDL_Delay(DROP_TIMER);
-            int matches = this->board.match();
-            if (matches > 0) {
-                addScore(matches);
-                this->current_action = Action::FALLING;
-            } else {
-                decreaseMoves();
-                this->current_action = Action::PICKING;
-            }
+            match();
             break;
     }
+}
+
+void BoardManager::match() {
+    SDL_Delay(DROP_TIMER);
+    std::vector<Shell> matches = this->board.match();
+    if (matches.size() > 0) {
+        int scoring_match = 0;
+        for(Shell match : matches) {
+            if (match == Shell::BUBBLE) {
+                increaseMoves();
+            } else if (match == Shell::URCHIN) {
+                this->score -= 50;
+            } else {
+                scoring_match++;
+            }
+        }
+        addScore(scoring_match);
+        this->current_action = Action::FALLING;
+    } else {
+        decreaseMoves();
+        this->current_action = Action::PICKING;
+    }
+
 }
 
 void BoardManager::draw(SDL_Renderer *renderer) {
@@ -200,15 +220,13 @@ void BoardManager::drawBoard(SDL_Renderer * renderer) {
 }
 
 void BoardManager::drawShells(SDL_Renderer * renderer) {
-    std::vector<std::vector<Shell>> shells = this->board.getGems();
+    std::vector<std::vector<Shell>> shells = this->board.getShells();
     if (this->current_action == Action::MOVING) {
         shells = this->preview;
     }
     // Draw the shells
     for (int x = 0; x < this->board.getWidth(); x++) {
         for (int y = 0; y < this->board.getHeight(); y++) {
-            SDL_Color color;
-
             SDL_Rect srcrect;
             srcrect.x = GEM_SIZE * (int) shells[x][y];
             srcrect.y = 0;
