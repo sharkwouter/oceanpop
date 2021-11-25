@@ -16,11 +16,8 @@ class BoardManager {
 private:
     Board board;
 
-    int start_x;
-    int start_y;
-    int end_x;
-    int end_y;
-
+    SDL_Point start;
+    SDL_Point end;
     SDL_Point selected;
     SDL_Point picked;
 
