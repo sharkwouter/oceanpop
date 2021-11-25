@@ -70,8 +70,12 @@ void Board::fillEmpty() {
             if (y > 0) {
                 this->gems[x][y] = this->gems[x][y-1];
                 this->gems[x][y-1] = Shell::NONE;
+            } else if (getCount(Shell::BUBBLE) < 6 && (rand() % 20) == 1) {
+                this->gems[x][y] = Shell::BUBBLE;
+            } else if (getCount(Shell::URCHIN) < 8 && (rand() % 20) == 1) {
+                this->gems[x][y] = Shell::URCHIN;
             } else {
-                this->gems[x][y] = (Shell) (rand() % (int) Shell::NUMBER_OF_COLORS);
+                this->gems[x][y] = (Shell) (rand() % ((int) Shell::NUMBER_OF_COLORS - 2));
             }
         }
     }
@@ -143,6 +147,18 @@ bool Board::isWithinBounds(SDL_Point point) {
         result = false;
     }
     return result;
+}
+
+int Board::getCount(Shell shell) {
+    int count = 0;
+    for (int x = 0; x < getWidth(); x++) {
+        for (int y = 0; y < getHeight(); y++) {
+            if (this->gems[x][y] == shell) {
+                count++;
+            }
+        }
+    }
+    return count;
 }
 
 std::vector<std::vector<Shell>> Board::getGemsCopy() {

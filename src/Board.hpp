@@ -13,6 +13,8 @@ private:
     bool isWithinBounds(SDL_Point point);
     int getMatches(std::vector<std::vector<Shell>> gems, std::vector<SDL_Point> * matchedGems);
     std::vector<std::vector<Shell>> getGemsCopy();
+
+    int getCount(Shell shell);
 public:
     Board(int width, int height);
 
