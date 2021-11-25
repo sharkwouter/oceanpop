@@ -27,7 +27,7 @@ SDL_Texture * FontManager::getTexture(SDL_Renderer *renderer, std::string text, 
     
     SDL_Surface * surface = TTF_RenderUTF8_Blended(current_font, text.c_str(), color);
     if (surface == NULL) {
-        SDL_Log("Couldn't create surface for text %s: ", text.c_str(), TTF_GetError());
+        SDL_Log("Couldn't create surface for text %s: %s", text.c_str(), TTF_GetError());
         return NULL;
     }
 
