@@ -208,7 +208,6 @@ void BoardManager::drawShells(SDL_Renderer * renderer) {
     for (int x = 0; x < this->board.getWidth(); x++) {
         for (int y = 0; y < this->board.getHeight(); y++) {
             SDL_Color color;
-            Shell shell = shells[x][y];
 
             SDL_Rect srcrect;
             srcrect.x = GEM_SIZE * (int) shells[x][y];
