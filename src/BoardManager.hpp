@@ -45,6 +45,8 @@ private:
     void drawScore(SDL_Renderer * renderer);
     void drawGems(SDL_Renderer * renderer);
 
+    std::vector<std::vector<Gem>> preview;
+
     void init();
     void reset();
 public:

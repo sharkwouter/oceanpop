@@ -53,6 +53,7 @@ void BoardManager::handleEvents(std::vector<Event> events) {
             case Event::CONFIRM:
                 if (this->current_action == Action::PICKING) {
                     this->picked = this->selected;
+                    this->preview = this->board.getGems();
                     this->current_action = Action::MOVING;
                 } else if (this->current_action == Action::MOVING) {
                     if (this->board.swap(picked, selected)) {
@@ -93,6 +94,8 @@ void BoardManager::moveCursor(int x, int y) {
         if (newSelected.x != this->picked.x && newSelected.y != this->picked.y) {
             return;
         }
+        // Update preview to draw
+        this->preview = this->board.getGemsAfterSwap(this->board.getGems(), this->picked, newSelected);
     }
 
     this->selected = newSelected;
@@ -193,7 +196,7 @@ void BoardManager::drawBoard(SDL_Renderer * renderer) {
 void BoardManager::drawGems(SDL_Renderer * renderer) {
     std::vector<std::vector<Gem>> gems = this->board.getGems();
     if (this->current_action == Action::MOVING) {
-        gems = this->board.getGemsAfterSwap(gems, this->picked, this->selected);
+        gems = this->preview;
     }
     // Draw the gems
     for (int x = 0; x < this->board.getWidth(); x++) {
