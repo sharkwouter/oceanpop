@@ -161,16 +161,23 @@ void BoardManager::draw(SDL_Renderer *renderer) {
 }
 
 void BoardManager::drawCursor(SDL_Renderer * renderer) {
-    // Draw picked rectangle
+    // Draw picked cross
     if (this->current_action == Action::MOVING) {
-        SDL_Rect pickrect;
-        pickrect.x = GEM_SIZE * picked.x + this->start.x + 1;
-        pickrect.y = GEM_SIZE * picked.y + this->start.y + 1;
-        pickrect.w = GEM_SIZE - 1;
-        pickrect.h = GEM_SIZE - 1;
+        SDL_Rect pickrect_hor;
+        pickrect_hor.x = this->start.x +1;
+        pickrect_hor.y = GEM_SIZE * this->picked.y + this->start.y + 1;
+        pickrect_hor.w = GEM_SIZE * this->board.getWidth();
+        pickrect_hor.h = GEM_SIZE - 1;
 
-        SDL_SetRenderDrawColor(renderer, 0, 0, 255, 200);
-        SDL_RenderFillRect(renderer, &pickrect);
+        SDL_Rect pickrect_ver;
+        pickrect_ver.x = GEM_SIZE * this->picked.x + this->start.x + 1;
+        pickrect_ver.y = this->start.y + 1;
+        pickrect_ver.w = GEM_SIZE - 1;
+        pickrect_ver.h =  GEM_SIZE * this->board.getHeight();
+
+        SDL_SetRenderDrawColor(renderer, 0, 0, 255, 50);
+        SDL_RenderFillRect(renderer, &pickrect_ver);
+        SDL_RenderFillRect(renderer, &pickrect_hor);
     }
 
     // Draw selection rectangle
@@ -180,7 +187,7 @@ void BoardManager::drawCursor(SDL_Renderer * renderer) {
     selrect.w = GEM_SIZE - 1;
     selrect.h = GEM_SIZE - 1;
 
-    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 200);
+    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 100);
     SDL_RenderFillRect(renderer, &selrect);
 }
 
