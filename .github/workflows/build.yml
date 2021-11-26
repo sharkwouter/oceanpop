@@ -39,13 +39,14 @@ jobs:
         uses: actions/checkout@v2
       - name: Build
         run: |
-          cmake -DCMAKE_TOOLCHAIN_FILE=C:\vcpkg\scripts\buildsystems\vcpkg.cmake -DCMAKE_BUILD_TYPE=Release .
-          cmake --build .
+          cmake -DCMAKE_TOOLCHAIN_FILE=C:\vcpkg\scripts\buildsystems\vcpkg.cmake -D-DVCPKG_TARGET_TRIPLET=x64-windows -A x64 .
+          cmake --build --type=Release .
       - name: Publish artifacts
         uses: actions/upload-artifact@v2
         with:
           name: match-theory-windows
           path: |
             Debug
+            Release
             LICENSE
             README.md
