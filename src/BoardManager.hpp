@@ -42,9 +42,12 @@ private:
     SDL_Texture * text_score;
 
     void addScore(int matches);
+    void increaseMoves();
     void decreaseMoves();
 
     void moveCursor(int x, int y);
+
+    void match();
 
     void drawCursor(SDL_Renderer * renderer);
     void drawBoard(SDL_Renderer * renderer);
