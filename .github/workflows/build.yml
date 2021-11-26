@@ -6,46 +6,42 @@ on:
 
 jobs:
   ubuntu:
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        - name: Ubuntu
+          os: ubuntu-latest
+          cmake-args:
+        - name: Windows
+          os: windows-latest
+          cmake-args: -DCMAKE_TOOLCHAIN_FILE=C:\vcpkg\scripts\buildsystems\vcpkg.cmake
+
     steps:
-      - name: install dependencies
+      - name: install dependencies (Ubuntu)
+        if: ${{ matrix.os == 'ubuntu-latest'}}
         run: |
           sudo apt-get update
-          sudo apt-get install -y cmake g++ libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev libsdl2-mixer-dev
-      - name: checkout
-        uses: actions/checkout@v2
-      - name: build
-        run: |
-          cmake .
-          cmake --build .
-      - name: publish artifacts
-        uses: actions/upload-artifact@v2
-        with:
-          name: ubuntu
-          path: |
-            match-theory
-            assets
-            LICENSE
-            README.md
+          sudo apt-get install -y cmake g++ libsdl2-dev libsdl2-image-dev
 
-  windows:
-    runs-on: windows-latest
-    steps:
-      - name: install dependencies
+      - name: Install dependencies (Windows)
+        if: ${{ matrix.os == 'windows-latest'}}
         run: |
-          vcpkg install sdl2:x64-windows sdl2-image:x64-windows sdl2-ttf:x64-windows sdl2-mixer:x64-windows
+          vcpkg install sdl2:x64-windows sdl2-image:x64-windows
+
       - name: checkout
         uses: actions/checkout@v2
       - name: build
         run: |
-          cmake -DCMAKE_TOOLCHAIN_FILE=C:\vcpkg\scripts\buildsystems\vcpkg.cmake .
+          cmake ${{ matrix.cmake-args }} .
           cmake --build .
       - name: publish artifacts
         uses: actions/upload-artifact@v2
         with:
-          name: windows
+          name: match-theory-${{ matrix.name }}
           path: |
-            match-theory.exe
+            match-theory*
             assets
             LICENSE
             README.md
