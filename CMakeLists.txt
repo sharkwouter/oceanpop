@@ -113,7 +113,7 @@ ELSEIF(WIN32)
           ${JSONCPP_INCLUDE_DIRS}
      )
      file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/assets
-          DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_BUILD_TYPE}/)
+          DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/Debug/)
 ELSE()
      include(FindPkgConfig)
 
