@@ -159,8 +159,12 @@ ELSEIF(WIN32)
           ${SDL2_MIXER_INCLUDE_DIRS}
           ${JSONCPP_INCLUDE_DIRS}
      )
+     if(NOT CMAKE_BUILD_TYPE MATCHES "Release")
+         set(CMAKE_BUILD_TYPE "Debug")
+     endif()
+     
      file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/assets
-          DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/Debug/)
+          DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_BUILD_TYPE}/)
 ELSE()
      include(FindPkgConfig)
 
