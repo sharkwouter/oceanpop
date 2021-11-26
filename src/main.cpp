@@ -34,7 +34,7 @@ void run() {
     }
 }
 
-int main() {
+int main(int argv, char** args) {
     try {
         run();
     } catch (...) {
