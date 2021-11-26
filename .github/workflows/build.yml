@@ -33,7 +33,7 @@ jobs:
     steps:
       - name: install dependencies
         run: |
-          vcpkg install sdl2 sdl2-image sdl2-ttf sdl2-mixer
+          vcpkg install sdl2:x64-windows sdl2-image:x64-windows sdl2-ttf:x64-windows sdl2-mixer:x64-windows
       - name: checkout
         uses: actions/checkout@v2
       - name: build
