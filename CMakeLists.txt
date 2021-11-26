@@ -5,9 +5,9 @@ project(match-theory VERSION 0.1.0)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-if(NOT WIN32) {
+if(NOT WIN32)
      add_compile_options(-Wall -Wextra -pedantic)
-}
+endif()
 
 file(GLOB_RECURSE SRC src/*.cpp)
 add_executable(match-theory ${SRC})
