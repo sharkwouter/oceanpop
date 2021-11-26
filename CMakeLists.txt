@@ -5,7 +5,7 @@ project(match-theory VERSION 0.1.0)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-if(NOT WIN32)
+if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
      add_compile_options(-Wall -Wextra -pedantic)
 endif()
 
