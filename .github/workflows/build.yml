@@ -11,12 +11,12 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        - name: Ubuntu
-          os: ubuntu-latest
-          cmake-args:
-        - name: Windows
-          os: windows-latest
-          cmake-args: -DCMAKE_TOOLCHAIN_FILE=C:\vcpkg\scripts\buildsystems\vcpkg.cmake
+        os: [ubuntu-latest, windows-latest]
+        include:
+          - os: windows-latest
+            cmake-args: -DCMAKE_TOOLCHAIN_FILE=C:\vcpkg\scripts\buildsystems\vcpkg.cmake
+          - os: ubuntu-latest
+            cmake-args: 
 
     steps:
       - name: install dependencies (Ubuntu)
@@ -39,7 +39,7 @@ jobs:
       - name: publish artifacts
         uses: actions/upload-artifact@v2
         with:
-          name: match-theory-${{ matrix.name }}
+          name: match-theory-${{ matrix.os }}
           path: |
             match-theory*
             assets
