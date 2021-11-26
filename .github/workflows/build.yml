@@ -17,8 +17,8 @@ jobs:
       - name: Build
         run: |
           cmake -DCMAKE_BUILD_TYPE=Release .
-          strip --strip-unneeded match-theory
           make
+          strip --strip-unneeded match-theory
       - name: Publish artifacts
         uses: actions/upload-artifact@v2
         with:
@@ -41,7 +41,7 @@ jobs:
       - name: Build
         run: |
           cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=C:\vcpkg\scripts\buildsystems\vcpkg.cmake -D-DVCPKG_TARGET_TRIPLET=x64-windows -A x64 .
-          cmake --build --config Release .
+          cmake --build .
       - name: Publish artifacts
         uses: actions/upload-artifact@v2
         with:
