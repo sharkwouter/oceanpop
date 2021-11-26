@@ -1,7 +1,7 @@
 # Match Theory
 A relaxing open source match 3 puzzle game with a twist.
 
-![screenshot](screenshot.png?raw=true)
+![screenshot](screenshot.jpg?raw=true)
 
 ## Features
 
