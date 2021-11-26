@@ -12,11 +12,7 @@ add_executable(match-theory ${SRC})
 
 find_package(SDL2 REQUIRED)
 target_include_directories(match-theory PRIVATE ${SDL2_INCLUDE_DIRS})
-target_link_libraries(match-theory ${SDL2_LIBRARIES})
-
-find_package(SDL2_image REQUIRED)
-target_include_directories(match-theory PRIVATE ${${SDL2_IMAGE_INCLUDE_DIRS}})
-target_link_libraries(match-theory ${SDL2_IMAGE_LIBRARIES})
+target_link_libraries(match-theory SDL2_image ${SDL2_LIBRARIES})
 
 file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/assets/images
      DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
