@@ -1,8 +1,8 @@
 #include "Board.hpp"
 
 Board::Board(int width, int height) {
-   // Create the gems vector
-   this->gems.reserve(width);
+    // Create the gems vector
+    this->gems.reserve(width);
     for (int x = 0; x < width; x++) {
         this->gems.push_back(std::move(std::vector<Gem>()));
         this->gems[x].reserve(height);
@@ -23,7 +23,7 @@ int Board::match() {
     int matchesFound = getMatches(this->gems, &matchedGems);
 
     for (SDL_Point p : matchedGems) {
-            this->gems[p.x][p.y] = Gem::EMPTY;
+        this->gems[p.x][p.y] = Gem::EMPTY;
     }
 
     return matchesFound;
