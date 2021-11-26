@@ -10,6 +10,12 @@
 #include "states/GameState.hpp"
 
 
+#ifdef __PSP__
+    #include "pspkernel.h"
+    PSP_MODULE_INFO("Match Theory", 0, 1, 1);
+    PSP_MAIN_THREAD_ATTR(THREAD_ATTR_VFPU | THREAD_ATTR_USER);
+#endif
+
 void run() {
     Window window("Match Theory", SCREEN_WIDTH, SCREEN_HEIGHT);
     StateManager state_manager(new GameState(window.renderer));

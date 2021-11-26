@@ -5,8 +5,9 @@
 #include <SDL.h>
 #include "Board.hpp"
 #include "constants.hpp"
-#include "Gem.hpp"
+#include "Shell.hpp"
 #include "TextureManager.hpp"
+#include "FontManager.hpp"
 #include "Event.hpp"
 #include "Action.hpp"
 
@@ -15,21 +16,43 @@ class BoardManager {
 private:
     Board board;
 
-    int start_x;
-    int start_y;
-    int end_x;
-    int end_y;
-
+    SDL_Point start;
+    SDL_Point end;
     SDL_Point selected;
     SDL_Point picked;
 
-    std::string image_gems = "images/gems.png";
+    int score;
+    int required_score;
+    bool score_updated = true;
+
+    int moves;
+    bool moves_updated = true;
+
+    std::string image_shells = "assets/images/shells.png";
 
     TextureManager textures;
 
+    FontManager fonts;
+
     Action current_action;
 
+    std::vector<std::vector<Shell>> preview;
+
+    SDL_Texture * text_moves;
+    SDL_Texture * text_score;
+
+    void addScore(int matches);
+    void decreaseMoves();
+
     void moveCursor(int x, int y);
+
+    void drawCursor(SDL_Renderer * renderer);
+    void drawBoard(SDL_Renderer * renderer);
+    void drawScore(SDL_Renderer * renderer);
+    void drawShells(SDL_Renderer * renderer);
+
+    void init();
+    void reset();
 public:
     BoardManager(SDL_Renderer *renderer, int x, int y, int width, int height);
 

@@ -63,19 +63,43 @@ if (VITA)
 		    VERSION ${VITA_VERSION}
 		    NAME ${VITA_APPNAME}
 		    FILE platform/vita/sce_sys sce_sys
-		    FILE assets/images images
+		    FILE assets assets
 	)
+ELSEIF(PLATFORM_PSP)
+     set(SDL2_INCLUDE_DIR "${PSPDEV}/psp/include/SDL2")
+
+     target_include_directories(match-theory PRIVATE
+          ${SDL2_INCLUDE_DIR}
+     )
+
+     target_link_libraries(match-theory PRIVATE SDL2_image SDL2 png jpeg z GLU GL pspvram pspvfpu psphprm pspdisplay pspgu pspge pspdebug pspaudio)
+
+     create_pbp_file(
+          TARGET match-theory
+          ICON_PATH NULL
+          BACKGROUND_PATH NULL
+          PREVIEW_PATH NULL
+          TITLE Match-Theory
+          BUILD_PRX
+     )
+
+     file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/assets
+               DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 ELSE()
      include(FindPkgConfig)
 
-     find_package(SDL2 REQUIRED)
-     target_include_directories(match-theory PRIVATE ${SDL2_INCLUDE_DIRS})
-     target_link_libraries(match-theory ${SDL2_LIBRARIES})
-
+     pkg_search_module(SDL2 REQUIRED sdl2)
      pkg_search_module(SDL2_IMAGE REQUIRED SDL2_image >= 2.0.0)
-     target_include_directories(match-theory PRIVATE ${${SDL2_IMAGE_INCLUDE_DIRS}})
-     target_link_libraries(match-theory ${SDL2_IMAGE_LIBRARIES})
+     pkg_search_module(SDL2_TTF REQUIRED SDL2_ttf)
 
-     file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/assets/images
+     target_include_directories(match-theory PRIVATE ${SDL2_INCLUDE_DIRS})
+     
+     target_link_libraries(match-theory
+          ${SDL2_TTF_LIBRARIES}
+          ${SDL2_IMAGE_LIBRARIES}
+          ${SDL2_LIBRARIES}
+     )
+
+     file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/assets
           DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 ENDIF()

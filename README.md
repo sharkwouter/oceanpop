@@ -50,4 +50,8 @@ make
 The copy the ``match-theory.vpk`` file to the Vita and install it to be able to play.
 
 ## Attribution
-Thanks to [Buch](https://opengameart.org/users/buch) for making the gem sprites used.
+
+[Shell sprites created by macrovector](https://www.freepik.com/free-vector/sea-fauna-icons_3924735.htm)
+[Urchin sprite created by macrovector](https://www.freepik.com/free-vector/sea-life-cartoon-icons-set_4265868.htm)
+[Bubble sprite created by starline](https://www.freepik.com/free-vector/water-bubbles-background-with-text-space_15355945.htm)
+[Background created by Pixabay](https://www.pexels.com/photo/scenic-view-of-landscape-against-sky-315998/)
