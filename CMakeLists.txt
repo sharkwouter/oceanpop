@@ -10,7 +10,11 @@ if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
 endif()
 
 file(GLOB_RECURSE SRC src/*.cpp)
-add_executable(match-theory ${SRC})
+if(WIN32)
+     add_executable(match-theory WIN32 ${SRC})
+else()
+     add_executable(match-theory ${SRC})
+endif()
 
 if (VITA)
 	# VITASDK defines
