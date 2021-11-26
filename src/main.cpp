@@ -12,7 +12,7 @@
 
 #ifdef __PSP__
     #include "pspkernel.h"
-    PSP_MODULE_INFO("SDL App", 0, 1, 1);
+    PSP_MODULE_INFO("Match Theory", 0, 1, 1);
     PSP_MAIN_THREAD_ATTR(THREAD_ATTR_VFPU | THREAD_ATTR_USER);
 #endif
 
