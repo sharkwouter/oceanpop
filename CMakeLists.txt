@@ -7,6 +7,10 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
      add_compile_options(-Wall -Wextra -pedantic)
+elseif(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
+     if(CMAKE_BUILD_TYPE STREQUAL "Release")
+          add_compile_options("")
+     endif()
 endif()
 
 file(GLOB_RECURSE SRC src/*.cpp)
@@ -91,7 +95,32 @@ ELSEIF(PLATFORM_PSP)
           ${SDL2_INCLUDE_DIR}
      )
 
-     target_link_libraries(match-theory PRIVATE SDL2_image SDL2 png jpeg z GLU GL pspvram pspvfpu psphprm pspdisplay pspgu pspge pspdebug pspaudio)
+     target_link_libraries(match-theory PRIVATE
+          SDL2_image
+          SDL2_mixer
+          SDL2main
+          SDL2
+          SDL2_ttf
+          png
+          jpeg
+          pspvram
+          GL
+          pspvram
+          pspvfpu
+          pspgu
+          pspdebug
+          pspdisplay
+          pspge
+          pspaudio
+          psphprm
+          psprtc
+          jsoncpp
+          vorbisfile
+          vorbis
+          ogg
+          freetype
+          z
+     )
 
      create_pbp_file(
           TARGET match-theory
@@ -99,6 +128,7 @@ ELSEIF(PLATFORM_PSP)
           BACKGROUND_PATH NULL
           PREVIEW_PATH NULL
           TITLE Match-Theory
+          ENC
           BUILD_PRX
      )
 
