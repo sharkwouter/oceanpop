@@ -1,57 +1,59 @@
 # Match Theory
-A portable open source match 3 game.
+A relaxing open source match 3 puzzle game with a twist.
 
-## Building
+![screenshot](screenshot.png?raw=true)
 
-Regardless of platform, building the game starts with cloning the git repo with the following command:
+## Features
 
-```
-git clone https://github.com/JoseTomasTocino/freegemas.git
-```
+Match Theory boasts at least the following features:
 
-### Linux
+- Match 3 gameplay with a twist
+- Full controller support
 
-On Linux make sure the following packages are installed:
+## How to play
 
-```
-libsdl2-dev libsdl2-image-dev
-```
+in Match Theory the goal is to reach the target score before running out of moves. Earn points by lining up 3 or more shells of the same type. This is done by moving one shell as far horizontally or vertically as the user would like, but it can only be places when a match is made. Each time this is done, a move is used.
 
-After cloning use the following commands to build for Linux:
+### Shells
 
-```
-cd match-theory
-mkdir build
-cd build
-cmake ..
-make
-```
+![shells](assets/images/shells.png?raw=true)
 
-Then the game can be run with:
+There are a couple of different shells to match. From the left, the first 4 all give points. The more matches in one turn the more points. The other 2 have a different effect, though:
 
-```
-./match-theory
-```
+- Don't match the **sea urchin**, it will cost points.
+- Match the **bubble** to make the current move free.
 
-### Playstation Vita
+### Controls
 
-Make sure the [VitaSDK](https://vitasdk.org/) is installed for building for the Vita.
+Match Theory can be played with a keyboard or gamepad. Here each will be listed.
 
-After cloning use the following commands to build for the Vita:
+#### Keyboard
 
-```
-cd match-theory
-mkdir vita
-cd vita
-cmake -DCMAKE_TOOLCHAIN_FILE="${VITASDK}/share/vita.toolchain.cmake" ..
-make
-```
+- **Arrow keys** or **WASD**: Move the cursor.
+- **Space**, **Return** or **E**: Pick or drop a shell or confirm in menus.
+- **Escape**: Open the menu.
+- **Backspace** or **Q**: Cancel.
 
-The copy the ``match-theory.vpk`` file to the Vita and install it to be able to play.
+#### Gamepad
+
+- **D-pad**: Move the cursor.
+- **A**: Pick or drop a shell or confirm in menus.
+- **Start**: Open the menu.
+- **B**: Cancel.
+
+This assumes an Xbox controller, but a Playstation controller will work too.
+
+## License
+
+Match Theory was made available under the MIT license. See the ``LICENSE`` file.
+
+The original code can be found at: https://github.com/match-theory/match-theory
 
 ## Attribution
 
-[Shell sprites created by macrovector](https://www.freepik.com/free-vector/sea-fauna-icons_3924735.htm)
-[Urchin sprite created by macrovector](https://www.freepik.com/free-vector/sea-life-cartoon-icons-set_4265868.htm)
-[Bubble sprite created by starline](https://www.freepik.com/free-vector/water-bubbles-background-with-text-space_15355945.htm)
-[Background created by Pixabay](https://www.pexels.com/photo/scenic-view-of-landscape-against-sky-315998/)
+Some of the assets were made available by the following parties:
+
+- [Shell sprites created by macrovector](https://www.freepik.com/free-vector/sea-fauna-icons_3924735.htm)
+- [Urchin sprite created by macrovector](https://www.freepik.com/free-vector/sea-life-cartoon-icons-set_4265868.htm)
+- [Bubble sprite created by starline](https://www.freepik.com/free-vector/water-bubbles-background-with-text-space_15355945.htm)
+- [Background created by Pixabay](https://www.pexels.com/photo/scenic-view-of-landscape-against-sky-315998/)
