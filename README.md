@@ -43,6 +43,10 @@ Match Theory can be played with a keyboard or gamepad. Here each will be listed.
 
 This assumes an Xbox controller, but a Playstation controller will work too.
 
+## Download
+
+Find the latest release can be found here: https://github.com/match-theory/match-theory/releases/latest
+
 ## License
 
 Match Theory was made available under the MIT license. See the ``LICENSE`` file.
