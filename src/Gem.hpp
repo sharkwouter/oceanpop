@@ -9,7 +9,8 @@ enum class Gem {
     PURPLE,
     GRAY,
     BROWN,
-    NUMBER_OF_COLORS
+    NUMBER_OF_COLORS,
+    EMPTY
 };
 
 

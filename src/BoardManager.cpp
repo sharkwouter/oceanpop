@@ -10,56 +10,122 @@ BoardManager::BoardManager(SDL_Renderer *renderer, int x, int y, int width, int 
     this->end_x = GEM_SIZE * this->board.getWidth() + this->start_x;
     this->end_y = GEM_SIZE * this->board.getHeight() + this->start_y;
 
-    this->selected_x = 3;
-    this->selected_y = 3;
+    this->selected.x = width / 2;
+    this->selected.y = height / 2;
 
     textures.add_texture(image_gems, renderer);
+
+    this->current_action = Action::FALLING;
 }
 
 void BoardManager::handleEvents(std::vector<Event> events) {
+    if (this->current_action == Action::MATCHING || this->current_action == Action::FALLING)
+        return;
+    
     for (Event e: events) {
         switch (e) {
             case Event::LEFT:
-                selected_x -= 1;
+                moveCursor(-1, 0);
                 break;
             case Event::RIGHT:
-                selected_x += 1;
+                moveCursor(1, 0);
                 break;
             case Event::UP:
-                selected_y -= 1;
+                moveCursor(0, -1);
                 break;
             case Event::DOWN:
-                selected_y += 1;
+                moveCursor(0, 1);
                 break;
+            case Event::CONFIRM:
+                if (this->current_action == Action::PICKING) {
+                    this->picked = this->selected;
+                    this->current_action = Action::MOVING;
+                } else if (this->current_action == Action::MOVING) {
+                    if (this->board.swap(picked, selected)) {
+                        this->current_action = Action::FALLING;
+                    } else {
+                        this->selected = this->picked;
+                        this->current_action = Action::PICKING;
+                    }
+                        
+                }
+                break;
+            case Event::CANCEL:
+                if (this->current_action == Action::MOVING) {
+                    this->selected = this->picked;
+                    this->current_action = Action::PICKING;
+                }
             default:
                 break;
         }
     }
 }
 
+void BoardManager::moveCursor(int x, int y) {
+    SDL_Point newSelected = {this->selected.x + x, this->selected.y + y};
+
+    // Wrap around the screen
+    if (newSelected.x < 0) {
+        newSelected.x = this->board.getWidth() - 1;
+    } else if (newSelected.x >= this->board.getWidth()) {
+        newSelected.x = 0;
+    } else if (newSelected.y < 0) {
+        newSelected.y = this->board.getHeight() - 1;
+    } else if (newSelected.y >= this->board.getHeight()) {
+        newSelected.y = 0;
+    }
+
+    if (this->current_action == Action::MOVING) {
+        if (newSelected.x != this->picked.x && newSelected.y != this->picked.y) {
+            return;
+        }
+    }
+
+    this->selected = newSelected;
+}
 
 void BoardManager::update() {
-    if (selected_x < 0) {
-        selected_x = board.getWidth() - 1;
-    } else if (selected_x >= board.getWidth()) {
-        selected_x = 0;
-    } else if (selected_y < 0) {
-        selected_y = board.getHeight() - 1;
-    } else if (selected_y >= board.getHeight()) {
-        selected_y = 0;
+    switch (this->current_action) {
+        case Action::FALLING:
+            this->board.fillEmpty();
+            SDL_Delay(DROP_TIMER);
+            if(!this->board.hasEmpty())
+                this->current_action = Action::MATCHING;
+            break;
+        case Action::MATCHING:
+            SDL_Delay(DROP_TIMER);
+            int score = this->board.match();
+            if (score > 0) {
+                this->current_action = Action::FALLING;
+            } else {
+                this->current_action = Action::PICKING;
+            }
+            break;
     }
 }
 
 void BoardManager::draw(SDL_Renderer *renderer) {
     // Draw selection rectangle
     SDL_Rect selrect;
-    selrect.x = GEM_SIZE * selected_x + this->start_x;
-    selrect.y = GEM_SIZE * selected_y + this->start_y;
+    selrect.x = GEM_SIZE * selected.x + this->start_x;
+    selrect.y = GEM_SIZE * selected.y + this->start_y;
     selrect.w = GEM_SIZE;
     selrect.h = GEM_SIZE;
 
     SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
     SDL_RenderFillRect(renderer, &selrect);
+
+    // Draw picked rectangle
+    if (this->current_action == Action::MOVING) {
+        SDL_Rect pickrect;
+        pickrect.x = GEM_SIZE * picked.x + this->start_x;
+        pickrect.y = GEM_SIZE * picked.y + this->start_y;
+        pickrect.w = GEM_SIZE;
+        pickrect.h = GEM_SIZE;
+
+        SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
+        SDL_RenderFillRect(renderer, &pickrect);
+    }
 
     // Draw board lines
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
@@ -85,13 +151,13 @@ void BoardManager::draw(SDL_Renderer *renderer) {
     }
 
     // Draw the gems
-    for (int y = 0; y < this->board.getHeight(); y++) {
-        for (int x = 0; x < this->board.getWidth(); x++) {
+    for (int x = 0; x < this->board.getWidth(); x++) {
+        for (int y = 0; y < this->board.getHeight(); y++) {
             SDL_Rect srcrect;
             srcrect.w = 32;
             srcrect.h = 32;
 
-            switch (this->board.gems[y][x]) {
+            switch (this->board.getGems()[x][y]) {
                 case Gem::RED:
                     srcrect.x = 374;
                     srcrect.y = 70;
@@ -121,8 +187,7 @@ void BoardManager::draw(SDL_Renderer *renderer) {
                     srcrect.y = 37;
                     break;
                 default:
-                    srcrect.x = 4;
-                    srcrect.y = 4;
+                    continue;
                     break;
             }
 
