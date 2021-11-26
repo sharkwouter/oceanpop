@@ -17,40 +17,53 @@ else()
 endif()
 
 if (VITA)
-	# VITASDK defines
-	if(NOT DEFINED CMAKE_TOOLCHAIN_FILE)
-		if(DEFINED ENV{VITASDK})
-			set(CMAKE_TOOLCHAIN_FILE "$ENV{VITASDK}/share/vita.toolchain.cmake" CACHE PATH "toolchain file")
-		    else()
-			message(FATAL_ERROR "Please define VITASDK to point to your SDK path!")
-		    endif()
-	endif()
+     # VITASDK defines
+     if(NOT DEFINED CMAKE_TOOLCHAIN_FILE)
+          if(DEFINED ENV{VITASDK})
+               set(CMAKE_TOOLCHAIN_FILE "$ENV{VITASDK}/share/vita.toolchain.cmake" CACHE PATH "toolchain file")
+               else()
+               message(FATAL_ERROR "Please define VITASDK to point to your SDK path!")
+               endif()
+     endif()
 
-	include("$ENV{VITASDK}/share/vita.cmake" REQUIRED)
+     include("$ENV{VITASDK}/share/vita.cmake" REQUIRED)
 
 
      # Project start
-	set(VITA_APPNAME Match-Theory)
-	set(VITA_TITLEID "MATH00001")
-	set(VITA_VERSION "01.00")
+     set(VITA_APPNAME Match-Theory)
+     set(VITA_TITLEID "MATH00001")
+     set(VITA_VERSION "01.00")
 
      set(VITA_INCLUDE_DIR "$ENV{VITASDK}/arm-vita-eabi/include/")
-	set(SDL2_INCLUDE_DIR "$ENV{VITASDK}/arm-vita-eabi/include/SDL2")
+     set(SDL2_INCLUDE_DIR "$ENV{VITASDK}/arm-vita-eabi/include/SDL2")
+     set(JSON_INCLUDE_DIR "$ENV{VITASDK}/arm-vita-eabi/include/jsoncpp")
 
      target_include_directories(match-theory PRIVATE
           ${VITA_INCLUDE_DIR}
           ${SDL2_INCLUDE_DIR}
+          ${JSON_INCLUDE_DIR}
      )
 
      target_link_libraries(match-theory
           SDL2_image
+          SDL2_ttf
+          SDL2_mixer
           SDL2
+          jsoncpp
+          stdc++
           webp
           pthread
           png16
+          freetype
+          vorbisfile
+          vorbis
+          ogg
           jpeg
           z
           m
+          mikmod
+          mpg123
+          FLAC
           SceAppUtil_stub
           SceAudio_stub
           SceCommonDialog_stub
@@ -65,12 +78,12 @@ if (VITA)
 
      vita_create_self(match-theory.self match-theory)
 
-	vita_create_vpk(match-theory.vpk ${VITA_TITLEID} match-theory.self
-		    VERSION ${VITA_VERSION}
-		    NAME ${VITA_APPNAME}
-		    FILE platform/vita/sce_sys sce_sys
-		    FILE assets assets
-	)
+     vita_create_vpk(match-theory.vpk ${VITA_TITLEID} match-theory.self
+          VERSION ${VITA_VERSION}
+          NAME ${VITA_APPNAME}
+          FILE platform/vita/sce_sys sce_sys
+          FILE assets assets
+     )
 ELSEIF(PLATFORM_PSP)
      set(SDL2_INCLUDE_DIR "${PSPDEV}/psp/include/SDL2")
 
