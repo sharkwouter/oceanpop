@@ -28,7 +28,7 @@ jobs:
       - name: Install dependencies (Windows)
         if: ${{ matrix.os == 'windows-latest'}}
         run: |
-          vcpkg install sdl2:x64-windows sdl2-image:x64-windows
+          vcpkg install --triple x64-windows sdl2 sdl2-image pkgconf
 
       - name: checkout
         uses: actions/checkout@v2
