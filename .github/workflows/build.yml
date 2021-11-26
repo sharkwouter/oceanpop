@@ -5,7 +5,7 @@ on:
   pull_request:
 
 jobs:
-  ubuntu:
+  build:
     runs-on: ${{ matrix.os }}
 
     strategy:
