@@ -1,0 +1,52 @@
+name: Build
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  ubuntu:
+    runs-on: ubuntu-latest
+    steps:
+      - name: install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cmake g++ libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev libsdl2-mixer-dev
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: build
+        run: |
+          cmake .
+          cmake --build .
+      - name: publish artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: ubuntu
+          path: |
+            match-theory
+            assets
+            LICENSE
+            README.md
+
+  windows:
+    runs-on: windows-latest
+    steps:
+      - name: install dependencies
+        run: |
+          vcpkg install sdl2 sdl2-image sdl2-ttf sdl2-mixer
+      - name: checkout
+        uses: actions/checkout@v2
+      - name: build
+        run: |
+          cmake -DCMAKE_TOOLCHAIN_FILE=C:\vcpkg\scripts\buildsystems\vcpkg.cmake .
+          cmake --build .
+      - name: publish artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: windows
+          path: |
+            match-theory.exe
+            assets
+            LICENSE
+            README.md
+
