@@ -73,7 +73,7 @@ To build execute the following commands from a terminal in the directory where t
 ```
 mkdir psp
 cd psp
-psp-cmake ..
+cmake -DCMAKE_TOOLCHAIN_FILE=$PSPDEV/psp/share/pspdev.cmake ..
 make
 ```
 
