@@ -25,9 +25,9 @@ if (VITA)
      if(NOT DEFINED CMAKE_TOOLCHAIN_FILE)
           if(DEFINED ENV{VITASDK})
                set(CMAKE_TOOLCHAIN_FILE "$ENV{VITASDK}/share/vita.toolchain.cmake" CACHE PATH "toolchain file")
-               else()
+          else()
                message(FATAL_ERROR "Please define VITASDK to point to your SDK path!")
-               endif()
+          endif()
      endif()
 
      include("$ENV{VITASDK}/share/vita.cmake" REQUIRED)
@@ -90,7 +90,7 @@ if (VITA)
           FILE platform/vita/assets/backgrounds assets/backgrounds
           FILE assets/fonts assets/fonts
      )
-ELSEIF(PLATFORM_PSP)
+elseif(PLATFORM_PSP)
      set(SDL2_INCLUDE_DIR "${PSPDEV}/psp/include/SDL2")
 
      target_include_directories(match-theory PRIVATE
@@ -143,7 +143,7 @@ ELSEIF(PLATFORM_PSP)
      file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/platform/psp/assets/backgrounds
           DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/assets)
 
-ELSEIF(WIN32)
+elseif(WIN32)
      find_package(SDL2 CONFIG REQUIRED)
      find_package(sdl2-image CONFIG REQUIRED)
      find_package(sdl2-ttf CONFIG REQUIRED)
@@ -173,7 +173,7 @@ ELSEIF(WIN32)
      
      file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/assets
           DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_BUILD_TYPE}/)
-ELSE()
+else()
      include(FindPkgConfig)
 
      pkg_search_module(SDL2 REQUIRED sdl2)
@@ -190,4 +190,4 @@ ELSE()
 
      file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/assets
           DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
-ENDIF()
+endif()
