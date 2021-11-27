@@ -61,7 +61,7 @@ jobs:
         uses: actions/checkout@v2
       - name: Build
         run: |
-          export $PATH:${PSPDEV}/bin
+          export PATH="$PATH:${PSPDEV}/bin"
           mkdir match-theory
           cd match-theory
           psp-cmake -DCMAKE_BUILD_TYPE=Release ..
