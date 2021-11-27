@@ -86,7 +86,9 @@ if (VITA)
           VERSION ${VITA_VERSION}
           NAME ${VITA_APPNAME}
           FILE platform/vita/sce_sys sce_sys
-          FILE assets assets
+          FILE platform/vita/assets/images assets/images
+          FILE platform/vita/assets/backgrounds assets/backgrounds
+          FILE assets/fonts assets/fonts
      )
 ELSEIF(PLATFORM_PSP)
      set(SDL2_INCLUDE_DIR "${PSPDEV}/psp/include/SDL2")
@@ -132,8 +134,13 @@ ELSEIF(PLATFORM_PSP)
           BUILD_PRX
      )
 
-     file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/assets
-               DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+     file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/assets)
+     file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/assets/fonts
+          DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/assets)
+     file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/platform/psp/assets/images
+          DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/assets)
+     file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/platform/psp/assets/backgrounds
+          DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/assets)
 
 ELSEIF(WIN32)
      find_package(SDL2 CONFIG REQUIRED)
