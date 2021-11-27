@@ -54,17 +54,16 @@ jobs:
 
   PSP:
     runs-on: ubuntu-latest
-    container: ghcr.io/pspdev/pspdev:latest
+    container: ghcr.io/pspdev/psp-packages:latest
 
     steps:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Build
         run: |
-          export PATH="$PATH:${PSPDEV}/bin"
           mkdir match-theory
           cd match-theory
-          psp-cmake -DCMAKE_BUILD_TYPE=Release ..
+          cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=$PSPDEV/psp/share/pspdev.cmake ..
           make
           cp ../LICENSE ./
         env:
