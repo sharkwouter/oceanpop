@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <SDL.h>
+#include <SDL_mixer.h>
 #include "Board.hpp"
 #include "constants.hpp"
 #include "Shell.hpp"
@@ -20,6 +21,14 @@ private:
     SDL_Point end;
     SDL_Point selected;
     SDL_Point picked;
+
+    // Sounds, temporary
+    Mix_Chunk * sound_pick;
+    Mix_Chunk * sound_drop;
+    Mix_Chunk * sound_match1;
+    Mix_Chunk * sound_match2;
+    Mix_Chunk * sound_pain;
+
 
     int score;
     int required_score;

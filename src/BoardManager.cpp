@@ -17,6 +17,13 @@ BoardManager::BoardManager(SDL_Renderer *renderer, int x, int y, int width, int 
 
     textures.add_texture(image_shells, renderer);
 
+    // Load sounds, temporary
+    sound_pick = Mix_LoadWAV("assets/sounds/pick.wav");
+    sound_drop = Mix_LoadWAV("assets/sounds/drop.wav");
+    sound_match1 = Mix_LoadWAV("assets/sounds/match1.wav");
+    sound_match2 = Mix_LoadWAV("assets/sounds/match2.wav");
+    sound_pain = Mix_LoadWAV("assets/sounds/pain.wav");
+
     init();
 }
 
@@ -55,11 +62,13 @@ void BoardManager::handleEvents(std::vector<Event> events) {
                     this->picked = this->selected;
                     this->preview = this->board.getShells();
                     this->current_action = Action::MOVING;
+                    Mix_PlayChannel(-1, sound_pick, 0);
                 } else if (this->current_action == Action::MOVING) {
                     if (this->board.swap(picked, selected)) {
                         this->current_action = Action::FALLING;
                     } else {
                         this->selected = this->picked;
+                        Mix_PlayChannel(-1, sound_drop, 0);
                         this->current_action = Action::PICKING;
                     }
                         
@@ -67,6 +76,7 @@ void BoardManager::handleEvents(std::vector<Event> events) {
                 break;
             case Event::CANCEL:
                 if (this->current_action == Action::MOVING) {
+                    Mix_PlayChannel(-1, sound_drop, 0);
                     this->selected = this->picked;
                     this->current_action = Action::PICKING;
                 }
@@ -137,10 +147,13 @@ void BoardManager::match() {
         int scoring_match = 0;
         for(Shell match : matches) {
             if (match == Shell::BUBBLE) {
+                Mix_PlayChannel(-1, sound_match2, 0);
                 increaseMoves();
             } else if (match == Shell::URCHIN) {
+                Mix_PlayChannel(-1, sound_pain, 0);
                 this->score -= 50;
             } else {
+                Mix_PlayChannel(-1, sound_match1, 0);
                 scoring_match++;
             }
         }

@@ -61,3 +61,4 @@ Some of the assets were made available by the following parties:
 - [Urchin sprite created by macrovector](https://www.freepik.com/free-vector/sea-life-cartoon-icons-set_4265868.htm)
 - [Bubble sprite created by starline](https://www.freepik.com/free-vector/water-bubbles-background-with-text-space_15355945.htm)
 - [Background created by Pixabay](https://www.pexels.com/photo/scenic-view-of-landscape-against-sky-315998/)
+- [Some of the sounds in this project were created by David McKee (ViRiX)](https://www.soundcloud.com/virix)
