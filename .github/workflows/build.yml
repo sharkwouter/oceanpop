@@ -79,7 +79,7 @@ jobs:
             match-theory/LICENSE
             README.md
 
-  PSP:
+  Vita:
     runs-on: ubuntu-latest
     container: gnuton/vitasdk-docker:latest
 
