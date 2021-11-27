@@ -61,6 +61,7 @@ jobs:
         uses: actions/checkout@v2
       - name: Build
         run: |
+          export $PATH:${PSPDEV}/bin
           mkdir match-theory
           cd match-theory
           psp-cmake -DCMAKE_BUILD_TYPE=Release ..
@@ -68,7 +69,6 @@ jobs:
           cp ../LICENSE ./
         env:
           PSPDEV: /usr/local/pspdev
-          PATH: $PATH:${PSPDEV}/bin
       - name: Publish artifacts
         uses: actions/upload-artifact@v2
         with:
