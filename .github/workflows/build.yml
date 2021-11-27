@@ -54,7 +54,7 @@ jobs:
 
   PSP:
     runs-on: ubuntu-latest
-    container: ghcr.io/pspdev/psp-packages:latest
+    container: ghcr.io/pspdev/pspdev:latest
 
     steps:
       - name: Checkout
