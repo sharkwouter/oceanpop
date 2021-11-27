@@ -52,7 +52,7 @@ jobs:
             LICENSE
             README.md
 
-  Playstation Portable:
+  PSP:
     runs-on: ubuntu-latest
     container: ghcr.io/pspdev/pspdev:latest
 
