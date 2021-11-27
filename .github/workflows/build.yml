@@ -57,7 +57,7 @@ jobs:
     container: ghcr.io/pspdev/pspdev:latest
 
     steps:
-    - name: Install dependencies
+      - name: Install dependencies
         run: |
           apk add cmake
       - name: Checkout
