@@ -59,7 +59,7 @@ jobs:
     steps:
       - name: Install dependencies
         run: |
-          apk add  cmake libgmp libmpc libmpfr make
+          apk add cmake gmp mpc1 mpfr4 make
       - name: Checkout
         uses: actions/checkout@v2
       - name: Build
