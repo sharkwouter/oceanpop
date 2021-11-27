@@ -53,8 +53,7 @@ jobs:
             README.md
 
   PSP:
-    runs-on: ubuntu-latest
-    container: ghcr.io/pspdev/pspdev:latest
+    container: pspdev/pspdev:latest
 
     steps:
       - name: Install dependencies
@@ -80,7 +79,6 @@ jobs:
             README.md
 
   Vita:
-    runs-on: ubuntu-latest
     container: gnuton/vitasdk-docker:latest
 
     steps:
