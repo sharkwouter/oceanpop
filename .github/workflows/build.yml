@@ -66,6 +66,9 @@ jobs:
           psp-cmake -DCMAKE_BUILD_TYPE=Release ..
           make
           cp ../LICENSE ./
+        env:
+          PSPDEV: /usr/local/pspdev
+          PATH: $PATH:${PSPDEV}/bin
       - name: Publish artifacts
         uses: actions/upload-artifact@v2
         with:
