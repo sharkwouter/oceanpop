@@ -110,6 +110,7 @@ ELSEIF(PLATFORM_PSP)
           pspvram
           pspvfpu
           pspgu
+          pspctrl
           pspdebug
           pspdisplay
           pspge
