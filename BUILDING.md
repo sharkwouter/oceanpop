@@ -66,6 +66,8 @@ The resulting ``match-theory.vpk`` file can be copied to the Vita and installed 
 
 ## Playstation Portable
 
+**Note**: The PSP version is currently not working, because of some bugs in the SDL2 port.
+
 To build for the Playstation Portable latest version of the [PSPDEV SDK](https://github.com/pspdev/pspdev/releases) needs to be installed.
 
 To build execute the following commands from a terminal in the directory where the code is found:
