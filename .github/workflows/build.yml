@@ -78,3 +78,26 @@ jobs:
             match-theory/assets
             match-theory/LICENSE
             README.md
+
+  PSP:
+    runs-on: ubuntu-latest
+    container: gnuton/vitasdk-docker:latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Build
+        run: |
+          cmake -DCMAKE_TOOLCHAIN_FILE="${VITASDK}/share/vita.toolchain.cmake" .
+          make
+        env:
+          PSPDEV: /usr/local/pspdev
+      - name: Publish artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: match-theory-psp
+          path: |
+            match-theory.vpk
+            LICENSE
+            README.md
+            
