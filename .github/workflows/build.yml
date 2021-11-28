@@ -47,7 +47,6 @@ jobs:
         with:
           name: match-theory-windows
           path: |
-            Debug
             Release
             LICENSE
             README.md
