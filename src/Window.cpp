@@ -1,10 +1,11 @@
 #include <SDL_image.h>
 #include <SDL_ttf.h>
+#include <SDL_mixer.h>
 #include "Window.hpp"
 #include "utils.hpp"
 
 Window::Window(const std::string &title, int width, int height) {
-    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_GAMECONTROLLER) != 0) {
+    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_GAMECONTROLLER) != 0) {
         panic("couldn't init SDL: " + std::string(SDL_GetError()));
     }
 
@@ -14,6 +15,10 @@ Window::Window(const std::string &title, int width, int height) {
 
      if (TTF_Init() == -1) {
         panic("couldn't init SDL_ttf: " + std::string(TTF_GetError()));
+    }
+
+    if( Mix_OpenAudio( 22050, MIX_DEFAULT_FORMAT, 2, 4096 ) == -1 ) {
+		panic("couldn't init SDL_mixer: " + std::string(Mix_GetError()));
     }
 
     this->window = SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, SDL_WINDOW_SHOWN);
@@ -42,6 +47,7 @@ void Window::present() {
 }
 
 Window::~Window() {
+    Mix_CloseAudio();
     SDL_DestroyRenderer(this->renderer);
     SDL_DestroyWindow(this->window);
     SDL_Quit();

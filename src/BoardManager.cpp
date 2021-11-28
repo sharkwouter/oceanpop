@@ -3,6 +3,8 @@
 #include <iostream>
 #include <string>
 
+#include "Sound.hpp"
+
 BoardManager::BoardManager(SDL_Renderer *renderer, int x, int y, int width, int height) : board(width, height) {
     this->start.x = x;
     this->start.y = y;
@@ -13,6 +15,7 @@ BoardManager::BoardManager(SDL_Renderer *renderer, int x, int y, int width, int 
     this->selected.x = width / 2;
     this->selected.y = height / 2;
 
+    sounds.load();
     fonts.load();
 
     textures.add_texture(image_shells, renderer);
@@ -55,11 +58,13 @@ void BoardManager::handleEvents(std::vector<Event> events) {
                     this->picked = this->selected;
                     this->preview = this->board.getShells();
                     this->current_action = Action::MOVING;
+                    sounds.play(Sound::PICK);
                 } else if (this->current_action == Action::MOVING) {
                     if (this->board.swap(picked, selected)) {
                         this->current_action = Action::FALLING;
                     } else {
                         this->selected = this->picked;
+                        sounds.play(Sound::DROP);
                         this->current_action = Action::PICKING;
                     }
                         
@@ -67,6 +72,7 @@ void BoardManager::handleEvents(std::vector<Event> events) {
                 break;
             case Event::CANCEL:
                 if (this->current_action == Action::MOVING) {
+                    sounds.play(Sound::DROP);
                     this->selected = this->picked;
                     this->current_action = Action::PICKING;
                 }
@@ -135,15 +141,18 @@ void BoardManager::match() {
     std::vector<Shell> matches = this->board.match();
     if (matches.size() > 0) {
         int scoring_match = 0;
+        Sound sound = Sound::MATCH;
         for(Shell match : matches) {
             if (match == Shell::BUBBLE) {
                 increaseMoves();
             } else if (match == Shell::URCHIN) {
+                sound =Sound::PAIN;
                 this->score -= 50;
             } else {
                 scoring_match++;
             }
         }
+        sounds.play(sound);
         addScore(scoring_match);
         this->current_action = Action::FALLING;
     } else {

@@ -89,6 +89,7 @@ if (VITA)
           FILE platform/vita/assets/images assets/images
           FILE platform/vita/assets/backgrounds assets/backgrounds
           FILE assets/fonts assets/fonts
+          FILE assets/sounds assets/sounds
      )
 elseif(PLATFORM_PSP)
      set(SDL2_INCLUDE_DIR "${PSPDEV}/psp/include/SDL2")
@@ -138,6 +139,8 @@ elseif(PLATFORM_PSP)
      file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/assets)
      file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/assets/fonts
           DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/assets)
+     file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/assets/sounds
+          DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/assets)
      file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/platform/psp/assets/images
           DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/assets)
      file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/platform/psp/assets/backgrounds
@@ -179,12 +182,14 @@ else()
      pkg_search_module(SDL2 REQUIRED sdl2)
      pkg_search_module(SDL2_IMAGE REQUIRED SDL2_image >= 2.0.0)
      pkg_search_module(SDL2_TTF REQUIRED SDL2_ttf)
+     pkg_search_module(SDL2_MIXER REQUIRED SDL2_mixer)
 
      target_include_directories(match-theory PRIVATE ${SDL2_INCLUDE_DIRS})
      
      target_link_libraries(match-theory
           ${SDL2_TTF_LIBRARIES}
           ${SDL2_IMAGE_LIBRARIES}
+          ${SDL2_MIXER_LIBRARIES}
           ${SDL2_LIBRARIES}
      )
 

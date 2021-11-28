@@ -3,10 +3,12 @@
 
 #include <vector>
 #include <SDL.h>
+#include <SDL_mixer.h>
 #include "Board.hpp"
 #include "constants.hpp"
 #include "Shell.hpp"
 #include "TextureManager.hpp"
+#include "SoundManager.hpp"
 #include "FontManager.hpp"
 #include "Event.hpp"
 #include "Action.hpp"
@@ -31,7 +33,7 @@ private:
     std::string image_shells = "assets/images/shells.png";
 
     TextureManager textures;
-
+    SoundManager sounds;
     FontManager fonts;
 
     Action current_action;
