@@ -12,6 +12,8 @@ private:
     TextureManager textures;
 
     std::string background_image = "assets/backgrounds/background1.jpg";
+
+    Mix_Music * music;
 public:
     GameState(SDL_Renderer *renderer);
     ~GameState();

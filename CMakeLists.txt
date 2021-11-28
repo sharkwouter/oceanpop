@@ -90,6 +90,7 @@ if (VITA)
           FILE platform/vita/assets/backgrounds assets/backgrounds
           FILE assets/fonts assets/fonts
           FILE assets/sounds assets/sounds
+          FILE assets/music assets/music
      )
 elseif(PLATFORM_PSP)
      set(SDL2_INCLUDE_DIR "${PSPDEV}/psp/include/SDL2")
@@ -140,6 +141,8 @@ elseif(PLATFORM_PSP)
      file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/assets/fonts
           DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/assets)
      file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/assets/sounds
+          DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/assets)
+     file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/assets/music
           DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/assets)
      file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/platform/psp/assets/images
           DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/assets)
