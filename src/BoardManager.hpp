@@ -8,6 +8,7 @@
 #include "constants.hpp"
 #include "Shell.hpp"
 #include "TextureManager.hpp"
+#include "SoundManager.hpp"
 #include "FontManager.hpp"
 #include "Event.hpp"
 #include "Action.hpp"
@@ -22,14 +23,6 @@ private:
     SDL_Point selected;
     SDL_Point picked;
 
-    // Sounds, temporary
-    Mix_Chunk * sound_pick;
-    Mix_Chunk * sound_drop;
-    Mix_Chunk * sound_match1;
-    Mix_Chunk * sound_match2;
-    Mix_Chunk * sound_pain;
-
-
     int score;
     int required_score;
     bool score_updated = true;
@@ -40,7 +33,7 @@ private:
     std::string image_shells = "assets/images/shells.png";
 
     TextureManager textures;
-
+    SoundManager sounds;
     FontManager fonts;
 
     Action current_action;
