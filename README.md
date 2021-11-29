@@ -41,7 +41,7 @@ Match Theory can be played with a keyboard or gamepad. Here each will be listed.
 - **Start**: Open the menu.
 - **B**: Cancel.
 
-This assumes an Xbox controller, but a Playstation controller will work too.
+This assumes an Xbox controller, but other controllers will work too.
 
 ## Download
 
