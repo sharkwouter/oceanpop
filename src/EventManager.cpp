@@ -1,5 +1,10 @@
 #include "EventManager.hpp"
 
+#include "constants.hpp"
+
+#define AXIS_MAX 32767
+#define AXIS_MIN -32767
+
 EventManager::~EventManager() {
     closeAllGameControllers();
 }
@@ -9,15 +14,20 @@ std::vector<Event> EventManager::getEvents(Window &window) {
     SDL_Event event;
 
     while (SDL_PollEvent(&event)) {
+        Event input = Event::NONE;
+
         switch (event.type) {
             case SDL_QUIT:
                 window.should_close = true;
                 break;
             case SDL_KEYDOWN:
-                inputs.push_back(getEventFromKeyboard(event.key.keysym.sym));
+                input = getEventFromKeyboard(event.key.keysym.sym);
                 break;
             case SDL_CONTROLLERBUTTONDOWN:
-                inputs.push_back(getEventFromControllerButton(event.cbutton.button));
+                input = getEventFromControllerButton(event.cbutton.button);
+                break;
+            case SDL_CONTROLLERAXISMOTION:
+                input = getEventFromControllerAxis(event.caxis.axis, event.caxis.value);
                 break;
             case SDL_CONTROLLERDEVICEADDED:
                 openGameController(event.cdevice.which);
@@ -25,6 +35,9 @@ std::vector<Event> EventManager::getEvents(Window &window) {
             case SDL_CONTROLLERDEVICEREMOVED:
                 closeDisconnectedGameControllers();
                 break;
+        }
+        if (input != Event::NONE) {
+            inputs.push_back(input);
         }
     }
     return inputs;
@@ -98,7 +111,50 @@ Event EventManager::getEventFromControllerButton(Uint32 button) {
         default:
             event = Event::OTHER;
             break;
-        }
+    }
+
+    return event;
+}
+
+Event EventManager::getEventFromControllerAxis(Uint32 axis, Sint16 value) {
+    Event event;
+
+    switch (axis)
+    {
+        case SDL_CONTROLLER_AXIS_LEFTX:
+            if (value > (AXIS_MAX*ANALOG_DEADZONE_MULTIPLIER)) {
+                if (this->returned_to_horizontal_center) {
+                    event = Event::RIGHT;
+                    this->returned_to_horizontal_center = false;
+                }
+            } else if (value < (AXIS_MIN*ANALOG_DEADZONE_MULTIPLIER)) {
+                if(this->returned_to_horizontal_center) {
+                    event = Event::LEFT;
+                    this->returned_to_horizontal_center = false;
+                }
+            } else {
+                this->returned_to_horizontal_center = true;
+            }
+            break;
+        case SDL_CONTROLLER_AXIS_LEFTY:
+            if (value > (AXIS_MAX*ANALOG_DEADZONE_MULTIPLIER)) {
+                if(this->returned_to_vertical_center) {
+                    event = Event::DOWN;
+                    this->returned_to_vertical_center = false;
+                }
+            } else if (value < (AXIS_MIN*ANALOG_DEADZONE_MULTIPLIER)) {
+                if(this->returned_to_vertical_center) {
+                    event = Event::UP;
+                    this->returned_to_vertical_center = false;
+                }
+            } else {
+                this->returned_to_vertical_center = true;
+            }
+            break;
+        default:
+            event = Event::NONE;
+            break;
+    }
 
     return event;
 }

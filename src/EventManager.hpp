@@ -7,8 +7,12 @@
 class EventManager {
 
 private:
+    bool returned_to_horizontal_center;
+    bool returned_to_vertical_center;
+
     Event getEventFromKeyboard(SDL_Keycode key);
     Event getEventFromControllerButton(Uint32 button);
+    Event getEventFromControllerAxis(Uint32 axis, Sint16 value);
 
     void openGameController(Sint32);
     void closeDisconnectedGameControllers();

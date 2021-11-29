@@ -1,6 +1,8 @@
 #ifndef CONSTANTS_HPP
 #define CONSTANTS_HPP
 
+inline constexpr float ANALOG_DEADZONE_MULTIPLIER = 0.4;
+
 inline constexpr int DROP_TIMER = 250;
 
 inline constexpr int BOARD_WIDTH = 8;
