@@ -2,6 +2,7 @@
 #define EVENT_HPP
 
 enum class Event {
+    NONE,
     CONFIRM,
     CANCEL,
     LEFT,
