@@ -73,7 +73,7 @@ jobs:
         with:
           name: match-theory-psp
           path: |
-            match-theory/EBOOT.pbp
+            match-theory/EBOOT.PBP
             match-theory/assets
             match-theory/LICENSE
             README.md
