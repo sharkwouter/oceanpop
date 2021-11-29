@@ -12,7 +12,7 @@ Match Theory boasts at least the following features:
 
 ## How to play
 
-in Match Theory the goal is to reach the target score before running out of moves. Earn points by lining up 3 or more shells of the same type. This is done by moving one shell as far horizontally or vertically as the user would like, but it can only be placed if it creates a match. Each time this is done, a move is used.
+In Match Theory the goal is to reach the target score before running out of moves. Earn points by lining up 3 or more shells of the same type. This is done by moving one shell as far horizontally or vertically as the user would like, but it can only be placed if it creates a match. Each time this is done, a move is used.
 
 ### Shells
 
