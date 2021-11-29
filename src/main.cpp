@@ -34,11 +34,11 @@ void run() {
     }
 }
 
-#if  defined(_WIN32) || defined(__PSP__)
 int main(int argv, char** args) {
-#else
-int main() {
-#endif
+
+    (void) argv;
+    (void) args;
+
     try {
         run();
     } catch (...) {
