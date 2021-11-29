@@ -36,7 +36,7 @@ Match Theory can be played with a keyboard or gamepad. Here each will be listed.
 
 #### Gamepad
 
-- **D-pad**: Move the cursor.
+- **Left analog stick** or **digital pad**: Move the cursor.
 - **A**: Pick or drop a shell or confirm in menus.
 - **Start**: Open the menu.
 - **B**: Cancel.
