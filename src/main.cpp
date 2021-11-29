@@ -9,6 +9,12 @@
 #include "constants.hpp"
 #include "states/GameState.hpp"
 
+#ifdef __PSP__
+    #include "pspkernel.h"
+    PSP_MODULE_INFO("Match Theory", 0, 1, 0);
+    PSP_MAIN_THREAD_ATTR(THREAD_ATTR_VFPU | THREAD_ATTR_USER);
+#endif
+
 void run() {
     Window window("Match Theory", SCREEN_WIDTH, SCREEN_HEIGHT);
     StateManager state_manager(new GameState(window.renderer));
@@ -27,13 +33,10 @@ void run() {
     }
 }
 
-#if defined(_WIN32)
 int main(int argv, char** args) {
-#elif defined(__PSP__)
-int SDL_main(int argc, char *argv[]) {
-#else
-int main() {
-#endif
+    (void) argv;
+    (void) args;
+
     try {
         run();
     } catch (...) {

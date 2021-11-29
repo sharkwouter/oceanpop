@@ -62,3 +62,4 @@ Some of the assets were made available by the following parties:
 - [Bubble sprite created by starline](https://www.freepik.com/free-vector/water-bubbles-background-with-text-space_15355945.htm)
 - [Background created by Pixabay](https://www.pexels.com/photo/scenic-view-of-landscape-against-sky-315998/)
 - [Some of the sounds in this project were created by David McKee (ViRiX)](https://www.soundcloud.com/virix)
+- [Song 1 by ZakharValaha from Pixabay](https://pixabay.com/music/corporate-background-uplifting-amp-upbeat-corporate-long-10292/)

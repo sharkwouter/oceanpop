@@ -5,13 +5,13 @@
 #include <SDL.h>
 #include "BaseState.hpp"
 #include "../BoardManager.hpp"
+#include "../ThemeManager.hpp"
 
 class GameState : public BaseState {
 private:
     BoardManager board;
-    TextureManager textures;
+    ThemeManager theme;
 
-    std::string background_image = "assets/backgrounds/background1.jpg";
 public:
     GameState(SDL_Renderer *renderer);
     ~GameState();
