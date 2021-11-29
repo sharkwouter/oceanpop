@@ -102,7 +102,6 @@ elseif(PLATFORM_PSP)
      target_link_libraries(match-theory PRIVATE
           SDL2_image
           SDL2_mixer
-          SDL2main
           SDL2
           SDL2_ttf
           png
@@ -133,8 +132,6 @@ elseif(PLATFORM_PSP)
           BACKGROUND_PATH NULL
           PREVIEW_PATH NULL
           TITLE Match-Theory
-          ENC
-          BUILD_PRX
      )
 
      file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/assets)
