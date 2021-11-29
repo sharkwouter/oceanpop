@@ -144,7 +144,7 @@ void BoardManager::match() {
         Sound sound = Sound::MATCH;
         for(Shell match : matches) {
             if (match == Shell::BUBBLE) {
-                increaseMoves();
+                this->moves++;
             } else if (match == Shell::URCHIN) {
                 sound =Sound::PAIN;
                 this->score -= 50;
