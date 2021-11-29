@@ -5,7 +5,7 @@ GameState::GameState(SDL_Renderer *renderer) : board(renderer, (SCREEN_WIDTH-GEM
 
     music = Mix_LoadMUS("assets/music/song1.mp3");
     Mix_VolumeMusic(MIX_MAX_VOLUME/2);
-    Mix_PlayMusic(music, SDL_TRUE);
+    Mix_PlayMusic(music, -1);
 }
 
 GameState::~GameState() {}
