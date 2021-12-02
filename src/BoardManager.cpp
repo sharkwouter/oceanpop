@@ -10,8 +10,8 @@ BoardManager::BoardManager(SDL_Renderer *renderer, int x, int y, int width, int 
     this->start.x = x;
     this->start.y = y;
 
-    this->end.x = this->start.x + GEM_SIZE * this->board.getWidth();
-    this->end.y = this->start.y + GEM_SIZE * this->board.getHeight();
+    this->end.x = this->start.x + SHELL_SIZE * this->board.getWidth();
+    this->end.y = this->start.y + SHELL_SIZE * this->board.getHeight();
 
     this->selected.x = width / 2;
     this->selected.y = height / 2;
@@ -119,7 +119,7 @@ void BoardManager::moveCursorMouse() {
     SDL_GetMouseState(&mouse.x, &mouse.y);
     // Make sure the mouse cursor is on the board
     if (mouse.x > start.x && mouse.x < end.x && mouse.y > start.y && mouse.y < end.y) {
-        SDL_Point newSelected = {(mouse.x - start.x)/GEM_SIZE, (mouse.y - start.y)/GEM_SIZE};
+        SDL_Point newSelected = {(mouse.x - start.x)/SHELL_SIZE, (mouse.y - start.y)/SHELL_SIZE};
         if (this->current_action == Action::MOVING) {
             if (newSelected.x != this->picked.x && newSelected.y != this->picked.y) {
                 // Snap to the nearest allowed position
@@ -203,15 +203,15 @@ void BoardManager::drawCursor(SDL_Renderer * renderer) {
     if (this->current_action == Action::MOVING) {
         SDL_Rect pickrect_hor;
         pickrect_hor.x = this->start.x +1;
-        pickrect_hor.y = GEM_SIZE * this->picked.y + this->start.y + 1;
-        pickrect_hor.w = GEM_SIZE * this->board.getWidth();
-        pickrect_hor.h = GEM_SIZE - 1;
+        pickrect_hor.y = SHELL_SIZE * this->picked.y + this->start.y + 1;
+        pickrect_hor.w = SHELL_SIZE * this->board.getWidth();
+        pickrect_hor.h = SHELL_SIZE - 1;
 
         SDL_Rect pickrect_ver;
-        pickrect_ver.x = GEM_SIZE * this->picked.x + this->start.x + 1;
+        pickrect_ver.x = SHELL_SIZE * this->picked.x + this->start.x + 1;
         pickrect_ver.y = this->start.y + 1;
-        pickrect_ver.w = GEM_SIZE - 1;
-        pickrect_ver.h =  GEM_SIZE * this->board.getHeight();
+        pickrect_ver.w = SHELL_SIZE - 1;
+        pickrect_ver.h =  SHELL_SIZE * this->board.getHeight();
 
         SDL_SetRenderDrawColor(renderer, 0, 0, 255, 50);
         SDL_RenderFillRect(renderer, &pickrect_ver);
@@ -220,10 +220,10 @@ void BoardManager::drawCursor(SDL_Renderer * renderer) {
 
     // Draw selection rectangle
     SDL_Rect selrect;
-    selrect.x = GEM_SIZE * selected.x + this->start.x + 1;
-    selrect.y = GEM_SIZE * selected.y + this->start.y + 1;
-    selrect.w = GEM_SIZE - 1;
-    selrect.h = GEM_SIZE - 1;
+    selrect.x = SHELL_SIZE * selected.x + this->start.x + 1;
+    selrect.y = SHELL_SIZE * selected.y + this->start.y + 1;
+    selrect.w = SHELL_SIZE - 1;
+    selrect.h = SHELL_SIZE - 1;
 
     SDL_SetRenderDrawColor(renderer, 255, 0, 0, 100);
     SDL_RenderFillRect(renderer, &selrect);
@@ -231,14 +231,14 @@ void BoardManager::drawCursor(SDL_Renderer * renderer) {
 
 void BoardManager::drawBoard(SDL_Renderer * renderer) {
     // Draw background rectangle
-    SDL_Rect background = {this->start.x, this->start.y, this->board.getWidth() * GEM_SIZE, (this->board.getHeight() + 1) * GEM_SIZE};
+    SDL_Rect background = {this->start.x, this->start.y, this->board.getWidth() * SHELL_SIZE, (this->board.getHeight() + 1) * SHELL_SIZE};
     SDL_SetRenderDrawColor(renderer, 51, 153, 255, 128);
     SDL_RenderFillRect(renderer, &background);
 
     // Draw board lines
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     for (int x = 0; x <= this->board.getWidth(); x++) {
-        int current_x = this->start.x + x * GEM_SIZE;
+        int current_x = this->start.x + x * SHELL_SIZE;
         SDL_RenderDrawLine(
                 renderer,
                 current_x,
@@ -248,7 +248,7 @@ void BoardManager::drawBoard(SDL_Renderer * renderer) {
                 );
     }
     for (int y = 0; y <= this->board.getHeight(); y++) {
-        int current_y = this->start.y + y * GEM_SIZE;
+        int current_y = this->start.y + y * SHELL_SIZE;
         SDL_RenderDrawLine(
                 renderer,
                 this->start.x,
@@ -259,9 +259,9 @@ void BoardManager::drawBoard(SDL_Renderer * renderer) {
     }
 
     // Draw lines around scoreboard
-    SDL_RenderDrawLine(renderer,this->start.x,this->end.y + 1,this->start.x,this->end.y + GEM_SIZE);
-    SDL_RenderDrawLine(renderer,this->end.x,this->end.y + 1,this->end.x,this->end.y + GEM_SIZE );
-    SDL_RenderDrawLine(renderer,this->start.x,this->end.y + GEM_SIZE,this->end.x,this->end.y + GEM_SIZE);
+    SDL_RenderDrawLine(renderer,this->start.x,this->end.y + 1,this->start.x,this->end.y + SHELL_SIZE);
+    SDL_RenderDrawLine(renderer,this->end.x,this->end.y + 1,this->end.x,this->end.y + SHELL_SIZE );
+    SDL_RenderDrawLine(renderer,this->start.x,this->end.y + SHELL_SIZE,this->end.x,this->end.y + SHELL_SIZE);
 }
 
 void BoardManager::drawShells(SDL_Renderer * renderer) {
@@ -273,16 +273,16 @@ void BoardManager::drawShells(SDL_Renderer * renderer) {
     for (int x = 0; x < this->board.getWidth(); x++) {
         for (int y = 0; y < this->board.getHeight(); y++) {
             SDL_Rect srcrect;
-            srcrect.x = GEM_SIZE * (int) shells[x][y];
+            srcrect.x = SHELL_SIZE * (int) shells[x][y];
             srcrect.y = 0;
-            srcrect.w = GEM_SIZE;
-            srcrect.h = GEM_SIZE;
+            srcrect.w = SHELL_SIZE;
+            srcrect.h = SHELL_SIZE;
 
             SDL_Rect dstrect;
-            dstrect.x = GEM_SIZE * x + this->start.x;
-            dstrect.y = GEM_SIZE * y + this->start.y;
-            dstrect.w = GEM_SIZE;
-            dstrect.h = GEM_SIZE;
+            dstrect.x = SHELL_SIZE * x + this->start.x;
+            dstrect.y = SHELL_SIZE * y + this->start.y;
+            dstrect.w = SHELL_SIZE;
+            dstrect.h = SHELL_SIZE;
 
             SDL_RenderCopy(renderer, textures.get(image_shells), &srcrect, &dstrect);
         }
@@ -303,14 +303,14 @@ void BoardManager::drawScore(SDL_Renderer * renderer) {
     // Render moves
     SDL_Rect rect_moves = {start.x, end.y, 0, 0};
     SDL_QueryTexture(text_moves, NULL, NULL, &rect_moves.w, &rect_moves.h);
-    rect_moves.x += GEM_SIZE * 2 - rect_moves.w/2;
-    rect_moves.y += GEM_SIZE/2 - rect_moves.h/2;
+    rect_moves.x += SHELL_SIZE * 2 - rect_moves.w/2;
+    rect_moves.y += SHELL_SIZE/2 - rect_moves.h/2;
     SDL_RenderCopy(renderer, text_moves, NULL, &rect_moves);
 
     // Render score
     SDL_Rect rect_score = {end.x, end.y, 0, 0};
     SDL_QueryTexture(text_score, NULL, NULL, &rect_score.w, &rect_score.h);
-    rect_score.x -= GEM_SIZE * 2 + rect_score.w/2;
-    rect_score.y += GEM_SIZE/2 - rect_score.h/2;
+    rect_score.x -= SHELL_SIZE * 2 + rect_score.w/2;
+    rect_score.y += SHELL_SIZE/2 - rect_score.h/2;
     SDL_RenderCopy(renderer, text_score, NULL, &rect_score);
 }

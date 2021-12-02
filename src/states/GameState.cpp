@@ -1,7 +1,7 @@
 #include "GameState.hpp"
 
 GameState::GameState(SDL_Renderer *renderer) :
-    board(renderer, (SCREEN_WIDTH-GEM_SIZE*BOARD_WIDTH)/2, (SCREEN_HEIGHT-GEM_SIZE*(BOARD_HEIGHT+1))/2, BOARD_WIDTH, BOARD_HEIGHT),
+    board(renderer, (SCREEN_WIDTH-SHELL_SIZE*BOARD_WIDTH)/2, (SCREEN_HEIGHT-SHELL_SIZE*(BOARD_HEIGHT+1))/2, BOARD_WIDTH, BOARD_HEIGHT),
     theme(renderer, 1, true)
 {
 
