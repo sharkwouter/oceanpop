@@ -10,6 +10,7 @@ enum class Event {
     UP,
     DOWN,
     MENU,
+    MOUSEMOVE,
     OTHER
 };
 

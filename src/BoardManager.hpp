@@ -30,6 +30,8 @@ private:
     int moves;
     bool moves_updated = true;
 
+    bool mouse_active = false;
+
     std::string image_shells = "assets/images/shells.png";
 
     TextureManager textures;
@@ -48,6 +50,7 @@ private:
     void decreaseMoves();
 
     void moveCursor(int x, int y);
+    void moveCursorMouse();
 
     void match();
 

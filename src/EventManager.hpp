@@ -11,6 +11,8 @@ private:
     bool returned_to_vertical_center;
 
     Event getEventFromKeyboard(SDL_Keycode key);
+    Event getEventFromMouseButton(Uint8 button);
+    Event getEventFromMouseButtonUp(Uint8 button);
     Event getEventFromControllerButton(Uint32 button);
     Event getEventFromControllerAxis(Uint32 axis, Sint16 value);
 

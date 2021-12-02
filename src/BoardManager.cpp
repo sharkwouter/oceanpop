@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <string>
+#include <cmath>
 
 #include "Sound.hpp"
 
@@ -38,7 +39,7 @@ void BoardManager::reset() {
 void BoardManager::handleEvents(std::vector<Event> events) {
     if (this->current_action == Action::MATCHING || this->current_action == Action::FALLING)
         return;
-    
+
     for (Event e: events) {
         switch (e) {
             case Event::LEFT:
@@ -60,6 +61,10 @@ void BoardManager::handleEvents(std::vector<Event> events) {
                     this->current_action = Action::MOVING;
                     sounds.play(Sound::PICK);
                 } else if (this->current_action == Action::MOVING) {
+                    // Don't do anything if the selector still on the picked gem
+                    if (this->selected.x == this->picked.x && this->selected.y == this->picked.y) {
+                        break;
+                    }
                     if (this->board.swap(picked, selected)) {
                         this->current_action = Action::FALLING;
                     } else {
@@ -67,7 +72,6 @@ void BoardManager::handleEvents(std::vector<Event> events) {
                         sounds.play(Sound::DROP);
                         this->current_action = Action::PICKING;
                     }
-                        
                 }
                 break;
             case Event::CANCEL:
@@ -76,6 +80,10 @@ void BoardManager::handleEvents(std::vector<Event> events) {
                     this->selected = this->picked;
                     this->current_action = Action::PICKING;
                 }
+                break;
+            case Event::MOUSEMOVE:
+                moveCursorMouse();
+                break;
             default:
                 break;
         }
@@ -103,8 +111,29 @@ void BoardManager::moveCursor(int x, int y) {
         // Update preview to draw
         this->preview = this->board.getShellsAfterSwap(this->board.getShells(), this->picked, newSelected);
     }
-
     this->selected = newSelected;
+}
+
+void BoardManager::moveCursorMouse() {
+    SDL_Point mouse;
+    SDL_GetMouseState(&mouse.x, &mouse.y);
+    // Make sure the mouse cursor is on the board
+    if (mouse.x > start.x && mouse.x < end.x && mouse.y > start.y && mouse.y < end.y) {
+        SDL_Point newSelected = {(mouse.x - start.x)/GEM_SIZE, (mouse.y - start.y)/GEM_SIZE};
+        if (this->current_action == Action::MOVING) {
+            if (newSelected.x != this->picked.x && newSelected.y != this->picked.y) {
+                // Snap to the nearest allowed position
+                if (abs(newSelected.x-this->picked.x) < abs(newSelected.x-this->picked.x)) {
+                    newSelected.x = this->picked.x;
+                } else {
+                    newSelected.y = this->picked.y;
+                }
+            }
+            // Update preview to draw
+            this->preview = this->board.getShellsAfterSwap(this->board.getShells(), this->picked, newSelected);
+        }
+        this->selected = newSelected;
+    }
 }
 
 void BoardManager::addScore(int matches) {

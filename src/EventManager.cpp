@@ -26,6 +26,15 @@ std::vector<Event> EventManager::getEvents(Window &window) {
             case SDL_CONTROLLERBUTTONDOWN:
                 input = getEventFromControllerButton(event.cbutton.button);
                 break;
+            case SDL_MOUSEBUTTONDOWN:
+                input = getEventFromMouseButton(event.button.button);
+                break;
+            case SDL_MOUSEBUTTONUP:
+                input = getEventFromMouseButtonUp(event.button.button);
+                break;
+            case SDL_MOUSEMOTION:
+                input = Event::MOUSEMOVE;
+                break;
             case SDL_CONTROLLERAXISMOTION:
                 input = getEventFromControllerAxis(event.caxis.axis, event.caxis.value);
                 break;
@@ -82,6 +91,40 @@ Event EventManager::getEventFromKeyboard(SDL_Keycode key) {
 
     return event;
 }
+
+Event EventManager::getEventFromMouseButton(Uint8 button) {
+    Event event;
+
+    switch (button) {
+        case SDL_BUTTON_LEFT:
+            event = Event::CONFIRM;
+            break;
+        case SDL_BUTTON_RIGHT:
+            event = Event::CANCEL;
+            break;
+        default:
+            event = Event::OTHER;
+            break;
+    }
+
+    return event;
+}
+
+Event EventManager::getEventFromMouseButtonUp(Uint8 button) {
+    Event event;
+
+    switch (button) {
+        case SDL_BUTTON_LEFT:
+            event = Event::CONFIRM;
+            break;
+        default:
+            event = Event::NONE;
+            break;
+    }
+
+    return event;
+}
+
 
 Event EventManager::getEventFromControllerButton(Uint32 button) {
     Event event;
