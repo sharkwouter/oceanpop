@@ -61,10 +61,6 @@ void BoardManager::handleEvents(std::vector<Event> events) {
                     this->current_action = Action::MOVING;
                     sounds.play(Sound::PICK);
                 } else if (this->current_action == Action::MOVING) {
-                    // Don't do anything if the selector still on the picked gem
-                    if (this->selected.x == this->picked.x && this->selected.y == this->picked.y) {
-                        break;
-                    }
                     if (this->board.swap(picked, selected)) {
                         this->current_action = Action::FALLING;
                     } else {
