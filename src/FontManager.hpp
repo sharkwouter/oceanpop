@@ -9,11 +9,12 @@ class FontManager {
 private:
     TTF_Font * font_title;
     TTF_Font * font;
+
+    void load();
 public:
     FontManager();
     ~FontManager();
 
-    void load();
     SDL_Texture * getTexture(SDL_Renderer *renderer, std::string text, bool title, SDL_Color color);
 };
 

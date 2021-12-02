@@ -48,9 +48,6 @@ void ThemeManager::loadMusic() {
 }
 
 void ThemeManager::update() {
-    if (this->repeat == -1) {
-        return;
-    }
     if (!Mix_PlayingMusic()) {
         loadMusic();
         Mix_PlayMusic(this->music, this->repeat);

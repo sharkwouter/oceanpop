@@ -4,7 +4,7 @@
 #include "utils.hpp"
 
 FontManager::FontManager() {
-
+    load();
 }
 
 FontManager::~FontManager() {

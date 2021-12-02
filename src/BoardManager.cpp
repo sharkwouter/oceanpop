@@ -5,8 +5,9 @@
 #include <cmath>
 
 #include "Sound.hpp"
+#include "colors.hpp"
 
-BoardManager::BoardManager(SDL_Renderer *renderer, int x, int y, int width, int height) : board(width, height) {
+BoardManager::BoardManager(SDL_Renderer *renderer, FontManager *fonts, int x, int y, int width, int height) : board(width, height), fonts(fonts) {
     this->start.x = x;
     this->start.y = y;
 
@@ -17,7 +18,6 @@ BoardManager::BoardManager(SDL_Renderer *renderer, int x, int y, int width, int 
     this->selected.y = height / 2;
 
     sounds.load();
-    fonts.load();
 
     textures.add_texture(image_shells, renderer);
 
@@ -228,7 +228,7 @@ void BoardManager::drawCursor(SDL_Renderer * renderer) {
 void BoardManager::drawBoard(SDL_Renderer * renderer) {
     // Draw background rectangle
     SDL_Rect background = {this->start.x, this->start.y, this->board.getWidth() * SHELL_SIZE, (this->board.getHeight() + 1) * SHELL_SIZE};
-    SDL_SetRenderDrawColor(renderer, 51, 153, 255, 128);
+    SDL_SetRenderDrawColor(renderer, COLOR_BOARD.r, COLOR_BOARD.g, COLOR_BOARD.b, COLOR_BOARD.a);
     SDL_RenderFillRect(renderer, &background);
 
     // Draw board lines
@@ -288,11 +288,11 @@ void BoardManager::drawShells(SDL_Renderer * renderer) {
 void BoardManager::drawScore(SDL_Renderer * renderer) {
     // Generate texture with text
     if (moves_updated) {
-        text_moves = fonts.getTexture(renderer, std::to_string(moves) + " moves left", false, {255, 255, 255, 255});
+        text_moves = fonts->getTexture(renderer, std::to_string(moves) + " moves left", false, {255, 255, 255, 255});
         moves_updated = false;
     }
     if (score_updated) {
-        text_score = fonts.getTexture(renderer, std::to_string(score) + "/" + std::to_string(required_score), false, {255, 255, 255, 255});
+        text_score = fonts->getTexture(renderer, std::to_string(score) + "/" + std::to_string(required_score), false, {255, 255, 255, 255});
         score_updated = false;
     }
 

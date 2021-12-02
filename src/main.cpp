@@ -21,7 +21,7 @@ void run() {
     EventManager input_manager;
     TextureManager texture_manager;
 
-    while (!window.should_close) {
+    while (!window.should_close && state_manager.isRunning()) {
         std::vector<Event> events = input_manager.getEvents(window);
 
         state_manager.handleEvents(events);

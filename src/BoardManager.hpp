@@ -36,7 +36,7 @@ private:
 
     TextureManager textures;
     SoundManager sounds;
-    FontManager fonts;
+    FontManager * fonts;
 
     Action current_action;
 
@@ -62,7 +62,7 @@ private:
     void init();
     void reset();
 public:
-    BoardManager(SDL_Renderer *renderer, int x, int y, int width, int height);
+    BoardManager(SDL_Renderer *renderer, FontManager *fonts, int x, int y, int width, int height);
 
     void handleEvents(std::vector<Event> events);
     void update();
