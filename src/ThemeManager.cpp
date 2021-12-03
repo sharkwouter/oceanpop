@@ -8,7 +8,6 @@ ThemeManager::ThemeManager(SDL_Renderer * renderer, Theme theme) {
 }
 
 ThemeManager::~ThemeManager() {
-    SDL_Log("ThemeManager destructor running");
     Mix_HaltMusic();
     Mix_FreeMusic(this->music);
     SDL_DestroyTexture(background);
