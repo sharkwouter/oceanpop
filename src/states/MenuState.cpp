@@ -8,24 +8,25 @@ MenuState::MenuState(SDL_Renderer * renderer) : renderer(renderer), theme(render
     text_title = fonts.getTexture(renderer, "Match Theory", true, {255, 255, 255, 255});
 
     for (int i = 0; i < (int) MenuOption::OPTIONCOUNT; i++) {
-        switch ((MenuOption) i)
-        {
-        case MenuOption::STANDARD:
-            options.push_back(fonts.getTexture(renderer, "Standard mode",false, {255, 255, 255, 255}));
-            break;
-        case MenuOption::RELAXED:
-            options.push_back(fonts.getTexture(renderer, "Relaxed mode",false, {255, 255, 255, 255}));
-            break;
-        case MenuOption::OPTIONS:
-            options.push_back(fonts.getTexture(renderer, "Options",false, {255, 255, 255, 255}));
-            break;
-        case MenuOption::EXIT:
-            options.push_back(fonts.getTexture(renderer, "Exit",false, {255, 255, 255, 255}));
-            break;
-        default:
-            options.push_back(fonts.getTexture(renderer, "?????????",false, {255, 255, 255, 255}));
-            break;
+        std::string option_text;
+        switch ((MenuOption) i) {
+            case MenuOption::STANDARD:
+                option_text = "Standard mode";
+                break;
+            case MenuOption::RELAXED:
+                option_text = "Relaxed mode";
+                break;
+            case MenuOption::OPTIONS:
+                option_text = "Options";
+                break;
+            case MenuOption::EXIT:
+                option_text = "Exit";
+                break;
+            default:
+                option_text = "?????????";
+                break;
         }
+        options.push_back(fonts.getTexture(renderer, option_text,false, {255, 255, 255, 255}));
     }
 }
 
