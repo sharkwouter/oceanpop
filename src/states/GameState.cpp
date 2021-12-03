@@ -13,7 +13,6 @@ GameState::GameState(SDL_Renderer *renderer) :
 }
 
 GameState::~GameState() {
-    SDL_Log("GameState destructor running");
     SDL_DestroyTexture(text_paused);
     SDL_DestroyTexture(text_paused_subtitle);
 }

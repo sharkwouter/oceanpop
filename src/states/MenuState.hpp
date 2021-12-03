@@ -3,7 +3,6 @@
 
 #include <string>
 #include <vector>
-#include <memory>
 #include <SDL.h>
 #include "BaseState.hpp"
 #include "../ThemeManager.hpp"
@@ -21,8 +20,6 @@ private:
 
     SDL_Texture * text_title;
     std::vector<SDL_Texture*> options;
-
-    std::unique_ptr<BaseState> state;
 
     int current_option = 0;
 public:

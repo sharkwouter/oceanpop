@@ -5,11 +5,13 @@
 #include "states/MenuState.hpp"
 #include "states/State.hpp"
 
-StateManager::StateManager(SDL_Renderer * renderer) : renderer(renderer), state(std::make_unique<MenuState>(renderer)) {
+StateManager::StateManager(SDL_Renderer * renderer) : renderer(renderer), state(new MenuState(renderer)) {
 
 }
 
-StateManager::~StateManager() {}
+StateManager::~StateManager() {
+    clearState();
+}
 
 void StateManager::update() {
     if (!this->state->isDone()) {
@@ -18,11 +20,11 @@ void StateManager::update() {
         switch (this->state->getNextState()) {
             case State::MENU:
                 clearState();
-                this->state = std::make_unique<MenuState>(renderer);
+                this->state = new MenuState(renderer);
                 break;
             case State::STANDARD:
                 clearState();
-                this->state = std::make_unique<GameState>(renderer);
+                this->state = new GameState(renderer);
                 break;
             case State::EXIT:
                 this->done = true;
@@ -43,6 +45,5 @@ void StateManager::draw(SDL_Renderer *renderer) {
 
 // This function does not work at the moment
 void StateManager::clearState() {
-    BaseState * old_state = this->state.release();
-    delete old_state;
+    delete this->state;
 }

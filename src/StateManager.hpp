@@ -9,9 +9,9 @@
 
 class StateManager {
 private:
-    std::unique_ptr<BaseState> state;
-
     SDL_Renderer * renderer;
+
+    BaseState * state;
 
     bool done = false;
     void clearState();

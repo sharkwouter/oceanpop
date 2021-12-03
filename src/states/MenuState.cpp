@@ -30,8 +30,6 @@ MenuState::MenuState(SDL_Renderer * renderer) : renderer(renderer), theme(render
 }
 
 MenuState::~MenuState() {
-    SDL_Log("MenuState destructor running");
-
     SDL_DestroyTexture(text_title);
     for (SDL_Texture * texture : options) {
         SDL_DestroyTexture(texture);
