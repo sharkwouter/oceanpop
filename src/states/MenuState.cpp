@@ -13,12 +13,6 @@ MenuState::MenuState(SDL_Renderer * renderer) : theme(renderer, Theme::MENU), re
             case MenuOption::STANDARD:
                 option_text = "Standard mode";
                 break;
-            case MenuOption::RELAXED:
-                option_text = "Relaxed mode";
-                break;
-            case MenuOption::OPTIONS:
-                option_text = "Options";
-                break;
             case MenuOption::EXIT:
                 option_text = "Exit";
                 break;
