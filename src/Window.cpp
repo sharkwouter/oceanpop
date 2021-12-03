@@ -5,6 +5,11 @@
 #include "utils.hpp"
 
 Window::Window(const std::string &title, int width, int height) {
+    #ifdef __vita__
+        // Disable back touch
+        SDL_SetHint(SDL_HINT_TOUCH_MOUSE_EVENTS_DIRECT_ONLY, "1");
+    #endif
+
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_GAMECONTROLLER) != 0) {
         panic("couldn't init SDL: " + std::string(SDL_GetError()));
     }
