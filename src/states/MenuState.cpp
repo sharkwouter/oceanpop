@@ -4,7 +4,7 @@
 #include "../colors.hpp"
 #include "GameState.hpp"
 
-MenuState::MenuState(SDL_Renderer * renderer) : renderer(renderer), theme(renderer, Theme::MENU) {
+MenuState::MenuState(SDL_Renderer * renderer) : theme(renderer, Theme::MENU), renderer(renderer) {
     text_title = fonts.getTexture(renderer, "Match Theory", true, {255, 255, 255, 255});
 
     for (int i = 0; i < (int) MenuOption::OPTIONCOUNT; i++) {
@@ -84,7 +84,7 @@ void MenuState::draw(SDL_Renderer * renderer) {
             SDL_SetTextureColorMod(options[i], 255, 255, 255);
         }
         // Draw the option title
-        SDL_Rect rect = {SCREEN_WIDTH/2, (SCREEN_HEIGHT/(options.size()+2))*(i+2), 0, 0};
+        SDL_Rect rect = {SCREEN_WIDTH/2, (SCREEN_HEIGHT/((int) options.size()+2))*(i+2), 0, 0};
         SDL_QueryTexture(options[i], NULL, NULL, &rect.w, &rect.h);
         rect.x -= rect.w/2;
         rect.y -= rect.h/2;

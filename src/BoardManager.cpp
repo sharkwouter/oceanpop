@@ -119,7 +119,7 @@ void BoardManager::moveCursorMouse() {
         if (this->current_action == Action::MOVING) {
             if (newSelected.x != this->picked.x && newSelected.y != this->picked.y) {
                 // Snap to the nearest allowed position
-                if (abs(newSelected.x-this->picked.x) < abs(newSelected.x-this->picked.x)) {
+                if (abs(newSelected.x-this->picked.x) < abs(newSelected.y-this->picked.y)) {
                     newSelected.x = this->picked.x;
                 } else {
                     newSelected.y = this->picked.y;
