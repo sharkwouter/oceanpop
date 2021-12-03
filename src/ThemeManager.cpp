@@ -2,64 +2,46 @@
 
 #include "utils.hpp"
 
-ThemeManager::ThemeManager(SDL_Renderer * renderer, int theme, bool repeat) {
-    loadBackground(renderer, theme);
-
-    this->repeat = 0;
-    if (repeat) {
-        this->repeat = -1;
-    }
-
+ThemeManager::ThemeManager(SDL_Renderer * renderer, Theme theme) {
     Mix_VolumeMusic(MIX_MAX_VOLUME/2);
-    this->next_track = theme;
+    load(renderer, theme);
 }
 
 ThemeManager::~ThemeManager() {
+    SDL_Log("ThemeManager destructor running");
     Mix_HaltMusic();
     Mix_FreeMusic(this->music);
     SDL_DestroyTexture(background);
 }
 
-void ThemeManager::loadBackground(SDL_Renderer * renderer, int theme) {
-    switch (theme)
-    {
-        case 1:
-            background = loadTexture(renderer, "assets/backgrounds/background1.jpg");
+void ThemeManager::load(SDL_Renderer * renderer, Theme theme) {
+    switch (theme) {
+        case Theme::MENU:
+            this->music = NULL;
+            this->background = loadBackground(renderer, "background1.jpg");
             break;
+        case Theme::DEFAULT:
+            this->music = Mix_LoadMUS("assets/music/song1.mp3");
+            this->background = loadBackground(renderer, "background1.jpg");
         default:
-            loadBackground(renderer, 1);
             break;
     }
-}
-
-void ThemeManager::loadMusic() {
-    switch (this->next_track)
-    {
-    case 1:
-        music = Mix_LoadMUS("assets/music/song1.mp3");
-        break;
-    default:
-        this->next_track = 1;
-        loadMusic();
-        return;
-        break;
+    if (this->music != NULL) {
+        Mix_PlayMusic(music, -1);
     }
-    this->next_track++;
 }
 
 void ThemeManager::update() {
-    if (!Mix_PlayingMusic()) {
-        loadMusic();
-        Mix_PlayMusic(this->music, this->repeat);
-    }
+
 }
 
 void ThemeManager::draw(SDL_Renderer * renderer) {
     SDL_RenderCopy(renderer, this->background, NULL, NULL);
 }
 
-SDL_Texture * ThemeManager::loadTexture(SDL_Renderer * renderer, std::string path) {
-        SDL_Surface *img = IMG_Load(path.c_str());
+SDL_Texture * ThemeManager::loadBackground(SDL_Renderer * renderer, std::string filename) {
+    std::string path = "assets/backgrounds/" + filename;
+    SDL_Surface *img = IMG_Load(path.c_str());
 
     if (img == nullptr) {
         panic("couldn't load image: " + std::string(IMG_GetError()));

@@ -6,19 +6,19 @@
 #include <SDL_mixer.h>
 #include <string>
 
+#include "Theme.hpp"
+
 class ThemeManager {
 private:
-    int next_track;
-    int repeat;
+    Theme theme;
 
     Mix_Music * music;
     SDL_Texture * background;
 
-    void loadMusic();
-    void loadBackground(SDL_Renderer * renderer, int theme);
-    SDL_Texture * loadTexture(SDL_Renderer * renderer, std::string path);
+    void load(SDL_Renderer * renderer, Theme theme);
+    SDL_Texture * loadBackground(SDL_Renderer * renderer, std::string filename);
 public:
-    ThemeManager(SDL_Renderer * renderer, int theme, bool repeat);
+    ThemeManager(SDL_Renderer * renderer, Theme theme);
     ~ThemeManager();
 
     void update();

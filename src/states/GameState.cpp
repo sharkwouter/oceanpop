@@ -6,15 +6,16 @@
 
 GameState::GameState(SDL_Renderer *renderer) :
     board(renderer, &fonts, (SCREEN_WIDTH-SHELL_SIZE*BOARD_WIDTH)/2, (SCREEN_HEIGHT-SHELL_SIZE*(BOARD_HEIGHT+1))/2, BOARD_WIDTH, BOARD_HEIGHT),
-    theme(renderer, 1, true)
+    theme(renderer, Theme::DEFAULT)
 {
     this->text_paused = fonts.getTexture(renderer, "Game Paused", true, {255, 255, 255, 255});
     this->text_paused_subtitle = fonts.getTexture(renderer, "Press the confirm button to exit", false, {255, 255, 255, 255});
-    this->running = true;
 }
 
 GameState::~GameState() {
-
+    SDL_Log("GameState destructor running");
+    SDL_DestroyTexture(text_paused);
+    SDL_DestroyTexture(text_paused_subtitle);
 }
 
 void GameState::update() {
@@ -31,7 +32,7 @@ void GameState::handleEvents(std::vector<Event> events) {
                 return;
         } else if (event != Event::NONE && event != Event::MOUSEMOVE && this->paused) {
             if (event == Event::CONFIRM) {
-                this->running = false;
+                this->done = true;
             } else {
                 this->paused = false;
             }
@@ -75,4 +76,8 @@ void GameState::drawPauseScreen(SDL_Renderer * renderer) {
 
     SDL_RenderCopy(renderer, text_paused, NULL, &rect_paused);
     SDL_RenderCopy(renderer, text_paused_subtitle, NULL, &rect_paused_subtitle);
+}
+
+State GameState::getNextState() {
+    return State::MENU;
 }

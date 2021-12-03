@@ -3,24 +3,27 @@
 
 #include <SDL.h>
 #include <vector>
+#include <memory>
 #include "states/BaseState.hpp"
-#include "states/GameState.hpp"
 #include "Event.hpp"
 
 class StateManager {
 private:
-    BaseState *currentState;
+    std::unique_ptr<BaseState> state;
 
-    bool running;
+    SDL_Renderer * renderer;
+
+    bool done = false;
+    void clearState();
 public:
-    StateManager(BaseState *initial_state);
+    StateManager(SDL_Renderer * renderer);
     ~StateManager();
 
     void handleEvents(std::vector<Event> events);
     void update();
     void draw(SDL_Renderer *renderer);
 
-    bool isRunning() {return running;};
+    bool isDone() {return done;};
 };
 
 #endif // STATEMANAGER_HPP

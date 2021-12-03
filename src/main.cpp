@@ -7,7 +7,7 @@
 #include "TextureManager.hpp"
 #include "utils.hpp"
 #include "constants.hpp"
-#include "states/GameState.hpp"
+#include "states/MenuState.hpp"
 
 #ifdef __PSP__
     #include "pspkernel.h"
@@ -17,11 +17,11 @@
 
 void run() {
     Window window("Match Theory", SCREEN_WIDTH, SCREEN_HEIGHT);
-    StateManager state_manager(new GameState(window.renderer));
+    StateManager state_manager(window.renderer);
     EventManager input_manager;
     TextureManager texture_manager;
 
-    while (!window.should_close && state_manager.isRunning()) {
+    while (!window.should_close && !state_manager.isDone()) {
         std::vector<Event> events = input_manager.getEvents(window);
 
         state_manager.handleEvents(events);

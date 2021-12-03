@@ -17,7 +17,6 @@ private:
     SDL_Texture * text_paused_subtitle;
 
     bool paused = false;
-    bool running = false;
 
     void drawPauseScreen(SDL_Renderer * renderer);
 public:
@@ -28,7 +27,7 @@ public:
     void update();
     void draw(SDL_Renderer *renderer);
 
-    bool isRunning() {return running;};
+    State getNextState();
 };
 
 #endif // GAMESTATE_HPP
