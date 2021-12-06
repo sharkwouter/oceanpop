@@ -114,9 +114,6 @@ Event EventManager::getEventFromMouseButtonUp(Uint8 button) {
     Event event;
 
     switch (button) {
-        case SDL_BUTTON_LEFT:
-            event = Event::CONFIRM;
-            break;
         default:
             event = Event::NONE;
             break;
