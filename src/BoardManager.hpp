@@ -23,9 +23,13 @@ private:
     SDL_Point selected;
     SDL_Point picked;
 
+    int level;
+    bool level_updated = true;
+
     int score;
-    int required_score;
     bool score_updated = true;
+
+    int required_score;
 
     int moves;
     bool moves_updated = true;
@@ -44,8 +48,11 @@ private:
 
     SDL_Texture * text_moves;
     SDL_Texture * text_score;
+    SDL_Texture * text_level;
+
 
     void addScore(int matches);
+    void increasLevel();
     void increaseMoves();
     void decreaseMoves();
 
@@ -60,7 +67,6 @@ private:
     void drawShells(SDL_Renderer * renderer);
 
     void init();
-    void reset();
 public:
     BoardManager(SDL_Renderer *renderer, FontManager *fonts, int x, int y, int width, int height);
 
@@ -68,6 +74,8 @@ public:
     void update();
     void draw(SDL_Renderer *renderer);
 
+    bool isCompleted() {return this->current_action == Action::COMPLETED;};
+    void reset();
 };
 
 #endif // BOARDMANAGER_HPP

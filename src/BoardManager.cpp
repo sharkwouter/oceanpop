@@ -21,14 +21,18 @@ BoardManager::BoardManager(SDL_Renderer *renderer, FontManager *fonts, int x, in
 
     textures.add_texture(image_shells, renderer);
 
+    this->required_score = 300;
+    this->level = 1;
     init();
 }
 
 void BoardManager::init() {
     this->score = 0;
     this->moves = 10;
-    this->required_score = 300;
+    this->score_updated = true;
+    this->moves_updated = true;
     this->current_action = Action::PICKING;
+
 }
 
 void BoardManager::reset() {
@@ -137,6 +141,11 @@ void BoardManager::addScore(int matches) {
     score_updated = true;
 }
 
+void BoardManager::increasLevel() {
+    level++;
+    level_updated = true;
+}
+
 void BoardManager::increaseMoves() {
     moves++;
     moves_updated = true;
@@ -158,6 +167,17 @@ void BoardManager::update() {
         case Action::MATCHING:
             match();
             break;
+        default:
+            break;
+    }
+
+    if (this->score >= this->required_score && this->current_action == Action::PICKING) {
+        this->current_action = Action::COMPLETED;
+        this->required_score += 10;
+        increasLevel();
+    } else if (this->moves == 0) {
+        sounds.play(Sound::PAIN);
+        reset();
     }
 }
 
@@ -291,6 +311,10 @@ void BoardManager::drawScore(SDL_Renderer * renderer) {
         text_moves = fonts->getTexture(renderer, std::to_string(moves) + " moves left", false, {255, 255, 255, 255});
         moves_updated = false;
     }
+    if (level_updated) {
+        text_level = fonts->getTexture(renderer, std::to_string(level), false, {255, 255, 255, 255});
+        level_updated = false;
+    }
     if (score_updated) {
         text_score = fonts->getTexture(renderer, std::to_string(score) + "/" + std::to_string(required_score), false, {255, 255, 255, 255});
         score_updated = false;
@@ -299,14 +323,21 @@ void BoardManager::drawScore(SDL_Renderer * renderer) {
     // Render moves
     SDL_Rect rect_moves = {start.x, end.y, 0, 0};
     SDL_QueryTexture(text_moves, NULL, NULL, &rect_moves.w, &rect_moves.h);
-    rect_moves.x += SHELL_SIZE * 2 - rect_moves.w/2;
-    rect_moves.y += SHELL_SIZE/2 - rect_moves.h/2;
+    rect_moves.x += SHELL_SIZE * 2 - rect_moves.w / 2;
+    rect_moves.y += SHELL_SIZE / 2 - rect_moves.h / 2;
     SDL_RenderCopy(renderer, text_moves, NULL, &rect_moves);
+
+    // Render level
+    SDL_Rect rect_level = {start.x - SHELL_SIZE * 3, end.y, 0, 0};
+    SDL_QueryTexture(text_level, NULL, NULL, &rect_level.w, &rect_level.h);
+    rect_level.x += SHELL_SIZE * 2 + rect_level.w / 2;
+    rect_level.y += SHELL_SIZE / 2 - rect_level.h / 2;
+    SDL_RenderCopy(renderer, text_level, NULL, &rect_level);
 
     // Render score
     SDL_Rect rect_score = {end.x, end.y, 0, 0};
     SDL_QueryTexture(text_score, NULL, NULL, &rect_score.w, &rect_score.h);
-    rect_score.x -= SHELL_SIZE * 2 + rect_score.w/2;
-    rect_score.y += SHELL_SIZE/2 - rect_score.h/2;
+    rect_score.x -= SHELL_SIZE * 2 + rect_score.w / 2;
+    rect_score.y += SHELL_SIZE / 2 - rect_score.h / 2;
     SDL_RenderCopy(renderer, text_score, NULL, &rect_score);
 }

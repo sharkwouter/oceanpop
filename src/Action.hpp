@@ -5,7 +5,8 @@ enum class Action {
     PICKING,
     MOVING,
     MATCHING,
-    FALLING
+    FALLING,
+    COMPLETED
 };
 
 #endif // ACTION_HPP

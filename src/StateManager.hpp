@@ -3,7 +3,6 @@
 
 #include <SDL.h>
 #include <vector>
-#include <memory>
 #include "states/BaseState.hpp"
 #include "Event.hpp"
 
