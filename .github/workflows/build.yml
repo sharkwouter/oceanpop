@@ -62,9 +62,11 @@ jobs:
           git clone https://github.com/libsdl-org/SDL.git
           cd SDL
           git checkout 21d46b7e0c59b9b0385293acc90893e879363da3
-          cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=$PSPDEV/psp/share/pspdev.cmake -DCMAKE_INSTALL_PREFIX=$PSPDEV/psp .
+          mkdir build
+          cd build
+          cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=$PSPDEV/psp/share/pspdev.cmake -DCMAKE_INSTALL_PREFIX=$PSPDEV/psp ..
           make install
-          cd ..
+          cd ../..
       - name: Checkout
         uses: actions/checkout@v2
       - name: Build
