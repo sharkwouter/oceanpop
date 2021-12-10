@@ -13,12 +13,17 @@ private:
     ThemeManager theme;
     FontManager fonts;
 
-    SDL_Texture * text_paused;
-    SDL_Texture * text_paused_subtitle;
+    SDL_Texture * text_paused = NULL;
+    SDL_Texture * text_paused_subtitle = NULL;
+    
+    SDL_Texture * text_completed = NULL;
+    SDL_Texture * text_completed_subtitle = NULL;
 
     bool paused = false;
+    bool completed = false;
 
     void drawPauseScreen(SDL_Renderer * renderer);
+    void drawCompletedScreen(SDL_Renderer * renderer);
 public:
     GameState(SDL_Renderer *renderer);
     ~GameState();

@@ -104,6 +104,7 @@ elseif(PLATFORM_PSP)
           SDL2_mixer
           SDL2
           SDL2_ttf
+          SDL2main
           png
           jpeg
           pspvram
@@ -117,7 +118,6 @@ elseif(PLATFORM_PSP)
           pspge
           pspaudio
           psphprm
-          psprtc
           jsoncpp
           vorbisfile
           vorbis
@@ -132,6 +132,7 @@ elseif(PLATFORM_PSP)
           BACKGROUND_PATH NULL
           PREVIEW_PATH NULL
           TITLE Match-Theory
+          BUILD_PRX
      )
 
      file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/assets)
