@@ -64,6 +64,7 @@ private:
     void drawCursor(SDL_Renderer * renderer);
     void drawBoard(SDL_Renderer * renderer);
     void drawScore(SDL_Renderer * renderer);
+    void drawLevel(SDL_Renderer * renderer);
     void drawShells(SDL_Renderer * renderer);
 
     void init();

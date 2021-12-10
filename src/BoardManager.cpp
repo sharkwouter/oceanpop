@@ -211,6 +211,7 @@ void BoardManager::draw(SDL_Renderer *renderer) {
     drawBoard(renderer);
     drawCursor(renderer);
     drawScore(renderer);
+    drawLevel(renderer);
     drawShells(renderer);
 }
 
@@ -311,10 +312,6 @@ void BoardManager::drawScore(SDL_Renderer * renderer) {
         text_moves = fonts->getTexture(renderer, std::to_string(moves) + " moves left", false, {255, 255, 255, 255});
         moves_updated = false;
     }
-    if (level_updated) {
-        text_level = fonts->getTexture(renderer, std::to_string(level), false, {255, 255, 255, 255});
-        level_updated = false;
-    }
     if (score_updated) {
         text_score = fonts->getTexture(renderer, std::to_string(score) + "/" + std::to_string(required_score), false, {255, 255, 255, 255});
         score_updated = false;
@@ -327,17 +324,37 @@ void BoardManager::drawScore(SDL_Renderer * renderer) {
     rect_moves.y += SHELL_SIZE / 2 - rect_moves.h / 2;
     SDL_RenderCopy(renderer, text_moves, NULL, &rect_moves);
 
-    // Render level
-    SDL_Rect rect_level = {start.x - SHELL_SIZE * 3, end.y, 0, 0};
-    SDL_QueryTexture(text_level, NULL, NULL, &rect_level.w, &rect_level.h);
-    rect_level.x += SHELL_SIZE * 2 + rect_level.w / 2;
-    rect_level.y += SHELL_SIZE / 2 - rect_level.h / 2;
-    SDL_RenderCopy(renderer, text_level, NULL, &rect_level);
-
     // Render score
     SDL_Rect rect_score = {end.x, end.y, 0, 0};
     SDL_QueryTexture(text_score, NULL, NULL, &rect_score.w, &rect_score.h);
     rect_score.x -= SHELL_SIZE * 2 + rect_score.w / 2;
     rect_score.y += SHELL_SIZE / 2 - rect_score.h / 2;
     SDL_RenderCopy(renderer, text_score, NULL, &rect_score);
+}
+
+void BoardManager::drawLevel(SDL_Renderer * renderer) {
+    if (level_updated) {
+        text_level = fonts->getTexture(renderer, "Level " + std::to_string(level), false, {255, 255, 255, 255});
+        level_updated = false;
+    }
+
+    // Render level
+    SDL_Rect rect_level = {start.x, start.y, 0, 0};
+    SDL_QueryTexture(text_level, NULL, NULL, &rect_level.w, &rect_level.h);
+    rect_level.x -= SHELL_SIZE / 2 + rect_level.w;
+    rect_level.y += SHELL_SIZE / 2 - rect_level.h / 2;
+
+    // Draw background rectangle
+    SDL_Rect background = {rect_level.x - SHELL_SIZE / 2, this->start.y, rect_level.w + SHELL_SIZE, SHELL_SIZE};
+    SDL_SetRenderDrawColor(renderer, COLOR_BOARD.r, COLOR_BOARD.g, COLOR_BOARD.b, COLOR_BOARD.a);
+    SDL_RenderFillRect(renderer, &background);
+
+    SDL_RenderCopy(renderer, text_level, NULL, &rect_level);
+
+    // Draw lines around level rectangle
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+
+    SDL_RenderDrawLine(renderer,background.x, background.y, background.x + background.w, background.y);
+    SDL_RenderDrawLine(renderer,background.x, background.y + background.h, background.x + background.w, background.y + background.h);
+    SDL_RenderDrawLine(renderer,background.x, background.y, background.x, background.y + background.h);
 }
