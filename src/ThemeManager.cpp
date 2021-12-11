@@ -42,7 +42,6 @@ void ThemeManager::load() {
             load();
             break;
     }
-    SDL_Log("Loaded music, error: %s", Mix_GetError());
     if (this->music != NULL) {
         Mix_PlayMusic(this->music, 0);
     }
