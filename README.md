@@ -63,3 +63,6 @@ Some of the assets were made available by the following parties:
 - [Background created by Pixabay](https://www.pexels.com/photo/scenic-view-of-landscape-against-sky-315998/)
 - [Some of the sounds in this project were created by David McKee (ViRiX)](https://www.soundcloud.com/virix)
 - [Song 1 by ZakharValaha from Pixabay](https://pixabay.com/music/corporate-background-uplifting-amp-upbeat-corporate-long-10292/)
+- [Song 2 by Lesfm from Pixabay](https://pixabay.com/music/solo-guitar-in-the-forest-ambient-acoustic-guitar-instrumental-background-music-for-videos-5718/)
+- [Song 3 by ZakharValaha from Pixabay](https://pixabay.com/music/beautiful-plays-ambient-piano-amp-strings-10711/)
+- [Song 4 by Coma-Media from Pixabay](https://pixabay.com/music/ambient-deep-ambient-11051/)
