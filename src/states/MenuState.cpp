@@ -49,10 +49,18 @@ void MenuState::handleEvents(std::vector<Event> events) {
     for(Event event :events) {
         switch (event) {
             case Event::UP:
-                current_option = (current_option - 1) % options.size(); 
+                if (current_option != 0) {
+                    current_option--;
+                } else {
+                    current_option = (int) options.size() - 1;
+                }
                 break;
             case Event::DOWN:
-                current_option = (current_option + 1) % options.size(); 
+                if (current_option < ((int) options.size() - 1)) {
+                    current_option++;
+                } else {
+                    current_option = 0;
+                }
                 break;
             case Event::CONFIRM:
                 this->done = true;
