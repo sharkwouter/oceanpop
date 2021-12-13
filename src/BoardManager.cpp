@@ -20,15 +20,13 @@ BoardManager::~BoardManager() {
     SDL_DestroyTexture(text_level);
     SDL_DestroyTexture(text_matches);
     SDL_DestroyTexture(text_moves);
-    delete(text_level);
-    delete(text_matches);
-    delete(text_moves);
+    free(text_level);
+    free(text_matches);
+    free(text_moves);
 }
 
 void BoardManager::loadLevel(int x, int y, int width, int height, int moves, int required_matches, int level) {
-    if (this->board != NULL) {
-        delete(this->board);
-    }
+    delete(this->board);
     this->board = new Board(width, height);
 
     this->rect_board.x = x;
