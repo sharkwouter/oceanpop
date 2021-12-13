@@ -18,6 +18,13 @@ Board::Board(int width, int height) {
     }
 }
 
+Board::~Board() {
+    for (int x = 0; x < getWidth(); x++) {
+        this->shells[x].clear();
+    }
+    this->shells.clear();
+}
+
 std::vector<Shell> Board::match() {
     std::vector<SDL_Point> matchedGems;
     std::vector<Shell> matchesFound = getMatches(this->shells, &matchedGems);

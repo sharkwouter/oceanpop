@@ -7,37 +7,70 @@
 #include "Sound.hpp"
 #include "colors.hpp"
 
-BoardManager::BoardManager(SDL_Renderer *renderer, FontManager *fonts, int x, int y, int width, int height) : board(width, height), fonts(fonts) {
-    this->start.x = x;
-    this->start.y = y;
-
-    this->end.x = this->start.x + SHELL_SIZE * this->board.getWidth();
-    this->end.y = this->start.y + SHELL_SIZE * this->board.getHeight();
-
-    this->selected.x = width / 2;
-    this->selected.y = height / 2;
-
+BoardManager::BoardManager(SDL_Renderer *renderer, FontManager *fonts, int x, int y, int width, int height, int moves, int required_matches, int level) : fonts(fonts) {
     sounds.load();
 
     textures.add_texture(image_shells, renderer);
 
-    this->required_matches = 10;
-    this->level = 1;
-    init();
+    loadLevel(x, y, width, height, moves, required_matches, level);
 }
 
-void BoardManager::init() {
-    this->matches = 0;
-    this->moves = 10;
-    this->matches_updated = true;
-    this->moves_updated = true;
-    this->current_action = Action::PICKING;
+BoardManager::~BoardManager() {
+    delete(this->board);
+    SDL_DestroyTexture(text_level);
+    SDL_DestroyTexture(text_matches);
+    SDL_DestroyTexture(text_moves);
+    delete(text_level);
+    delete(text_matches);
+    delete(text_moves);
+}
 
+void BoardManager::loadLevel(int x, int y, int width, int height, int moves, int required_matches, int level) {
+    if (this->board != NULL) {
+        delete(this->board);
+    }
+    this->board = new Board(width, height);
+
+    this->rect_board.x = x;
+    this->rect_board.y = y;
+
+    this->rect_board.w = SHELL_SIZE * width;
+    this->rect_board.h = SHELL_SIZE * height;
+
+    this->selected.x = width / 2;
+    this->selected.y = height / 2;
+
+    this->matches = 0;
+    this->required_matches = required_matches;
+    this->matches_updated = true;
+
+    this->starting_moves = moves;
+    this->moves = moves;
+    this->moves_updated = true;
+
+    this->level = level;
+    this->level_updated = true;
+
+    this->current_action = Action::PICKING;
 }
 
 void BoardManager::reset() {
-    this->board = Board(this->board.getWidth(), this->board.getHeight());
-    init();
+    int board_width = this->board->getWidth();
+    int board_height = this->board->getHeight();
+    delete(this->board);
+    this->board = new Board(board_width, board_height);
+
+    this->selected.x = this->board->getWidth() / 2;
+    this->selected.y = this->board->getHeight() / 2;
+
+    this->matches = 0;
+    this->required_matches = required_matches;
+    this->matches_updated = true;
+
+    this->moves = this->starting_moves;
+    this->moves_updated = true;
+
+    this->current_action = Action::PICKING;
 }
 
 void BoardManager::handleEvents(std::vector<Event> events) {
@@ -61,11 +94,11 @@ void BoardManager::handleEvents(std::vector<Event> events) {
             case Event::CONFIRM:
                 if (this->current_action == Action::PICKING) {
                     this->picked = this->selected;
-                    this->preview = this->board.getShells();
+                    this->preview = this->board->getShells();
                     this->current_action = Action::MOVING;
                     sounds.play(Sound::PICK);
                 } else if (this->current_action == Action::MOVING) {
-                    if (this->board.swap(picked, selected)) {
+                    if (this->board->swap(picked, selected)) {
                         this->current_action = Action::FALLING;
                     } else {
                         this->selected = this->picked;
@@ -95,12 +128,12 @@ void BoardManager::moveCursor(int x, int y) {
 
     // Wrap around the screen
     if (newSelected.x < 0) {
-        newSelected.x = this->board.getWidth() - 1;
-    } else if (newSelected.x >= this->board.getWidth()) {
+        newSelected.x = this->board->getWidth() - 1;
+    } else if (newSelected.x >= this->board->getWidth()) {
         newSelected.x = 0;
     } else if (newSelected.y < 0) {
-        newSelected.y = this->board.getHeight() - 1;
-    } else if (newSelected.y >= this->board.getHeight()) {
+        newSelected.y = this->board->getHeight() - 1;
+    } else if (newSelected.y >= this->board->getHeight()) {
         newSelected.y = 0;
     }
 
@@ -109,7 +142,7 @@ void BoardManager::moveCursor(int x, int y) {
             return;
         }
         // Update preview to draw
-        this->preview = this->board.getShellsAfterSwap(this->board.getShells(), this->picked, newSelected);
+        this->preview = this->board->getShellsAfterSwap(this->board->getShells(), this->picked, newSelected);
     }
     this->selected = newSelected;
 }
@@ -118,8 +151,8 @@ void BoardManager::moveCursorMouse() {
     SDL_Point mouse;
     SDL_GetMouseState(&mouse.x, &mouse.y);
     // Make sure the mouse cursor is on the board
-    if (mouse.x > start.x && mouse.x < end.x && mouse.y > start.y && mouse.y < end.y) {
-        SDL_Point newSelected = {(mouse.x - start.x)/SHELL_SIZE, (mouse.y - start.y)/SHELL_SIZE};
+    if (mouse.x > rect_board.x && mouse.x < (rect_board.x + rect_board.w) && mouse.y > rect_board.y && mouse.y < (rect_board.y + rect_board.h)) {
+        SDL_Point newSelected = {(mouse.x - rect_board.x)/SHELL_SIZE, (mouse.y - rect_board.y)/SHELL_SIZE};
         if (this->current_action == Action::MOVING) {
             if (newSelected.x != this->picked.x && newSelected.y != this->picked.y) {
                 // Snap to the nearest allowed position
@@ -130,7 +163,7 @@ void BoardManager::moveCursorMouse() {
                 }
             }
             // Update preview to draw
-            this->preview = this->board.getShellsAfterSwap(this->board.getShells(), this->picked, newSelected);
+            this->preview = this->board->getShellsAfterSwap(this->board->getShells(), this->picked, newSelected);
         }
         this->selected = newSelected;
     }
@@ -159,9 +192,9 @@ void BoardManager::decreaseMoves() {
 void BoardManager::update() {
     switch (this->current_action) {
         case Action::FALLING:
-            this->board.fillEmpty();
+            this->board->fillEmpty();
             SDL_Delay(DROP_TIMER);
-            if(!this->board.hasEmpty())
+            if(!this->board->hasEmpty())
                 this->current_action = Action::MATCHING;
             break;
         case Action::MATCHING:
@@ -180,7 +213,7 @@ void BoardManager::update() {
 
 void BoardManager::match() {
     SDL_Delay(DROP_TIMER);
-    std::vector<Shell> matches = this->board.match();
+    std::vector<Shell> matches = this->board->match();
     if (matches.size() > 0) {
         int scoring_match = 0;
         Sound sound = Sound::MATCH;
@@ -215,16 +248,16 @@ void BoardManager::drawCursor(SDL_Renderer * renderer) {
     // Draw picked cross
     if (this->current_action == Action::MOVING) {
         SDL_Rect pickrect_hor;
-        pickrect_hor.x = this->start.x +1;
-        pickrect_hor.y = SHELL_SIZE * this->picked.y + this->start.y + 1;
-        pickrect_hor.w = SHELL_SIZE * this->board.getWidth();
+        pickrect_hor.x = this->rect_board.x +1;
+        pickrect_hor.y = SHELL_SIZE * this->picked.y + this->rect_board.y + 1;
+        pickrect_hor.w = SHELL_SIZE * this->board->getWidth();
         pickrect_hor.h = SHELL_SIZE - 1;
 
         SDL_Rect pickrect_ver;
-        pickrect_ver.x = SHELL_SIZE * this->picked.x + this->start.x + 1;
-        pickrect_ver.y = this->start.y + 1;
+        pickrect_ver.x = SHELL_SIZE * this->picked.x + this->rect_board.x + 1;
+        pickrect_ver.y = this->rect_board.y + 1;
         pickrect_ver.w = SHELL_SIZE - 1;
-        pickrect_ver.h =  SHELL_SIZE * this->board.getHeight();
+        pickrect_ver.h =  SHELL_SIZE * this->board->getHeight();
 
         SDL_SetRenderDrawColor(renderer, 0, 0, 255, 50);
         SDL_RenderFillRect(renderer, &pickrect_ver);
@@ -233,8 +266,8 @@ void BoardManager::drawCursor(SDL_Renderer * renderer) {
 
     // Draw selection rectangle
     SDL_Rect selrect;
-    selrect.x = SHELL_SIZE * selected.x + this->start.x + 1;
-    selrect.y = SHELL_SIZE * selected.y + this->start.y + 1;
+    selrect.x = SHELL_SIZE * selected.x + this->rect_board.x + 1;
+    selrect.y = SHELL_SIZE * selected.y + this->rect_board.y + 1;
     selrect.w = SHELL_SIZE - 1;
     selrect.h = SHELL_SIZE - 1;
 
@@ -244,47 +277,47 @@ void BoardManager::drawCursor(SDL_Renderer * renderer) {
 
 void BoardManager::drawBoard(SDL_Renderer * renderer) {
     // Draw background rectangle
-    SDL_Rect background = {this->start.x, this->start.y, this->board.getWidth() * SHELL_SIZE, (this->board.getHeight() + 1) * SHELL_SIZE};
+    SDL_Rect background = {this->rect_board.x, this->rect_board.y, this->board->getWidth() * SHELL_SIZE, (this->board->getHeight() + 1) * SHELL_SIZE};
     SDL_SetRenderDrawColor(renderer, COLOR_BOARD.r, COLOR_BOARD.g, COLOR_BOARD.b, COLOR_BOARD.a);
     SDL_RenderFillRect(renderer, &background);
 
     // Draw board lines
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-    for (int x = 0; x <= this->board.getWidth(); x++) {
-        int current_x = this->start.x + x * SHELL_SIZE;
+    for (int x = 0; x <= this->board->getWidth(); x++) {
+        int current_x = this->rect_board.x + x * SHELL_SIZE;
         SDL_RenderDrawLine(
                 renderer,
                 current_x,
-                this->start.y,
+                this->rect_board.y,
                 current_x,
-                this->end.y
+                (this->rect_board.y + this->rect_board.h)
                 );
     }
-    for (int y = 0; y <= this->board.getHeight(); y++) {
-        int current_y = this->start.y + y * SHELL_SIZE;
+    for (int y = 0; y <= this->board->getHeight(); y++) {
+        int current_y = this->rect_board.y + y * SHELL_SIZE;
         SDL_RenderDrawLine(
                 renderer,
-                this->start.x,
+                this->rect_board.x,
                 current_y,
-                this->end.x,
+                (this->rect_board.x + this->rect_board.w),
                 current_y
         );
     }
 
     // Draw lines around scoreboard
-    SDL_RenderDrawLine(renderer,this->start.x,this->end.y + 1,this->start.x,this->end.y + SHELL_SIZE);
-    SDL_RenderDrawLine(renderer,this->end.x,this->end.y + 1,this->end.x,this->end.y + SHELL_SIZE );
-    SDL_RenderDrawLine(renderer,this->start.x,this->end.y + SHELL_SIZE,this->end.x,this->end.y + SHELL_SIZE);
+    SDL_RenderDrawLine(renderer,this->rect_board.x,(this->rect_board.y + this->rect_board.h) + 1,this->rect_board.x,(this->rect_board.y + this->rect_board.h) + SHELL_SIZE);
+    SDL_RenderDrawLine(renderer,(this->rect_board.x + this->rect_board.w),(this->rect_board.y + this->rect_board.h) + 1,(this->rect_board.x + this->rect_board.w),(this->rect_board.y + this->rect_board.h) + SHELL_SIZE );
+    SDL_RenderDrawLine(renderer,this->rect_board.x,(this->rect_board.y + this->rect_board.h) + SHELL_SIZE,(this->rect_board.x + this->rect_board.w),(this->rect_board.y + this->rect_board.h) + SHELL_SIZE);
 }
 
 void BoardManager::drawShells(SDL_Renderer * renderer) {
-    std::vector<std::vector<Shell>> shells = this->board.getShells();
+    std::vector<std::vector<Shell>> shells = this->board->getShells();
     if (this->current_action == Action::MOVING) {
         shells = this->preview;
     }
     // Draw the shells
-    for (int x = 0; x < this->board.getWidth(); x++) {
-        for (int y = 0; y < this->board.getHeight(); y++) {
+    for (int x = 0; x < this->board->getWidth(); x++) {
+        for (int y = 0; y < this->board->getHeight(); y++) {
             SDL_Rect srcrect;
             srcrect.x = SHELL_SIZE * (int) shells[x][y];
             srcrect.y = 0;
@@ -292,8 +325,8 @@ void BoardManager::drawShells(SDL_Renderer * renderer) {
             srcrect.h = SHELL_SIZE;
 
             SDL_Rect dstrect;
-            dstrect.x = SHELL_SIZE * x + this->start.x;
-            dstrect.y = SHELL_SIZE * y + this->start.y;
+            dstrect.x = SHELL_SIZE * x + this->rect_board.x;
+            dstrect.y = SHELL_SIZE * y + this->rect_board.y;
             dstrect.w = SHELL_SIZE;
             dstrect.h = SHELL_SIZE;
 
@@ -319,7 +352,7 @@ void BoardManager::drawInfo(SDL_Renderer * renderer) {
 
     // Render level
     if (level > 0) {
-        SDL_Rect rect_level = {start.x, end.y, 0, 0};
+        SDL_Rect rect_level = {rect_board.x, rect_board.y + rect_board.h, 0, 0};
         SDL_QueryTexture(text_level, NULL, NULL, &rect_level.w, &rect_level.h);
         rect_level.x += SHELL_SIZE / 2;
         rect_level.y += SHELL_SIZE / 2 - rect_level.h / 2;
@@ -327,14 +360,14 @@ void BoardManager::drawInfo(SDL_Renderer * renderer) {
     }
 
     // Render matches
-    SDL_Rect rect_matches = {start.x + (end.x - start.x)/2 , end.y, 0, 0};
+    SDL_Rect rect_matches = {rect_board.x + rect_board.w / 2 , rect_board.y + rect_board.h, 0, 0};
     SDL_QueryTexture(text_matches, NULL, NULL, &rect_matches.w, &rect_matches.h);
     rect_matches.x -= rect_matches.w / 2;
     rect_matches.y += SHELL_SIZE / 2 - rect_matches.h / 2;
     SDL_RenderCopy(renderer, text_matches, NULL, &rect_matches);
 
     // Render moves
-    SDL_Rect rect_moves = {end.x, end.y, 0, 0};
+    SDL_Rect rect_moves = {rect_board.x + rect_board.w, rect_board.y + rect_board.h, 0, 0};
     SDL_QueryTexture(text_moves, NULL, NULL, &rect_moves.w, &rect_moves.h);
     rect_moves.x -= SHELL_SIZE / 2 + rect_moves.w;
     rect_moves.y += SHELL_SIZE / 2 - rect_moves.h / 2;

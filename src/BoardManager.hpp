@@ -16,10 +16,9 @@
 class BoardManager {
 
 private:
-    Board board;
+    Board * board;
 
-    SDL_Point start;
-    SDL_Point end;
+    SDL_Rect rect_board;
     SDL_Point selected;
     SDL_Point picked;
 
@@ -31,6 +30,7 @@ private:
 
     int required_matches;
 
+    int starting_moves;
     int moves;
     bool moves_updated = true;
 
@@ -65,18 +65,18 @@ private:
     void drawBoard(SDL_Renderer * renderer);
     void drawInfo(SDL_Renderer * renderer);
     void drawShells(SDL_Renderer * renderer);
-
-    void init();
 public:
-    BoardManager(SDL_Renderer *renderer, FontManager *fonts, int x, int y, int width, int height);
+    BoardManager(SDL_Renderer *renderer, FontManager *fonts, int x, int y, int width, int height, int moves, int required_matches=0, int level=0);
+    ~BoardManager();
 
     void handleEvents(std::vector<Event> events);
     void update();
     void draw(SDL_Renderer *renderer);
 
     bool isCompleted() {return this->current_action == Action::COMPLETED;};
-    int getMoves() {return moves;};
+    int hasMovesLeft() {return (required_matches == 0 || moves > 0);};
     void reset();
+    void loadLevel(int x, int y, int width, int height, int moves, int required_matches=0, int level=0);
 };
 
 #endif // BOARDMANAGER_HPP

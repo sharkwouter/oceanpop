@@ -10,7 +10,9 @@
 
 class GameState : public BaseState {
 private:
-    BoardManager board;
+    SDL_Renderer * renderer;
+
+    BoardManager * board;
     ThemeManager theme;
     FontManager fonts;
 
@@ -20,6 +22,16 @@ private:
 
     bool paused = false;
     bool completed = false;
+
+    int level;
+    int moves;
+    int required_matches;
+    int width;
+    int height;
+    SDL_Point position;
+
+    SDL_Point calculatePosition(int width, int height);
+    void loadLevel();
 public:
     GameState(SDL_Renderer *renderer);
     ~GameState();
