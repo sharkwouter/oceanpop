@@ -256,7 +256,7 @@ void BoardManager::drawCursor(SDL_Renderer * renderer) {
         pickrect_ver.w = SHELL_SIZE - 1;
         pickrect_ver.h =  SHELL_SIZE * this->board->getHeight();
 
-        SDL_SetRenderDrawColor(renderer, 0, 0, 255, 50);
+        SDL_SetRenderDrawColor(renderer, COLOR_PICKED.r, COLOR_PICKED.g, COLOR_PICKED.b, COLOR_PICKED.a);
         SDL_RenderFillRect(renderer, &pickrect_ver);
         SDL_RenderFillRect(renderer, &pickrect_hor);
     }
@@ -268,7 +268,7 @@ void BoardManager::drawCursor(SDL_Renderer * renderer) {
     selrect.w = SHELL_SIZE - 1;
     selrect.h = SHELL_SIZE - 1;
 
-    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 100);
+    SDL_SetRenderDrawColor(renderer, COLOR_SELECT.r, COLOR_SELECT.g, COLOR_SELECT.b, COLOR_SELECT.a);
     SDL_RenderFillRect(renderer, &selrect);
 }
 
