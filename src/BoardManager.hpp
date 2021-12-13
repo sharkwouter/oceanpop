@@ -23,10 +23,10 @@ private:
     SDL_Point selected;
     SDL_Point picked;
 
-    int level;
+    int level = 0;
     bool level_updated = true;
 
-    int score;
+    int score = 0;
     bool score_updated = true;
 
     int required_score;
