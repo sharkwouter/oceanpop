@@ -75,6 +75,7 @@ public:
     void draw(SDL_Renderer *renderer);
 
     bool isCompleted() {return this->current_action == Action::COMPLETED;};
+    int getMoves() {return moves;};
     void reset();
 };
 

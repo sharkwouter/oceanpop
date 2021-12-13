@@ -175,9 +175,6 @@ void BoardManager::update() {
         this->current_action = Action::COMPLETED;
         this->required_matches += 1;
         increasLevel();
-    } else if (this->moves == 0) {
-        sounds.play(Sound::PAIN);
-        reset();
     }
 }
 

@@ -6,6 +6,7 @@
 #include "BaseState.hpp"
 #include "../BoardManager.hpp"
 #include "../ThemeManager.hpp"
+#include "../PauseScreen.hpp"
 
 class GameState : public BaseState {
 private:
@@ -13,17 +14,12 @@ private:
     ThemeManager theme;
     FontManager fonts;
 
-    SDL_Texture * text_paused = NULL;
-    SDL_Texture * text_paused_subtitle = NULL;
-    
-    SDL_Texture * text_completed = NULL;
-    SDL_Texture * text_completed_subtitle = NULL;
+    PauseScreen pause_screen;
+    PauseScreen win_screen;
+    PauseScreen lose_screen;
 
     bool paused = false;
     bool completed = false;
-
-    void drawPauseScreen(SDL_Renderer * renderer);
-    void drawCompletedScreen(SDL_Renderer * renderer);
 public:
     GameState(SDL_Renderer *renderer);
     ~GameState();
