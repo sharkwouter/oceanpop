@@ -18,7 +18,7 @@ void ThemeManager::load() {
     switch (this->theme) {
         case Theme::MENU:
             this->music = NULL;
-            this->background = loadBackground("background1.jpg");
+            this->background = loadBackground("menu.jpg");
             break;
         case Theme::THEME1:
             this->music = Mix_LoadMUS("assets/music/song1.mp3");
@@ -26,15 +26,15 @@ void ThemeManager::load() {
             break;
         case Theme::THEME2:
             this->music = Mix_LoadMUS("assets/music/song2.mp3");
-            this->background = loadBackground("background1.jpg");
+            this->background = loadBackground("background2.jpg");
             break;
         case Theme::THEME3:
             this->music = Mix_LoadMUS("assets/music/song3.mp3");
-            this->background = loadBackground("background1.jpg");
+            this->background = loadBackground("background3.jpg");
             break;
         case Theme::THEME4:
             this->music = Mix_LoadMUS("assets/music/song4.mp3");
-            this->background = loadBackground("background1.jpg");
+            this->background = loadBackground("background4.jpg");
             break;
         default:
             this->theme = Theme::THEME1;
