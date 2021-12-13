@@ -8,7 +8,6 @@ TextureManager::~TextureManager() {
     for (auto &pair : this->textures) {
         if (pair.second != nullptr) {
             SDL_DestroyTexture(pair.second);
-            free(pair.second);
             pair.second = nullptr;
         }
     }

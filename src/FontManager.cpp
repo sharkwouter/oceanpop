@@ -10,8 +10,6 @@ FontManager::FontManager() {
 FontManager::~FontManager() {
     TTF_CloseFont(font);
     TTF_CloseFont(font_title);
-    free(font);
-    free(font_title);
 }
 
 void FontManager::load() {

@@ -16,7 +16,7 @@
 class BoardManager {
 
 private:
-    Board * board;
+    Board * board = NULL;
 
     SDL_Rect rect_board;
     SDL_Point selected;

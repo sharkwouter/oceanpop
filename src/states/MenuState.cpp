@@ -26,10 +26,8 @@ MenuState::MenuState(SDL_Renderer * renderer) : theme(renderer, Theme::MENU), re
 
 MenuState::~MenuState() {
     SDL_DestroyTexture(text_title);
-    free(text_title);
     for (int i = 0; i < (int) options.size(); i++) {
         SDL_DestroyTexture(options[i]);
-        free(options[i]);
         options[i] = NULL;
     }
 }

@@ -11,8 +11,6 @@ PauseScreen::PauseScreen(SDL_Renderer * renderer, std::string title, std::string
 PauseScreen::~PauseScreen() {
     SDL_DestroyTexture(title);
     SDL_DestroyTexture(subtitle);
-    free(title);
-    free(subtitle);
 }
 
 void PauseScreen::draw(SDL_Renderer * renderer) {

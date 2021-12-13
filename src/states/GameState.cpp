@@ -32,8 +32,7 @@ void GameState::handleEvents(std::vector<Event> events) {
 
     for(Event event: events) {
         if (event == Event::MENU) {
-            //this->paused = !(this->paused);
-            this->board->reset();
+            this->paused = !(this->paused);
             return;
         }
 
