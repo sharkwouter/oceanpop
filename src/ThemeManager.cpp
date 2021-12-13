@@ -11,8 +11,9 @@ ThemeManager::ThemeManager(SDL_Renderer * renderer, Theme theme) : renderer(rend
 ThemeManager::~ThemeManager() {
     Mix_HaltMusic();
     Mix_FreeMusic(this->music);
-    this->music = NULL;
-    SDL_DestroyTexture(background);
+    free(this->music);
+    SDL_DestroyTexture(this->background);
+    free(this->background);
 }
 
 void ThemeManager::load() {

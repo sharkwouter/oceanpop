@@ -8,9 +8,11 @@ TextureManager::~TextureManager() {
     for (auto &pair : this->textures) {
         if (pair.second != nullptr) {
             SDL_DestroyTexture(pair.second);
+            free(pair.second);
             pair.second = nullptr;
         }
     }
+    this->textures.clear();
 }
 
 void TextureManager::add_texture(const std::string &file, SDL_Renderer *renderer) {

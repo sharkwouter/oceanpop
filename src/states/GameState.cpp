@@ -15,7 +15,7 @@ GameState::GameState(SDL_Renderer * renderer) :
 }
 
 GameState::~GameState() {
-
+    delete(this->board);
 }
 
 void GameState::update() {
