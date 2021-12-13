@@ -21,15 +21,15 @@ BoardManager::BoardManager(SDL_Renderer *renderer, FontManager *fonts, int x, in
 
     textures.add_texture(image_shells, renderer);
 
-    this->required_score = 300;
+    this->required_matches = 10;
     this->level = 1;
     init();
 }
 
 void BoardManager::init() {
-    this->score = 0;
+    this->matches = 0;
     this->moves = 10;
-    this->score_updated = true;
+    this->matches_updated = true;
     this->moves_updated = true;
     this->current_action = Action::PICKING;
 
@@ -136,9 +136,9 @@ void BoardManager::moveCursorMouse() {
     }
 }
 
-void BoardManager::addScore(int matches) {
-    this->score += 10*matches*(matches+1)/2;
-    score_updated = true;
+void BoardManager::addMatches(int matches) {
+    this->matches += matches;
+    matches_updated = true;
 }
 
 void BoardManager::increasLevel() {
@@ -171,9 +171,9 @@ void BoardManager::update() {
             break;
     }
 
-    if (this->score >= this->required_score && this->current_action == Action::PICKING) {
+    if (this->matches >= this->required_matches && this->current_action == Action::PICKING) {
         this->current_action = Action::COMPLETED;
-        this->required_score += 10;
+        this->required_matches += 1;
         increasLevel();
     } else if (this->moves == 0) {
         sounds.play(Sound::PAIN);
@@ -192,13 +192,13 @@ void BoardManager::match() {
                 this->moves++;
             } else if (match == Shell::URCHIN) {
                 sound =Sound::PAIN;
-                this->score -= 50;
+                this->matches -= 3;
             } else {
                 scoring_match++;
             }
         }
         sounds.play(sound);
-        addScore(scoring_match);
+        addMatches(scoring_match);
         this->current_action = Action::FALLING;
     } else {
         decreaseMoves();
@@ -210,10 +210,7 @@ void BoardManager::match() {
 void BoardManager::draw(SDL_Renderer *renderer) {
     drawBoard(renderer);
     drawCursor(renderer);
-    drawScore(renderer);
-    if (level > 0) {
-        drawLevel(renderer);
-    }
+    drawInfo(renderer);
     drawShells(renderer);
 }
 
@@ -308,55 +305,41 @@ void BoardManager::drawShells(SDL_Renderer * renderer) {
     }
 }
 
-void BoardManager::drawScore(SDL_Renderer * renderer) {
+void BoardManager::drawInfo(SDL_Renderer * renderer) {
     // Generate texture with text
-    if (moves_updated) {
-        text_moves = fonts->getTexture(renderer, std::to_string(moves) + " moves left", false, {255, 255, 255, 255});
-        moves_updated = false;
-    }
-    if (score_updated) {
-        text_score = fonts->getTexture(renderer, std::to_string(score) + "/" + std::to_string(required_score), false, {255, 255, 255, 255});
-        score_updated = false;
-    }
-
-    // Render moves
-    SDL_Rect rect_moves = {start.x, end.y, 0, 0};
-    SDL_QueryTexture(text_moves, NULL, NULL, &rect_moves.w, &rect_moves.h);
-    rect_moves.x += SHELL_SIZE * 2 - rect_moves.w / 2;
-    rect_moves.y += SHELL_SIZE / 2 - rect_moves.h / 2;
-    SDL_RenderCopy(renderer, text_moves, NULL, &rect_moves);
-
-    // Render score
-    SDL_Rect rect_score = {end.x, end.y, 0, 0};
-    SDL_QueryTexture(text_score, NULL, NULL, &rect_score.w, &rect_score.h);
-    rect_score.x -= SHELL_SIZE * 2 + rect_score.w / 2;
-    rect_score.y += SHELL_SIZE / 2 - rect_score.h / 2;
-    SDL_RenderCopy(renderer, text_score, NULL, &rect_score);
-}
-
-void BoardManager::drawLevel(SDL_Renderer * renderer) {
     if (level_updated) {
         text_level = fonts->getTexture(renderer, "Level " + std::to_string(level), false, {255, 255, 255, 255});
         level_updated = false;
     }
+    if (matches_updated) {
+        text_matches = fonts->getTexture(renderer, std::to_string(matches) + "/" + std::to_string(required_matches), false, {255, 255, 255, 255});
+        matches_updated = false;
+    }
+    if (moves_updated) {
+        text_moves = fonts->getTexture(renderer, std::to_string(moves) + " moves", false, {255, 255, 255, 255});
+        moves_updated = false;
+    }
 
     // Render level
-    SDL_Rect rect_level = {start.x, start.y, 0, 0};
-    SDL_QueryTexture(text_level, NULL, NULL, &rect_level.w, &rect_level.h);
-    rect_level.x -= SHELL_SIZE / 2 + rect_level.w;
-    rect_level.y += SHELL_SIZE / 2 - rect_level.h / 2;
+    if (level > 0) {
+        SDL_Rect rect_level = {start.x, end.y, 0, 0};
+        SDL_QueryTexture(text_level, NULL, NULL, &rect_level.w, &rect_level.h);
+        rect_level.x += SHELL_SIZE / 2;
+        rect_level.y += SHELL_SIZE / 2 - rect_level.h / 2;
+        SDL_RenderCopy(renderer, text_level, NULL, &rect_level);
+    }
 
-    // Draw background rectangle
-    SDL_Rect background = {rect_level.x - SHELL_SIZE / 2, this->start.y, rect_level.w + SHELL_SIZE, SHELL_SIZE};
-    SDL_SetRenderDrawColor(renderer, COLOR_BOARD.r, COLOR_BOARD.g, COLOR_BOARD.b, COLOR_BOARD.a);
-    SDL_RenderFillRect(renderer, &background);
+    // Render matches
+    SDL_Rect rect_matches = {start.x + (end.x - start.x)/2 , end.y, 0, 0};
+    SDL_QueryTexture(text_matches, NULL, NULL, &rect_matches.w, &rect_matches.h);
+    rect_matches.x -= rect_matches.w / 2;
+    rect_matches.y += SHELL_SIZE / 2 - rect_matches.h / 2;
+    SDL_RenderCopy(renderer, text_matches, NULL, &rect_matches);
 
-    SDL_RenderCopy(renderer, text_level, NULL, &rect_level);
-
-    // Draw lines around level rectangle
-    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-
-    SDL_RenderDrawLine(renderer,background.x, background.y, background.x + background.w, background.y);
-    SDL_RenderDrawLine(renderer,background.x, background.y + background.h, background.x + background.w, background.y + background.h);
-    SDL_RenderDrawLine(renderer,background.x, background.y, background.x, background.y + background.h);
+    // Render moves
+    SDL_Rect rect_moves = {end.x, end.y, 0, 0};
+    SDL_QueryTexture(text_moves, NULL, NULL, &rect_moves.w, &rect_moves.h);
+    rect_moves.x -= SHELL_SIZE / 2 + rect_moves.w;
+    rect_moves.y += SHELL_SIZE / 2 - rect_moves.h / 2;
+    SDL_RenderCopy(renderer, text_moves, NULL, &rect_moves);
 }

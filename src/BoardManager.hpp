@@ -26,10 +26,10 @@ private:
     int level = 0;
     bool level_updated = true;
 
-    int score = 0;
-    bool score_updated = true;
+    int matches = 0;
+    bool matches_updated = true;
 
-    int required_score;
+    int required_matches;
 
     int moves;
     bool moves_updated = true;
@@ -47,11 +47,11 @@ private:
     std::vector<std::vector<Shell>> preview;
 
     SDL_Texture * text_moves;
-    SDL_Texture * text_score;
+    SDL_Texture * text_matches;
     SDL_Texture * text_level;
 
 
-    void addScore(int matches);
+    void addMatches(int matches);
     void increasLevel();
     void increaseMoves();
     void decreaseMoves();
@@ -63,8 +63,7 @@ private:
 
     void drawCursor(SDL_Renderer * renderer);
     void drawBoard(SDL_Renderer * renderer);
-    void drawScore(SDL_Renderer * renderer);
-    void drawLevel(SDL_Renderer * renderer);
+    void drawInfo(SDL_Renderer * renderer);
     void drawShells(SDL_Renderer * renderer);
 
     void init();
