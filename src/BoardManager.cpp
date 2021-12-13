@@ -211,7 +211,9 @@ void BoardManager::draw(SDL_Renderer *renderer) {
     drawBoard(renderer);
     drawCursor(renderer);
     drawScore(renderer);
-    drawLevel(renderer);
+    if (level > 0) {
+        drawLevel(renderer);
+    }
     drawShells(renderer);
 }
 
