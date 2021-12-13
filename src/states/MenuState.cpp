@@ -64,25 +64,33 @@ void MenuState::draw(SDL_Renderer * renderer) {
     this->theme.draw(renderer);
 
     // Draw title
-    SDL_Rect rect_title = {SCREEN_WIDTH/2, SHELL_SIZE, 0, 0};
+    SDL_Rect rect_title = {SCREEN_WIDTH/2, SHELL_SIZE / 2, 0, 0};
     SDL_QueryTexture(text_title, NULL, NULL, &rect_title.w, &rect_title.h);
     rect_title.x -= rect_title.w/2;
-    rect_title.y -= rect_title.h/2;
     SDL_RenderCopy(renderer, text_title, NULL, &rect_title);
 
     // Draw options
     for(int i = 0; i < (int) options.size(); i++) {
-        // Set the texture color
-        if(i == current_option) {
-            SDL_SetTextureColorMod(options[i], 0, 0, 0);
-        } else {
-            SDL_SetTextureColorMod(options[i], 255, 255, 255);
-        }
         // Draw the option title
         SDL_Rect rect = {SCREEN_WIDTH/2, (SCREEN_HEIGHT/((int) options.size()+2))*(i+2), 0, 0};
         SDL_QueryTexture(options[i], NULL, NULL, &rect.w, &rect.h);
         rect.x -= rect.w/2;
         rect.y -= rect.h/2;
+
+        // Set the texture color
+        if(i == current_option) {
+            // Draw selection box
+            SDL_Rect rect_selection = {0, rect.y, SCREEN_WIDTH, rect.h};
+            SDL_SetRenderDrawColor(renderer, COLOR_BOARD.r, COLOR_BOARD.g, COLOR_BOARD.b, COLOR_BOARD.a);
+            SDL_RenderFillRect(renderer, &rect_selection);
+
+            // Draw lines around selection box
+            SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+            SDL_RenderDrawLine(renderer, rect_selection.x, rect_selection.y, rect_selection.x + rect_selection.w, rect_selection.y);
+            SDL_RenderDrawLine(renderer, rect_selection.x, rect_selection.y + rect_selection.h, rect_selection.x + rect_selection.w, rect_selection.y + rect_selection.h);
+        }
+
+        // Render the option text
         SDL_RenderCopy(renderer, options[i], NULL, &rect);
     }
 }
