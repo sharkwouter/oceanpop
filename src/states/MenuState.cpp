@@ -5,13 +5,25 @@
 #include "GameState.hpp"
 
 MenuState::MenuState(SDL_Renderer * renderer) : theme(renderer, Theme::MENU), renderer(renderer) {
-    text_title = fonts.getTexture(renderer, "Match Theory", true, {255, 255, 255, 255});
+    text_title = fonts.getTexture(renderer, "Match Theory", true, {COLOR_MENU_TITLE.r, COLOR_MENU_TITLE.g, COLOR_MENU_TITLE.b, COLOR_MENU_TITLE.a});
 
     for (int i = 0; i < (int) MenuOption::OPTIONCOUNT; i++) {
         std::string option_text;
         switch ((MenuOption) i) {
             case MenuOption::STANDARD:
                 option_text = "Standard mode";
+                break;
+            case MenuOption::ENDLESS:
+                option_text = "Endless mode";
+                break;
+            case MenuOption::RELAXED:
+                option_text = "Relaxed mode";
+                break;
+            case MenuOption::OPTIONS:
+                option_text = "Options";
+                break;
+            case MenuOption::CREDITS:
+                option_text = "Credits";
                 break;
             case MenuOption::EXIT:
                 option_text = "Exit";
@@ -64,7 +76,7 @@ void MenuState::draw(SDL_Renderer * renderer) {
     this->theme.draw(renderer);
 
     // Draw title
-    SDL_Rect rect_title = {SCREEN_WIDTH/2, SHELL_SIZE / 2, 0, 0};
+    SDL_Rect rect_title = {SCREEN_WIDTH / 2, SHELL_SIZE / 2, 0, 0};
     SDL_QueryTexture(text_title, NULL, NULL, &rect_title.w, &rect_title.h);
     rect_title.x -= rect_title.w/2;
     SDL_RenderCopy(renderer, text_title, NULL, &rect_title);
@@ -75,7 +87,6 @@ void MenuState::draw(SDL_Renderer * renderer) {
         SDL_Rect rect = {SCREEN_WIDTH/2, (SCREEN_HEIGHT/((int) options.size()+2))*(i+2), 0, 0};
         SDL_QueryTexture(options[i], NULL, NULL, &rect.w, &rect.h);
         rect.x -= rect.w/2;
-        rect.y -= rect.h/2;
 
         // Set the texture color
         if(i == current_option) {

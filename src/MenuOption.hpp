@@ -3,6 +3,10 @@
 
 enum class MenuOption {
     STANDARD,
+    ENDLESS,
+    RELAXED,
+    OPTIONS,
+    CREDITS,
     EXIT,
     OPTIONCOUNT
 };
