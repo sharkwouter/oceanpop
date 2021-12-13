@@ -14,13 +14,18 @@ private:
     SDL_Renderer * renderer;
 
     Mix_Music * music = NULL;
-    SDL_Texture * background;
+    Mix_Music * next_music = NULL;
+    SDL_Texture * background = NULL;
 
     bool paused = false;
+
+    bool change_music_on_switch = true;
 
     void load(Theme theme);
     void loadBackground(Theme theme);
     void loadMusic(Theme theme);
+
+    Theme getNextTheme();
 
     SDL_Texture * createBackgroundTexture(std::string filename);
 public:

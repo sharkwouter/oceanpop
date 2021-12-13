@@ -67,7 +67,7 @@ void GameState::handleEvents(std::vector<Event> events) {
             if (event == Event::CONFIRM) {
                 this->failed = false;
                 this->board->reset();
-                theme.unpause();
+                theme.pause();
             }
         } else if (this->paused) {
             if (event == Event::CONFIRM) {
