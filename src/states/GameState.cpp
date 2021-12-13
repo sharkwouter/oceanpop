@@ -6,7 +6,7 @@
 
 GameState::GameState(SDL_Renderer *renderer) :
     board(renderer, &fonts, (SCREEN_WIDTH-SHELL_SIZE*BOARD_WIDTH)/2, (SCREEN_HEIGHT-SHELL_SIZE*(BOARD_HEIGHT+1))/2, BOARD_WIDTH, BOARD_HEIGHT),
-    theme(renderer, Theme::DEFAULT)
+    theme(renderer, Theme::THEME1)
 {
 
 }
@@ -42,6 +42,7 @@ void GameState::handleEvents(std::vector<Event> events) {
             }
         } else if (this->board.isCompleted()) {
             if (event == Event::CONFIRM) {
+                this->theme.next();
                 this->board.reset();
             }
         }

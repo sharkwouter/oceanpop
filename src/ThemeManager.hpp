@@ -11,18 +11,21 @@
 class ThemeManager {
 private:
     Theme theme;
+    SDL_Renderer * renderer;
 
-    Mix_Music * music;
+    Mix_Music * music = NULL;
     SDL_Texture * background;
 
-    void load(SDL_Renderer * renderer, Theme theme);
-    SDL_Texture * loadBackground(SDL_Renderer * renderer, std::string filename);
+    void load();
+    SDL_Texture * loadBackground(std::string filename);
 public:
     ThemeManager(SDL_Renderer * renderer, Theme theme);
     ~ThemeManager();
 
     void update();
     void draw(SDL_Renderer * renderer);
+
+    void next();
 };
 
 #endif // THEMEMANAGER_H

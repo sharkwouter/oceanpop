@@ -3,7 +3,11 @@
 
 enum class Theme {
     MENU,
-    DEFAULT
+    THEME1,
+    THEME2,
+    THEME3,
+    THEME4,
+    AMOUNT
 };
 
 #endif // THEME_HPP
