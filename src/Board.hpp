@@ -20,7 +20,7 @@ private:
     bool isFalling(int x);
     bool shellsMatch(std::vector<std::vector<Shell>> shells, SDL_Point p1, SDL_Point p2, SDL_Point p3);
 public:
-    Board(int width, int height);
+    Board(int width, int height, int seed);
     ~Board();
 
     std::vector<Shell> match();

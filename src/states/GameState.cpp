@@ -59,7 +59,7 @@ void GameState::handleEvents(std::vector<Event> events) {
             if (event == Event::CONFIRM) {
                 this->completed = false;
                 this->theme.next();
-                this->board->loadLevel(this->position.x, this->position.y, this->width, this->height, this->moves, ++this->required_matches, ++this->level);
+                this->board->loadLevel(this->position.x, this->position.y, this->width, this->height, this->moves, ++this->required_matches, ++this->level, ++this->seed);
             }
         } else if (this->failed) {
             if (event == Event::CONFIRM) {
@@ -93,6 +93,7 @@ void GameState::loadLevel() {
     this->moves = 10;
     this->required_matches = 12;
     this->level = 1;
+    this->seed = this->level;
 
     this->board = new BoardManager(
         renderer,
@@ -104,7 +105,8 @@ void GameState::loadLevel() {
         this->height,
         this->moves,
         this->required_matches,
-        this->level
+        this->level,
+        this->seed
     );
 }
 

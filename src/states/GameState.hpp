@@ -27,6 +27,7 @@ private:
     bool failed = false;
 
     int level;
+    int seed;
     int moves;
     int required_matches;
     int width;

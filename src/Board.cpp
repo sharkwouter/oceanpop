@@ -1,6 +1,7 @@
 #include "Board.hpp"
 
-Board::Board(int width, int height) {
+Board::Board(int width, int height, int seed) {
+    srand(seed);
    // Create the shells vector
    this->shells.reserve(width);
     for (int x = 0; x < width; x++) {

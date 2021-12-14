@@ -30,6 +30,8 @@ private:
     int level = 0;
     bool level_updated = true;
 
+    int seed;
+
     int matches = 0;
     bool matches_updated = true;
 
@@ -67,7 +69,7 @@ private:
     void drawInfo(SDL_Renderer * renderer);
     void drawShells(SDL_Renderer * renderer);
 public:
-    BoardManager(SDL_Renderer *renderer, FontManager *fonts, SoundManager * sounds, int x, int y, int width, int height, int moves, int required_matches=0, int level=0);
+    BoardManager(SDL_Renderer *renderer, FontManager *fonts, SoundManager * sounds, int x, int y, int width, int height, int moves, int required_matches=0, int level=0, int seed=0);
     ~BoardManager();
 
     void handleEvents(std::vector<Event> events);
@@ -77,7 +79,7 @@ public:
     bool isCompleted() {return this->current_action == Action::COMPLETED;};
     int hasMovesLeft() {return (required_matches == 0 || moves > 0);};
     void reset();
-    void loadLevel(int x, int y, int width, int height, int moves, int required_matches=0, int level=0);
+    void loadLevel(int x, int y, int width, int height, int moves, int required_matches=0, int level=0, int seed=0);
 };
 
 #endif // BOARDMANAGER_HPP

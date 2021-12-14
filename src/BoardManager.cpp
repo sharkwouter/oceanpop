@@ -7,10 +7,10 @@
 #include "Sound.hpp"
 #include "colors.hpp"
 
-BoardManager::BoardManager(SDL_Renderer *renderer, FontManager *fonts, SoundManager * sounds, int x, int y, int width, int height, int moves, int required_matches, int level) : fonts(fonts), sounds(sounds) {
+BoardManager::BoardManager(SDL_Renderer *renderer, FontManager *fonts, SoundManager * sounds, int x, int y, int width, int height, int moves, int required_matches, int level, int seed) : fonts(fonts), sounds(sounds) {
     textures.add_texture(image_shells, renderer);
 
-    loadLevel(x, y, width, height, moves, required_matches, level);
+    loadLevel(x, y, width, height, moves, required_matches, level, seed);
 }
 
 BoardManager::~BoardManager() {
@@ -20,11 +20,12 @@ BoardManager::~BoardManager() {
     SDL_DestroyTexture(text_moves);
 }
 
-void BoardManager::loadLevel(int x, int y, int width, int height, int moves, int required_matches, int level) {
+void BoardManager::loadLevel(int x, int y, int width, int height, int moves, int required_matches, int level, int seed) {
     if (this->board != NULL) {
         delete(this->board);
     }
-    this->board = new Board(width, height);
+    this->board = new Board(width, height, seed);
+    this->seed = seed;
 
     this->rect_board.x = x;
     this->rect_board.y = y;
@@ -53,7 +54,7 @@ void BoardManager::reset() {
     int board_width = this->board->getWidth();
     int board_height = this->board->getHeight();
     delete(this->board);
-    this->board = new Board(board_width, board_height);
+    this->board = new Board(board_width, board_height, this->seed);
 
     this->selected.x = this->board->getWidth() / 2;
     this->selected.y = this->board->getHeight() / 2;
