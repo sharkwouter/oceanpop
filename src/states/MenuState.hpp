@@ -9,6 +9,7 @@
 #include "../FontManager.hpp"
 #include "../SoundManager.hpp"
 #include "../MenuOption.hpp"
+#include "../PauseScreen.hpp"
 
 class MenuState : public BaseState {
 private:
@@ -23,6 +24,10 @@ private:
     std::vector<SDL_Texture*> options;
 
     int current_option = 0;
+
+    PauseScreen not_impletemented_screen;
+
+    bool showing_not_implemented = false;
 public:
     MenuState(SDL_Renderer * renderer, FontManager * fonts, SoundManager * sounds);
     ~MenuState();

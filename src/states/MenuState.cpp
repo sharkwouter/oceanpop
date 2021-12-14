@@ -5,7 +5,8 @@
 #include "GameState.hpp"
 
 MenuState::MenuState(SDL_Renderer * renderer, FontManager * fonts, SoundManager * sounds) : renderer(renderer), fonts(fonts), sounds(sounds),
-    theme(renderer, Theme::MENU)
+    theme(renderer, Theme::MENU),
+    not_impletemented_screen(renderer, "Not yet implemented", "Press the confirm button to continue")
 {
     text_title = fonts->getTexture(renderer, "Match Theory", true, {COLOR_MENU_TITLE.r, COLOR_MENU_TITLE.g, COLOR_MENU_TITLE.b, COLOR_MENU_TITLE.a});
 
@@ -55,6 +56,14 @@ MenuState::~MenuState() {
 
 void MenuState::handleEvents(std::vector<Event> events) {
     for(Event event :events) {
+        if (this->showing_not_implemented) {
+            if (event == Event::CONFIRM) {
+                this->showing_not_implemented = false;
+                return;
+            }
+            continue;
+        }
+
         switch (event) {
             case Event::UP:
                 if (current_option != 0) {
@@ -71,7 +80,11 @@ void MenuState::handleEvents(std::vector<Event> events) {
                 }
                 break;
             case Event::CONFIRM:
-                this->done = true;
+                if (getNextState() == State::MENU) {
+                    showing_not_implemented = true;
+                } else {
+                    this->done = true;
+                }
                 break;
             case Event::CANCEL:
                 this->current_option = (int) MenuOption::EXIT;
@@ -90,6 +103,11 @@ void MenuState::update() {
 
 void MenuState::draw(SDL_Renderer * renderer) {
     this->theme.draw(renderer);
+
+    if (this->showing_not_implemented) {
+        not_impletemented_screen.draw(renderer);
+        return;
+    }
 
     // Draw title
     SDL_Rect rect_title = {SCREEN_WIDTH / 2, SHELL_SIZE / 2, 0, 0};
