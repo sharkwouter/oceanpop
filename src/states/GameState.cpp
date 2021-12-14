@@ -13,7 +13,8 @@ GameState::GameState(SDL_Renderer * renderer, FontManager * fonts, SoundManager 
     theme(renderer, Theme::THEME1),
     pause_screen(renderer, "Game Paused", "Press the confirm button to exit"),
     win_screen(renderer, "Level Finished!", "Press the confirm button to continue"),
-    lose_screen(renderer, "Level failed", "Press the confirm button to restart")
+    lose_screen(renderer, "Level Failed", "Press the confirm button to restart"),
+    finish_screen(renderer, "Game Completed!", "Press the confirm button to exit")
 {
     this->renderer = renderer;
     this->fonts = fonts;
@@ -133,6 +134,8 @@ void GameState::loadLevel() {
         this->level + 1,
         this->seed
     );
+
+    theme.switchTheme(json.get("theme", 1).asInt());
 }
 
 SDL_Point GameState::calculatePosition(int width, int height) {

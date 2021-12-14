@@ -32,6 +32,9 @@ public:
 
     void next();
     void nextSong();
+
+    void switchTheme(int theme);
+
     void pause();
     void unpause();
 };

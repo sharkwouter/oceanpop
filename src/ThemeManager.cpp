@@ -97,6 +97,22 @@ void ThemeManager::nextSong() {
     loadMusic(this->theme);
 }
 
+void ThemeManager::switchTheme(int theme) {
+    if (theme < 1 || theme >= (int) Theme::AMOUNT) {
+        theme = 1;
+    }
+
+    this->theme = (Theme) theme;
+
+    Mix_HaltMusic();
+    Mix_FreeMusic(this->music);
+    this->music = NULL;
+    SDL_DestroyTexture(background);
+    this->background = NULL;
+
+    load(this->theme);
+}
+
 void ThemeManager::pause() {
     this->paused = true;
     Mix_HaltMusic();
