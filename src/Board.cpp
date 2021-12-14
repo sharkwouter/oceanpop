@@ -94,11 +94,13 @@ void Board::dropNewShell(int x) {
     }
 
     // Make sure we're not causing a match directly
+    if (shellsMatch(this->shells, {x,0},{x,1},{x,2})) {
+        dropNewShell(x);
+        return;
+    }
+
+    // Horizontal matches should only be checked at the top
     if (!isFalling(x)) {
-        if (shellsMatch(this->shells, {x,0},{x,1},{x,2})) {
-            dropNewShell(x);
-            return;
-        }
         if (shellsMatch(this->shells, {x,0},{x+1,0},{x+2,0}) && !isFalling(x+1) && !isFalling(x+2)) {
             dropNewShell(x);
             return;
