@@ -157,10 +157,9 @@ Event EventManager::getEventFromControllerButton(Uint32 button) {
 }
 
 Event EventManager::getEventFromControllerAxis(Uint32 axis, Sint16 value) {
-    Event event;
+    Event event = Event::NONE;
 
-    switch (axis)
-    {
+    switch (axis) {
         case SDL_CONTROLLER_AXIS_LEFTX:
             if (value > (AXIS_MAX*ANALOG_DEADZONE_MULTIPLIER)) {
                 if (this->returned_to_horizontal_center) {
@@ -192,7 +191,6 @@ Event EventManager::getEventFromControllerAxis(Uint32 axis, Sint16 value) {
             }
             break;
         default:
-            event = Event::NONE;
             break;
     }
 
