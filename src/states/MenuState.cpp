@@ -4,8 +4,10 @@
 #include "../colors.hpp"
 #include "GameState.hpp"
 
-MenuState::MenuState(SDL_Renderer * renderer) : theme(renderer, Theme::MENU), renderer(renderer) {
-    text_title = fonts.getTexture(renderer, "Match Theory", true, {COLOR_MENU_TITLE.r, COLOR_MENU_TITLE.g, COLOR_MENU_TITLE.b, COLOR_MENU_TITLE.a});
+MenuState::MenuState(SDL_Renderer * renderer, FontManager * fonts, SoundManager * sounds) : renderer(renderer), fonts(fonts), sounds(sounds),
+    theme(renderer, Theme::MENU)
+{
+    text_title = fonts->getTexture(renderer, "Match Theory", true, {COLOR_MENU_TITLE.r, COLOR_MENU_TITLE.g, COLOR_MENU_TITLE.b, COLOR_MENU_TITLE.a});
 
     for (int i = 0; i < (int) MenuOption::OPTIONCOUNT; i++) {
         std::string option_text;
@@ -18,6 +20,12 @@ MenuState::MenuState(SDL_Renderer * renderer) : theme(renderer, Theme::MENU), re
                 break;
             case MenuOption::RELAXED:
                 option_text = "Relaxed mode";
+                break;
+            case MenuOption::HOWTOPLAY:
+                option_text = "How to play";
+                break;
+            case MenuOption::HIGHSCORES:
+                option_text = "High scores";
                 break;
             case MenuOption::OPTIONS:
                 option_text = "Options";
@@ -32,7 +40,7 @@ MenuState::MenuState(SDL_Renderer * renderer) : theme(renderer, Theme::MENU), re
                 option_text = "?????????";
                 break;
         }
-        options.push_back(fonts.getTexture(renderer, option_text,false, {255, 255, 255, 255}));
+        options.push_back(fonts->getTexture(renderer, option_text,false, {255, 255, 255, 255}));
     }
 }
 
@@ -92,7 +100,7 @@ void MenuState::draw(SDL_Renderer * renderer) {
     // Draw options
     for(int i = 0; i < (int) options.size(); i++) {
         // Draw the option title
-        SDL_Rect rect = {SCREEN_WIDTH/2, (SCREEN_HEIGHT/((int) options.size()+2))*(i+2), 0, 0};
+        SDL_Rect rect = {SCREEN_WIDTH/2, (SCREEN_HEIGHT/((int) options.size()+3))*(i+3), 0, 0};
         SDL_QueryTexture(options[i], NULL, NULL, &rect.w, &rect.h);
         rect.x -= rect.w/2;
 
@@ -122,7 +130,7 @@ State MenuState::getNextState() {
         case MenuOption::STANDARD:
             return State::STANDARD;
         default:
-            return State::EXIT;
+            return State::MENU;
             break;
     }
 }

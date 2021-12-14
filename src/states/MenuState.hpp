@@ -7,15 +7,16 @@
 #include "BaseState.hpp"
 #include "../ThemeManager.hpp"
 #include "../FontManager.hpp"
+#include "../SoundManager.hpp"
 #include "../MenuOption.hpp"
 
 class MenuState : public BaseState {
 private:
-    ThemeManager theme;
-    FontManager fonts;
-
     SDL_Renderer * renderer;
+    FontManager * fonts;
+    SoundManager * sounds;
 
+    ThemeManager theme;
     std::string background = "assets/backgrounds/background1.jpg";
 
     SDL_Texture * text_title;
@@ -23,7 +24,7 @@ private:
 
     int current_option = 0;
 public:
-    MenuState(SDL_Renderer * renderer);
+    MenuState(SDL_Renderer * renderer, FontManager * fonts, SoundManager * sounds);
     ~MenuState();
 
     void handleEvents(std::vector<Event> events);

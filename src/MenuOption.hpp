@@ -5,6 +5,8 @@ enum class MenuOption {
     STANDARD,
     ENDLESS,
     RELAXED,
+    HOWTOPLAY,
+    HIGHSCORES,
     OPTIONS,
     CREDITS,
     EXIT,

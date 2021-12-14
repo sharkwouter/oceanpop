@@ -5,7 +5,7 @@
 #include "states/MenuState.hpp"
 #include "states/State.hpp"
 
-StateManager::StateManager(SDL_Renderer * renderer, FontManager * fonts, SoundManager * sounds) : renderer(renderer), fonts(fonts), sounds(sounds), state(new MenuState(renderer)) {
+StateManager::StateManager(SDL_Renderer * renderer, FontManager * fonts, SoundManager * sounds) : renderer(renderer), fonts(fonts), sounds(sounds), state(new MenuState(renderer, fonts, sounds)) {
 
 }
 
@@ -20,7 +20,7 @@ void StateManager::update() {
         switch (this->state->getNextState()) {
             case State::MENU:
                 clearState();
-                this->state = new MenuState(renderer);
+                this->state = new MenuState(renderer, fonts, sounds);
                 break;
             case State::STANDARD:
                 clearState();
