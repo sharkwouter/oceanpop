@@ -1,8 +1,11 @@
 #ifndef GAMESTATE_HPP
 #define GAMESTATE_HPP
 
-#include <vector>
 #include <SDL.h>
+
+#include <vector>
+#include <filesystem>
+
 #include "BaseState.hpp"
 #include "../BoardManager.hpp"
 #include "../ThemeManager.hpp"
@@ -15,16 +18,20 @@ private:
     SoundManager * sounds;
     FontManager * fonts;
 
-    BoardManager * board;
+    BoardManager * board = NULL;
     ThemeManager theme;
+
+    std::vector<std::filesystem::path> levels;
 
     PauseScreen pause_screen;
     PauseScreen win_screen;
     PauseScreen lose_screen;
+    PauseScreen finish_screen;
 
     bool paused = false;
     bool completed = false;
     bool failed = false;
+    bool finished = false;
 
     int level;
     int seed;

@@ -184,14 +184,16 @@ else()
      pkg_search_module(SDL2_IMAGE REQUIRED SDL2_image >= 2.0.0)
      pkg_search_module(SDL2_TTF REQUIRED SDL2_ttf)
      pkg_search_module(SDL2_MIXER REQUIRED SDL2_mixer)
+	pkg_search_module(JSONCPP REQUIRED jsoncpp)
 
-     target_include_directories(match-theory PRIVATE ${SDL2_INCLUDE_DIRS})
+     target_include_directories(match-theory PRIVATE ${SDL2_INCLUDE_DIRS} ${JSONCPP_INCLUDE_DIRS})
      
      target_link_libraries(match-theory
           ${SDL2_TTF_LIBRARIES}
           ${SDL2_IMAGE_LIBRARIES}
           ${SDL2_MIXER_LIBRARIES}
           ${SDL2_LIBRARIES}
+          ${JSONCPP_LIBRARIES}
      )
 
      file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/assets

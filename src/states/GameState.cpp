@@ -1,7 +1,12 @@
 #include "GameState.hpp"
 
 #include <SDL_ttf.h>
+#include <json/json.h>
+
 #include <cmath>
+#include <filesystem>
+#include <fstream>
+
 #include "../colors.hpp"
 
 GameState::GameState(SDL_Renderer * renderer, FontManager * fonts, SoundManager * sounds) :
@@ -13,6 +18,12 @@ GameState::GameState(SDL_Renderer * renderer, FontManager * fonts, SoundManager 
     this->renderer = renderer;
     this->fonts = fonts;
     this->sounds = sounds;
+
+    std::filesystem::directory_iterator level_files("assets/levels/");
+    for (auto &entry : level_files) {
+        levels.push_back(entry.path());
+    }
+    this->level = 0;
 
     loadLevel();
 }
@@ -48,7 +59,8 @@ void GameState::handleEvents(std::vector<Event> events) {
             if (event == Event::CONFIRM) {
                 this->completed = false;
                 this->theme.next();
-                this->board->loadLevel(this->position.x, this->position.y, this->width, this->height, this->moves, ++this->required_matches, ++this->level, ++this->seed);
+                this->level++;
+                this->loadLevel();
             }
         } else if (this->failed) {
             if (event == Event::CONFIRM) {
@@ -83,16 +95,31 @@ void GameState::draw(SDL_Renderer *renderer) {
 }
 
 void GameState::loadLevel() {
-    this->width = BOARD_WIDTH;
-    this->height = BOARD_HEIGHT;
+    if (this->level >= (int) this->levels.size() || this->level < 0) {
+        this->level = 0;
+    }
+
+    Json::Value json;
+
+    std::ifstream levelStream;
+    levelStream.open(this->levels[this->level], std::ios::binary);
+    Json::CharReaderBuilder builder;
+    JSONCPP_STRING errors;
+    Json::parseFromStream(builder, levelStream, &json, &errors);
+    levelStream.close();
+
+    this->width = json.get("width", BOARD_WIDTH).asInt();
+    this->height = json.get("height", BOARD_HEIGHT).asInt();
 
     this->position = calculatePosition(this->width, this->height);
 
-    this->moves = 10;
-    this->required_matches = 12;
-    this->level = 1;
-    this->seed = this->level;
+    this->moves = json.get("moves", 10).asInt();
+    this->required_matches = json.get("matches", 12).asInt();
+    this->seed = json.get("seed", this->level).asInt();
 
+    if (this->board != NULL) {
+        free(this->board);
+    }
     this->board = new BoardManager(
         renderer,
         this->fonts,
@@ -103,7 +130,7 @@ void GameState::loadLevel() {
         this->height,
         this->moves,
         this->required_matches,
-        this->level,
+        this->level + 1,
         this->seed
     );
 }
