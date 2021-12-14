@@ -334,19 +334,31 @@ void BoardManager::drawShells(SDL_Renderer * renderer) {
 void BoardManager::drawInfo(SDL_Renderer * renderer) {
     // Generate texture with text
     if (level_updated) {
-        text_level = fonts->getTexture(renderer, "Level " + std::to_string(level), false, {255, 255, 255, 255});
+        std::string str_level = std::to_string(level);
+        if (this->board->getWidth() > 7) {
+            str_level = "level " + str_level;
+        } else if (this->board->getWidth() > 3) {
+            str_level = "L" + str_level;
+        }
+        text_level = fonts->getTexture(renderer, str_level, false, {255, 255, 255, 255});
         level_updated = false;
     }
     if (matches_updated) {
+        std::string str_matches = std::to_string(matches);
         if (this->required_matches > 0) {
-            text_matches = fonts->getTexture(renderer, std::to_string(matches) + "/" + std::to_string(required_matches), false, {255, 255, 255, 255});
-        } else {
-            text_matches = fonts->getTexture(renderer, std::to_string(matches), false, {255, 255, 255, 255});
+            str_matches += "/" +  std::to_string(required_matches);
         }
+        text_matches = fonts->getTexture(renderer, str_matches, false, {255, 255, 255, 255});
         matches_updated = false;
     }
     if (moves_updated) {
-        text_moves = fonts->getTexture(renderer, std::to_string(moves) + " moves", false, {255, 255, 255, 255});
+        std::string str_moves = std::to_string(level);
+        if (this->board->getWidth() > 7) {
+            str_moves += " moves";
+        } else if (this->board->getWidth() > 3) {
+            str_moves += "m";
+        }
+        text_moves = fonts->getTexture(renderer, str_moves, false, {255, 255, 255, 255});
         moves_updated = false;
     }
 

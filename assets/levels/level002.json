@@ -1,8 +1,8 @@
 {
-    "width": 8,
-    "height": 7,
-    "seed": 80,
-    "theme": 2,
-    "moves": 5,
-    "matches": 15
+    "width": 5,
+    "height": 2,
+    "seed": 3,
+    "theme": 3,
+    "moves": 1,
+    "matches": 2
 }
