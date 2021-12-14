@@ -35,12 +35,11 @@ int main(int argv, char** args) {
     (void) argv;
     (void) args;
 
-    // try {
-    //     run();
-    // } catch (...) {
-    //     std::rethrow_exception(std::current_exception());
-    // }
-    run();
+    try {
+        run();
+    } catch (...) {
+        std::rethrow_exception(std::current_exception());
+    }
 
     return EXIT_SUCCESS;
 }
