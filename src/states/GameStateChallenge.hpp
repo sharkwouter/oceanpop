@@ -21,10 +21,16 @@ private:
     PauseScreen pause_screen;
     PauseScreen win_screen;
     PauseScreen lose_screen;
+    PauseScreen game_over_screen;
+
+    SDL_Texture * text_attempts = NULL;
+    SDL_Texture * text_attempts_number = NULL;
+
 
     bool paused = false;
     bool completed = false;
     bool failed = false;
+    bool game_over = false;
 
     int level;
     int seed;
@@ -34,8 +40,13 @@ private:
     int height;
     SDL_Point position;
 
+    int attempts;
+    bool attempts_changed;
+
     SDL_Point calculatePosition(int width, int height);
     void loadLevel();
+
+    void drawAttempts(SDL_Renderer *renderer);
 public:
     GameStateChallenge(SDL_Renderer *renderer, FontManager * fonts, SoundManager * sounds);
     ~GameStateChallenge();
