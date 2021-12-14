@@ -16,7 +16,12 @@
 class BoardManager {
 
 private:
+    FontManager * fonts;
+    SoundManager * sounds;
+
     Board * board = NULL;
+
+    TextureManager textures;
 
     SDL_Rect rect_board;
     SDL_Point selected;
@@ -37,10 +42,6 @@ private:
     bool mouse_active = false;
 
     std::string image_shells = "assets/images/shells.png";
-
-    TextureManager textures;
-    SoundManager * sounds;
-    FontManager * fonts;
 
     Action current_action;
 
