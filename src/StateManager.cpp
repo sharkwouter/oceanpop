@@ -2,6 +2,8 @@
 
 
 #include "states/GameState.hpp"
+#include "states/GameStateChallenge.hpp"
+#include "states/GameStateRelaxed.hpp"
 #include "states/MenuState.hpp"
 #include "states/State.hpp"
 
@@ -25,6 +27,14 @@ void StateManager::update() {
             case State::STANDARD:
                 clearState();
                 this->state = new GameState(renderer, fonts, sounds);
+                break;
+            case State::CHALLENGE:
+                clearState();
+                this->state = new GameStateChallenge(renderer, fonts, sounds);
+                break;
+            case State::RELAXED:
+                clearState();
+                this->state = new GameStateRelaxed(renderer, fonts, sounds);
                 break;
             case State::EXIT:
                 this->done = true;

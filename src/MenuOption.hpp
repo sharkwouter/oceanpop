@@ -3,7 +3,7 @@
 
 enum class MenuOption {
     STANDARD,
-    ENDLESS,
+    CHALLENGE,
     RELAXED,
     HOWTOPLAY,
     HIGHSCORES,

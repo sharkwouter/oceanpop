@@ -200,7 +200,7 @@ void BoardManager::update() {
             break;
     }
 
-    if (this->matches >= this->required_matches && this->current_action == Action::PICKING) {
+    if (this->required_matches > 0 && this->matches >= this->required_matches && this->current_action == Action::PICKING) {
         this->current_action = Action::COMPLETED;
         this->required_matches += 1;
         increasLevel();
@@ -338,7 +338,11 @@ void BoardManager::drawInfo(SDL_Renderer * renderer) {
         level_updated = false;
     }
     if (matches_updated) {
-        text_matches = fonts->getTexture(renderer, std::to_string(matches) + "/" + std::to_string(required_matches), false, {255, 255, 255, 255});
+        if (this->required_matches > 0) {
+            text_matches = fonts->getTexture(renderer, std::to_string(matches) + "/" + std::to_string(required_matches), false, {255, 255, 255, 255});
+        } else {
+            text_matches = fonts->getTexture(renderer, std::to_string(matches), false, {255, 255, 255, 255});
+        }
         matches_updated = false;
     }
     if (moves_updated) {
@@ -363,9 +367,11 @@ void BoardManager::drawInfo(SDL_Renderer * renderer) {
     SDL_RenderCopy(renderer, text_matches, NULL, &rect_matches);
 
     // Render moves
-    SDL_Rect rect_moves = {rect_board.x + rect_board.w, rect_board.y + rect_board.h, 0, 0};
-    SDL_QueryTexture(text_moves, NULL, NULL, &rect_moves.w, &rect_moves.h);
-    rect_moves.x -= SHELL_SIZE / 2 + rect_moves.w;
-    rect_moves.y += SHELL_SIZE / 2 - rect_moves.h / 2;
-    SDL_RenderCopy(renderer, text_moves, NULL, &rect_moves);
+    if (this->starting_moves > 0) {
+        SDL_Rect rect_moves = {rect_board.x + rect_board.w, rect_board.y + rect_board.h, 0, 0};
+        SDL_QueryTexture(text_moves, NULL, NULL, &rect_moves.w, &rect_moves.h);
+        rect_moves.x -= SHELL_SIZE / 2 + rect_moves.w;
+        rect_moves.y += SHELL_SIZE / 2 - rect_moves.h / 2;
+        SDL_RenderCopy(renderer, text_moves, NULL, &rect_moves);
+    }
 }

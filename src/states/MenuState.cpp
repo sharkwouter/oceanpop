@@ -15,8 +15,8 @@ MenuState::MenuState(SDL_Renderer * renderer, FontManager * fonts, SoundManager 
             case MenuOption::STANDARD:
                 option_text = "Standard mode";
                 break;
-            case MenuOption::ENDLESS:
-                option_text = "Endless mode";
+            case MenuOption::CHALLENGE:
+                option_text = "Challenge mode";
                 break;
             case MenuOption::RELAXED:
                 option_text = "Relaxed mode";
@@ -129,6 +129,10 @@ State MenuState::getNextState() {
             break;
         case MenuOption::STANDARD:
             return State::STANDARD;
+        case MenuOption::CHALLENGE:
+            return State::CHALLENGE;
+        case MenuOption::RELAXED:
+            return State::RELAXED;
         default:
             return State::MENU;
             break;

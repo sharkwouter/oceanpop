@@ -4,6 +4,8 @@
 enum class State {
     MENU,
     STANDARD,
+    CHALLENGE,
+    RELAXED,
     EXIT
 };
 
