@@ -8,7 +8,6 @@
 #include "../ThemeManager.hpp"
 #include "../FontManager.hpp"
 #include "../SoundManager.hpp"
-#include "../MenuOption.hpp"
 #include "../PauseScreen.hpp"
 
 class MenuState : public BaseState {
@@ -28,6 +27,8 @@ private:
     PauseScreen not_impletemented_screen;
 
     bool showing_not_implemented = false;
+
+    bool isImplemented(State state);
 public:
     MenuState(SDL_Renderer * renderer, FontManager * fonts, SoundManager * sounds);
     ~MenuState();

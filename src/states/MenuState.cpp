@@ -10,31 +10,31 @@ MenuState::MenuState(SDL_Renderer * renderer, FontManager * fonts, SoundManager 
 {
     text_title = fonts->getTexture(renderer, "Match Theory", true, {COLOR_MENU_TITLE.r, COLOR_MENU_TITLE.g, COLOR_MENU_TITLE.b, COLOR_MENU_TITLE.a});
 
-    for (int i = 0; i < (int) MenuOption::OPTIONCOUNT; i++) {
+    for (int i = 1; i < ((int) State::EXIT + 1); i++) {
         std::string option_text;
-        switch ((MenuOption) i) {
-            case MenuOption::STANDARD:
+        switch ((State) i) {
+            case State::STANDARD:
                 option_text = "Standard mode";
                 break;
-            case MenuOption::CHALLENGE:
+            case State::CHALLENGE:
                 option_text = "Challenge mode";
                 break;
-            case MenuOption::RELAXED:
+            case State::RELAXED:
                 option_text = "Relaxed mode";
                 break;
-            case MenuOption::HOWTOPLAY:
+            case State::HOWTOPLAY:
                 option_text = "How to play";
                 break;
-            case MenuOption::HIGHSCORES:
+            case State::HIGHSCORES:
                 option_text = "High scores";
                 break;
-            case MenuOption::OPTIONS:
+            case State::OPTIONS:
                 option_text = "Options";
                 break;
-            case MenuOption::CREDITS:
+            case State::CREDITS:
                 option_text = "Credits";
                 break;
-            case MenuOption::EXIT:
+            case State::EXIT:
                 option_text = "Exit";
                 break;
             default:
@@ -80,14 +80,14 @@ void MenuState::handleEvents(std::vector<Event> events) {
                 }
                 break;
             case Event::CONFIRM:
-                if (getNextState() == State::MENU) {
+                if (!isImplemented(getNextState())) {
                     showing_not_implemented = true;
                 } else {
                     this->done = true;
                 }
                 break;
             case Event::CANCEL:
-                this->current_option = (int) MenuOption::EXIT;
+                this->current_option = (int) State::EXIT;
                 this->done = true;
                 break;
             default:
@@ -140,19 +140,20 @@ void MenuState::draw(SDL_Renderer * renderer) {
     }
 }
 
-State MenuState::getNextState() {
-    switch ((MenuOption) this->current_option) {
-        case MenuOption::EXIT:
-            return State::EXIT;
+bool MenuState::isImplemented(State state) {
+    switch (state) {
+        case State::HOWTOPLAY:
+        case State::HIGHSCORES:
+        case State::OPTIONS:
+        case State::CREDITS:
+            return false;
             break;
-        case MenuOption::STANDARD:
-            return State::STANDARD;
-        case MenuOption::CHALLENGE:
-            return State::CHALLENGE;
-        case MenuOption::RELAXED:
-            return State::RELAXED;
         default:
-            return State::MENU;
+            return true;
             break;
     }
+}
+
+State MenuState::getNextState() {
+    return (State) (this->current_option + 1);
 }

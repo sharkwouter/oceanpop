@@ -6,6 +6,10 @@ enum class State {
     STANDARD,
     CHALLENGE,
     RELAXED,
+    HOWTOPLAY,
+    HIGHSCORES,
+    OPTIONS,
+    CREDITS,
     EXIT
 };
 
