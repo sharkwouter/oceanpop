@@ -136,6 +136,9 @@ void GameState::loadLevel() {
     );
 
     theme.switchTheme(json.get("theme", 1).asInt());
+    if (this->moves < 3) {
+        theme.pause();
+    }
 }
 
 SDL_Point GameState::calculatePosition(int width, int height) {
