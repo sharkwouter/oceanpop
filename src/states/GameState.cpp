@@ -26,7 +26,7 @@ void GameState::update() {
         theme.pause();
         sounds->play(Sound::COMPLETED);
         this->completed = true;
-    } else if (!this->board->hasMovesLeft() && !this->failed) {
+    } else if (!this->board->hasMovesLeft() && !this->failed && !this->completed) {
         theme.pause();
         sounds->play(Sound::FAILED);
         this->failed = true;
@@ -39,23 +39,12 @@ void GameState::update() {
 }
 
 void GameState::handleEvents(std::vector<Event> events) {
-    if (!this->paused) {
+    if (!this->paused && !this->completed && !this->failed) {
         this->board->handleEvents(events);
     }
 
     for(Event event: events) {
-        if (event == Event::MENU) {
-            this->paused = !(this->paused);
-            return;
-        }
-
-        if (this->paused) {
-            if (event == Event::CONFIRM) {
-                this->done = true;
-            } else if (event == Event::CANCEL) {
-                this->paused = false;
-            }
-        } else if (this->completed) {
+         if (this->completed) {
             if (event == Event::CONFIRM) {
                 this->completed = false;
                 this->theme.next();
@@ -67,6 +56,15 @@ void GameState::handleEvents(std::vector<Event> events) {
                 this->board->reset();
                 theme.unpause();
             }
+        } else if (this->paused) {
+            if (event == Event::CONFIRM) {
+                this->done = true;
+            } else if (event == Event::CANCEL) {
+                this->paused = false;
+            }
+        } else if (event == Event::MENU) {
+            this->paused = !(this->paused);
+            return;
         }
     }
 }
