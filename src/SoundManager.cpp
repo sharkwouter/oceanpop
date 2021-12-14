@@ -2,6 +2,7 @@
 
 SoundManager::SoundManager() {
     this->uneven_match = false;
+    load();
 }
 
 SoundManager::~SoundManager() {
@@ -18,12 +19,16 @@ void SoundManager::load() {
     sound_match1 = Mix_LoadWAV("assets/sounds/match1.wav");
     sound_match2 = Mix_LoadWAV("assets/sounds/match2.wav");
     sound_pain = Mix_LoadWAV("assets/sounds/pain.wav");
+    sound_completed = Mix_LoadWAV("assets/sounds/completed.wav");
+    sound_failed = Mix_LoadWAV("assets/sounds/failed.wav");
 
     if (sound_drop == NULL ||
         sound_drop == NULL ||
         sound_match1 == NULL ||
         sound_match2 == NULL ||
-        sound_pain == NULL) {
+        sound_pain == NULL ||
+        sound_completed == NULL ||
+        sound_failed == NULL) {
             SDL_Log("Couldn't load all sounds: %s", Mix_GetError());
     }
 }
@@ -48,7 +53,17 @@ void SoundManager::play(Sound sound) {
     case Sound::PAIN:
         Mix_HaltChannel(channel_match1);
         Mix_HaltChannel(channel_match2);
-        Mix_PlayChannel(channel_pain, sound_pain, SDL_FALSE);
+        Mix_PlayChannel(channel_notify, sound_pain, SDL_FALSE);
+        break;
+    case Sound::COMPLETED:
+        Mix_HaltChannel(channel_match1);
+        Mix_HaltChannel(channel_match2);
+        Mix_PlayChannel(channel_notify, sound_completed, SDL_FALSE);
+        break;
+    case Sound::FAILED:
+        Mix_HaltChannel(channel_match1);
+        Mix_HaltChannel(channel_match2);
+        Mix_PlayChannel(channel_notify, sound_failed, SDL_FALSE);
         break;
     }
 }

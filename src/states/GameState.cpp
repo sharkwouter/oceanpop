@@ -4,13 +4,16 @@
 #include <cmath>
 #include "../colors.hpp"
 
-GameState::GameState(SDL_Renderer * renderer) :
+GameState::GameState(SDL_Renderer * renderer, FontManager * fonts, SoundManager * sounds) :
     theme(renderer, Theme::THEME1),
     pause_screen(renderer, "Game Paused", "Press the confirm button to exit"),
     win_screen(renderer, "Level Finished!", "Press the confirm button to continue"),
     lose_screen(renderer, "Level failed", "Press the confirm button to restart")
 {
     this->renderer = renderer;
+    this->fonts = fonts;
+    this->sounds = sounds;
+
     loadLevel();
 }
 
@@ -19,8 +22,18 @@ GameState::~GameState() {
 }
 
 void GameState::update() {
-    this->theme.update();
-    if (!this->paused && !this->board->isCompleted() && this->board->hasMovesLeft() > 0) {
+    if (this->board->isCompleted() && !this->completed) {
+        theme.pause();
+        sounds->play(Sound::COMPLETED);
+        this->completed = true;
+    } else if (!this->board->hasMovesLeft() && !this->failed) {
+        theme.pause();
+        sounds->play(Sound::FAILED);
+        this->failed = true;
+    }
+
+    if (!this->paused && !this->completed &&  !this->failed) {
+        this->theme.update();
         this->board->update();
     }
 }
@@ -42,14 +55,17 @@ void GameState::handleEvents(std::vector<Event> events) {
             } else if (event == Event::CANCEL) {
                 this->paused = false;
             }
-        } else if (this->board->isCompleted()) {
+        } else if (this->completed) {
             if (event == Event::CONFIRM) {
+                this->completed = false;
                 this->theme.next();
                 this->board->loadLevel(this->position.x, this->position.y, this->width, this->height, this->moves, ++this->required_matches, ++this->level);
             }
-        } else if (!this->board->hasMovesLeft()) {
+        } else if (this->failed) {
             if (event == Event::CONFIRM) {
+                this->failed = false;
                 this->board->reset();
+                theme.unpause();
             }
         }
     }
@@ -57,9 +73,9 @@ void GameState::handleEvents(std::vector<Event> events) {
 
 void GameState::draw(SDL_Renderer *renderer) {
     this->theme.draw(renderer);
-    if (this->board->isCompleted()) {
+    if (this->completed) {
         win_screen.draw(renderer);
-    } else if (!this->board->hasMovesLeft()) {
+    } else if (this->failed) {
         lose_screen.draw(renderer);
     } else if (this->paused) {
         pause_screen.draw(renderer);
@@ -80,7 +96,8 @@ void GameState::loadLevel() {
 
     this->board = new BoardManager(
         renderer,
-        &this->fonts,
+        this->fonts,
+        this->sounds,
         this->position.x,
         this->position.y,
         this->width,

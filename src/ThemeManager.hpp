@@ -16,8 +16,13 @@ private:
     Mix_Music * music = NULL;
     SDL_Texture * background;
 
-    void load();
-    SDL_Texture * loadBackground(std::string filename);
+    bool paused = false;
+
+    void load(Theme theme);
+    void loadBackground(Theme theme);
+    void loadMusic(Theme theme);
+
+    SDL_Texture * createBackgroundTexture(std::string filename);
 public:
     ThemeManager(SDL_Renderer * renderer, Theme theme);
     ~ThemeManager();
@@ -26,6 +31,9 @@ public:
     void draw(SDL_Renderer * renderer);
 
     void next();
+    void nextSong();
+    void pause();
+    void unpause();
 };
 
 #endif // THEMEMANAGER_H

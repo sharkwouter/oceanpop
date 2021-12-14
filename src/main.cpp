@@ -2,6 +2,8 @@
 #include <stdexcept>
 #include <vector>
 #include "Window.hpp"
+#include "FontManager.hpp"
+#include "SoundManager.hpp"
 #include "StateManager.hpp"
 #include "EventManager.hpp"
 #include "TextureManager.hpp"
@@ -11,7 +13,9 @@
 
 void run() {
     Window window("Match Theory", SCREEN_WIDTH, SCREEN_HEIGHT);
-    StateManager state_manager(window.renderer);
+    FontManager font_manager;
+    SoundManager sound_manager;
+    StateManager state_manager(window.renderer, &font_manager, &sound_manager);
     EventManager input_manager;
     TextureManager texture_manager;
 

@@ -5,7 +5,9 @@ enum class Sound {
     PICK,
     DROP,
     MATCH,
-    PAIN
+    PAIN,
+    COMPLETED,
+    FAILED
 };
 
 #endif // SOUND_HPP

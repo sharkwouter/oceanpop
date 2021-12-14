@@ -5,7 +5,7 @@
 #include "states/MenuState.hpp"
 #include "states/State.hpp"
 
-StateManager::StateManager(SDL_Renderer * renderer) : renderer(renderer), state(new MenuState(renderer)) {
+StateManager::StateManager(SDL_Renderer * renderer, FontManager * fonts, SoundManager * sounds) : renderer(renderer), fonts(fonts), sounds(sounds), state(new MenuState(renderer)) {
 
 }
 
@@ -24,7 +24,7 @@ void StateManager::update() {
                 break;
             case State::STANDARD:
                 clearState();
-                this->state = new GameState(renderer);
+                this->state = new GameState(renderer, fonts, sounds);
                 break;
             case State::EXIT:
                 this->done = true;

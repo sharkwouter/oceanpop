@@ -3,9 +3,10 @@
 #include "utils.hpp"
 
 ThemeManager::ThemeManager(SDL_Renderer * renderer, Theme theme) : renderer(renderer){
-    this->theme = theme;
     Mix_VolumeMusic(MIX_MAX_VOLUME/2);
-    load();
+
+    this->theme = theme;
+    load(this->theme);
 }
 
 ThemeManager::~ThemeManager() {
@@ -14,31 +15,47 @@ ThemeManager::~ThemeManager() {
     SDL_DestroyTexture(this->background);
 }
 
-void ThemeManager::load() {
-    switch (this->theme) {
-        case Theme::MENU:
-            this->music = NULL;
-            this->background = loadBackground("menu.jpg");
+void ThemeManager::load(Theme theme) {
+    loadBackground(theme);
+    loadMusic(theme);
+}
+
+void ThemeManager::loadBackground(Theme theme) {
+    switch (theme) {
+        case Theme::THEME1:
+            this->background = createBackgroundTexture("background1.jpg");
             break;
+        case Theme::THEME2:
+            this->background = createBackgroundTexture("background2.jpg");
+            break;
+        case Theme::THEME3:
+            this->background = createBackgroundTexture("background3.jpg");
+            break;
+        case Theme::THEME4:
+            this->background = createBackgroundTexture("background4.jpg");
+            break;
+        default:
+            this->background = createBackgroundTexture("menu.jpg");
+            break;
+    }
+}
+
+void ThemeManager::loadMusic(Theme theme) {
+    switch (theme) {
         case Theme::THEME1:
             this->music = Mix_LoadMUS("assets/music/song1.mp3");
-            this->background = loadBackground("background1.jpg");
             break;
         case Theme::THEME2:
             this->music = Mix_LoadMUS("assets/music/song2.mp3");
-            this->background = loadBackground("background2.jpg");
             break;
         case Theme::THEME3:
             this->music = Mix_LoadMUS("assets/music/song3.mp3");
-            this->background = loadBackground("background3.jpg");
             break;
         case Theme::THEME4:
             this->music = Mix_LoadMUS("assets/music/song4.mp3");
-            this->background = loadBackground("background4.jpg");
             break;
         default:
-            this->theme = Theme::THEME1;
-            load();
+            this->music = NULL;
             break;
     }
     if (this->music != NULL) {
@@ -47,10 +64,9 @@ void ThemeManager::load() {
 }
 
 void ThemeManager::update() {
-    if (this->music != NULL && !Mix_PlayingMusic()) {
-        next();
+    if (this->music != NULL && !this->paused && !Mix_PlayingMusic()) {
+        nextSong();
     }
-
 }
 
 void ThemeManager::draw(SDL_Renderer * renderer) {
@@ -67,10 +83,31 @@ void ThemeManager::next() {
     this->music = NULL;
     SDL_DestroyTexture(background);
     this->background = NULL;
-    load();
+    load(this->theme);
 }
 
-SDL_Texture * ThemeManager::loadBackground(std::string filename) {
+void ThemeManager::nextSong() {
+    this->theme = (Theme) (((int) this->theme + 1) % (int) Theme::AMOUNT);
+    if (this->theme == Theme::MENU) {
+        this->theme = Theme::THEME1;
+    }
+    Mix_HaltMusic();
+    Mix_FreeMusic(this->music);
+    this->music = NULL;
+    loadMusic(this->theme);
+}
+
+void ThemeManager::pause() {
+    this->paused = true;
+    Mix_HaltMusic();
+}
+
+void ThemeManager::unpause() {
+    this->paused = false;
+    Mix_PlayMusic(this->music, 0);
+}
+
+SDL_Texture * ThemeManager::createBackgroundTexture(std::string filename) {
     std::string path = "assets/backgrounds/" + filename;
     SDL_Surface *img = IMG_Load(path.c_str());
 

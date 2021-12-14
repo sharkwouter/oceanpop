@@ -7,9 +7,7 @@
 #include "Sound.hpp"
 #include "colors.hpp"
 
-BoardManager::BoardManager(SDL_Renderer *renderer, FontManager *fonts, int x, int y, int width, int height, int moves, int required_matches, int level) : fonts(fonts) {
-    sounds.load();
-
+BoardManager::BoardManager(SDL_Renderer *renderer, FontManager *fonts, SoundManager * sounds, int x, int y, int width, int height, int moves, int required_matches, int level) : fonts(fonts), sounds(sounds) {
     textures.add_texture(image_shells, renderer);
 
     loadLevel(x, y, width, height, moves, required_matches, level);
@@ -93,20 +91,20 @@ void BoardManager::handleEvents(std::vector<Event> events) {
                     this->picked = this->selected;
                     this->preview = this->board->getShells();
                     this->current_action = Action::MOVING;
-                    sounds.play(Sound::PICK);
+                    sounds->play(Sound::PICK);
                 } else if (this->current_action == Action::MOVING) {
                     if (this->board->swap(picked, selected)) {
                         this->current_action = Action::FALLING;
                     } else {
                         this->selected = this->picked;
-                        sounds.play(Sound::DROP);
+                        sounds->play(Sound::DROP);
                         this->current_action = Action::PICKING;
                     }
                 }
                 break;
             case Event::CANCEL:
                 if (this->current_action == Action::MOVING) {
-                    sounds.play(Sound::DROP);
+                    sounds->play(Sound::DROP);
                     this->selected = this->picked;
                     this->current_action = Action::PICKING;
                 }
@@ -224,7 +222,7 @@ void BoardManager::match() {
                 scoring_match++;
             }
         }
-        sounds.play(sound);
+        sounds->play(sound);
         addMatches(scoring_match);
         this->current_action = Action::FALLING;
     } else {

@@ -6,15 +6,17 @@
 #include "BaseState.hpp"
 #include "../BoardManager.hpp"
 #include "../ThemeManager.hpp"
+#include "../SoundManager.hpp"
 #include "../PauseScreen.hpp"
 
 class GameState : public BaseState {
 private:
     SDL_Renderer * renderer;
+    SoundManager * sounds;
+    FontManager * fonts;
 
     BoardManager * board;
     ThemeManager theme;
-    FontManager fonts;
 
     PauseScreen pause_screen;
     PauseScreen win_screen;
@@ -22,6 +24,7 @@ private:
 
     bool paused = false;
     bool completed = false;
+    bool failed = false;
 
     int level;
     int moves;
@@ -33,7 +36,7 @@ private:
     SDL_Point calculatePosition(int width, int height);
     void loadLevel();
 public:
-    GameState(SDL_Renderer *renderer);
+    GameState(SDL_Renderer *renderer, FontManager * fonts, SoundManager * sounds);
     ~GameState();
 
     void handleEvents(std::vector<Event> events);

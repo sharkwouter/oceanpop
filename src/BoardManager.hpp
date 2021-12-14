@@ -39,7 +39,7 @@ private:
     std::string image_shells = "assets/images/shells.png";
 
     TextureManager textures;
-    SoundManager sounds;
+    SoundManager * sounds;
     FontManager * fonts;
 
     Action current_action;
@@ -66,7 +66,7 @@ private:
     void drawInfo(SDL_Renderer * renderer);
     void drawShells(SDL_Renderer * renderer);
 public:
-    BoardManager(SDL_Renderer *renderer, FontManager *fonts, int x, int y, int width, int height, int moves, int required_matches=0, int level=0);
+    BoardManager(SDL_Renderer *renderer, FontManager *fonts, SoundManager * sounds, int x, int y, int width, int height, int moves, int required_matches=0, int level=0);
     ~BoardManager();
 
     void handleEvents(std::vector<Event> events);

@@ -14,19 +14,21 @@ private:
     Mix_Chunk * sound_match1;
     Mix_Chunk * sound_match2;
     Mix_Chunk * sound_pain;
+    Mix_Chunk * sound_completed;
+    Mix_Chunk * sound_failed;
 
     bool uneven_match;
-    bool pain_playing;
 
     int channel_pick = 1;
     int channel_match1 = 2;
     int channel_match2 = 3;
-    int channel_pain = 3;
+    int channel_notify = 3;
+
+    void load();
 public:
     SoundManager();
     ~SoundManager();
 
-    void load();
     void play(Sound sound);
 };
 
