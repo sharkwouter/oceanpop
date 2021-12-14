@@ -29,11 +29,11 @@ void PauseScreen::draw(SDL_Renderer * renderer) {
     rect_background.w = std::max(rect_completed.w, rect_completed_subtitle.w) + SHELL_SIZE;
     rect_background.h = rect_completed_subtitle.y - rect_completed.y + rect_completed_subtitle.h + SHELL_SIZE;
 
-    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-    SDL_RenderDrawRect(renderer, &rect_background);
-
     SDL_SetRenderDrawColor(renderer, COLOR_BOARD.r, COLOR_BOARD.g, COLOR_BOARD.b, COLOR_BOARD.a);
     SDL_RenderFillRect(renderer, &rect_background);
+
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+    SDL_RenderDrawRect(renderer, &rect_background);
 
     SDL_RenderCopy(renderer, title, NULL, &rect_completed);
     SDL_RenderCopy(renderer, subtitle, NULL, &rect_completed_subtitle);
