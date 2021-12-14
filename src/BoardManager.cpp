@@ -352,7 +352,7 @@ void BoardManager::drawInfo(SDL_Renderer * renderer) {
         matches_updated = false;
     }
     if (moves_updated) {
-        std::string str_moves = std::to_string(level);
+        std::string str_moves = std::to_string(this->moves);
         if (this->board->getWidth() > 7) {
             str_moves += " moves";
         } else if (this->board->getWidth() > 3) {
