@@ -79,7 +79,7 @@ jobs:
           cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=$PSPDEV/psp/share/pspdev.cmake ..
           make
           cp ../LICENSE ./
-          cp ../README ./
+          cp ../README.md ./
       - name: Publish artifacts
         uses: actions/upload-artifact@v2
         with:
