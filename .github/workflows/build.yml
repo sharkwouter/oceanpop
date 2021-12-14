@@ -79,6 +79,7 @@ jobs:
           cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=$PSPDEV/psp/share/pspdev.cmake ..
           make
           cp ../LICENSE ./
+          cp ../README ./
       - name: Publish artifacts
         uses: actions/upload-artifact@v2
         with:
@@ -87,11 +88,12 @@ jobs:
             match-theory/EBOOT.PBP
             match-theory/assets
             match-theory/LICENSE
-            README.md
+            match-theory/README.md
 
   Vita:
     runs-on: ubuntu-latest
     container: gnuton/vitasdk-docker:latest
+    if: false
 
     steps:
       - name: Checkout
