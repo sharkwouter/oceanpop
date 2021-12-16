@@ -31,7 +31,6 @@ jobs:
 
   Windows:
     runs-on: windows-latest
-    if: false
 
     steps:
       - name: Install dependencies
