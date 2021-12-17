@@ -49,9 +49,9 @@ private:
 
     std::vector<std::vector<Shell>> preview;
 
-    SDL_Texture * text_moves;
-    SDL_Texture * text_matches;
-    SDL_Texture * text_level;
+    SDL_Texture * text_moves = NULL;
+    SDL_Texture * text_matches = NULL;
+    SDL_Texture * text_level = NULL;
 
 
     void addMatches(int matches);

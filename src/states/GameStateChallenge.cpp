@@ -21,6 +21,7 @@ GameStateChallenge::GameStateChallenge(SDL_Renderer * renderer, FontManager * fo
 
 GameStateChallenge::~GameStateChallenge() {
     SDL_DestroyTexture(text_attempts);
+    SDL_DestroyTexture(text_attempts_number);
     delete(this->board);
 }
 
@@ -100,10 +101,14 @@ void GameStateChallenge::draw(SDL_Renderer *renderer) {
 
 void GameStateChallenge::drawAttempts(SDL_Renderer * renderer) {
     if(text_attempts == NULL) {
-            text_attempts = fonts->getTexture(renderer, "lives left", false, {255, 255, 255, 255});
+        text_attempts = fonts->getTexture(renderer, "lives left", false, {255, 255, 255, 255});
     }
     if (this->attempts_changed) {
+        if (text_attempts_number != NULL) {
+            SDL_DestroyTexture(text_attempts_number);
+        }
         text_attempts_number = fonts->getTexture(renderer, std::to_string(this->attempts), false, {255, 255, 255, 255});
+        this->attempts_changed = false;
     }
     // Render
     SDL_Rect rect_attempts = {this->position.x, this->position.y, 0, 0};

@@ -340,6 +340,9 @@ void BoardManager::drawInfo(SDL_Renderer * renderer) {
         } else if (this->board->getWidth() > 3) {
             str_level = "L" + str_level;
         }
+        if (text_level != NULL) {
+            SDL_DestroyTexture(text_level);
+        }
         text_level = fonts->getTexture(renderer, str_level, false, {255, 255, 255, 255});
         level_updated = false;
     }
@@ -347,6 +350,9 @@ void BoardManager::drawInfo(SDL_Renderer * renderer) {
         std::string str_matches = std::to_string(matches);
         if (this->required_matches > 0) {
             str_matches += "/" +  std::to_string(required_matches);
+        }
+        if (text_matches != NULL) {
+            SDL_DestroyTexture(text_matches);
         }
         text_matches = fonts->getTexture(renderer, str_matches, false, {255, 255, 255, 255});
         matches_updated = false;
@@ -357,6 +363,9 @@ void BoardManager::drawInfo(SDL_Renderer * renderer) {
             str_moves += " moves";
         } else if (this->board->getWidth() > 3) {
             str_moves += "m";
+        }
+        if (text_moves != NULL) {
+            SDL_DestroyTexture(text_moves);
         }
         text_moves = fonts->getTexture(renderer, str_moves, false, {255, 255, 255, 255});
         moves_updated = false;
