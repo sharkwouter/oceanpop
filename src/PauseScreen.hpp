@@ -14,8 +14,8 @@ class PauseScreen {
 private:
     FontManager fonts;
 
-    SDL_Texture * title;
-    SDL_Texture * subtitle;
+    SDL_Texture * title = NULL;
+    SDL_Texture * subtitle = NULL;
 public:
     PauseScreen(SDL_Renderer * renderer, std::string title, std::string subtitle);
     ~PauseScreen();

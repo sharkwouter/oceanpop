@@ -119,7 +119,7 @@ void GameState::loadLevel() {
     this->seed = json.get("seed", this->level).asInt();
 
     if (this->board != NULL) {
-        free(this->board);
+        delete this->board;
     }
     this->board = new BoardManager(
         renderer,

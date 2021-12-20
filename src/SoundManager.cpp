@@ -11,6 +11,8 @@ SoundManager::~SoundManager() {
     Mix_FreeChunk(sound_match1);
     Mix_FreeChunk(sound_match2);
     Mix_FreeChunk(sound_pain);
+    Mix_FreeChunk(sound_completed);
+    Mix_FreeChunk(sound_failed);
 }
 
 void SoundManager::load() {

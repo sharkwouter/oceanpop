@@ -52,8 +52,10 @@ void Window::present() {
 }
 
 Window::~Window() {
-    Mix_CloseAudio();
     SDL_DestroyRenderer(this->renderer);
     SDL_DestroyWindow(this->window);
+    Mix_CloseAudio();
+    TTF_Quit();
+    IMG_Quit();
     SDL_Quit();
 }
