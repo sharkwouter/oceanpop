@@ -181,7 +181,11 @@ void BoardManager::increaseMoves() {
 }
 
 void BoardManager::decreaseMoves() {
-    moves--;
+    if (!this->bubbles_matched) {
+        moves--;
+    } else {
+        this->bubbles_matched = false;
+    }
     moves_updated = true;
 }
 
@@ -215,6 +219,7 @@ void BoardManager::match() {
         Sound sound = Sound::MATCH;
         for(Shell match : matches) {
             if (match == Shell::BUBBLE) {
+                this->bubbles_matched = true;
                 this->moves++;
             } else if (match == Shell::URCHIN) {
                 sound =Sound::PAIN;

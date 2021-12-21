@@ -43,6 +43,8 @@ private:
 
     bool mouse_active = false;
 
+    bool bubbles_matched = false;
+
     std::string image_shells = "assets/images/shells.png";
 
     Action current_action;
