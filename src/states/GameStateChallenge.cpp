@@ -73,7 +73,7 @@ void GameStateChallenge::handleEvents(std::vector<Event> events) {
         } else if (this->paused) {
             if (event == Event::CONFIRM) {
                 this->done = true;
-            } else if (event == Event::CANCEL) {
+            } else if (event == Event::CANCEL || event == Event::MENU) {
                 this->paused = false;
             }
         } else if (event == Event::MENU) {

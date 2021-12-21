@@ -40,7 +40,7 @@ void GameStateRelaxed::handleEvents(std::vector<Event> events) {
         if (this->paused) {
             if (event == Event::CONFIRM) {
                 this->done = true;
-            } else if (event == Event::CANCEL) {
+            } else if (event == Event::CANCEL || event == Event::MENU) {
                 this->paused = false;
             }
         }
