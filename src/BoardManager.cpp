@@ -47,6 +47,7 @@ void BoardManager::loadLevel(int x, int y, int width, int height, int moves, int
     this->level = level;
     this->level_updated = true;
 
+    this->preview = this->board->getShells();
     this->current_action = Action::PICKING;
 }
 
@@ -70,7 +71,7 @@ void BoardManager::reset() {
 }
 
 void BoardManager::handleEvents(std::vector<Event> events) {
-    if (this->current_action == Action::MATCHING || this->current_action == Action::FALLING)
+    if (this->current_action != Action::PICKING && this->current_action != Action::MOVING)
         return;
 
     for (Event e: events) {
@@ -95,7 +96,7 @@ void BoardManager::handleEvents(std::vector<Event> events) {
                     sounds->play(Sound::PICK);
                 } else if (this->current_action == Action::MOVING) {
                     if (this->board->swap(picked, selected)) {
-                        this->current_action = Action::FALLING;
+                        this->current_action = Action::FALLING_START;
                     } else {
                         this->selected = this->picked;
                         sounds->play(Sound::DROP);
@@ -191,11 +192,26 @@ void BoardManager::decreaseMoves() {
 
 void BoardManager::update() {
     switch (this->current_action) {
-        case Action::FALLING:
-            this->board->fillEmpty();
-            SDL_Delay(DROP_TIMER);
+        case Action::FALLING_START:
+            this->preview = this->board->getShells();
             if(!this->board->hasEmpty())
-                this->current_action = Action::MATCHING;
+                this->current_action = Action::FALLING_END;
+            else {
+                this->board->dropShells();
+                this->current_action = Action::ANIMATE_FALLING;
+            }
+            break;
+        case Action::ANIMATE_FALLING:
+            this->animation++;
+            SDL_Delay(5);
+            if (this->animation == SHELL_SIZE) {
+                this->current_action = Action::FALLING_START;
+                this->animation = 0;
+            }
+            break;
+        case Action::FALLING_END:
+            this->preview = this->board->getShells();
+            this->current_action = Action::MATCHING;
             break;
         case Action::MATCHING:
             match();
@@ -215,7 +231,7 @@ void BoardManager::match() {
     SDL_Delay(DROP_TIMER);
     std::vector<Shell> matches = this->board->match();
     if (matches.size() > 0) {
-        int scoring_match = 0;
+        int scoring_matches = 0;
         Sound sound = Sound::MATCH;
         for(Shell match : matches) {
             if (match == Shell::BUBBLE) {
@@ -225,12 +241,12 @@ void BoardManager::match() {
                 sound =Sound::PAIN;
                 this->matches -= 3;
             } else {
-                scoring_match++;
+                scoring_matches++;
             }
         }
         sounds->play(sound);
-        addMatches(scoring_match);
-        this->current_action = Action::FALLING;
+        addMatches(scoring_matches);
+        this->current_action = Action::FALLING_START;
     } else {
         decreaseMoves();
         this->current_action = Action::PICKING;
@@ -249,16 +265,16 @@ void BoardManager::drawCursor(SDL_Renderer * renderer) {
     // Draw picked cross
     if (this->current_action == Action::MOVING) {
         SDL_Rect pickrect_hor;
-        pickrect_hor.x = this->rect_board.x +1;
+        pickrect_hor.x = this->rect_board.x + 1;
         pickrect_hor.y = SHELL_SIZE * this->picked.y + this->rect_board.y + 1;
-        pickrect_hor.w = SHELL_SIZE * this->board->getWidth();
+        pickrect_hor.w = SHELL_SIZE * this->board->getWidth() - 1;
         pickrect_hor.h = SHELL_SIZE - 1;
 
         SDL_Rect pickrect_ver;
         pickrect_ver.x = SHELL_SIZE * this->picked.x + this->rect_board.x + 1;
         pickrect_ver.y = this->rect_board.y + 1;
         pickrect_ver.w = SHELL_SIZE - 1;
-        pickrect_ver.h =  SHELL_SIZE * this->board->getHeight();
+        pickrect_ver.h =  SHELL_SIZE * this->board->getHeight() - 1;
 
         SDL_SetRenderDrawColor(renderer, COLOR_PICKED.r, COLOR_PICKED.g, COLOR_PICKED.b, COLOR_PICKED.a);
         SDL_RenderFillRect(renderer, &pickrect_ver);
@@ -313,7 +329,7 @@ void BoardManager::drawBoard(SDL_Renderer * renderer) {
 
 void BoardManager::drawShells(SDL_Renderer * renderer) {
     std::vector<std::vector<Shell>> shells = this->board->getShells();
-    if (this->current_action == Action::MOVING) {
+    if (true) {
         shells = this->preview;
     }
     // Draw the shells

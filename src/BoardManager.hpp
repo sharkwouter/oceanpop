@@ -51,10 +51,14 @@ private:
 
     std::vector<std::vector<Shell>> preview;
 
+    std::vector<SDL_Point> shells_to_drop;
+    bool done_falling = true;
+
     SDL_Texture * text_moves = NULL;
     SDL_Texture * text_matches = NULL;
     SDL_Texture * text_level = NULL;
 
+    int animation = 0;
 
     void addMatches(int matches);
     void increasLevel();
