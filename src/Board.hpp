@@ -8,24 +8,24 @@
 class Board {
 
 private:
-    std::vector<std::vector<Shell>> shells;
+    std::vector<std::vector<ShellType>> shells;
 
     bool isWithinBounds(SDL_Point point);
-    std::vector<Shell> getMatches(std::vector<std::vector<Shell>> shells, std::vector<SDL_Point> * matchedGems);
-    std::vector<std::vector<Shell>> getShellsCopy();
+    std::vector<ShellType> getMatches(std::vector<std::vector<ShellType>> shells, std::vector<SDL_Point> * matchedGems);
+    std::vector<std::vector<ShellType>> getShellsCopy();
 
-    int getCount(Shell shell);
+    int getCount(ShellType shell);
 
     void dropNewShell(int x);
     bool isFalling(int x);
-    bool shellsMatch(std::vector<std::vector<Shell>> shells, SDL_Point p1, SDL_Point p2, SDL_Point p3);
+    bool shellsMatch(std::vector<std::vector<ShellType>> shells, SDL_Point p1, SDL_Point p2, SDL_Point p3);
 public:
     Board(int width, int height, int seed);
     ~Board();
 
-    std::vector<Shell> match();
+    std::vector<ShellType> match();
 
-    std::vector<SDL_Point> dropShells();
+    std::vector<Shell> dropShells();
 
     bool hasEmpty();
 
@@ -34,8 +34,8 @@ public:
     int getWidth();
     int getHeight();
 
-    std::vector<std::vector<Shell>> getShells(){return shells;};
-    std::vector<std::vector<Shell>> getShellsAfterSwap(std::vector<std::vector<Shell>> shells, SDL_Point p1, SDL_Point p2);
+    std::vector<std::vector<ShellType>> getShells(){return shells;};
+    std::vector<std::vector<ShellType>> getShellsAfterSwap(std::vector<std::vector<ShellType>> shells, SDL_Point p1, SDL_Point p2);
 };
 
 #endif // BOARD_HPP

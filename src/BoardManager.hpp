@@ -49,9 +49,9 @@ private:
 
     Action current_action;
 
-    std::vector<std::vector<Shell>> preview;
+    std::vector<std::vector<ShellType>> preview;
 
-    std::vector<SDL_Point> shells_to_drop;
+    std::vector<Shell> shells_to_drop;
     bool done_falling = true;
 
     SDL_Texture * text_moves = NULL;
@@ -70,10 +70,13 @@ private:
 
     void match();
 
+    bool isFalling(SDL_Point point);
+
     void drawCursor(SDL_Renderer * renderer);
     void drawBoard(SDL_Renderer * renderer);
     void drawInfo(SDL_Renderer * renderer);
     void drawShells(SDL_Renderer * renderer);
+    void drawFallingShells(SDL_Renderer * renderer);
 public:
     BoardManager(SDL_Renderer *renderer, FontManager *fonts, SoundManager * sounds, int x, int y, int width, int height, int moves, int required_matches=0, int level=0, int seed=0);
     ~BoardManager();

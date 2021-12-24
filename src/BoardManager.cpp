@@ -71,9 +71,6 @@ void BoardManager::reset() {
 }
 
 void BoardManager::handleEvents(std::vector<Event> events) {
-    if (this->current_action != Action::PICKING && this->current_action != Action::MOVING)
-        return;
-
     for (Event e: events) {
         switch (e) {
             case Event::LEFT:
@@ -89,6 +86,9 @@ void BoardManager::handleEvents(std::vector<Event> events) {
                 moveCursor(0, 1);
                 break;
             case Event::CONFIRM:
+                if (this->current_action != Action::PICKING && this->current_action != Action::MOVING) {
+                    break;
+                }
                 if (this->current_action == Action::PICKING) {
                     this->picked = this->selected;
                     this->preview = this->board->getShells();
@@ -105,6 +105,9 @@ void BoardManager::handleEvents(std::vector<Event> events) {
                 }
                 break;
             case Event::CANCEL:
+                if (this->current_action != Action::PICKING && this->current_action != Action::MOVING) {
+                    break;
+                }
                 if (this->current_action == Action::MOVING) {
                     sounds->play(Sound::DROP);
                     this->selected = this->picked;
@@ -197,7 +200,7 @@ void BoardManager::update() {
             if(!this->board->hasEmpty())
                 this->current_action = Action::FALLING_END;
             else {
-                this->board->dropShells();
+                this->shells_to_drop = this->board->dropShells();
                 this->current_action = Action::ANIMATE_FALLING;
             }
             break;
@@ -229,15 +232,15 @@ void BoardManager::update() {
 
 void BoardManager::match() {
     SDL_Delay(DROP_TIMER);
-    std::vector<Shell> matches = this->board->match();
+    std::vector<ShellType> matches = this->board->match();
     if (matches.size() > 0) {
         int scoring_matches = 0;
         Sound sound = Sound::MATCH;
-        for(Shell match : matches) {
-            if (match == Shell::BUBBLE) {
+        for(ShellType match : matches) {
+            if (match == ShellType::BUBBLE) {
                 this->bubbles_matched = true;
                 this->moves++;
-            } else if (match == Shell::URCHIN) {
+            } else if (match == ShellType::URCHIN) {
                 sound =Sound::PAIN;
                 this->matches -= 3;
             } else {
@@ -252,6 +255,15 @@ void BoardManager::match() {
         this->current_action = Action::PICKING;
     }
 
+}
+
+bool BoardManager::isFalling(SDL_Point point) {
+    for (Shell falling: this->shells_to_drop) {
+        if (falling.x == point.x && falling.y == point.y) {
+            return true;
+        }
+    }
+    return false;
 }
 
 void BoardManager::draw(SDL_Renderer *renderer) {
@@ -328,13 +340,24 @@ void BoardManager::drawBoard(SDL_Renderer * renderer) {
 }
 
 void BoardManager::drawShells(SDL_Renderer * renderer) {
-    std::vector<std::vector<Shell>> shells = this->board->getShells();
+    std::vector<std::vector<ShellType>> shells = this->board->getShells();
     if (true) {
         shells = this->preview;
     }
+
+    if (this->current_action == Action::ANIMATE_FALLING) {
+        drawFallingShells(renderer);
+    }
+
     // Draw the shells
     for (int x = 0; x < this->board->getWidth(); x++) {
         for (int y = 0; y < this->board->getHeight(); y++) {
+            if (this->current_action == Action::ANIMATE_FALLING) {
+                if (isFalling({x,y})){
+                    continue;
+                }
+            }
+
             SDL_Rect srcrect;
             srcrect.x = SHELL_SIZE * (int) shells[x][y];
             srcrect.y = 0;
@@ -349,6 +372,33 @@ void BoardManager::drawShells(SDL_Renderer * renderer) {
 
             SDL_RenderCopy(renderer, textures.get(image_shells), &srcrect, &dstrect);
         }
+    }
+}
+
+void BoardManager::drawFallingShells(SDL_Renderer * renderer) {
+    // Draw the shells
+    for(Shell shell : this->shells_to_drop) {
+        SDL_Rect srcrect;
+        srcrect.x = SHELL_SIZE * (int) shell.type;
+        srcrect.y = 0;
+        srcrect.w = SHELL_SIZE;
+        srcrect.h = SHELL_SIZE;
+
+        SDL_Rect dstrect;
+        dstrect.x = SHELL_SIZE * shell.x + this->rect_board.x;
+        dstrect.y = SHELL_SIZE * shell.y + this->rect_board.y + animation;
+        dstrect.w = SHELL_SIZE;
+        dstrect.h = SHELL_SIZE;
+
+        if (shell.y == -1) {
+            int start_y = this->rect_board.y - dstrect.y;
+            dstrect.y = this->rect_board.y;
+            dstrect.h = SHELL_SIZE - start_y;
+            srcrect.y = start_y;
+            srcrect.h = dstrect.h;
+        }
+
+        SDL_RenderCopy(renderer, textures.get(image_shells), &srcrect, &dstrect);
     }
 }
 

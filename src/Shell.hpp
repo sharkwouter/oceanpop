@@ -1,7 +1,7 @@
 #ifndef SHELL_HPP
 #define SHELL_HPP
 
-enum class Shell {
+enum class ShellType {
     CRONCH,
     SHALLOP,
     CONE,
@@ -12,5 +12,10 @@ enum class Shell {
     NONE
 };
 
+struct Shell {
+    int x;
+    int y;
+    ShellType type;
+};
 
 #endif // SHELL_HPP

@@ -5,10 +5,10 @@ Board::Board(int width, int height, int seed) {
    // Create the shells vector
    this->shells.reserve(width);
     for (int x = 0; x < width; x++) {
-        this->shells.push_back(std::move(std::vector<Shell>()));
+        this->shells.push_back(std::move(std::vector<ShellType>()));
         this->shells[x].reserve(height);
         for (int y = 0; y < height; y++) {
-            this->shells[x].push_back(Shell::NONE);
+            this->shells[x].push_back(ShellType::NONE);
         }
     }
 
@@ -26,19 +26,19 @@ Board::~Board() {
     this->shells.clear();
 }
 
-std::vector<Shell> Board::match() {
+std::vector<ShellType> Board::match() {
     std::vector<SDL_Point> matchedGems;
-    std::vector<Shell> matchesFound = getMatches(this->shells, &matchedGems);
+    std::vector<ShellType> matchesFound = getMatches(this->shells, &matchedGems);
 
     for (SDL_Point p : matchedGems) {
-        this->shells[p.x][p.y] = Shell::NONE;
+        this->shells[p.x][p.y] = ShellType::NONE;
     }
 
     return matchesFound;
 }
 
-std::vector<Shell> Board::getMatches(std::vector<std::vector<Shell>> shells, std::vector<SDL_Point> * matchedGems=nullptr){
-    std::vector<Shell> matchesFound;
+std::vector<ShellType> Board::getMatches(std::vector<std::vector<ShellType>> shells, std::vector<SDL_Point> * matchedGems=nullptr){
+    std::vector<ShellType> matchesFound;
 
     for (int x = 0; x < getWidth(); x++) {
         for (int y = 0; y < getHeight() - 2; y++) {
@@ -68,33 +68,33 @@ std::vector<Shell> Board::getMatches(std::vector<std::vector<Shell>> shells, std
     return matchesFound;
 }
 
-std::vector<SDL_Point> Board::dropShells() {
-    std::vector<SDL_Point> droppingShells;
+std::vector<Shell> Board::dropShells() {
+    std::vector<Shell> droppingShells;
     for (int x = 0; x < getWidth(); x++) {
         for (int y = (getHeight() - 1); y >= 0; y--) {
-            if (this->shells[x][y] != Shell::NONE)
+            if (this->shells[x][y] != ShellType::NONE)
                 continue;
             
             // Make the gem above us fall
             if (y > 0) {
                 this->shells[x][y] = this->shells[x][y-1];
-                this->shells[x][y-1] = Shell::NONE;
+                this->shells[x][y-1] = ShellType::NONE;
             } else {
                 dropNewShell(x);
             }
-            droppingShells.push_back({x,y});
+            droppingShells.push_back({x, y-1, this->shells[x][y]});
         }
     }
     return droppingShells;
 }
 
 void Board::dropNewShell(int x) {
-    if (getCount(Shell::BUBBLE) < 6 && (rand() % 20) == 1) {
-        this->shells[x][0] = Shell::BUBBLE;
-    } else if (getCount(Shell::URCHIN) < 8 && (rand() % 20) == 1) {
-        this->shells[x][0] = Shell::URCHIN;
+    if (getCount(ShellType::BUBBLE) < 6 && (rand() % 20) == 1) {
+        this->shells[x][0] = ShellType::BUBBLE;
+    } else if (getCount(ShellType::URCHIN) < 8 && (rand() % 20) == 1) {
+        this->shells[x][0] = ShellType::URCHIN;
     } else {
-        this->shells[x][0] = (Shell) (rand() % ((int) Shell::NUMBER_OF_COLORS - 2));
+        this->shells[x][0] = (ShellType) (rand() % ((int) ShellType::NUMBER_OF_COLORS - 2));
     }
 
     // Make sure we're not causing a match directly
@@ -127,7 +127,7 @@ bool Board::isFalling(int x) {
     }
 
     for (int y = 0; y < getHeight(); y++) {
-        if (this->shells[x][y] == Shell::NONE) {
+        if (this->shells[x][y] == ShellType::NONE) {
             return true;
         }
     }
@@ -137,7 +137,7 @@ bool Board::isFalling(int x) {
 bool Board::hasEmpty() {
     for (int x = 0; x < getWidth(); x++) {
         for (int y = 0; y < getHeight(); y++) {
-            if (this->shells[x][y] == Shell::NONE) {
+            if (this->shells[x][y] == ShellType::NONE) {
                 return true;
             }
         }
@@ -156,7 +156,7 @@ bool Board::swap(SDL_Point p1, SDL_Point p2) {
         return false;
     }
     
-    std::vector<std::vector<Shell>> swappedGems = getShellsAfterSwap(this->shells, p1, p2);
+    std::vector<std::vector<ShellType>> swappedGems = getShellsAfterSwap(this->shells, p1, p2);
     if (getMatches(swappedGems).size() > 0) {
         this->shells = swappedGems;
         return true;
@@ -165,13 +165,13 @@ bool Board::swap(SDL_Point p1, SDL_Point p2) {
     }
 }
 
-std::vector<std::vector<Shell>> Board::getShellsAfterSwap(std::vector<std::vector<Shell>> shells, SDL_Point p1, SDL_Point p2) {
+std::vector<std::vector<ShellType>> Board::getShellsAfterSwap(std::vector<std::vector<ShellType>> shells, SDL_Point p1, SDL_Point p2) {
     // Return if nothing changed
     if (p1.x == p2.x && p1.y == p2.y) {
         return shells;
     }
 
-    Shell type1 = shells[p1.x][p1.y];
+    ShellType type1 = shells[p1.x][p1.y];
     if (p1.y == p2.y) {
         int direction = ((p2.x - p1.x) > 0) ? 1 : -1;
         for (int i = p1.x + direction; i != p2.x + direction; i+=direction) {
@@ -200,7 +200,7 @@ bool Board::isWithinBounds(SDL_Point point) {
     return result;
 }
 
-int Board::getCount(Shell shell) {
+int Board::getCount(ShellType shell) {
     int count = 0;
     for (int x = 0; x < getWidth(); x++) {
         for (int y = 0; y < getHeight(); y++) {
@@ -212,7 +212,7 @@ int Board::getCount(Shell shell) {
     return count;
 }
 
-bool Board::shellsMatch(std::vector<std::vector<Shell>> shells, SDL_Point p1, SDL_Point p2, SDL_Point p3) {
+bool Board::shellsMatch(std::vector<std::vector<ShellType>> shells, SDL_Point p1, SDL_Point p2, SDL_Point p3) {
     // Return false if any of the points are not in bounds
     if (!isWithinBounds(p1) || !isWithinBounds(p2) || !isWithinBounds(p3)) {
         return false;
@@ -224,11 +224,11 @@ bool Board::shellsMatch(std::vector<std::vector<Shell>> shells, SDL_Point p1, SD
     );
 }
 
-std::vector<std::vector<Shell>> Board::getShellsCopy() {
-    std::vector<std::vector<Shell>> copy;
+std::vector<std::vector<ShellType>> Board::getShellsCopy() {
+    std::vector<std::vector<ShellType>> copy;
     copy.reserve(getWidth());
     for (int x = 0; x < getWidth(); x++) {
-        copy.push_back(std::move(std::vector<Shell>()));
+        copy.push_back(std::move(std::vector<ShellType>()));
         copy[x].reserve(getHeight());
         for (int y = 0; y < getHeight(); y++) {
             copy[x].push_back(this->shells[x][y]);
