@@ -27,18 +27,18 @@ GameStateChallenge::~GameStateChallenge() {
 
 void GameStateChallenge::update() {
     if (this->attempts == 0 && !this->game_over) {
-        theme.pause();
-        sounds->play(Sound::FAILED);
+        this->theme.pause();
+        this->sounds->play(Sound::FAILED);
         this->game_over = true;
     } else if (this->board->isCompleted() && !this->completed  && !this->game_over) {
-        theme.pause();
-        sounds->play(Sound::COMPLETED);
+        this->theme.pause();
+        this->sounds->play(Sound::COMPLETED);
         this->completed = true;
     } else if (!this->board->hasMovesLeft() && !this->failed && !this->game_over && !this->completed) {
         this->attempts--;
         this->attempts_changed = true;
-        theme.pause();
-        sounds->play(Sound::FAILED);
+        this->theme.pause();
+        this->sounds->play(Sound::FAILED);
         this->failed = true;
     }
 
@@ -68,6 +68,7 @@ void GameStateChallenge::handleEvents(std::vector<Event> events) {
             if (event == Event::CONFIRM) {
                 this->failed = false;
                 this->board->reset();
+                this->theme.unpause();
             }
         } else if (this->paused) {
             if (event == Event::CONFIRM) {
