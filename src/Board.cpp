@@ -14,7 +14,7 @@ Board::Board(int width, int height, int seed) {
 
     // Fill the array and remove matches
     while(hasEmpty()) {
-        fillEmpty();
+        dropShells();
         match();
     }
 }
@@ -68,7 +68,8 @@ std::vector<Shell> Board::getMatches(std::vector<std::vector<Shell>> shells, std
     return matchesFound;
 }
 
-void Board::fillEmpty() {
+std::vector<SDL_Point> Board::dropShells() {
+    std::vector<SDL_Point> droppingShells;
     for (int x = 0; x < getWidth(); x++) {
         for (int y = (getHeight() - 1); y >= 0; y--) {
             if (this->shells[x][y] != Shell::NONE)
@@ -81,8 +82,10 @@ void Board::fillEmpty() {
             } else {
                 dropNewShell(x);
             }
+            droppingShells.push_back({x,y});
         }
     }
+    return droppingShells;
 }
 
 void Board::dropNewShell(int x) {

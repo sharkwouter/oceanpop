@@ -25,7 +25,7 @@ public:
 
     std::vector<Shell> match();
 
-    void fillEmpty();
+    std::vector<SDL_Point> dropShells();
 
     bool hasEmpty();
 
