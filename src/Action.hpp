@@ -4,7 +4,9 @@
 enum class Action {
     PICKING,
     MOVING,
-    MATCHING,
+    MATCHING_START,
+    ANIMATE_MATCHING,
+    MATCHING_END,
     FALLING_START,
     ANIMATE_FALLING,
     FALLING_END,

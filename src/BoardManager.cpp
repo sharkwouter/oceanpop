@@ -86,12 +86,8 @@ void BoardManager::handleEvents(std::vector<Event> events) {
                 moveCursor(0, 1);
                 break;
             case Event::CONFIRM:
-                if (this->current_action != Action::PICKING && this->current_action != Action::MOVING) {
-                    break;
-                }
                 if (this->current_action == Action::PICKING) {
                     this->picked = this->selected;
-                    this->preview = this->board->getShells();
                     this->current_action = Action::MOVING;
                     sounds->play(Sound::PICK);
                 } else if (this->current_action == Action::MOVING) {
@@ -99,18 +95,17 @@ void BoardManager::handleEvents(std::vector<Event> events) {
                         this->current_action = Action::FALLING_START;
                     } else {
                         this->selected = this->picked;
+                        this->preview = this->board->getShells();
                         sounds->play(Sound::DROP);
                         this->current_action = Action::PICKING;
                     }
                 }
                 break;
             case Event::CANCEL:
-                if (this->current_action != Action::PICKING && this->current_action != Action::MOVING) {
-                    break;
-                }
                 if (this->current_action == Action::MOVING) {
                     sounds->play(Sound::DROP);
                     this->selected = this->picked;
+                    this->preview = this->board->getShells();
                     this->current_action = Action::PICKING;
                 }
                 break;
@@ -195,50 +190,71 @@ void BoardManager::decreaseMoves() {
 
 void BoardManager::update() {
     switch (this->current_action) {
+        case Action::PICKING:
+        case Action::MOVING:
+            break;
+        case Action::MATCHING_START:
+            match();
+            if (matches_made.size() > 0) {
+                this->animation = 0;
+                this->preview = this->board->getShells();
+                this->current_action = Action::ANIMATE_MATCHING;
+            } else {
+                this->current_action = Action::MATCHING_END;
+            }
+            break;
+        case Action::ANIMATE_MATCHING:
+            this->animation++;
+            SDL_Delay(MATCH_DELAY);
+            if (this->animation > MATCH_STEPS) {
+                this->current_action = Action::FALLING_START;
+            }
+            break;
+        case Action::MATCHING_END:
+            decreaseMoves();
+            if (this->required_matches > 0 && this->matches >= this->required_matches) {
+                this->current_action = Action::COMPLETED;
+                this->required_matches += 1;
+                increasLevel();
+            } else {
+                this->current_action = Action::PICKING;
+            }
+            break;
         case Action::FALLING_START:
             this->preview = this->board->getShells();
             if(!this->board->hasEmpty())
                 this->current_action = Action::FALLING_END;
             else {
+                this->animation = 0;
                 this->shells_to_drop = this->board->dropShells();
                 this->current_action = Action::ANIMATE_FALLING;
             }
             break;
         case Action::ANIMATE_FALLING:
             this->animation++;
-            SDL_Delay(DROP_STEP);
-            if ((this->animation + 1) > SHELL_SIZE) {
-                this->animation = 1;
+            SDL_Delay(DROP_DELAY);
+            if (this->animation > DROP_STEPS) {
                 this->current_action = Action::FALLING_START;
                 this->preview = this->board->getShells();
             }
             break;
         case Action::FALLING_END:
             this->preview = this->board->getShells();
-            this->animation = 0;
-            this->current_action = Action::MATCHING;
+            this->current_action = Action::MATCHING_START;
             break;
-        case Action::MATCHING:
-            match();
+        case Action::COMPLETED:
+            // Do not add code here
+            // We're waiting for the game state to clean us up
             break;
-        default:
-            break;
-    }
-
-    if (this->required_matches > 0 && this->matches >= this->required_matches && this->current_action == Action::PICKING) {
-        this->current_action = Action::COMPLETED;
-        this->required_matches += 1;
-        increasLevel();
     }
 }
 
 void BoardManager::match() {
-    SDL_Delay(MATCH_TIME);
-    std::vector<Match> matches = this->board->match();
-    if (matches.size() > 0) {
+    this->matches_made = this->board->match();
+    if (this->matches_made.size() > 0) {
         int scoring_matches = 0;
         Sound sound = Sound::MATCH;
-        for(Match match : matches) {
+        for(Match match : matches_made) {
             if (match.type == ShellType::BUBBLE) {
                 this->bubbles_matched = true;
                 this->moves++;
@@ -251,12 +267,7 @@ void BoardManager::match() {
         }
         sounds->play(sound);
         addMatches(scoring_matches);
-        this->current_action = Action::FALLING_START;
-    } else {
-        decreaseMoves();
-        this->current_action = Action::PICKING;
     }
-
 }
 
 bool BoardManager::isFalling(SDL_Point point) {

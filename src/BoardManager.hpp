@@ -54,6 +54,8 @@ private:
     std::vector<Shell> shells_to_drop;
     bool done_falling = true;
 
+    std::vector<Match> matches_made;
+
     SDL_Texture * text_moves = NULL;
     SDL_Texture * text_matches = NULL;
     SDL_Texture * text_level = NULL;
