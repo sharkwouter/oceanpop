@@ -414,8 +414,35 @@ void BoardManager::drawFallingShells(SDL_Renderer * renderer) {
 }
 
 void BoardManager::drawMatches(SDL_Renderer * renderer) {
-    // Draw the matches
+    if (this->text_plus_one == NULL) {
+        this->text_plus_one = fonts->getTexture(renderer, "+1", false, {0, 0, 0, 255});
+    }
+    if (this->text_minus_three == NULL) {
+        this->text_minus_three = fonts->getTexture(renderer, "-3", false, {0, 0, 0, 255});
+    }
+
     for(Match match : this->matches_made) {
+        if (match.type != ShellType::BUBBLE) {
+            // Draw the score text
+            SDL_Texture * text = text_plus_one;
+            if (match.type == ShellType::URCHIN) {
+                text = text_minus_three;
+            }
+
+            SDL_Rect rect_plus_one = {SHELL_SIZE * match.x + this->rect_board.x, SHELL_SIZE * match.y + this->rect_board.y, 0, 0};
+            SDL_QueryTexture(text, NULL, NULL, &rect_plus_one.w, &rect_plus_one.h);
+            rect_plus_one.x += SHELL_SIZE/2 - rect_plus_one.w/2;
+            rect_plus_one.y += SHELL_SIZE/2 - rect_plus_one.h/2;
+            if (match.direction == Direction::HORIZONTAL) {
+                rect_plus_one.x += SHELL_SIZE;
+            } else {
+                rect_plus_one.y += SHELL_SIZE;
+            }
+
+            SDL_RenderCopy(renderer, text, NULL, &rect_plus_one);
+        }
+
+        // Draw the shells
         for(int i = 0; i < 3; i++) {
             SDL_Rect srcrect;
             srcrect.x = SHELL_SIZE * (int) match.type;
