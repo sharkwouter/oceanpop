@@ -284,6 +284,10 @@ void BoardManager::draw(SDL_Renderer *renderer) {
     drawCursor(renderer);
     drawInfo(renderer);
     drawShells(renderer);
+
+    if (this->current_action == Action::ANIMATE_FALLING) {
+        drawFallingShells(renderer);
+    }
 }
 
 void BoardManager::drawCursor(SDL_Renderer * renderer) {
@@ -353,26 +357,15 @@ void BoardManager::drawBoard(SDL_Renderer * renderer) {
 }
 
 void BoardManager::drawShells(SDL_Renderer * renderer) {
-    std::vector<std::vector<ShellType>> shells = this->board->getShells();
-    if (true) {
-        shells = this->preview;
-    }
-
-    if (this->current_action == Action::ANIMATE_FALLING) {
-        drawFallingShells(renderer);
-    }
-
     // Draw the shells
     for (int x = 0; x < this->board->getWidth(); x++) {
         for (int y = 0; y < this->board->getHeight(); y++) {
-            if (this->current_action == Action::ANIMATE_FALLING) {
-                if (isFalling({x,y})){
-                    continue;
-                }
+            if (this->current_action == Action::ANIMATE_FALLING && isFalling({x,y})) {
+                continue;
             }
 
             SDL_Rect srcrect;
-            srcrect.x = SHELL_SIZE * (int) shells[x][y];
+            srcrect.x = SHELL_SIZE * (int) this->preview[x][y];
             srcrect.y = 0;
             srcrect.w = SHELL_SIZE;
             srcrect.h = SHELL_SIZE;
