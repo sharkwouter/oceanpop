@@ -58,7 +58,7 @@ private:
     SDL_Texture * text_matches = NULL;
     SDL_Texture * text_level = NULL;
 
-    int animation = 0;
+    float animation = 0;
 
     void addMatches(int matches);
     void increasLevel();

@@ -206,14 +206,16 @@ void BoardManager::update() {
             break;
         case Action::ANIMATE_FALLING:
             this->animation++;
-            SDL_Delay(5);
-            if (this->animation == SHELL_SIZE) {
+            SDL_Delay(DROP_STEP);
+            if ((this->animation + 1) > SHELL_SIZE) {
+                this->animation = 1;
                 this->current_action = Action::FALLING_START;
-                this->animation = 0;
+                this->preview = this->board->getShells();
             }
             break;
         case Action::FALLING_END:
             this->preview = this->board->getShells();
+            this->animation = 0;
             this->current_action = Action::MATCHING;
             break;
         case Action::MATCHING:
@@ -231,7 +233,7 @@ void BoardManager::update() {
 }
 
 void BoardManager::match() {
-    SDL_Delay(DROP_TIMER);
+    SDL_Delay(MATCH_TIME);
     std::vector<ShellType> matches = this->board->match();
     if (matches.size() > 0) {
         int scoring_matches = 0;
@@ -375,7 +377,7 @@ void BoardManager::drawShells(SDL_Renderer * renderer) {
     }
 }
 
-void BoardManager::drawFallingShells(SDL_Renderer * renderer) {
+void BoardManager::drawFallingShells(SDL_Renderer * renderer) {   
     // Draw the shells
     for(Shell shell : this->shells_to_drop) {
         SDL_Rect srcrect;

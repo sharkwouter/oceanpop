@@ -3,8 +3,6 @@
 
 inline constexpr float ANALOG_DEADZONE_MULTIPLIER = 0.5;
 
-inline constexpr int DROP_TIMER = 250;
-
 inline constexpr int BOARD_WIDTH = 8;
 inline constexpr int BOARD_HEIGHT = 7;
 
@@ -24,5 +22,10 @@ inline constexpr int SHELL_SIZE = 128;
 
 inline constexpr int FONT_SIZE = SHELL_SIZE/2;
 inline constexpr int FONT_SIZE_TITLE = SHELL_SIZE;
+
+inline constexpr int DROP_TIME = 400;
+inline constexpr float DROP_STEP = DROP_TIME/SHELL_SIZE;
+
+inline constexpr int MATCH_TIME = 1000;
 
 #endif // CONSTANTS_HPP
