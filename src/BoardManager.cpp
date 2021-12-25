@@ -67,6 +67,7 @@ void BoardManager::reset() {
     this->moves = this->starting_moves;
     this->moves_updated = true;
 
+    this->preview = this->board->getShells();
     this->current_action = Action::PICKING;
 }
 
