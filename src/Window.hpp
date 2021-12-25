@@ -13,6 +13,9 @@ public:
     Window(const std::string &title, int width, int height);
     ~Window();
 
+    unsigned int start_frame;
+    float frame_delay;
+
     void clear();
     void present();
 };

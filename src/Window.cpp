@@ -40,6 +40,8 @@ Window::Window(const std::string &title, int width, int height) {
     SDL_SetRenderDrawBlendMode(this->renderer, SDL_BLENDMODE_BLEND);
 
     this->should_close = false;
+    this->start_frame = SDL_GetTicks();
+    this->frame_delay = 1000 / 60; // Target 60 fps
 }
 
 void Window::clear() {
@@ -48,7 +50,12 @@ void Window::clear() {
 }
 
 void Window::present() {
+    int delta = SDL_GetTicks() - this->start_frame;
+    if (delta < this->frame_delay) {
+        SDL_Delay(this->frame_delay - delta);
+    }
     SDL_RenderPresent(this->renderer);
+    this->start_frame = SDL_GetTicks();
 }
 
 Window::~Window() {
