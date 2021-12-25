@@ -67,6 +67,7 @@ private:
     SDL_Rect rect_moves;
 
     int animation = 0;
+    unsigned int animation_start;
 
     void addMatches(int matches);
     void increasLevel();

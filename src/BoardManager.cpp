@@ -190,6 +190,8 @@ void BoardManager::decreaseMoves() {
 }
 
 void BoardManager::update() {
+    int delta;
+
     switch (this->current_action) {
         case Action::PICKING:
         case Action::MOVING:
@@ -199,14 +201,18 @@ void BoardManager::update() {
             if (matches_made.size() > 0) {
                 this->animation = 0;
                 this->preview = this->board->getShells();
+                this->animation_start = SDL_GetTicks();
                 this->current_action = Action::ANIMATE_MATCHING;
             } else {
                 this->current_action = Action::MATCHING_END;
             }
             break;
         case Action::ANIMATE_MATCHING:
-            this->animation++;
-            SDL_Delay(MATCH_DELAY);
+            delta = SDL_GetTicks() - this->animation_start;
+            if(delta >= MATCH_DELAY) {
+                this->animation += delta/MATCH_DELAY;
+                this->animation_start = SDL_GetTicks();
+            }
             if (this->animation > MATCH_STEPS) {
                 this->matches_updated = true;
                 this->moves_updated = true;
@@ -230,12 +236,16 @@ void BoardManager::update() {
             else {
                 this->animation = 0;
                 this->shells_to_drop = this->board->dropShells();
+                this->animation_start = SDL_GetTicks();
                 this->current_action = Action::ANIMATE_FALLING;
             }
             break;
         case Action::ANIMATE_FALLING:
-            this->animation++;
-            SDL_Delay(DROP_DELAY);
+            delta = SDL_GetTicks() - this->animation_start;
+            if(delta >= DROP_DELAY) {
+                this->animation += delta/DROP_DELAY;
+                this->animation_start = SDL_GetTicks();
+            }
             if (this->animation > DROP_STEPS) {
                 this->current_action = Action::FALLING_START;
                 this->preview = this->board->getShells();
