@@ -13,9 +13,21 @@ enum class ShellType {
 };
 
 struct Shell {
+    ShellType type;
     int x;
     int y;
+};
+
+enum class Direction {
+    HORIZONTAL,
+    VERTICAL
+};
+
+struct Match {
     ShellType type;
+    int x;
+    int y;
+    Direction direction;
 };
 
 #endif // SHELL_HPP

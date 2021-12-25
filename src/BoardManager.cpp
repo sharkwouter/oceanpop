@@ -234,15 +234,15 @@ void BoardManager::update() {
 
 void BoardManager::match() {
     SDL_Delay(MATCH_TIME);
-    std::vector<ShellType> matches = this->board->match();
+    std::vector<Match> matches = this->board->match();
     if (matches.size() > 0) {
         int scoring_matches = 0;
         Sound sound = Sound::MATCH;
-        for(ShellType match : matches) {
-            if (match == ShellType::BUBBLE) {
+        for(Match match : matches) {
+            if (match.type == ShellType::BUBBLE) {
                 this->bubbles_matched = true;
                 this->moves++;
-            } else if (match == ShellType::URCHIN) {
+            } else if (match.type == ShellType::URCHIN) {
                 sound =Sound::PAIN;
                 this->matches -= 3;
             } else {

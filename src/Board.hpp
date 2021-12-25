@@ -11,7 +11,7 @@ private:
     std::vector<std::vector<ShellType>> shells;
 
     bool isWithinBounds(SDL_Point point);
-    std::vector<ShellType> getMatches(std::vector<std::vector<ShellType>> shells, std::vector<SDL_Point> * matchedGems);
+    std::vector<Match> getMatches(std::vector<std::vector<ShellType>> shells);
     std::vector<std::vector<ShellType>> getShellsCopy();
 
     int getCount(ShellType shell);
@@ -23,7 +23,7 @@ public:
     Board(int width, int height, int seed);
     ~Board();
 
-    std::vector<ShellType> match();
+    std::vector<Match> match();
 
     std::vector<Shell> dropShells();
 

@@ -26,41 +26,38 @@ Board::~Board() {
     this->shells.clear();
 }
 
-std::vector<ShellType> Board::match() {
-    std::vector<SDL_Point> matchedGems;
-    std::vector<ShellType> matchesFound = getMatches(this->shells, &matchedGems);
+std::vector<Match> Board::match() {
+    std::vector<Match> matchesFound = getMatches(this->shells);
 
-    for (SDL_Point p : matchedGems) {
-        this->shells[p.x][p.y] = ShellType::NONE;
+    for (Match m : matchesFound) {
+        if (m.direction == Direction::HORIZONTAL) {
+            for(int x = 0; x < 3; x++) {
+                this->shells[m.x+x][m.y] = ShellType::NONE;
+            }
+        } else {
+            for(int y = 0; y < 3; y++) {
+                this->shells[m.x][m.y+y] = ShellType::NONE;
+            }
+        }
     }
 
     return matchesFound;
 }
 
-std::vector<ShellType> Board::getMatches(std::vector<std::vector<ShellType>> shells, std::vector<SDL_Point> * matchedGems=nullptr){
-    std::vector<ShellType> matchesFound;
+std::vector<Match> Board::getMatches(std::vector<std::vector<ShellType>> shells){
+    std::vector<Match> matchesFound;
 
     for (int x = 0; x < getWidth(); x++) {
         for (int y = 0; y < getHeight() - 2; y++) {
             if (shellsMatch(shells, {x,y},{x,y+1},{x,y+2})) {
-                if (matchedGems != nullptr) {
-                    matchedGems->push_back({x,y});
-                    matchedGems->push_back({x,y+1});
-                    matchedGems->push_back({x,y+2});
-                }
-                matchesFound.push_back(shells[x][y]);
+                matchesFound.push_back({shells[x][y], x, y, Direction::VERTICAL});
             }
         }
     }
     for (int y = 0; y < getHeight(); y++) {
         for (int x = 0; x < getWidth() - 2; x++) {
             if (shellsMatch(shells, {x,y},{x+1,y},{x+2,y})) {
-                if (matchedGems != nullptr) {
-                    matchedGems->push_back({x,y});
-                    matchedGems->push_back({x+1,y});
-                    matchedGems->push_back({x+2,y});
-                }
-                matchesFound.push_back(shells[x][y]);
+                matchesFound.push_back({shells[x][y], x, y, Direction::HORIZONTAL});
             }
         }
     }
@@ -82,7 +79,7 @@ std::vector<Shell> Board::dropShells() {
             } else {
                 dropNewShell(x);
             }
-            droppingShells.push_back({x, y-1, this->shells[x][y]});
+            droppingShells.push_back({this->shells[x][y], x, y-1});
         }
     }
     return droppingShells;
