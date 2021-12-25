@@ -60,6 +60,9 @@ private:
     SDL_Texture * text_matches = NULL;
     SDL_Texture * text_level = NULL;
 
+    SDL_Rect rect_matches;
+    SDL_Rect rect_moves;
+
     int animation = 0;
 
     void addMatches(int matches);
@@ -79,6 +82,7 @@ private:
     void drawInfo(SDL_Renderer * renderer);
     void drawShells(SDL_Renderer * renderer);
     void drawFallingShells(SDL_Renderer * renderer);
+    void drawMatches(SDL_Renderer * renderer);
 public:
     BoardManager(SDL_Renderer *renderer, FontManager *fonts, SoundManager * sounds, int x, int y, int width, int height, int moves, int required_matches=0, int level=0, int seed=0);
     ~BoardManager();

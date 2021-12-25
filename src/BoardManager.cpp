@@ -181,11 +181,11 @@ void BoardManager::increaseMoves() {
 
 void BoardManager::decreaseMoves() {
     if (!this->bubbles_matched) {
-        moves--;
+        this->moves--;
     } else {
         this->bubbles_matched = false;
     }
-    moves_updated = true;
+    this->moves_updated = true;
 }
 
 void BoardManager::update() {
@@ -207,6 +207,8 @@ void BoardManager::update() {
             this->animation++;
             SDL_Delay(MATCH_DELAY);
             if (this->animation > MATCH_STEPS) {
+                this->matches_updated = true;
+                this->moves_updated = true;
                 this->current_action = Action::FALLING_START;
             }
             break;
@@ -266,7 +268,7 @@ void BoardManager::match() {
             }
         }
         sounds->play(sound);
-        addMatches(scoring_matches);
+        this->matches += scoring_matches;
     }
 }
 
@@ -287,6 +289,8 @@ void BoardManager::draw(SDL_Renderer *renderer) {
 
     if (this->current_action == Action::ANIMATE_FALLING) {
         drawFallingShells(renderer);
+    } else if(this->current_action == Action::ANIMATE_MATCHING) {
+        drawMatches(renderer);
     }
 }
 
@@ -408,9 +412,45 @@ void BoardManager::drawFallingShells(SDL_Renderer * renderer) {
     }
 }
 
+void BoardManager::drawMatches(SDL_Renderer * renderer) {
+    // Draw the matches
+    for(Match match : this->matches_made) {
+        for(int i = 0; i < 3; i++) {
+            SDL_Rect srcrect;
+            srcrect.x = SHELL_SIZE * (int) match.type;
+            srcrect.y = 0;
+            srcrect.w = SHELL_SIZE;
+            srcrect.h = SHELL_SIZE;
+
+            SDL_Rect dstrect;
+            dstrect.x = SHELL_SIZE * match.x + this->rect_board.x;
+            dstrect.y = SHELL_SIZE * match.y + this->rect_board.y;
+            dstrect.w = SHELL_SIZE;
+            dstrect.h = SHELL_SIZE;
+
+            if (match.direction == Direction::HORIZONTAL) {
+                dstrect.x += SHELL_SIZE*i;
+            } else {
+                dstrect.y += SHELL_SIZE*i;
+            }
+
+            // Move towards score/moves
+            if (match.type == ShellType::BUBBLE && this->starting_moves > 0) {
+                dstrect.x += (rect_moves.x-dstrect.x)/MATCH_STEPS*animation;
+                dstrect.y += (rect_moves.y-dstrect.y)/MATCH_STEPS*animation;
+            } else {
+                dstrect.x += (rect_matches.x-dstrect.x)/MATCH_STEPS*animation;
+                dstrect.y += (rect_matches.y-dstrect.y)/MATCH_STEPS*animation;
+            }
+
+            SDL_RenderCopy(renderer, textures.get(image_shells), &srcrect, &dstrect);
+        }
+    }
+}
+
 void BoardManager::drawInfo(SDL_Renderer * renderer) {
     // Generate texture with text
-    if (level_updated) {
+    if (this->level_updated) {
         std::string str_level = std::to_string(level);
         if (this->board->getWidth() > 7) {
             str_level = "level " + str_level;
@@ -423,7 +463,7 @@ void BoardManager::drawInfo(SDL_Renderer * renderer) {
         text_level = fonts->getTexture(renderer, str_level, false, {255, 255, 255, 255});
         level_updated = false;
     }
-    if (matches_updated) {
+    if (this->matches_updated) {
         std::string str_matches = std::to_string(matches);
         if (this->required_matches > 0) {
             str_matches += "/" +  std::to_string(required_matches);
@@ -434,7 +474,7 @@ void BoardManager::drawInfo(SDL_Renderer * renderer) {
         text_matches = fonts->getTexture(renderer, str_matches, false, {255, 255, 255, 255});
         matches_updated = false;
     }
-    if (moves_updated) {
+    if (this->moves_updated) {
         std::string str_moves = std::to_string(this->moves);
         if (this->board->getWidth() > 7) {
             str_moves += " moves";
@@ -458,7 +498,7 @@ void BoardManager::drawInfo(SDL_Renderer * renderer) {
     }
 
     // Render matches
-    SDL_Rect rect_matches = {rect_board.x + rect_board.w / 2 , rect_board.y + rect_board.h, 0, 0};
+    this->rect_matches = {rect_board.x + rect_board.w / 2 , rect_board.y + rect_board.h, 0, 0};
     SDL_QueryTexture(text_matches, NULL, NULL, &rect_matches.w, &rect_matches.h);
     rect_matches.x -= rect_matches.w / 2;
     rect_matches.y += SHELL_SIZE / 2 - rect_matches.h / 2;
@@ -466,7 +506,7 @@ void BoardManager::drawInfo(SDL_Renderer * renderer) {
 
     // Render moves
     if (this->starting_moves > 0) {
-        SDL_Rect rect_moves = {rect_board.x + rect_board.w, rect_board.y + rect_board.h, 0, 0};
+        this->rect_moves = {rect_board.x + rect_board.w, rect_board.y + rect_board.h, 0, 0};
         SDL_QueryTexture(text_moves, NULL, NULL, &rect_moves.w, &rect_moves.h);
         rect_moves.x -= SHELL_SIZE / 2 + rect_moves.w;
         rect_moves.y += SHELL_SIZE / 2 - rect_moves.h / 2;
