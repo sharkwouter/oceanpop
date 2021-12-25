@@ -28,7 +28,7 @@ inline constexpr int DROP_STEPS = SHELL_SIZE;
 inline constexpr float DROP_DELAY = DROP_TIME/DROP_STEPS;
 
 inline constexpr int MATCH_TIME = 500;
-inline constexpr int MATCH_STEPS = 60;
+inline constexpr int MATCH_STEPS = 30;
 inline constexpr float MATCH_DELAY = MATCH_TIME/MATCH_STEPS;
 
 #endif // CONSTANTS_HPP
