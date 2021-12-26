@@ -5,6 +5,7 @@
 
 #include <vector>
 #include <filesystem>
+#include <regex>
 
 #include <json/json.h>
 
@@ -26,6 +27,7 @@ private:
     ThemeManager theme;
 
     std::vector<std::filesystem::path> levels;
+    std::regex level_regex{"^.*level[0-9][0-9][0-9]\.json$"};
 
     PauseScreen pause_screen;
     PauseScreen win_screen;

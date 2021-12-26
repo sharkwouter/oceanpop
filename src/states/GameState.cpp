@@ -5,6 +5,7 @@
 #include <cmath>
 #include <filesystem>
 #include <fstream>
+#include <iostream>
 
 #include "../colors.hpp"
 
@@ -19,9 +20,16 @@ GameState::GameState(SDL_Renderer * renderer, FontManager * fonts, SoundManager 
     this->fonts = fonts;
     this->sounds = sounds;
 
+
     std::filesystem::directory_iterator level_files("assets/levels/");
+    int levels_found = 0;
     for (auto &entry : level_files) {
-        levels.push_back(entry.path());
+        if (std::regex_match(entry.path().string(), level_regex)) {
+            std::string name = entry.path().stem().string();
+            std::cout << "Level found: " << std::stoi(name.substr(5)) << std::endl;
+            levels.push_back(entry.path());
+            levels_found++;
+        }
     }
     this->level = 0;
 
