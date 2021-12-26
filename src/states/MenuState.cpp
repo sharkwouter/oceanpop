@@ -8,7 +8,7 @@ MenuState::MenuState(SDL_Renderer * renderer, FontManager * fonts, SoundManager 
     theme(renderer, Theme::MENU),
     not_impletemented_screen(renderer, "Not yet implemented", "Press the confirm button to continue")
 {
-    text_title = fonts->getTexture(renderer, "Match Theory", true, {COLOR_MENU_TITLE.r, COLOR_MENU_TITLE.g, COLOR_MENU_TITLE.b, COLOR_MENU_TITLE.a});
+    this->text_title = fonts->getTexture(renderer, "Match Theory", true, {COLOR_MENU_TITLE.r, COLOR_MENU_TITLE.g, COLOR_MENU_TITLE.b, COLOR_MENU_TITLE.a});
 
     for (int i = 1; i < ((int) State::EXIT + 1); i++) {
         std::string option_text;
@@ -43,6 +43,8 @@ MenuState::MenuState(SDL_Renderer * renderer, FontManager * fonts, SoundManager 
         }
         options.push_back(fonts->getTexture(renderer, option_text,false, {255, 255, 255, 255}));
     }
+
+    this->options_start_y = getOptionY(0);
 }
 
 MenuState::~MenuState() {
@@ -55,6 +57,8 @@ MenuState::~MenuState() {
 
 
 void MenuState::handleEvents(std::vector<Event> events) {
+    SDL_Point mouse;
+
     for(Event event :events) {
         if (this->showing_not_implemented) {
             if (event == Event::CONFIRM) {
@@ -90,6 +94,11 @@ void MenuState::handleEvents(std::vector<Event> events) {
                 this->current_option = (int) State::EXIT;
                 this->done = true;
                 break;
+            case Event::MOUSEMOVE:
+                SDL_GetMouseState(&mouse.x, &mouse.y);
+                if (mouse.y >= this->options_start_y) {
+                    this->current_option = mouse.y/(SCREEN_HEIGHT/((int) this->options.size() + options_offset)) - options_offset;
+                }
             default:
                 break;
         }
@@ -118,7 +127,7 @@ void MenuState::draw(SDL_Renderer * renderer) {
     // Draw options
     for(int i = 0; i < (int) options.size(); i++) {
         // Draw the option title
-        SDL_Rect rect = {SCREEN_WIDTH/2, (SCREEN_HEIGHT/((int) options.size()+3))*(i+3), 0, 0};
+        SDL_Rect rect = {SCREEN_WIDTH/2, getOptionY(i), 0, 0};
         SDL_QueryTexture(options[i], NULL, NULL, &rect.w, &rect.h);
         rect.x -= rect.w/2;
 
@@ -152,6 +161,10 @@ bool MenuState::isImplemented(State state) {
             return true;
             break;
     }
+}
+
+int MenuState::getOptionY(int number) {
+    return SCREEN_HEIGHT/(((int) options.size())+this->options_offset)*(number+this->options_offset);
 }
 
 State MenuState::getNextState() {
