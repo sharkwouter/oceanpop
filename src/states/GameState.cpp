@@ -8,6 +8,7 @@
 #include <iostream>
 
 #include "../colors.hpp"
+#include "../utils.hpp"
 
 GameState::GameState(SDL_Renderer * renderer, FontManager * fonts, SoundManager * sounds) :
     theme(renderer, Theme::THEME1),
@@ -20,19 +21,26 @@ GameState::GameState(SDL_Renderer * renderer, FontManager * fonts, SoundManager 
     this->fonts = fonts;
     this->sounds = sounds;
 
-
     std::filesystem::directory_iterator level_files("assets/levels/");
-    int levels_found = 0;
+    this->total_levels = 0;
+    int highest_level = 0;
     for (auto &entry : level_files) {
         if (std::regex_match(entry.path().string(), level_regex)) {
             std::string name = entry.path().stem().string();
-            std::cout << "Level found: " << std::stoi(name.substr(5)) << std::endl;
-            levels.push_back(entry.path());
-            levels_found++;
+            int number = std::stoi(name.substr(5));
+
+            SDL_Log("Found level: %d", number);
+            if (number > highest_level) {
+                highest_level = number;
+            }
+            this->total_levels++;
         }
     }
-    this->level = 0;
+    if (this->total_levels != highest_level) {
+        panic("Found " + std::to_string(this->total_levels) + "levels, the highest being " + std::to_string(highest_level) + ". This does not add up. Quitting!");
+    }
 
+    this->level = 1;
     loadLevel();
 }
 
@@ -103,18 +111,27 @@ void GameState::draw(SDL_Renderer *renderer) {
 }
 
 void GameState::loadLevel() {
-    if (this->level >= (int) this->levels.size() || this->level < 0) {
-        this->level = 0;
+    if (this->level > this->total_levels || this->level <= 0) {
+        this->level = 1;
     }
 
-    Json::Value json;
-
     std::ifstream levelStream;
-    levelStream.open(this->levels[this->level], std::ios::binary);
     Json::CharReaderBuilder builder;
+    Json::Value json;
     JSONCPP_STRING errors;
+    const char * filename_base = "assets/levels/level%03d.json";
+    char * filename = (char*) malloc(std::strlen(filename_base));
+
+    std::sprintf(filename, filename_base, this->level);
+    SDL_Log("Trying to load level: %s", filename);
+    levelStream.open(filename, std::ios::binary);
     Json::parseFromStream(builder, levelStream, &json, &errors);
     levelStream.close();
+    free(filename);
+
+    if (errors.length() > 0) {
+        panic("Failed to read level file with error: " + errors);
+    }
 
     this->shells = loadShells(json["shells"]);
     if ((int) this->shells.size() == 0) {
@@ -145,7 +162,7 @@ void GameState::loadLevel() {
             this->height,
             this->moves,
             this->required_matches,
-            this->level + 1,
+            this->level,
             this->seed
         );
     } else {
@@ -158,7 +175,7 @@ void GameState::loadLevel() {
             this->shells,
             this->moves,
             this->required_matches,
-            this->level + 1,
+            this->level,
             this->seed
         );
     }

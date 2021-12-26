@@ -26,8 +26,8 @@ private:
     BoardManager * board = NULL;
     ThemeManager theme;
 
-    std::vector<std::filesystem::path> levels;
-    std::regex level_regex{"^.*level[0-9][0-9][0-9]\.json$"};
+    std::regex level_regex{"^.*[\\\\\\/]level[0-9][0-9][0-9]\\.json$"};
+    int total_levels = 0;
 
     PauseScreen pause_screen;
     PauseScreen win_screen;
