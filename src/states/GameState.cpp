@@ -162,19 +162,23 @@ void GameState::loadLevel() {
 }
 
 std::vector<std::vector<ShellType>> GameState::loadShells(Json::Value array) {
-    std::vector<std::vector<ShellType>> initial {
-        {ShellType::CONE, ShellType::CRONCH, ShellType::CORAL},
-        {ShellType::CRONCH, ShellType::CORAL, ShellType::SHALLOP},
-        {ShellType::CONE, ShellType::CRONCH, ShellType::SHALLOP}
-    };
-
     std::vector<std::vector<ShellType>> result;
-    result.reserve((int) initial[0].size());
-    for (int x = 0; x < (int) initial[0].size(); x++) {
+
+    if (array.empty() || !array.isArray() || (int) array.size() == 0) {
+       return result;
+    }
+
+    result.reserve((int) array[0].size());
+    for (int x = 0; x < (int) array[0].size(); x++) {
         result.push_back(std::move(std::vector<ShellType>()));
-        result[x].reserve((int) initial.size());
-        for (int y = 0; y < (int) initial.size(); y++) {
-            result[x].push_back(initial[y][x]);
+        result[x].reserve((int) array.size());
+        for (int y = 0; y < (int) array.size(); y++) {
+            int shell = array[y][x].asInt();
+            if (shell < 0 || shell >= (int) ShellType::NUMBER_OF_COLORS) {
+                SDL_Log("Not loading level, unknown shell number: %d", shell);
+                return std::vector<std::vector<ShellType>>();
+            }
+            result[x].push_back((ShellType) shell);
         }
     }
 
