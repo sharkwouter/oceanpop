@@ -41,6 +41,8 @@ private:
     int moves;
     bool moves_updated = true;
 
+    std::vector<std::vector<ShellType>> starting_shells;
+
     bool mouse_active = false;
 
     bool bubbles_matched = false;
@@ -87,8 +89,10 @@ private:
     void drawShells(SDL_Renderer * renderer);
     void drawFallingShells(SDL_Renderer * renderer);
     void drawMatches(SDL_Renderer * renderer);
+    void storeLevel(int x, int y, Board * board, int moves, int required_matches, int level);
 public:
     BoardManager(SDL_Renderer *renderer, FontManager *fonts, SoundManager * sounds, int x, int y, int width, int height, int moves, int required_matches=0, int level=0, int seed=0);
+    BoardManager(SDL_Renderer *renderer, FontManager *fonts, SoundManager * sounds, int x, int y, std::vector<std::vector<ShellType>> shells, int moves, int required_matches=0, int level=0, int seed=0);
     ~BoardManager();
 
     void handleEvents(std::vector<Event> events);
@@ -99,6 +103,7 @@ public:
     int hasMovesLeft() {return (required_matches == 0 || moves > 0);};
     void reset();
     void loadLevel(int x, int y, int width, int height, int moves, int required_matches=0, int level=0, int seed=0);
+    void loadLevel(int x, int y, std::vector<std::vector<ShellType>> shells, int moves, int required_matches=0, int level=0, int seed=0);
 };
 
 #endif // BOARDMANAGER_HPP

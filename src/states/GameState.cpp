@@ -1,7 +1,6 @@
 #include "GameState.hpp"
 
 #include <SDL_ttf.h>
-#include <json/json.h>
 
 #include <cmath>
 #include <filesystem>
@@ -109,8 +108,14 @@ void GameState::loadLevel() {
     Json::parseFromStream(builder, levelStream, &json, &errors);
     levelStream.close();
 
-    this->width = json.get("width", BOARD_WIDTH).asInt();
-    this->height = json.get("height", BOARD_HEIGHT).asInt();
+    this->shells = loadShells(json["shells"]);
+    if ((int) this->shells.size() == 0) {
+        this->width = json.get("width", BOARD_WIDTH).asInt();
+        this->height = json.get("height", BOARD_HEIGHT).asInt();
+    } else {
+        this->width = this->shells.size();
+        this->height = this->shells[0].size();
+    }
 
     this->position = calculatePosition(this->width, this->height);
 
@@ -121,24 +126,59 @@ void GameState::loadLevel() {
     if (this->board != NULL) {
         delete this->board;
     }
-    this->board = new BoardManager(
-        renderer,
-        this->fonts,
-        this->sounds,
-        this->position.x,
-        this->position.y,
-        this->width,
-        this->height,
-        this->moves,
-        this->required_matches,
-        this->level + 1,
-        this->seed
-    );
+    if ((int) this->shells.size() == 0) {
+        this->board = new BoardManager(
+            renderer,
+            this->fonts,
+            this->sounds,
+            this->position.x,
+            this->position.y,
+            this->width,
+            this->height,
+            this->moves,
+            this->required_matches,
+            this->level + 1,
+            this->seed
+        );
+    } else {
+        this->board = new BoardManager(
+            renderer,
+            this->fonts,
+            this->sounds,
+            this->position.x,
+            this->position.y,
+            this->shells,
+            this->moves,
+            this->required_matches,
+            this->level + 1,
+            this->seed
+        );
+    }
 
     theme.switchTheme(json.get("theme", 1).asInt());
     if (this->moves < 3) {
         theme.pause();
     }
+}
+
+std::vector<std::vector<ShellType>> GameState::loadShells(Json::Value array) {
+    std::vector<std::vector<ShellType>> initial {
+        {ShellType::CONE, ShellType::CRONCH, ShellType::CORAL},
+        {ShellType::CRONCH, ShellType::CORAL, ShellType::SHALLOP},
+        {ShellType::CONE, ShellType::CRONCH, ShellType::SHALLOP}
+    };
+
+    std::vector<std::vector<ShellType>> result;
+    result.reserve((int) initial[0].size());
+    for (int x = 0; x < (int) initial[0].size(); x++) {
+        result.push_back(std::move(std::vector<ShellType>()));
+        result[x].reserve((int) initial.size());
+        for (int y = 0; y < (int) initial.size(); y++) {
+            result[x].push_back(initial[y][x]);
+        }
+    }
+
+    return result;
 }
 
 SDL_Point GameState::calculatePosition(int width, int height) {

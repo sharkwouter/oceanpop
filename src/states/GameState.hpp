@@ -6,11 +6,15 @@
 #include <vector>
 #include <filesystem>
 
+#include <json/json.h>
+
 #include "BaseState.hpp"
 #include "../BoardManager.hpp"
 #include "../ThemeManager.hpp"
 #include "../SoundManager.hpp"
 #include "../PauseScreen.hpp"
+
+#include "../Shell.hpp"
 
 class GameState : public BaseState {
 private:
@@ -39,10 +43,12 @@ private:
     int required_matches;
     int width;
     int height;
+    std::vector<std::vector<ShellType>> shells;
     SDL_Point position;
 
     SDL_Point calculatePosition(int width, int height);
     void loadLevel();
+    std::vector<std::vector<ShellType>> loadShells(Json::Value array);
 public:
     GameState(SDL_Renderer *renderer, FontManager * fonts, SoundManager * sounds);
     ~GameState();

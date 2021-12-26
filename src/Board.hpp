@@ -21,6 +21,7 @@ private:
     bool shellsMatch(std::vector<std::vector<ShellType>> shells, SDL_Point p1, SDL_Point p2, SDL_Point p3);
 public:
     Board(int width, int height, int seed);
+    Board(std::vector<std::vector<ShellType>> shells, int seed);
     ~Board();
 
     std::vector<Match> match();

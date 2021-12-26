@@ -9,8 +9,12 @@
 
 BoardManager::BoardManager(SDL_Renderer *renderer, FontManager *fonts, SoundManager * sounds, int x, int y, int width, int height, int moves, int required_matches, int level, int seed) : fonts(fonts), sounds(sounds) {
     textures.add_texture(image_shells, renderer);
-
     loadLevel(x, y, width, height, moves, required_matches, level, seed);
+}
+
+BoardManager::BoardManager(SDL_Renderer *renderer, FontManager *fonts, SoundManager * sounds, int x, int y, std::vector<std::vector<ShellType>> shells, int moves, int required_matches, int level, int seed) : fonts(fonts), sounds(sounds) {
+    textures.add_texture(image_shells, renderer);
+    loadLevel(x, y, shells, moves, required_matches, level, seed);
 }
 
 BoardManager::~BoardManager() {
@@ -21,20 +25,34 @@ BoardManager::~BoardManager() {
 }
 
 void BoardManager::loadLevel(int x, int y, int width, int height, int moves, int required_matches, int level, int seed) {
+    this->seed = seed;
+    storeLevel(x, y, new Board(width, height, seed), moves, required_matches, level);
+    this->preview = this->board->getShells();
+    this->current_action = Action::PICKING;
+}
+
+void BoardManager::loadLevel(int x, int y, std::vector<std::vector<ShellType>> shells, int moves, int required_matches, int level, int seed) {
+    this->starting_shells = shells;
+    this->seed = seed;
+    storeLevel(x, y, new Board(shells, seed), moves, required_matches, level);
+    this->preview = this->board->getShells();
+    this->current_action = Action::PICKING;
+}
+
+void BoardManager::storeLevel(int x, int y, Board * board, int moves, int required_matches, int level) {
     if (this->board != NULL) {
         delete(this->board);
     }
-    this->board = new Board(width, height, seed);
-    this->seed = seed;
+    this->board = std::move(board);
 
     this->rect_board.x = x;
     this->rect_board.y = y;
 
-    this->rect_board.w = SHELL_SIZE * width;
-    this->rect_board.h = SHELL_SIZE * height;
+    this->rect_board.w = SHELL_SIZE * this->board->getWidth();
+    this->rect_board.h = SHELL_SIZE * this->board->getHeight();
 
-    this->selected.x = width / 2;
-    this->selected.y = height / 2;
+    this->selected.x = this->board->getWidth() / 2;
+    this->selected.y = this->board->getHeight() / 2;
 
     this->matches = 0;
     this->required_matches = required_matches;
@@ -46,16 +64,15 @@ void BoardManager::loadLevel(int x, int y, int width, int height, int moves, int
 
     this->level = level;
     this->level_updated = true;
-
-    this->preview = this->board->getShells();
-    this->current_action = Action::PICKING;
 }
 
 void BoardManager::reset() {
-    int board_width = this->board->getWidth();
-    int board_height = this->board->getHeight();
     delete(this->board);
-    this->board = new Board(board_width, board_height, this->seed);
+    if ((int) this->starting_shells.size() > 0) {
+        this->board = new Board(this->starting_shells, this->seed);
+    } else {
+        this->board = new Board(this->board->getWidth(), this->board->getHeight(), this->seed);
+    }
 
     this->selected.x = this->board->getWidth() / 2;
     this->selected.y = this->board->getHeight() / 2;

@@ -19,6 +19,11 @@ Board::Board(int width, int height, int seed) {
     }
 }
 
+Board::Board(std::vector<std::vector<ShellType>> shells, int seed) {
+    srand(seed);
+    this->shells = shells;
+}
+
 Board::~Board() {
     for (int x = 0; x < getWidth(); x++) {
         this->shells[x].clear();
