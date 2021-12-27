@@ -21,27 +21,8 @@ GameState::GameState(SDL_Renderer * renderer, FontManager * fonts, SoundManager 
     this->fonts = fonts;
     this->sounds = sounds;
 
-    std::filesystem::directory_iterator level_files("assets/levels/");
-    this->total_levels = 0;
-    int highest_level = 0;
-    for (auto &entry : level_files) {
-        if (std::regex_match(entry.path().string(), level_regex)) {
-            std::string name = entry.path().stem().string();
-            int number = std::stoi(name.substr(5));
-
-            SDL_Log("Found level: %d", number);
-            if (number > highest_level) {
-                highest_level = number;
-            }
-            this->total_levels++;
-        }
-    }
-    if (this->total_levels != highest_level) {
-        panic("Found " + std::to_string(this->total_levels) + "levels, the highest being " + std::to_string(highest_level) + ". This does not add up. Quitting!");
-    }
-
-    this->level = 1;
-    loadLevel();
+    this->total_levels = getTotalLevels();
+    loadLevel(1);
 }
 
 GameState::~GameState() {
@@ -50,7 +31,6 @@ GameState::~GameState() {
 
 void GameState::update() {
     if (this->board->isCompleted() && !this->completed) {
-        this->theme.pause();
         this->sounds->play(Sound::COMPLETED);
         this->completed = true;
     } else if (!this->board->hasMovesLeft() && !this->failed && !this->completed) {
@@ -74,9 +54,7 @@ void GameState::handleEvents(std::vector<Event> events) {
          if (this->completed) {
             if (event == Event::CONFIRM) {
                 this->completed = false;
-                this->theme.next();
-                this->level++;
-                this->loadLevel();
+                this->loadLevel(this->level+1);
             }
         } else if (this->failed) {
             if (event == Event::CONFIRM) {
@@ -110,11 +88,35 @@ void GameState::draw(SDL_Renderer *renderer) {
     }
 }
 
-void GameState::loadLevel() {
-    if (this->level > this->total_levels || this->level <= 0) {
-        this->level = 1;
+int GameState::getTotalLevels() {
+    int levels = 0;
+
+    std::filesystem::directory_iterator level_files("assets/levels/");
+    int highest_level = 0;
+    for (auto &entry : level_files) {
+        if (std::regex_match(entry.path().string(), level_regex)) {
+            std::string name = entry.path().stem().string();
+            int number = std::stoi(name.substr(5));
+
+            SDL_Log("Found level: %d", number);
+            if (number > highest_level) {
+                highest_level = number;
+            }
+            levels++;
+        }
+    }
+    if (levels != highest_level) {
+        panic("The amount of levels (" + std::to_string(levels) + ") has to match the highest level number (" + std::to_string(highest_level) + ")!");
     }
 
+    if (levels == 0) {
+        panic("No levels found!");
+    }
+
+    return levels;
+}
+
+void GameState::loadLevel(int level) {
     std::ifstream levelStream;
     Json::CharReaderBuilder builder;
     Json::Value json;
@@ -122,8 +124,13 @@ void GameState::loadLevel() {
     const char * filename_base = "assets/levels/level%03d.json";
     char * filename = (char*) malloc(std::strlen(filename_base));
 
+    if (level > this->total_levels || level <= 0) {
+        level = 1;
+    }
+    this->level = level;
+
     std::sprintf(filename, filename_base, this->level);
-    SDL_Log("Trying to load level: %s", filename);
+    SDL_Log("Loading level: %s", filename);
     levelStream.open(filename, std::ios::binary);
     Json::parseFromStream(builder, levelStream, &json, &errors);
     levelStream.close();
@@ -180,9 +187,10 @@ void GameState::loadLevel() {
         );
     }
 
-    theme.switchTheme(json.get("theme", 1).asInt());
-    if (this->moves < 3) {
-        theme.pause();
+    int new_theme = json.get("theme", 1).asInt();
+    if (new_theme != this->current_theme) {
+        this->theme.switchTheme(new_theme);
+        this->current_theme = new_theme;
     }
 }
 

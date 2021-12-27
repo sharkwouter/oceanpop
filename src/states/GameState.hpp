@@ -45,11 +45,13 @@ private:
     int required_matches;
     int width;
     int height;
+    int current_theme;
     std::vector<std::vector<ShellType>> shells;
     SDL_Point position;
 
     SDL_Point calculatePosition(int width, int height);
-    void loadLevel();
+    int getTotalLevels();
+    void loadLevel(int level);
     std::vector<std::vector<ShellType>> loadShells(Json::Value array);
 public:
     GameState(SDL_Renderer *renderer, FontManager * fonts, SoundManager * sounds);
