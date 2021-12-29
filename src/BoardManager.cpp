@@ -444,7 +444,7 @@ void BoardManager::drawFallingShells(SDL_Renderer * renderer) {
 
 void BoardManager::drawMatches(SDL_Renderer * renderer) {
     if (this->text_plus_one == NULL) {
-        this->text_plus_one = fonts->getTexture(renderer, "+1", false, {0, 0, 0, 255});
+        this->text_plus_one = fonts->getTexture(renderer, "+1", false, {255, 255, 255, 255});
     }
     if (this->text_minus_three == NULL) {
         this->text_minus_three = fonts->getTexture(renderer, "-3", false, {0, 0, 0, 255});
