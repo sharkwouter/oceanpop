@@ -18,6 +18,7 @@ private:
 
     bool done = false;
     void clearState();
+    void switchState();
 public:
     StateManager(SDL_Renderer * renderer, FontManager * fonts, SoundManager * sounds);
     ~StateManager();

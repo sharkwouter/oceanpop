@@ -9,8 +9,7 @@ GameStateChallenge::GameStateChallenge(SDL_Renderer * renderer, FontManager * fo
     theme(renderer, Theme::THEME1),
     pause_screen(renderer, "Game Paused", "Press the confirm button to exit"),
     win_screen(renderer, "Level Finished!", "Press the confirm button to continue"),
-    lose_screen(renderer, "Level failed", "Press the confirm button to restart"),
-    game_over_screen(renderer, "Game over", "Press the confirm button to exit")
+    lose_screen(renderer, "Level failed", "Press the confirm button to restart")
 {
     this->renderer = renderer;
     this->fonts = fonts;
@@ -26,15 +25,14 @@ GameStateChallenge::~GameStateChallenge() {
 }
 
 void GameStateChallenge::update() {
-    if (this->attempts == 0 && !this->game_over) {
-        this->theme.pause();
-        this->sounds->play(Sound::FAILED);
+    if (this->attempts == 0) {
         this->game_over = true;
-    } else if (this->board->isCompleted() && !this->completed  && !this->game_over) {
+        this->done = true;
+    } else if (this->board->isCompleted() && !this->completed) {
         this->theme.pause();
         this->sounds->play(Sound::COMPLETED);
         this->completed = true;
-    } else if (!this->board->hasMovesLeft() && !this->failed && !this->game_over && !this->completed) {
+    } else if (!this->board->hasMovesLeft() && !this->failed && !this->completed) {
         this->attempts--;
         this->attempts_changed = true;
         this->theme.pause();
@@ -42,23 +40,19 @@ void GameStateChallenge::update() {
         this->failed = true;
     }
 
-    if (!this->paused && !this->completed &&  !this->failed && !this->game_over) {
+    if (!this->paused && !this->completed &&  !this->failed) {
         this->theme.update();
         this->board->update();
     }
 }
 
 void GameStateChallenge::handleEvents(std::vector<Event> events) {
-    if (!this->paused && !this->completed &&  !this->failed && !this->game_over) {
+    if (!this->paused && !this->completed &&  !this->failed) {
         this->board->handleEvents(events);
     }
 
     for(Event event: events) {
-        if (this->game_over) {
-            if (event == Event::CONFIRM) {
-                this->done = true;
-            }
-        } else if (this->completed) {
+        if (this->completed) {
             if (event == Event::CONFIRM) {
                 this->completed = false;
                 this->theme.next();
@@ -85,9 +79,7 @@ void GameStateChallenge::handleEvents(std::vector<Event> events) {
 
 void GameStateChallenge::draw(SDL_Renderer *renderer) {
     this->theme.draw(renderer);
-    if (this->game_over) {
-        game_over_screen.draw(renderer);
-    } else if (this->completed) {
+    if (this->completed) {
         win_screen.draw(renderer);
     } else if (this->failed) {
         lose_screen.draw(renderer);
@@ -157,5 +149,9 @@ SDL_Point GameStateChallenge::calculatePosition(int width, int height) {
 }
 
 State GameStateChallenge::getNextState() {
-    return State::MENU;
+    if (this->game_over) {
+        return State::GAMEOVER;
+    } else {
+        return State::MENU;
+    }
 }

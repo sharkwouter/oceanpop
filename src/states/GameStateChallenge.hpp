@@ -21,7 +21,6 @@ private:
     PauseScreen pause_screen;
     PauseScreen win_screen;
     PauseScreen lose_screen;
-    PauseScreen game_over_screen;
 
     SDL_Texture * text_attempts = NULL;
     SDL_Texture * text_attempts_number = NULL;

@@ -197,7 +197,7 @@ void GameState::loadLevel(int level) {
 std::vector<std::vector<ShellType>> GameState::loadShells(Json::Value array) {
     std::vector<std::vector<ShellType>> result;
 
-    if (array.empty() || !array.isArray() || (int) array.size() == 0) {
+    if (array.empty() || !array.isArray() || (int) array.size() == 0 || (int) array[0].size() == 0) {
        return result;
     }
 
