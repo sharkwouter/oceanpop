@@ -35,11 +35,7 @@ int main(int argv, char** args) {
     (void) argv;
     (void) args;
 
-    try {
-        run();
-    } catch (...) {
-        std::rethrow_exception(std::current_exception());
-    }
+    run();
 
     return EXIT_SUCCESS;
 }
