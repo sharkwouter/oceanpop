@@ -10,12 +10,15 @@ class Board {
 private:
     std::vector<std::vector<ShellType>> shells;
 
+    unsigned int seed;
+
     bool isWithinBounds(SDL_Point point);
     std::vector<Match> getMatches(std::vector<std::vector<ShellType>> shells);
     std::vector<std::vector<ShellType>> getShellsCopy();
 
     int getCount(ShellType shell);
 
+    unsigned int rand();
     void dropNewShell(int x);
     bool isFalling(int x);
     bool shellsMatch(std::vector<std::vector<ShellType>> shells, SDL_Point p1, SDL_Point p2, SDL_Point p3);

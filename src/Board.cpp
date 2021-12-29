@@ -1,7 +1,7 @@
 #include "Board.hpp"
 
 Board::Board(int width, int height, int seed) {
-    srand(seed);
+    this-> seed = seed;
    // Create the shells vector
    this->shells.reserve(width);
     for (int x = 0; x < width; x++) {
@@ -20,7 +20,7 @@ Board::Board(int width, int height, int seed) {
 }
 
 Board::Board(std::vector<std::vector<ShellType>> shells, int seed) {
-    srand(seed);
+    this->seed = seed;
     this->shells = shells;
 }
 
@@ -91,12 +91,12 @@ std::vector<Shell> Board::dropShells() {
 }
 
 void Board::dropNewShell(int x) {
-    if (getCount(ShellType::BUBBLE) < 6 && (rand() % 20) == 1) {
+    if (getCount(ShellType::BUBBLE) < 6 && (this->rand() % 20) == 1) {
         this->shells[x][0] = ShellType::BUBBLE;
-    } else if (getCount(ShellType::URCHIN) < 8 && (rand() % 20) == 1) {
+    } else if (getCount(ShellType::URCHIN) < 8 && (this->rand() % 20) == 1) {
         this->shells[x][0] = ShellType::URCHIN;
     } else {
-        this->shells[x][0] = (ShellType) (rand() % ((int) ShellType::NUMBER_OF_COLORS - 2));
+        this->shells[x][0] = (ShellType) (this->rand() % ((int) ShellType::NUMBER_OF_COLORS - 2));
     }
 
     // Make sure we're not causing a match directly
@@ -224,6 +224,11 @@ bool Board::shellsMatch(std::vector<std::vector<ShellType>> shells, SDL_Point p1
         shells[p1.x][p1.y] == shells[p2.x][p2.y] &&
         shells[p1.x][p1.y] == shells[p3.x][p3.y]
     );
+}
+
+unsigned int Board::rand() {
+    this->seed = this->seed * 1664525 + 1013904223;
+    return this->seed >> 24;
 }
 
 std::vector<std::vector<ShellType>> Board::getShellsCopy() {
