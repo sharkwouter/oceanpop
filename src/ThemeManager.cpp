@@ -3,7 +3,9 @@
 #include "utils.hpp"
 
 ThemeManager::ThemeManager(SDL_Renderer * renderer, Theme theme) : renderer(renderer){
-    Mix_VolumeMusic(MIX_MAX_VOLUME/2);
+    this->volume = MIX_MAX_VOLUME/2;
+    this->current_volume = this->volume;
+    Mix_VolumeMusic(this->current_volume);
 
     load(theme);
 }
@@ -72,7 +74,7 @@ void ThemeManager::loadMusic(Theme theme) {
 }
 
 void ThemeManager::update() {
-    if (this->music == NULL && this->next_music == NULL) {
+    if ((this->music == NULL && this->next_music == NULL) || this->paused) {
         return;
     }
 
@@ -86,6 +88,11 @@ void ThemeManager::update() {
         this->music = std::move(this->next_music);
         this->next_music = NULL;
         Mix_PlayMusic(this->music, 0);
+    }
+
+    if(this->current_volume < this->volume) {
+        this->current_volume++;
+        Mix_VolumeMusic(this->current_volume);
     }
 }
 
@@ -106,18 +113,18 @@ void ThemeManager::next() {
     load(getNextTheme());
     if (change_music_on_switch) {
         Mix_HaltMusic();
-    } else {
-        unpause();
     }
+    unpause();
 }
 
 void ThemeManager::nextSong() {
     loadMusic(getNextTheme());
     if (change_music_on_switch) {
         Mix_HaltMusic();
-    } else {
-        unpause();
+        this->current_volume = this->volume;
+        Mix_VolumeMusic(this->current_volume);
     }
+    unpause();
 }
 
 void ThemeManager::switchTheme(int theme) {
@@ -130,14 +137,18 @@ void ThemeManager::switchTheme(int theme) {
 
 void ThemeManager::pause() {
     if (!this->paused) {
-        Mix_PauseMusic();
+        this->current_volume = 0;
+        Mix_VolumeMusic(this->current_volume);
         this->paused = true;
     }
 }
 
 void ThemeManager::unpause() {
     if (this->paused) {
-        Mix_ResumeMusic();
+        if (this->change_music_on_switch) {
+            this->current_volume = this->volume;
+            Mix_VolumeMusic(this->current_volume);
+        }
         this->paused = false;
     }
 }

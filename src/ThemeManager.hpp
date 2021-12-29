@@ -20,6 +20,8 @@ private:
     bool paused = false;
 
     bool change_music_on_switch = true;
+    int volume;
+    int current_volume = 0;
 
     void load(Theme theme);
     void loadBackground(Theme theme);
