@@ -67,11 +67,13 @@ void BoardManager::storeLevel(int x, int y, Board * board, int moves, int requir
 }
 
 void BoardManager::reset() {
+    int width = this->board->getWidth();
+    int height = this->board->getHeight();
     delete(this->board);
     if ((int) this->starting_shells.size() > 0) {
         this->board = new Board(this->starting_shells, this->seed);
     } else {
-        this->board = new Board(this->board->getWidth(), this->board->getHeight(), this->seed);
+        this->board = new Board(width, height, this->seed);
     }
 
     this->selected.x = this->board->getWidth() / 2;
