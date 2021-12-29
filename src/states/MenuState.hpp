@@ -22,7 +22,7 @@ private:
     SDL_Texture * text_title;
     std::vector<SDL_Texture*> options;
 
-    int options_offset = 3;
+    int options_offset = 2;
     int options_start_y;
 
     int current_option = 0;

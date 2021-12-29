@@ -22,17 +22,11 @@ MenuState::MenuState(SDL_Renderer * renderer, FontManager * fonts, SoundManager 
             case State::RELAXED:
                 option_text = "Relaxed mode";
                 break;
-            case State::HOWTOPLAY:
-                option_text = "How to play";
-                break;
             case State::HIGHSCORES:
                 option_text = "High scores";
                 break;
             case State::OPTIONS:
                 option_text = "Options";
-                break;
-            case State::CREDITS:
-                option_text = "Credits";
                 break;
             case State::EXIT:
                 option_text = "Exit";
@@ -151,10 +145,8 @@ void MenuState::draw(SDL_Renderer * renderer) {
 
 bool MenuState::isImplemented(State state) {
     switch (state) {
-        case State::HOWTOPLAY:
         case State::HIGHSCORES:
         case State::OPTIONS:
-        case State::CREDITS:
             return false;
             break;
         default:
