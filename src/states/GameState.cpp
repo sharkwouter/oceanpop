@@ -14,8 +14,7 @@ GameState::GameState(SDL_Renderer * renderer, FontManager * fonts, SoundManager 
     theme(renderer, Theme::THEME1),
     pause_screen(renderer, "Game Paused", "Press the confirm button to exit"),
     win_screen(renderer, "Level Finished!", "Press the confirm button to continue"),
-    lose_screen(renderer, "Level Failed", "Press the confirm button to restart"),
-    finish_screen(renderer, "Game Completed!", "Press the confirm button to exit")
+    lose_screen(renderer, "Level Failed", "Press the confirm button to restart")
 {
     this->renderer = renderer;
     this->fonts = fonts;
@@ -54,7 +53,13 @@ void GameState::handleEvents(std::vector<Event> events) {
          if (this->completed) {
             if (event == Event::CONFIRM) {
                 this->completed = false;
-                this->loadLevel(this->level+1);
+                int next_level = this->level+1;
+                if (next_level > this->total_levels ) {
+                    this->finished = true;
+                    this->done = true;
+                } else {
+                    this->loadLevel(next_level);
+                }
             }
         } else if (this->failed) {
             if (event == Event::CONFIRM) {
@@ -123,10 +128,6 @@ void GameState::loadLevel(int level) {
     JSONCPP_STRING errors;
     const char * filename_base = "assets/levels/level%03d.json";
     char * filename = (char*) malloc(std::strlen(filename_base));
-
-    if (level > this->total_levels || level <= 0) {
-        level = 1;
-    }
     this->level = level;
 
     std::sprintf(filename, filename_base, this->level);
@@ -223,5 +224,9 @@ SDL_Point GameState::calculatePosition(int width, int height) {
 }
 
 State GameState::getNextState() {
-    return State::MENU;
+    if(this->finished) {
+        return State::WON;
+    } else {
+        return State::MENU;
+    }
 }

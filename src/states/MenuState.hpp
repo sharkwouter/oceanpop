@@ -27,11 +27,6 @@ private:
 
     int current_option = 0;
 
-    PauseScreen not_impletemented_screen;
-
-    bool showing_not_implemented = false;
-
-    bool isImplemented(State state);
     int getOptionY(int number);
 public:
     MenuState(SDL_Renderer * renderer, FontManager * fonts, SoundManager * sounds);

@@ -6,6 +6,8 @@
 #include "states/GameStateRelaxed.hpp"
 #include "states/GameOverState.hpp"
 #include "states/MenuState.hpp"
+#include "states/NotImplementedState.hpp"
+#include "states/WonState.hpp"
 #include "states/State.hpp"
 
 StateManager::StateManager(SDL_Renderer * renderer, FontManager * fonts, SoundManager * sounds) : renderer(renderer), fonts(fonts), sounds(sounds), state(new MenuState(renderer, fonts, sounds)) {
@@ -54,8 +56,11 @@ void StateManager::switchState() {
             case State::GAMEOVER:
                 this->state = new GameOverState(renderer, fonts, sounds);
                 break;
+            case State::WON:
+                this->state = new WonState(renderer, fonts, sounds);
+                break;
             default:
-                this->state = new MenuState(renderer, fonts, sounds);
+                this->state = new NotImplementedState(renderer, fonts, sounds);
                 break;
         }
     }

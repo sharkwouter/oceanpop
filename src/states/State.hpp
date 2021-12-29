@@ -9,7 +9,8 @@ enum class State {
     HIGHSCORES,
     OPTIONS,
     EXIT,
-    GAMEOVER
+    GAMEOVER,
+    WON
 };
 
 #endif // STATE_HPP

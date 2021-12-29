@@ -32,7 +32,6 @@ private:
     PauseScreen pause_screen;
     PauseScreen win_screen;
     PauseScreen lose_screen;
-    PauseScreen finish_screen;
 
     bool paused = false;
     bool completed = false;
