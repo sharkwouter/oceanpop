@@ -4,13 +4,14 @@
 #include <cmath>
 #include "../colors.hpp"
 
-GameStateRelaxed::GameStateRelaxed(SDL_Renderer * renderer, FontManager * fonts, SoundManager * sounds) :
+GameStateRelaxed::GameStateRelaxed(SDL_Renderer * renderer, FontManager * fonts, SoundManager * sounds, OptionManager * options) :
     theme(renderer, Theme::THEME1),
     pause_screen(renderer, "Game Paused", "Press the confirm button to exit")
 {
     this->renderer = renderer;
     this->fonts = fonts;
     this->sounds = sounds;
+    this->options = options;
 
     loadLevel();
 }

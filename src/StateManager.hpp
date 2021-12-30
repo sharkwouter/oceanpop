@@ -7,12 +7,14 @@
 #include "Event.hpp"
 #include "FontManager.hpp"
 #include "SoundManager.hpp"
+#include "OptionManager.hpp"
 
 class StateManager {
 private:
     SDL_Renderer * renderer;
     FontManager * fonts;
     SoundManager * sounds;
+    OptionManager * options;
 
     BaseState * state;
 
@@ -20,7 +22,7 @@ private:
     void clearState();
     void switchState();
 public:
-    StateManager(SDL_Renderer * renderer, FontManager * fonts, SoundManager * sounds);
+    StateManager(SDL_Renderer * renderer, FontManager * fonts, SoundManager * sounds, OptionManager * options);
     ~StateManager();
 
     void handleEvents(std::vector<Event> events);

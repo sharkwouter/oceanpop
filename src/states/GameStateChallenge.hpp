@@ -7,6 +7,8 @@
 #include "../BoardManager.hpp"
 #include "../ThemeManager.hpp"
 #include "../SoundManager.hpp"
+#include "../FontManager.hpp"
+#include "../OptionManager.hpp"
 #include "../PauseScreen.hpp"
 
 class GameStateChallenge : public BaseState {
@@ -14,6 +16,7 @@ private:
     SDL_Renderer * renderer;
     SoundManager * sounds;
     FontManager * fonts;
+    OptionManager * options;
 
     BoardManager * board;
     ThemeManager theme;
@@ -47,7 +50,7 @@ private:
 
     void drawAttempts(SDL_Renderer *renderer);
 public:
-    GameStateChallenge(SDL_Renderer *renderer, FontManager * fonts, SoundManager * sounds);
+    GameStateChallenge(SDL_Renderer *renderer, FontManager * fonts, SoundManager * sounds, OptionManager * options);
     ~GameStateChallenge();
 
     void handleEvents(std::vector<Event> events);

@@ -13,6 +13,8 @@
 #include "../BoardManager.hpp"
 #include "../ThemeManager.hpp"
 #include "../SoundManager.hpp"
+#include "../FontManager.hpp"
+#include "../OptionManager.hpp"
 #include "../PauseScreen.hpp"
 
 #include "../Shell.hpp"
@@ -22,6 +24,7 @@ private:
     SDL_Renderer * renderer;
     SoundManager * sounds;
     FontManager * fonts;
+    OptionManager * options;
 
     BoardManager * board = NULL;
     ThemeManager theme;
@@ -53,7 +56,7 @@ private:
     void loadLevel(int level);
     std::vector<std::vector<ShellType>> loadShells(Json::Value array);
 public:
-    GameState(SDL_Renderer *renderer, FontManager * fonts, SoundManager * sounds);
+    GameState(SDL_Renderer *renderer, FontManager * fonts, SoundManager * sounds, OptionManager * options);
     ~GameState();
 
     void handleEvents(std::vector<Event> events);

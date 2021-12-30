@@ -7,6 +7,7 @@
 #include "StateManager.hpp"
 #include "EventManager.hpp"
 #include "TextureManager.hpp"
+#include "OptionManager.hpp"
 #include "utils.hpp"
 #include "constants.hpp"
 #include "states/MenuState.hpp"
@@ -15,7 +16,8 @@ void run() {
     Window window("Match Theory", SCREEN_WIDTH, SCREEN_HEIGHT);
     FontManager font_manager;
     SoundManager sound_manager;
-    StateManager state_manager(window.renderer, &font_manager, &sound_manager);
+    OptionManager option_manager;
+    StateManager state_manager(window.renderer, &font_manager, &sound_manager, &option_manager);
     EventManager input_manager;
     TextureManager texture_manager;
 

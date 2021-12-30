@@ -7,6 +7,8 @@
 #include "../BoardManager.hpp"
 #include "../ThemeManager.hpp"
 #include "../SoundManager.hpp"
+#include "../FontManager.hpp"
+#include "../OptionManager.hpp"
 #include "../PauseScreen.hpp"
 
 class GameStateRelaxed : public BaseState {
@@ -14,6 +16,7 @@ private:
     SDL_Renderer * renderer;
     SoundManager * sounds;
     FontManager * fonts;
+    OptionManager * options;
 
     BoardManager * board;
     ThemeManager theme;
@@ -30,7 +33,7 @@ private:
     SDL_Point calculatePosition(int width, int height);
     void loadLevel();
 public:
-    GameStateRelaxed(SDL_Renderer *renderer, FontManager * fonts, SoundManager * sounds);
+    GameStateRelaxed(SDL_Renderer *renderer, FontManager * fonts, SoundManager * sounds, OptionManager * options);
     ~GameStateRelaxed();
 
     void handleEvents(std::vector<Event> events);

@@ -5,7 +5,7 @@
 #include <string>
 #include "../colors.hpp"
 
-GameStateChallenge::GameStateChallenge(SDL_Renderer * renderer, FontManager * fonts, SoundManager * sounds) :
+GameStateChallenge::GameStateChallenge(SDL_Renderer * renderer, FontManager * fonts, SoundManager * sounds, OptionManager * options) :
     theme(renderer, Theme::THEME1),
     pause_screen(renderer, "Game Paused", "Press the confirm button to exit"),
     win_screen(renderer, "Level Finished!", "Press the confirm button to continue"),
@@ -14,6 +14,7 @@ GameStateChallenge::GameStateChallenge(SDL_Renderer * renderer, FontManager * fo
     this->renderer = renderer;
     this->fonts = fonts;
     this->sounds = sounds;
+    this->options = options;
 
     loadLevel();
 }
@@ -26,6 +27,9 @@ GameStateChallenge::~GameStateChallenge() {
 
 void GameStateChallenge::update() {
     if (this->attempts == 0) {
+        if(this->options->getChallengeModeHighscore() < this->level) {
+            this->options->setChallengeModeHighscore(this->level);
+        }
         this->game_over = true;
         this->done = true;
     } else if (this->board->isCompleted() && !this->completed) {
@@ -66,6 +70,8 @@ void GameStateChallenge::handleEvents(std::vector<Event> events) {
             }
         } else if (this->paused) {
             if (event == Event::CONFIRM) {
+                this->options->setChallengeModeLevel(this->level);
+                this->options->setChallengeModeLives(this->attempts);
                 this->done = true;
             } else if (event == Event::CANCEL || event == Event::MENU) {
                 this->paused = false;
@@ -122,9 +128,11 @@ void GameStateChallenge::loadLevel() {
     this->position = calculatePosition(this->width, this->height);
 
     this->moves = 10;
-    this->required_matches = 12;
-    this->level = 1;
+    this->level = this->options->getChallengeModeLevel();
+    this->required_matches = 11 + this->level;
     this->seed = this->level;
+
+    
 
     this->board = new BoardManager(
         renderer,
@@ -140,7 +148,11 @@ void GameStateChallenge::loadLevel() {
         this->seed
     );
 
-    this->attempts = 3;
+    if (this->level > 1) {
+        this->attempts = this->options->getChallengeModeLives();
+    } else {
+        this->attempts = 3;
+    }
     this->attempts_changed = true;
 }
 

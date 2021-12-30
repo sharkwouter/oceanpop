@@ -10,7 +10,7 @@
 #include "states/WonState.hpp"
 #include "states/State.hpp"
 
-StateManager::StateManager(SDL_Renderer * renderer, FontManager * fonts, SoundManager * sounds) : renderer(renderer), fonts(fonts), sounds(sounds), state(new MenuState(renderer, fonts, sounds)) {
+StateManager::StateManager(SDL_Renderer * renderer, FontManager * fonts, SoundManager * sounds, OptionManager * options) : renderer(renderer), fonts(fonts), sounds(sounds), options(options), state(new MenuState(renderer, fonts, sounds)) {
 
 }
 
@@ -45,13 +45,13 @@ void StateManager::switchState() {
                 this->state = new MenuState(renderer, fonts, sounds);
                 break;
             case State::STANDARD:
-                this->state = new GameState(renderer, fonts, sounds);
+                this->state = new GameState(renderer, fonts, sounds, options);
                 break;
             case State::CHALLENGE:
-                this->state = new GameStateChallenge(renderer, fonts, sounds);
+                this->state = new GameStateChallenge(renderer, fonts, sounds, options);
                 break;
             case State::RELAXED:
-                this->state = new GameStateRelaxed(renderer, fonts, sounds);
+                this->state = new GameStateRelaxed(renderer, fonts, sounds, options);
                 break;
             case State::GAMEOVER:
                 this->state = new GameOverState(renderer, fonts, sounds);
