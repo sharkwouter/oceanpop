@@ -4,13 +4,15 @@
 #include <SDL.h>
 #include <string>
 
+#include "OptionManager.hpp"
+
 class Window {
 public:
     SDL_Window *window;
     SDL_Renderer *renderer;
     bool should_close;
 
-    Window(const std::string &title, int width, int height);
+    Window(const std::string &title, int width, int height, OptionManager * options);
     ~Window();
 
     unsigned int start_frame;

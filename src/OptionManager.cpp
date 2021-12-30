@@ -129,6 +129,7 @@ void OptionManager::setRelaxedModeScore(int value) {
 bool OptionManager::getFullscreen() {
     return this->options.get("fullscreen", false).asBool();
 }
+
 void OptionManager::setFullscreen(bool value) {
     this->options["fullscreen"] = value;
     write();

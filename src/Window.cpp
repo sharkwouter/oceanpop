@@ -4,7 +4,7 @@
 #include "Window.hpp"
 #include "utils.hpp"
 
-Window::Window(const std::string &title, int width, int height) {
+Window::Window(const std::string &title, int width, int height, OptionManager * options) {
     #ifdef __vita__
         // Disable back touch
         SDL_SetHint(SDL_HINT_TOUCH_MOUSE_EVENTS_DIRECT_ONLY, "1");
@@ -42,6 +42,10 @@ Window::Window(const std::string &title, int width, int height) {
     this->should_close = false;
     this->start_frame = SDL_GetTicks();
     this->frame_delay = 1000 / 60; // Target 60 fps
+
+    if (options->getFullscreen()) {
+        SDL_SetWindowFullscreen(this->window, SDL_WINDOW_FULLSCREEN);
+    }
 }
 
 void Window::clear() {
