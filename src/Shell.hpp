@@ -6,6 +6,7 @@ enum class ShellType {
     SHALLOP,
     CONE,
     CORAL,
+    WEED,
     URCHIN,
     BUBBLE,
     NUMBER_OF_COLORS,
