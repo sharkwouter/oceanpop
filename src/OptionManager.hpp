@@ -11,8 +11,7 @@ private:
     void load();
     void write();
 
-    std::string getOptionsDirPath();
-    std::string getOptionsFilePath();
+    std::string optionsFile;
 
     Json::Value options;
 public:

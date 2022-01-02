@@ -9,6 +9,7 @@
 #include "utils.hpp"
 
 OptionManager::OptionManager() {
+    this->optionsFile = SDL_GetPrefPath("match-theory","options") + std::string("options.json");
     load();
 }
 
@@ -20,28 +21,16 @@ void OptionManager::load() {
     Json::CharReaderBuilder builder;
     std::ifstream optionsStream;
 
-    optionsStream.open(getOptionsFilePath(), std::ios::in);
-    if (!optionsStream.fail()) {
-        parseFromStream(builder, optionsStream, &this->options, NULL);
-    } else {
-        std::filesystem::create_directories(getOptionsDirPath());
-        write();
-    }
+    optionsStream.open(this->optionsFile, std::ios::in);
+    parseFromStream(builder, optionsStream, &this->options, NULL);
     optionsStream.close();
+    SDL_Log("Configuration loaded at %s", this->optionsFile.c_str());
 }
 
 void OptionManager::write() {
-    std::ofstream optionsStream(getOptionsFilePath(), std::ios::binary);
+    std::ofstream optionsStream(this->optionsFile, std::ios::binary);
     optionsStream << this->options;
     optionsStream.close();
-}
-
-std::string OptionManager::getOptionsFilePath() {
-    return getOptionsDirPath() + "options.json";
-}
-
-std::string OptionManager::getOptionsDirPath() {
-    return SDL_GetPrefPath("match-theory","options");
 }
 
 int OptionManager::getMusicVolume() {
