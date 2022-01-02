@@ -9,7 +9,7 @@
 #include "utils.hpp"
 
 OptionManager::OptionManager() {
-    this->optionsFile = SDL_GetPrefPath("match-theory","options") + std::string("options.json");
+    this->optionsFile = SDL_GetPrefPath(NULL,"match-theory") + std::string("options.json");
     load();
 }
 
