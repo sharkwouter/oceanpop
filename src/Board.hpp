@@ -40,6 +40,8 @@ public:
 
     std::vector<std::vector<ShellType>> getShells(){return shells;};
     std::vector<std::vector<ShellType>> getShellsAfterSwap(std::vector<std::vector<ShellType>> shells, SDL_Point p1, SDL_Point p2);
+
+    unsigned int getCurrentSeed(){return seed;};
 };
 
 #endif // BOARD_HPP

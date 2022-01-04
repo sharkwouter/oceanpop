@@ -101,10 +101,15 @@ public:
     void draw(SDL_Renderer *renderer);
 
     bool isCompleted() {return this->current_action == Action::COMPLETED;};
-    int hasMovesLeft() {return (required_matches == 0 || moves > 0);};
+    int hasMovesLeft() {return (isRelaxedMode || moves > 0);};
     void reset();
     void loadLevel(int x, int y, int width, int height, int moves, int required_matches=0, int level=0, int seed=0);
     void loadLevel(int x, int y, std::vector<std::vector<ShellType>> shells, int moves, int required_matches=0, int level=0, int seed=0);
+
+    int getMatches() {return matches;};
+    int getRemainingMoves() {return moves;};
+    unsigned int getCurrentSeed() {return board->getCurrentSeed();};
+    std::vector<std::vector<ShellType>> getCurrentShells() {return board->getShells();};
 };
 
 #endif // BOARDMANAGER_HPP
