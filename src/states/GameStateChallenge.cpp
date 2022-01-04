@@ -69,15 +69,15 @@ void GameStateChallenge::handleEvents(std::vector<Event> events) {
                 this->theme.unpause();
             }
         } else if (this->paused) {
-            if (event == Event::CONFIRM) {
+            if (event == Event::CONFIRM || event == Event::QUIT) {
                 this->options->setChallengeModeLevel(this->level);
                 this->options->setChallengeModeLives(this->attempts);
                 this->done = true;
             } else if (event == Event::CANCEL || event == Event::MENU) {
                 this->paused = false;
             }
-        } else if (event == Event::MENU) {
-            this->paused = !(this->paused);
+        } else if (event == Event::MENU || event == Event::QUIT) {
+            this->paused = true;
             return;
         }
     }

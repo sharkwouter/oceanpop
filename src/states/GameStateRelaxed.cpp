@@ -36,10 +36,13 @@ void GameStateRelaxed::handleEvents(std::vector<Event> events) {
         if (event == Event::MENU) {
             this->paused = !(this->paused);
             return;
+        } else if (event == Event::QUIT) {
+            this->paused = true;
+            return;
         }
 
         if (this->paused) {
-            if (event == Event::CONFIRM) {
+            if (event == Event::CONFIRM || event == Event::QUIT) {
                 this->done = true;
             } else if (event == Event::CANCEL || event == Event::MENU) {
                 this->paused = false;

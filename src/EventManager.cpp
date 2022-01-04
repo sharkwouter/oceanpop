@@ -18,7 +18,7 @@ std::vector<Event> EventManager::getEvents(Window &window) {
 
         switch (event.type) {
             case SDL_QUIT:
-                window.should_close = true;
+                input = Event::QUIT;
                 break;
             case SDL_KEYDOWN:
                 input = getEventFromKeyboard(event.key.keysym.sym);

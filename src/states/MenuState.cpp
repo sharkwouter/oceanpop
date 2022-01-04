@@ -71,8 +71,9 @@ void MenuState::handleEvents(std::vector<Event> events) {
             case Event::CONFIRM:
                 this->done = true;
                 break;
+            case Event::QUIT:
             case Event::CANCEL:
-                this->current_option = (int) State::EXIT;
+                this->current_option = (int) State::EXIT  - 1;
                 this->done = true;
                 break;
             case Event::MOUSEMOVE:
@@ -80,6 +81,7 @@ void MenuState::handleEvents(std::vector<Event> events) {
                 if (mouse.y >= this->options_start_y) {
                     this->current_option = mouse.y/(SCREEN_HEIGHT/((int) this->options.size() + options_offset)) - options_offset;
                 }
+                break;
             default:
                 break;
         }
