@@ -36,7 +36,7 @@ private:
     bool matches_updated = true;
 
     int required_matches;
-    bool isRelaxedMode;
+    bool isRelaxedMode = false;
 
     int starting_moves;
     int moves;
@@ -107,6 +107,7 @@ public:
     void loadLevel(int x, int y, std::vector<std::vector<ShellType>> shells, int moves, int required_matches=0, int level=0, int seed=0);
 
     int getMatches() {return matches;};
+    void setMatches(int matches) { this->matches = matches; this->matches_updated = true;};
     int getRemainingMoves() {return moves;};
     unsigned int getCurrentSeed() {return board->getCurrentSeed();};
     std::vector<std::vector<ShellType>> getCurrentShells() {return board->getShells();};

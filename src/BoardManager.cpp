@@ -56,7 +56,7 @@ void BoardManager::storeLevel(int x, int y, Board * board, int moves, int requir
 
     this->matches = 0;
     this->required_matches = required_matches;
-    if (required_matches == 0) {
+    if (this->required_matches == 0) {
         this->isRelaxedMode = true;
     }
 

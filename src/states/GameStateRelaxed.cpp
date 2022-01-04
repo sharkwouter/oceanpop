@@ -43,6 +43,7 @@ void GameStateRelaxed::handleEvents(std::vector<Event> events) {
 
         if (this->paused) {
             if (event == Event::CONFIRM || event == Event::QUIT) {
+                this->options->setRelaxedModeScore(this->board->getMatches());
                 this->done = true;
             } else if (event == Event::CANCEL || event == Event::MENU) {
                 this->paused = false;
@@ -84,6 +85,8 @@ void GameStateRelaxed::loadLevel() {
         level,
         seed
     );
+
+    this->board->setMatches(this->options->getRelaxedModeScore());
 }
 
 SDL_Point GameStateRelaxed::calculatePosition(int width, int height) {
