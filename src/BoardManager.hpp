@@ -36,6 +36,7 @@ private:
     bool matches_updated = true;
 
     int required_matches;
+    bool isRelaxedMode;
 
     int starting_moves;
     int moves;

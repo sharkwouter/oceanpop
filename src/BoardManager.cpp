@@ -56,6 +56,10 @@ void BoardManager::storeLevel(int x, int y, Board * board, int moves, int requir
 
     this->matches = 0;
     this->required_matches = required_matches;
+    if (required_matches == 0) {
+        this->isRelaxedMode = true;
+    }
+
     this->matches_updated = true;
 
     this->starting_moves = moves;
@@ -240,7 +244,7 @@ void BoardManager::update() {
             break;
         case Action::MATCHING_END:
             decreaseMoves();
-            if (this->required_matches > 0 && this->matches >= this->required_matches) {
+            if (!this->isRelaxedMode && this->matches >= this->required_matches) {
                 this->current_action = Action::COMPLETED;
                 this->required_matches += 1;
                 increasLevel();
@@ -522,7 +526,7 @@ void BoardManager::drawInfo(SDL_Renderer * renderer) {
     }
     if (this->matches_updated) {
         std::string str_matches = std::to_string(matches);
-        if (this->required_matches > 0) {
+        if (!this->isRelaxedMode) {
             str_matches += "/" +  std::to_string(required_matches);
         }
         if (text_matches != NULL) {
