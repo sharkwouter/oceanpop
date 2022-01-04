@@ -39,7 +39,6 @@ Window::Window(const std::string &title, int width, int height, OptionManager * 
     // Make the use of transparancy possible
     SDL_SetRenderDrawBlendMode(this->renderer, SDL_BLENDMODE_BLEND);
 
-    this->should_close = false;
     this->start_frame = SDL_GetTicks();
     this->frame_delay = 1000 / 60; // Target 60 fps
 
