@@ -9,7 +9,7 @@ EventManager::~EventManager() {
     closeAllGameControllers();
 }
 
-std::vector<Event> EventManager::getEvents(Window &window) {
+std::vector<Event> EventManager::getEvents() {
     std::vector<Event> inputs;
     SDL_Event event;
 

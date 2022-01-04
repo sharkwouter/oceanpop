@@ -25,6 +25,6 @@ private:
 public:
     ~EventManager();
 
-    std::vector<Event> getEvents(Window &window);
+    std::vector<Event> getEvents();
 
 };

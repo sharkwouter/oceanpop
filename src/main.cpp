@@ -22,7 +22,7 @@ void run() {
     TextureManager texture_manager;
 
     while (!state_manager.isDone()) {
-        std::vector<Event> events = input_manager.getEvents(window);
+        std::vector<Event> events = input_manager.getEvents();
 
         state_manager.handleEvents(events);
         state_manager.update();
