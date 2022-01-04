@@ -128,7 +128,12 @@ void ThemeManager::nextSong() {
 }
 
 void ThemeManager::switchTheme(int theme) {
-    if (theme < 1 || theme >= (int) Theme::AMOUNT) {
+    if (theme >= (int) Theme::AMOUNT) {
+        theme = theme % (((int) Theme::AMOUNT) - 1);
+        if (theme == 0) {
+            theme = ((int) Theme::AMOUNT) - 1;
+        }
+    } else if (theme < 1) {
         theme = 1;
     }
 
