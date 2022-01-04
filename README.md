@@ -18,7 +18,7 @@ In Match Theory the goal is to reach the target score before running out of move
 
 ![shells](assets/images/shells.png?raw=true)
 
-There are a couple of different shells to match. From the left, the first 4 all give points. The more matches in one turn the more points. The other 2 have a different effect, though:
+There are a couple of different shells to match. From the left, the first 5 all give points. The more matches in one turn the more points. The other 2 have a different effect, though:
 
 - Don't match the **sea urchin**, it will cost points.
 - Match the **bubble** to make the current move free.
