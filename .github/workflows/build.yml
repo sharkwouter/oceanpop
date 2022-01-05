@@ -6,7 +6,6 @@ on:
 jobs:
   Ubuntu:
     runs-on: ubuntu-latest
-
     steps:
       - name: Install dependencies
         run: |
@@ -31,7 +30,6 @@ jobs:
 
   Windows:
     runs-on: windows-latest
-
     steps:
       - name: Install dependencies
         run: |
@@ -54,7 +52,6 @@ jobs:
   PSP:
     runs-on: ubuntu-latest
     container: pspdev/pspdev:latest
-
     steps:
       - name: Install dependencies
         run: |
@@ -91,7 +88,6 @@ jobs:
   Vita:
     runs-on: ubuntu-latest
     container: gnuton/vitasdk-docker:latest
-
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -108,38 +104,36 @@ jobs:
             LICENSE
             README.md
 
-
-    Release:
-      needs: [Ubuntu, Windows, PSP, Vita]
-      runs-on: ubuntu-latest
-      strategy:
-        matrix:
-          build: [ubuntu, windows, psp, vita]
-
-      steps:
-      - name: Extract tag name
-        if: startsWith(github.ref, 'refs/tags/')
-        id: tag
-        run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
-      - uses: actions/download-artifact@v2
-      - name: Zip artifacts
-        run: |
-          zip -r match-theory-${{matrix.build}}.zip match-theory-${{matrix.build}}
-      - name: Create pre-release
-        if: github.ref == 'refs/heads/master'
-        uses: softprops/action-gh-release@v1
-        with:
-          files: match-theory-${{matrix.build}}.zip
-          prerelease: true
-          name: "Development build"
-          tag_name: "latest"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Release
-        if: startsWith(github.ref, 'refs/tags/')
-        uses: softprops/action-gh-release@v1
-        with:
-          files: match-theory-${{matrix.build}}.zip
-          tag_name: ${{ steps.tag.outputs.VERSION }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  Publish:
+    needs: [Ubuntu, Windows, PSP, Vita]
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        build: [ubuntu, windows, psp, vita]
+    steps:
+    - name: Extract tag name
+      if: startsWith(github.ref, 'refs/tags/')
+      id: tag
+      run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
+    - uses: actions/download-artifact@v2
+    - name: Zip artifacts
+      run: |
+        zip -r match-theory-${{matrix.build}}.zip match-theory-${{matrix.build}}
+    - name: Create pre-release
+      if: github.ref == 'refs/heads/master'
+      uses: softprops/action-gh-release@v1
+      with:
+        files: match-theory-${{matrix.build}}.zip
+        prerelease: true
+        name: "Development build"
+        tag_name: "latest"
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - name: Release
+      if: startsWith(github.ref, 'refs/tags/')
+      uses: softprops/action-gh-release@v1
+      with:
+        files: match-theory-${{matrix.build}}.zip
+        tag_name: ${{ steps.tag.outputs.VERSION }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
