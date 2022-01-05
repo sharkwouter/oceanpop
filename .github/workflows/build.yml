@@ -28,6 +28,28 @@ jobs:
             assets
             LICENSE
             README.md
+      - name: Extract tag name
+        if: startsWith(github.ref, 'refs/tags/')
+        id: tag
+        run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
+      - name: Create pre-release
+        if: github.ref == 'refs/heads/master'
+        uses: softprops/action-gh-release@v1
+        with:
+          files: match-theory-ubuntu.zip
+          prerelease: true
+          name: "Development build"
+          tag_name: "latest"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v1
+        with:
+          files: match-theory-ubuntu.zip
+          tag_name: ${{ steps.tag.outputs.VERSION }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   Windows:
     runs-on: windows-latest
@@ -50,6 +72,28 @@ jobs:
             Release
             LICENSE
             README.md
+      - name: Extract tag name
+        if: startsWith(github.ref, 'refs/tags/')
+        id: tag
+        run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
+      - name: Create pre-release
+        if: github.ref == 'refs/heads/master'
+        uses: softprops/action-gh-release@v1
+        with:
+          files: match-theory-windows.zip
+          prerelease: true
+          name: "Development build"
+          tag_name: "latest"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v1
+        with:
+          files: match-theory-windows.zip
+          tag_name: ${{ steps.tag.outputs.VERSION }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   PSP:
     runs-on: ubuntu-latest
@@ -87,6 +131,28 @@ jobs:
             match-theory/assets
             match-theory/LICENSE
             match-theory/README.md
+      - name: Extract tag name
+        if: startsWith(github.ref, 'refs/tags/')
+        id: tag
+        run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
+      - name: Create pre-release
+        if: github.ref == 'refs/heads/master'
+        uses: softprops/action-gh-release@v1
+        with:
+          files: match-theory-psp.zip
+          prerelease: true
+          name: "Development build"
+          tag_name: "latest"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v1
+        with:
+          files: match-theory-psp.zip
+          tag_name: ${{ steps.tag.outputs.VERSION }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   Vita:
     runs-on: ubuntu-latest
@@ -107,4 +173,25 @@ jobs:
             match-theory.vpk
             LICENSE
             README.md
-            
+      - name: Extract tag name
+        if: startsWith(github.ref, 'refs/tags/')
+        id: tag
+        run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
+      - name: Create pre-release
+        if: github.ref == 'refs/heads/master'
+        uses: softprops/action-gh-release@v1
+        with:
+          files: match-theory-vita.zip
+          prerelease: true
+          name: "Development build"
+          tag_name: "latest"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v1
+        with:
+          files: match-theory-vita.zip
+          tag_name: ${{ steps.tag.outputs.VERSION }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
