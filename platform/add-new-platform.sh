@@ -31,7 +31,6 @@ IMAGES_DIR="platform/${PLATFORM}/assets/images"
 mkdir -p "${BACKGROUNDS_DIR}" "${IMAGES_DIR}"
 
 # Create image
-SHELLRESOLUTION="$((${SHELLSIZE} * 6))x${SHELLSIZE}"
 convert -background none -density 1200 -resize "${SHELLRESOLUTION}" platform/shells.svgz platform/${PLATFORM}/assets/images/shells.png
 
 # Convert backgrounds to right size
