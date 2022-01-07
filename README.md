@@ -25,7 +25,7 @@ There are a couple of different shells to match. From the left, the first 5 all 
 
 ### Controls
 
-Match Theory can be played with a keyboard or gamepad. Here each will be listed.
+Match Theory can be played with a keyboard, mouse or gamepad. Here each will be listed.
 
 #### Keyboard
 
@@ -33,6 +33,11 @@ Match Theory can be played with a keyboard or gamepad. Here each will be listed.
 - **Space**, **Return** or **E**: Pick or drop a shell or confirm in menus.
 - **Escape**: Open the menu.
 - **Backspace** or **Q**: Cancel.
+
+#### Mouse
+
+- **Left click**: Pick or drop a shell or confirm in menus.
+- **Right click**: Cancel.
 
 #### Gamepad
 
@@ -49,7 +54,7 @@ Find the latest release can be found here: https://github.com/match-theory/match
 
 ## License
 
-Match Theory was made available under the MIT license. See the ``LICENSE`` file.
+Match Theory was made available under the MIT license. See the ``LICENSE.txt`` file.
 
 The original code can be found at: https://github.com/match-theory/match-theory
 

@@ -25,7 +25,7 @@ jobs:
           path: |
             match-theory
             assets
-            LICENSE
+            LICENSE.txt
             README.md
 
   Windows:
@@ -40,14 +40,14 @@ jobs:
         run: |
           cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=C:\vcpkg\scripts\buildsystems\vcpkg.cmake -D-DVCPKG_TARGET_TRIPLET=x64-windows -A x64 .
           cmake --build . --config Release
+          cp LICENSE.txt Release
+          cp README.md Release
       - name: Publish artifacts
         uses: actions/upload-artifact@v2
         with:
           name: match-theory-windows
           path: |
             Release
-            LICENSE
-            README.md
 
   PSP:
     runs-on: ubuntu-latest
@@ -64,7 +64,7 @@ jobs:
           cd match-theory
           cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=$PSPDEV/psp/share/pspdev.cmake ..
           make
-          cp ../LICENSE ./
+          cp ../LICENSE.txt ./
           cp ../README.md ./
       - name: Publish artifacts
         uses: actions/upload-artifact@v2
@@ -73,7 +73,7 @@ jobs:
           path: |
             match-theory/EBOOT.PBP
             match-theory/assets
-            match-theory/LICENSE
+            match-theory/LICENSE.txt
             match-theory/README.md
 
   Vita:
@@ -92,7 +92,7 @@ jobs:
           name: match-theory-vita
           path: |
             match-theory.vpk
-            LICENSE
+            LICENSE.txt
             README.md
 
   Publish:

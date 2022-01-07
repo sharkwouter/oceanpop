@@ -13,7 +13,7 @@ git clone https://github.com/match-theory/match-theory.git
 On Ubuntu install the required packages with the following command:
 
 ```
-sudo apt-get install cmake pkgconf g++ libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev libjsoncpp-dev
+sudo apt-get install cmake pkgconf g++ libsdl2-dev libsdl2-image-dev libsdl2-ttf-dev libsdl2-mixer-dev libjsoncpp-dev
 ```
 
 To build execute the following commands from a terminal in the directory where the code is found:
@@ -66,8 +66,6 @@ The resulting ``match-theory.vpk`` file can be copied to the Vita and installed 
 
 ## Playstation Portable
 
-**Note**: The PSP version is currently not working, because of some bugs in the SDL2 port.
-
 To build for the Playstation Portable latest version of the [PSPDEV SDK](https://github.com/pspdev/pspdev/releases) needs to be installed.
 
 To build execute the following commands from a terminal in the directory where the code is found:
@@ -75,7 +73,7 @@ To build execute the following commands from a terminal in the directory where t
 ```
 mkdir psp
 cd psp
-cmake -DCMAKE_TOOLCHAIN_FILE=$PSPDEV/psp/share/pspdev.cmake ..
+psp-cmake ..
 make
 ```
 
