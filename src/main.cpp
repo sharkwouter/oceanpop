@@ -6,7 +6,6 @@
 #include "SoundManager.hpp"
 #include "StateManager.hpp"
 #include "EventManager.hpp"
-#include "TextureManager.hpp"
 #include "OptionManager.hpp"
 #include "utils.hpp"
 #include "constants.hpp"
@@ -19,7 +18,6 @@ void run() {
     SoundManager sound_manager;
     StateManager state_manager(window.renderer, &font_manager, &sound_manager, &option_manager);
     EventManager input_manager;
-    TextureManager texture_manager;
 
     while (!state_manager.isDone()) {
         std::vector<Event> events = input_manager.getEvents();
