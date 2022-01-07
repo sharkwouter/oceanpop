@@ -55,16 +55,7 @@ jobs:
     steps:
       - name: Install dependencies
         run: |
-          apk add cmake gmp mpc1 mpfr4 make git
-      - name: Build SDL
-        run: |
-          git clone https://github.com/libsdl-org/SDL.git
-          cd SDL
-          mkdir build
-          cd build
-          cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=$PSPDEV/psp/share/pspdev.cmake -DCMAKE_INSTALL_PREFIX=$PSPDEV/psp ..
-          make install
-          cd ../..
+          apk add cmake gmp mpc1 mpfr4 make
       - name: Checkout
         uses: actions/checkout@v2
       - name: Build
