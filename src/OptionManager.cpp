@@ -33,6 +33,42 @@ void OptionManager::write() {
     optionsStream.close();
 }
 
+std::vector<std::vector<ShellType>> OptionManager::loadShells(std::string field) {
+    std::vector<std::vector<ShellType>> result;
+
+    Json::Value array = this->options[field];
+
+    if (array.empty() || !array.isArray() || (int) array.size() == 0 || (int) array[0].size() == 0) {
+       return result;
+    }
+
+    result.reserve((int) array.size());
+    for (int x = 0; x < (int) array.size(); x++) {
+        result.push_back(std::move(std::vector<ShellType>()));
+        result[x].reserve((int) array[x].size());
+        for (int y = 0; y < (int) array[x].size(); y++) {
+            result[x].push_back((ShellType) array[x][y].asInt());
+        }
+    }
+
+    return result;
+}
+
+void OptionManager::writeShells(std::string field, std::vector<std::vector<ShellType>> shells) {
+    Json::Value array;
+
+    for (int x = 0; x < (int) shells.size(); x++) {
+        Json::Value column;
+        for (int y = 0; y < (int) shells[x].size(); y++) {
+            column.append((int) shells[x][y]);
+        }
+        array.append(column);
+    }
+    this->options[field] = array;
+    write();
+}
+
+
 int OptionManager::getMusicVolume() {
     return this->options.get("music_volume", 4).asInt();
 }
@@ -78,6 +114,13 @@ void OptionManager::setStandardModeLevel(int value) {
     write();
 }
 
+void OptionManager::resetChallengeMode() {
+    this->options.removeMember("challenge_mode_level");
+    this->options.removeMember("challenge_mode_lives");
+    this->options.removeMember("challenge_mode_shells");
+    write();
+}
+
 int OptionManager::getChallengeModeHighscore() {
     return this->options.get("challenge_mode_highscore", 1).asInt();
 }
@@ -113,6 +156,23 @@ int OptionManager::getRelaxedModeScore() {
 void OptionManager::setRelaxedModeScore(int value) {
     this->options["relaxed_mode_score"] = value;
     write();
+}
+
+unsigned int OptionManager::getRelaxedModeSeed() {
+    return this->options.get("relaxed_mode_seed", 0).asUInt();
+
+}
+void OptionManager::setRelaxedModeSeed(unsigned int value) {
+    this->options["relaxed_mode_seed"] = value;
+    write();
+}
+
+std::vector<std::vector<ShellType>> OptionManager::getRelaxedModeShells() {
+    return loadShells("relaxed_mode_shells");
+}
+
+void OptionManager::setRelaxedModeShells(std::vector<std::vector<ShellType>> value) {
+    writeShells("relaxed_mode_shells", value);
 }
 
 bool OptionManager::getFullscreen() {

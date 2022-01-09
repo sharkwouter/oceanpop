@@ -30,8 +30,7 @@ void GameStateChallenge::update() {
         if(this->options->getChallengeModeHighscore() < this->level) {
             this->options->setChallengeModeHighscore(this->level);
         }
-        this->options->setChallengeModeLevel(1);
-        this->options->setChallengeModeLives(3);
+        this->options->resetChallengeMode();
         this->game_over = true;
         this->done = true;
     } else if (this->board->isCompleted() && !this->completed) {
