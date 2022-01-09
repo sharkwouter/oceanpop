@@ -51,6 +51,7 @@ public:
     void setFullscreen(bool value);
 
     void resetChallengeMode();
+    void resetStandardMode();
 };
 
 #endif // OPTIONMANAGER_HPP

@@ -22,7 +22,7 @@ GameState::GameState(SDL_Renderer * renderer, FontManager * fonts, SoundManager 
     this->options = options;
 
     this->total_levels = getTotalLevels();
-    loadLevel(1);
+    loadLevel(this->options->getStandardModeLevel());
 }
 
 GameState::~GameState() {
@@ -56,10 +56,12 @@ void GameState::handleEvents(std::vector<Event> events) {
                 this->completed = false;
                 int next_level = this->level+1;
                 if (next_level > this->total_levels ) {
+                    this->options->resetStandardMode();
                     this->finished = true;
                     this->done = true;
                 } else {
                     this->loadLevel(next_level);
+                    this->options->setStandardModeLevel(this->level);
                 }
             }
         } else if (this->failed) {

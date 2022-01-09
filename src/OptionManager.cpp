@@ -96,6 +96,12 @@ void OptionManager::setChangeMusicOnSwitch(bool value) {
     write();
 }
 
+void OptionManager::resetStandardMode() {
+    this->options.removeMember("standard_mode_level");
+    write();
+}
+
+
 bool OptionManager::getStandardModeCompleted() {
     return this->options.get("standard_mode_completed", true).asBool();
 }
@@ -106,7 +112,7 @@ void OptionManager::setStandardModeCompleted(bool value) {
 }
 
 int OptionManager::getStandardModeLevel() {
-    return this->options.get("standard_mode_level", 1).asBool();
+    return this->options.get("standard_mode_level", 1).asInt();
 }
 
 void OptionManager::setStandardModeLevel(int value) {
