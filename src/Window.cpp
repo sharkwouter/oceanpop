@@ -22,7 +22,7 @@ Window::Window(const std::string &title, int width, int height, OptionManager * 
         panic("couldn't init SDL_ttf: " + std::string(TTF_GetError()));
     }
 
-    if( Mix_OpenAudio( 22050, MIX_DEFAULT_FORMAT, 2, 4096 ) == -1 ) {
+    if( Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 4096) == -1 ) {
 		panic("couldn't init SDL_mixer: " + std::string(Mix_GetError()));
     }
 
