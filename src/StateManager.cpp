@@ -76,5 +76,8 @@ void StateManager::switchState() {
 }
 
 void StateManager::clearState() {
-    delete this->state;
+    if (this->state != NULL) {
+        delete this->state;
+        this->state = NULL;
+    }
 }

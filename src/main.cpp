@@ -1,6 +1,10 @@
 #include <iostream>
 #include <stdexcept>
 #include <vector>
+
+#include <SDL.h>
+#include <json/json.h>
+
 #include "Window.hpp"
 #include "FontManager.hpp"
 #include "SoundManager.hpp"
@@ -35,7 +39,12 @@ int main(int argv, char** args) {
     (void) argv;
     (void) args;
 
-    run();
+    try {
+        run();
+    } catch (const Json::LogicError&) {
+        SDL_Log("Configuration file invalid, please delete it");
+        return EXIT_FAILURE;
+    }
 
     return EXIT_SUCCESS;
 }

@@ -16,7 +16,7 @@ private:
     SoundManager * sounds;
     OptionManager * options;
 
-    BaseState * state;
+    BaseState * state = NULL;
 
     bool done = false;
     void clearState();
