@@ -21,7 +21,7 @@ private:
 
     bool paused = false;
 
-    bool change_music_on_switch = true;
+    bool change_music_on_switch;
     int volume;
     int current_volume = 0;
 

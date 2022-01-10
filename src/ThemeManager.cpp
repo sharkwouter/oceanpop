@@ -3,6 +3,7 @@
 #include "utils.hpp"
 
 ThemeManager::ThemeManager(SDL_Renderer * renderer, OptionManager * options, Theme theme) : renderer(renderer) {
+    this->change_music_on_switch = options->getChangeMusicOnSwitch();
     this->volume = MIX_MAX_VOLUME/8*options->getMusicVolume();
     this->current_volume = this->volume;
     Mix_VolumeMusic(this->current_volume);
@@ -11,6 +12,7 @@ ThemeManager::ThemeManager(SDL_Renderer * renderer, OptionManager * options, The
 }
 
 ThemeManager::ThemeManager(SDL_Renderer * renderer, Theme theme) : renderer(renderer) {
+    this->change_music_on_switch = true;
     this->volume = 0;
     this->current_volume = this->volume;
     Mix_VolumeMusic(this->current_volume);
