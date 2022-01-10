@@ -2,8 +2,18 @@
 
 #include "utils.hpp"
 
-ThemeManager::ThemeManager(SDL_Renderer * renderer, Theme theme) : renderer(renderer){
-    this->volume = MIX_MAX_VOLUME/2;
+ThemeManager::ThemeManager(SDL_Renderer * renderer, OptionManager * options, Theme theme) : renderer(renderer) {
+    this->change_music_on_switch = options->getChangeMusicOnSwitch();
+    this->volume = MIX_MAX_VOLUME/8*options->getMusicVolume();
+    this->current_volume = this->volume;
+    Mix_VolumeMusic(this->current_volume);
+
+    load(theme);
+}
+
+ThemeManager::ThemeManager(SDL_Renderer * renderer, Theme theme) : renderer(renderer) {
+    this->change_music_on_switch = true;
+    this->volume = 0;
     this->current_volume = this->volume;
     Mix_VolumeMusic(this->current_volume);
 
@@ -74,7 +84,7 @@ void ThemeManager::loadMusic(Theme theme) {
 }
 
 void ThemeManager::update() {
-    if ((this->music == NULL && this->next_music == NULL) || this->paused) {
+    if ((this->music == NULL && this->next_music == NULL) || this->paused || this->volume == 0) {
         return;
     }
 

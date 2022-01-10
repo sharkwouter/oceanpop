@@ -133,8 +133,6 @@ elseif(PLATFORM_PSP)
           BACKGROUND_PATH NULL
           PREVIEW_PATH NULL
           TITLE Match-Theory
-          BUILD_PRX
-          ENC_PRX
      )
 
      file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/assets)

@@ -2,8 +2,11 @@
 #define OPTIONMANAGER_HPP
 
 #include <string>
+#include <vector>
 
 #include <json/json.h>
+
+#include "Shell.hpp"
 
 class OptionManager {
 
@@ -14,6 +17,9 @@ private:
     std::string optionsFile;
 
     Json::Value options;
+
+    std::vector<std::vector<ShellType>> loadShells(std::string field);
+    void writeShells(std::string field, std::vector<std::vector<ShellType>> shells);
 public:
     OptionManager();
     ~OptionManager();
@@ -27,6 +33,8 @@ public:
     int getChallengeModeLevel();
     int getChallengeModeLives();
     int getRelaxedModeScore();
+    unsigned int getRelaxedModeSeed();
+    std::vector<std::vector<ShellType>> getRelaxedModeShells();
     bool getFullscreen();
 
     void setMusicVolume(int value);
@@ -38,7 +46,12 @@ public:
     void setChallengeModeLevel(int value);
     void setChallengeModeLives(int value);
     void setRelaxedModeScore(int value);
+    void setRelaxedModeSeed(unsigned int value);
+    void setRelaxedModeShells(std::vector<std::vector<ShellType>> value);
     void setFullscreen(bool value);
+
+    void resetChallengeMode();
+    void resetStandardMode();
 };
 
 #endif // OPTIONMANAGER_HPP

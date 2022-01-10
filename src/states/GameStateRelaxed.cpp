@@ -5,7 +5,7 @@
 #include "../colors.hpp"
 
 GameStateRelaxed::GameStateRelaxed(SDL_Renderer * renderer, FontManager * fonts, SoundManager * sounds, OptionManager * options) :
-    theme(renderer, Theme::THEME1),
+    theme(renderer, options, Theme::THEME1),
     pause_screen(renderer, "Game Paused", "Press the confirm button to exit")
 {
     this->renderer = renderer;
@@ -44,6 +44,8 @@ void GameStateRelaxed::handleEvents(std::vector<Event> events) {
         if (this->paused) {
             if (event == Event::CONFIRM || event == Event::QUIT) {
                 this->options->setRelaxedModeScore(this->board->getMatches());
+                this->options->setRelaxedModeShells(this->board->getCurrentShells());
+                this->options->setRelaxedModeSeed(this->board->getCurrentSeed());
                 this->done = true;
             } else if (event == Event::CANCEL || event == Event::MENU) {
                 this->paused = false;
@@ -70,21 +72,36 @@ void GameStateRelaxed::loadLevel() {
     int moves = 0;
     int required_matches = 0;
     int level = 0;
-    int seed = 0;
+    int seed = this->options->getRelaxedModeSeed();
 
-    this->board = new BoardManager(
-        renderer,
-        this->fonts,
-        this->sounds,
-        this->position.x,
-        this->position.y,
-        this->width,
-        this->height,
-        moves,
-        required_matches,
-        level,
-        seed
-    );
+    if (seed == 0) {
+        this->board = new BoardManager(
+            renderer,
+            this->fonts,
+            this->sounds,
+            this->position.x,
+            this->position.y,
+            this->width,
+            this->height,
+            moves,
+            required_matches,
+            level,
+            seed
+        );
+    } else {
+        this->board = new BoardManager(
+            renderer,
+            this->fonts,
+            this->sounds,
+            this->position.x,
+            this->position.y,
+            this->options->getRelaxedModeShells(),
+            moves,
+            required_matches,
+            level,
+            seed
+        );
+    }
 
     this->board->setMatches(this->options->getRelaxedModeScore());
 }
