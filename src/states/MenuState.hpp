@@ -17,7 +17,6 @@ private:
     SoundManager * sounds;
 
     ThemeManager theme;
-    std::string background = "assets/backgrounds/background1.jpg";
 
     SDL_Texture * text_title;
     std::vector<SDL_Texture*> options;
