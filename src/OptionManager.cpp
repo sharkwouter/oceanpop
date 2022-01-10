@@ -20,10 +20,36 @@ OptionManager::~OptionManager() {
 void OptionManager::load() {
     Json::CharReaderBuilder builder;
     std::ifstream optionsStream;
+    JSONCPP_STRING errors;
+    bool errors_found = false;
 
     optionsStream.open(this->optionsFile, std::ios::in);
-    parseFromStream(builder, optionsStream, &this->options, NULL);
+    try {
+        parseFromStream(builder, optionsStream, &this->options, &errors);
+
+        // Make sure the file can be read
+        this->options.get("test", 1).asInt();
+    } catch (...) {
+        errors_found = true;
+    }
     optionsStream.close();
+
+    if(errors_found) {
+        SDL_Log("Couldn't load configuration at %s", this->optionsFile.c_str());
+        if (std::filesystem::remove(this->optionsFile)) {
+            SDL_Log("Deleted %s", this->optionsFile.c_str());
+        } else {
+            SDL_Log("Couldn't delete %s", this->optionsFile.c_str());
+        }
+        this->options = Json::Value();
+        return;
+    }
+
+    if (!errors.empty()) {
+        SDL_Log("Could not parse configuration at %s: %s", this->optionsFile.c_str(), errors.c_str());
+        return;
+    }
+
     SDL_Log("Configuration loaded at %s", this->optionsFile.c_str());
 }
 
