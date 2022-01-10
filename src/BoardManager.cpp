@@ -62,7 +62,6 @@ void BoardManager::storeLevel(int x, int y, Board * board, int moves, int requir
 
     this->matches_updated = true;
 
-    this->starting_moves = moves;
     this->moves = moves;
     this->moves_updated = true;
 
@@ -87,7 +86,6 @@ void BoardManager::reset() {
     this->required_matches = required_matches;
     this->matches_updated = true;
 
-    this->moves = this->starting_moves;
     this->moves_updated = true;
 
     this->preview = this->board->getShells();
@@ -496,7 +494,7 @@ void BoardManager::drawMatches(SDL_Renderer * renderer) {
             }
 
             // Move towards score/moves
-            if (match.type == ShellType::BUBBLE && this->starting_moves > 0) {
+            if (match.type == ShellType::BUBBLE && !this->isRelaxedMode) {
                 dstrect.x += (rect_moves.x-dstrect.x)/MATCH_STEPS*animation;
                 dstrect.y += (rect_moves.y-dstrect.y)/MATCH_STEPS*animation;
             } else {
@@ -550,7 +548,7 @@ void BoardManager::drawInfo(SDL_Renderer * renderer) {
     }
 
     // Render level
-    if (level > 0) {
+    if (!this->isRelaxedMode) {
         SDL_Rect rect_level = {rect_board.x, rect_board.y + rect_board.h, 0, 0};
         SDL_QueryTexture(text_level, NULL, NULL, &rect_level.w, &rect_level.h);
         rect_level.x += SHELL_SIZE / 2;
@@ -566,7 +564,7 @@ void BoardManager::drawInfo(SDL_Renderer * renderer) {
     SDL_RenderCopy(renderer, text_matches, NULL, &rect_matches);
 
     // Render moves
-    if (this->starting_moves > 0) {
+    if (!this->isRelaxedMode) {
         this->rect_moves = {rect_board.x + rect_board.w, rect_board.y + rect_board.h, 0, 0};
         SDL_QueryTexture(text_moves, NULL, NULL, &rect_moves.w, &rect_moves.h);
         rect_moves.x -= SHELL_SIZE / 2 + rect_moves.w;

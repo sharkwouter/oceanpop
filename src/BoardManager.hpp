@@ -38,7 +38,6 @@ private:
     int required_matches;
     bool isRelaxedMode = false;
 
-    int starting_moves;
     int moves;
     bool moves_updated = true;
 
@@ -100,8 +99,8 @@ public:
     void update();
     void draw(SDL_Renderer *renderer);
 
-    bool isCompleted() {return this->current_action == Action::COMPLETED;};
-    int hasMovesLeft() {return (isRelaxedMode || moves > 0);};
+    bool isCompleted() {return (this->current_action == Action::COMPLETED);};
+    int hasMovesLeft() {return (moves > 0);};
     void reset();
     void loadLevel(int x, int y, int width, int height, int moves, int required_matches=0, int level=0, int seed=0);
     void loadLevel(int x, int y, std::vector<std::vector<ShellType>> shells, int moves, int required_matches=0, int level=0, int seed=0);
