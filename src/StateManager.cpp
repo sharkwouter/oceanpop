@@ -6,12 +6,14 @@
 #include "states/GameStateRelaxed.hpp"
 #include "states/GameOverState.hpp"
 #include "states/HighscoreState.hpp"
+#include "states/OptionsState.hpp"
 #include "states/MenuState.hpp"
 #include "states/NotImplementedState.hpp"
 #include "states/WonState.hpp"
 #include "states/State.hpp"
 
-StateManager::StateManager(SDL_Renderer * renderer, FontManager * fonts, SoundManager * sounds, OptionManager * options) : renderer(renderer), fonts(fonts), sounds(sounds), options(options), state(new MenuState(renderer, fonts, sounds)) {
+StateManager::StateManager(SDL_Renderer * renderer, FontManager * fonts, SoundManager * sounds, OptionManager * options) : renderer(renderer), fonts(fonts), sounds(sounds), options(options),
+    state(new MenuState(renderer, fonts, sounds)) {
 
 }
 
@@ -56,6 +58,9 @@ void StateManager::switchState() {
                 break;
             case State::HIGHSCORES:
                 this->state = new HighscoreState(renderer, fonts, sounds, options);
+                break;
+            case State::OPTIONS:
+                this->state = new OptionsState(renderer, fonts, sounds, options);
                 break;
             case State::GAMEOVER:
                 this->state = new GameOverState(renderer, fonts, sounds);
