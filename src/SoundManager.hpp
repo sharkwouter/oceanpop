@@ -5,10 +5,13 @@
 #include <SDL.h>
 #include <SDL_mixer.h>
 
+#include "OptionManager.hpp"
 #include "Sound.hpp"
 
 class SoundManager {
 private:
+    OptionManager * options;
+
     Mix_Chunk * sound_pick;
     Mix_Chunk * sound_drop;
     Mix_Chunk * sound_match1;
@@ -26,7 +29,7 @@ private:
 
     void load();
 public:
-    SoundManager();
+    SoundManager(OptionManager * options);
     ~SoundManager();
 
     void play(Sound sound);

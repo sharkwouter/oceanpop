@@ -15,7 +15,7 @@ void run() {
     OptionManager option_manager;
     Window window("Match Theory", SCREEN_WIDTH, SCREEN_HEIGHT, &option_manager);
     FontManager font_manager;
-    SoundManager sound_manager;
+    SoundManager sound_manager(&option_manager);
     StateManager state_manager(window.renderer, &font_manager, &sound_manager, &option_manager);
     EventManager input_manager;
 

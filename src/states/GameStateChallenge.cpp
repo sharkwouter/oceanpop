@@ -6,7 +6,7 @@
 #include "../colors.hpp"
 
 GameStateChallenge::GameStateChallenge(SDL_Renderer * renderer, FontManager * fonts, SoundManager * sounds, OptionManager * options) :
-    theme(renderer, Theme::THEME1),
+    theme(renderer, options, Theme::THEME1),
     pause_screen(renderer, "Game Paused", "Press the confirm button to exit"),
     win_screen(renderer, "Level Finished!", "Press the confirm button to continue"),
     lose_screen(renderer, "Level failed", "Press the confirm button to restart")

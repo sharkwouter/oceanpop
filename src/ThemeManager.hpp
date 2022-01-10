@@ -6,6 +6,8 @@
 #include <SDL_mixer.h>
 #include <string>
 
+#include "OptionManager.hpp"
+
 #include "Theme.hpp"
 
 class ThemeManager {
@@ -32,6 +34,7 @@ private:
     SDL_Texture * createBackgroundTexture(std::string filename);
 public:
     ThemeManager(SDL_Renderer * renderer, Theme theme);
+    ThemeManager(SDL_Renderer * renderer, OptionManager * options, Theme theme);
     ~ThemeManager();
 
     void update();
