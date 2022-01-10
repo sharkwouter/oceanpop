@@ -5,6 +5,7 @@
 #include "states/GameStateChallenge.hpp"
 #include "states/GameStateRelaxed.hpp"
 #include "states/GameOverState.hpp"
+#include "states/HighscoreState.hpp"
 #include "states/MenuState.hpp"
 #include "states/NotImplementedState.hpp"
 #include "states/WonState.hpp"
@@ -52,6 +53,9 @@ void StateManager::switchState() {
                 break;
             case State::RELAXED:
                 this->state = new GameStateRelaxed(renderer, fonts, sounds, options);
+                break;
+            case State::HIGHSCORES:
+                this->state = new HighscoreState(renderer, fonts, sounds, options);
                 break;
             case State::GAMEOVER:
                 this->state = new GameOverState(renderer, fonts, sounds);
