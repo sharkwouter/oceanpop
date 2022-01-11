@@ -39,6 +39,7 @@ private:
     bool isRelaxedMode = false;
 
     int moves;
+    int starting_moves;
     bool moves_updated = true;
 
     std::vector<std::vector<ShellType>> starting_shells;

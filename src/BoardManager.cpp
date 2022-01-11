@@ -63,6 +63,7 @@ void BoardManager::storeLevel(int x, int y, Board * board, int moves, int requir
     this->matches_updated = true;
 
     this->moves = moves;
+    this->starting_moves = this->moves;
     this->moves_updated = true;
 
     this->level = level;
@@ -83,9 +84,9 @@ void BoardManager::reset() {
     this->selected.y = this->board->getHeight() / 2;
 
     this->matches = 0;
-    this->required_matches = required_matches;
     this->matches_updated = true;
 
+    this->moves = this->starting_moves;
     this->moves_updated = true;
 
     this->preview = this->board->getShells();
