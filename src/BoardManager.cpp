@@ -291,8 +291,12 @@ void BoardManager::match() {
         Sound sound = Sound::MATCH;
         for(Match match : matches_made) {
             if (match.type == ShellType::BUBBLE) {
-                this->bubbles_matched = true;
-                this->moves++;
+                if (!this->isRelaxedMode) {
+                    this->bubbles_matched = true;
+                    this->moves++;
+                } else {
+                    this->matches += 3;
+                }
             } else if (match.type == ShellType::URCHIN) {
                 sound =Sound::PAIN;
                 this->matches -= 3;
