@@ -539,7 +539,7 @@ void BoardManager::drawInfo(SDL_Renderer * renderer) {
         if (this->board->getWidth() > 7) {
             str_moves += " moves";
         } else if (this->board->getWidth() > 3) {
-            str_moves += "m";
+            str_moves += "M";
         }
         if (text_moves != NULL) {
             SDL_DestroyTexture(text_moves);
