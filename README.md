@@ -8,7 +8,7 @@ Match Theory boasts at least the following features:
 - Full controller support
 - 3 game modes:
   - Standard mode: complete a set of pre-made levels
-  - Challenge mode: each level has 10 moves and an increasing amount of matches require
+  - Challenge mode: each level has 10 moves and an increasing amount of matches required
   - Relaxed mode: match without win or lose condition
 
 ## How to play
