@@ -57,7 +57,7 @@ The latest release can be found [here](https://github.com/match-theory/match-the
 
 Match Theory was made available under the MIT license. See the ``LICENSE.txt`` file.
 
-The original code can be found [here](https://github.com/match-theory/match-theory)/
+The original code can be found [here](https://github.com/match-theory/match-theory/).
 
 ## Attribution
 
