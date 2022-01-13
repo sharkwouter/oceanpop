@@ -21,7 +21,7 @@ In Match Theory the goal is to reach the target score before running out of move
 There are a couple of different shells to match. From the left, the first 5 all give points. The more matches in one turn the more points. The other 2 have a different effect, though:
 
 - Don't match the **sea urchin**, it will cost points.
-- Match the **bubble** to make the current move free.
+- Match the **bubble** to earn extra moves.
 
 ### Controls
 
@@ -63,7 +63,7 @@ The original code can be found at: https://github.com/match-theory/match-theory
 Some of the assets were made available by the following parties:
 
 - [Shell sprites created by macrovector](https://www.freepik.com/free-vector/sea-fauna-icons_3924735.htm)
-- [Urchin sprite created by macrovector](https://www.freepik.com/free-vector/sea-life-cartoon-icons-set_4265868.htm)
+- [Urchin and sea weed sprites created by macrovector](https://www.freepik.com/free-vector/sea-life-cartoon-icons-set_4265868.htm)
 - [Bubble sprite created by starline](https://www.freepik.com/free-vector/water-bubbles-background-with-text-space_15355945.htm)
 - [Menu background created by Kellie Churchman from Pexels](https://www.pexels.com/photo/landscape-photograph-of-body-of-water-1001682/)
 - [Background 1 created by Pixabay](https://www.pexels.com/photo/scenic-view-of-landscape-against-sky-315998/)
