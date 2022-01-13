@@ -1,6 +1,3 @@
-# Match Theory
-A relaxing open source match 3 puzzle game with a twist.
-
 ![screenshot](screenshot.jpg?raw=true)
 
 ## Features
@@ -9,6 +6,10 @@ Match Theory boasts at least the following features:
 
 - Match 3 gameplay with a twist
 - Full controller support
+- 3 game modes:
+  - Standard mode: complete a set of pre-made levels
+  - Challenge mode: each level has 10 moves and an increasing amount of matches require
+  - Relaxed mode: match without win or lose condition
 
 ## How to play
 
