@@ -50,13 +50,13 @@ This assumes an Xbox controller, but other controllers will work too.
 
 ## Download
 
-Find the latest release can be found here: https://github.com/match-theory/match-theory/releases/latest
+The latest release can be found [here](https://github.com/match-theory/match-theory/releases/latest).
 
 ## License
 
 Match Theory was made available under the MIT license. See the ``LICENSE.txt`` file.
 
-The original code can be found at: https://github.com/match-theory/match-theory
+The original code can be found [here](https://github.com/match-theory/match-theory)/
 
 ## Attribution
 
