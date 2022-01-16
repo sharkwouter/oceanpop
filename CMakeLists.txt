@@ -34,7 +34,7 @@ if (VITA)
 
 
      # Project start
-     set(VITA_APPNAME Oceanpop)
+     set(VITA_APPNAME OceanPop)
      set(VITA_TITLEID "OPOP00001")
      set(VITA_VERSION "01.00")
 
@@ -132,7 +132,7 @@ elseif(PLATFORM_PSP)
           ICON_PATH NULL
           BACKGROUND_PATH NULL
           PREVIEW_PATH NULL
-          TITLE Oceanpop
+          TITLE OceanPop
      )
 
      file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/assets)
