@@ -1,6 +1,6 @@
 # Building
 
-This document contains information on how to build Oceanpop for each supported platform.
+This document contains information on how to build OceanPop for each supported platform.
 
 For each platform the instrutions assume that the code has already been downloaded. When this isn't the case yet, head over to the [Github page](https://github.com/sharkwouter/oceanpop) to download the latest version of the code or clone it with the following git command:
 

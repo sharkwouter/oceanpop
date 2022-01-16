@@ -1,8 +1,8 @@
 # Contributing
 
-Thank you for considering contributing to Oceanpop.
+Thank you for considering contributing to OceanPop.
 
-There are many ways to contribute to Oceanpop, for example you can submit bug reports, write code or modify code comments to make them more clear.
+There are many ways to contribute to OceanPop, for example you can submit bug reports, write code or modify code comments to make them more clear.
 
 When contributing, please follow this guidelines:
 

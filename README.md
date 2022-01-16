@@ -2,7 +2,7 @@
 
 ## Features
 
-Oceanpop boasts at least the following features:
+OceanPop boasts at least the following features:
 
 - Match 3 gameplay with a twist
 - Full controller support
@@ -13,7 +13,7 @@ Oceanpop boasts at least the following features:
 
 ## How to play
 
-In Oceanpop the goal is to reach the target score before running out of moves. Earn points by lining up 3 or more shells of the same type. This is done by moving one shell as far horizontally or vertically as the user would like, but it can only be placed if it creates a match. Each time this is done, a move is used.
+In OceanPop the goal is to reach the target score before running out of moves. Earn points by lining up 3 or more shells of the same type. This is done by moving one shell as far horizontally or vertically as the user would like, but it can only be placed if it creates a match. Each time this is done, a move is used.
 
 ### Shells
 
@@ -26,7 +26,7 @@ There are a couple of different shells to match. From the left, the first 5 all 
 
 ### Controls
 
-Oceanpop can be played with a keyboard, mouse or gamepad. Here each will be listed.
+OceanPop can be played with a keyboard, mouse or gamepad. Here each will be listed.
 
 #### Keyboard
 
@@ -55,7 +55,7 @@ The latest release can be found [here](https://github.com/sharkwouter/oceanpop/r
 
 ## License
 
-Oceanpop was made available under the MIT license. See the ``LICENSE.txt`` file.
+OceanPop was made available under the MIT license. See the ``LICENSE.txt`` file.
 
 The original code can be found [here](https://github.com/sharkwouter/oceanpop/).
 
