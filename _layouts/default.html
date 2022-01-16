@@ -23,8 +23,11 @@
         </header>
         <section id="downloads" class="clearfix">
           {% if site.show_downloads %}
-          <a href="{{ site.github.zip_url }}" id="download-zip" class="button"><span>Download for Windows</span></a>
-          <a href="{{ site.github.tar_url }}" id="download-tar-gz" class="button"><span>Download .tar.gz</span></a>
+          <a href="{{ site.github.respository_url }}/releases/download/latest/match-theory-windows.zip" id="download-zip" class="button"><span>Download for Windows</span></a>
+          <a href="{{ site.github.respository_url }}/releases/download/latest/match-theory-ubuntu.zip" id="download-zip" class="button"><span>Download for Linux</span></a>
+          <a href="{{ site.github.respository_url }}/releases/download/latest/match-theory-vita.zip" id="download-zip" class="button"><span>Download for Playstation Vita</span></a>
+          <a href="{{ site.github.respository_url }}/releases/download/latest/match-theory-psp.zip" id="download-zip" class="button"><span>Download for Playstation Portable</span></a>
+          <a href="{{ site.github.tar_url }}" id="download-tar-gz" class="button"><span>Download source code</span></a>
           {% endif %}
 	{% if site.github.public %}
 	  {% if site.github.is_project_page %}
