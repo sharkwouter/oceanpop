@@ -65,6 +65,7 @@ private:
 
     SDL_Texture * text_plus_one = NULL;
     SDL_Texture * text_minus_three = NULL;
+    SDL_Texture * text_plus_three = NULL;
 
     SDL_Rect rect_matches;
     SDL_Rect rect_moves;

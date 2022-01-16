@@ -22,6 +22,16 @@ BoardManager::~BoardManager() {
     SDL_DestroyTexture(text_level);
     SDL_DestroyTexture(text_matches);
     SDL_DestroyTexture(text_moves);
+
+    if(text_plus_one != NULL) {
+        SDL_DestroyTexture(text_plus_one);
+    }
+    if(text_plus_three != NULL) {
+        SDL_DestroyTexture(text_plus_three);
+    }
+    if(text_minus_three != NULL) {
+        SDL_DestroyTexture(text_minus_three);
+    }
 }
 
 void BoardManager::loadLevel(int x, int y, int width, int height, int moves, int required_matches, int level, int seed) {
@@ -456,16 +466,22 @@ void BoardManager::drawMatches(SDL_Renderer * renderer) {
     if (this->text_plus_one == NULL) {
         this->text_plus_one = fonts->getTexture(renderer, "+1", false, {255, 255, 255, 255});
     }
-    if (this->text_minus_three == NULL) {
+    if (!this->isRelaxedMode && this->text_minus_three == NULL) {
         this->text_minus_three = fonts->getTexture(renderer, "-3", false, {0, 0, 0, 255});
+    }
+    if (this->isRelaxedMode && this->text_plus_three == NULL) {
+        this->text_plus_three = fonts->getTexture(renderer, "+3", false, {255, 255, 255, 255});
     }
 
     for(Match match : this->matches_made) {
-        if (match.type != ShellType::BUBBLE) {
+        if (this->isRelaxedMode || match.type != ShellType::BUBBLE) {
             // Draw the score text
             SDL_Texture * text = text_plus_one;
             if (match.type == ShellType::URCHIN) {
                 text = text_minus_three;
+            }
+            if (match.type == ShellType::BUBBLE) {
+                text = text_plus_three;
             }
 
             SDL_Rect rect_plus_one = {SHELL_SIZE * match.x + this->rect_board.x, SHELL_SIZE * match.y + this->rect_board.y, 0, 0};
