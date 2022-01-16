@@ -26,7 +26,10 @@ BoardManager::~BoardManager() {
 
 void BoardManager::loadLevel(int x, int y, int width, int height, int moves, int required_matches, int level, int seed) {
     this->seed = seed;
-    storeLevel(x, y, new Board(width, height, seed), moves, required_matches, level);
+    if (required_matches == 0) {
+        this->isRelaxedMode = true;
+    }
+    storeLevel(x, y, new Board(width, height, seed, this->isRelaxedMode), moves, required_matches, level);
     this->preview = this->board->getShells();
     this->current_action = Action::PICKING;
 }
@@ -34,7 +37,10 @@ void BoardManager::loadLevel(int x, int y, int width, int height, int moves, int
 void BoardManager::loadLevel(int x, int y, std::vector<std::vector<ShellType>> shells, int moves, int required_matches, int level, int seed) {
     this->starting_shells = shells;
     this->seed = seed;
-    storeLevel(x, y, new Board(shells, seed), moves, required_matches, level);
+    if (required_matches == 0) {
+        this->isRelaxedMode = true;
+    }
+    storeLevel(x, y, new Board(shells, seed, this->isRelaxedMode), moves, required_matches, level);
     this->preview = this->board->getShells();
     this->current_action = Action::PICKING;
 }
@@ -56,9 +62,6 @@ void BoardManager::storeLevel(int x, int y, Board * board, int moves, int requir
 
     this->matches = 0;
     this->required_matches = required_matches;
-    if (this->required_matches == 0) {
-        this->isRelaxedMode = true;
-    }
 
     this->matches_updated = true;
 

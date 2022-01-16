@@ -1,7 +1,8 @@
 #include "Board.hpp"
 
-Board::Board(int width, int height, int seed) {
+Board::Board(int width, int height, int seed, bool isRelaxedMode) {
     this-> seed = seed;
+    this->isRelaxedMode = isRelaxedMode;
    // Create the shells vector
    this->shells.reserve(width);
     for (int x = 0; x < width; x++) {
@@ -19,8 +20,9 @@ Board::Board(int width, int height, int seed) {
     }
 }
 
-Board::Board(std::vector<std::vector<ShellType>> shells, int seed) {
+Board::Board(std::vector<std::vector<ShellType>> shells, int seed, bool isRelaxedMode) {
     this->seed = seed;
+    this->isRelaxedMode = isRelaxedMode;
     this->shells = shells;
 }
 
@@ -93,7 +95,7 @@ std::vector<Shell> Board::dropShells() {
 void Board::dropNewShell(int x) {
     if (getCount(ShellType::BUBBLE) < 6 && (this->rand() % 20) == 1) {
         this->shells[x][0] = ShellType::BUBBLE;
-    } else if (getCount(ShellType::URCHIN) < 8 && (this->rand() % 20) == 1) {
+    } else if (!this->isRelaxedMode && getCount(ShellType::URCHIN) < 8 && (this->rand() % 20) == 1) {
         this->shells[x][0] = ShellType::URCHIN;
     } else {
         this->shells[x][0] = (ShellType) (this->rand() % ((int) ShellType::NUMBER_OF_COLORS - 2));

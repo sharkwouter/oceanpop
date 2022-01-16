@@ -12,6 +12,8 @@ private:
 
     unsigned int seed;
 
+    bool isRelaxedMode;
+
     bool isWithinBounds(SDL_Point point);
     std::vector<Match> getMatches(std::vector<std::vector<ShellType>> shells);
     std::vector<std::vector<ShellType>> getShellsCopy();
@@ -23,8 +25,8 @@ private:
     bool isFalling(int x);
     bool shellsMatch(std::vector<std::vector<ShellType>> shells, SDL_Point p1, SDL_Point p2, SDL_Point p3);
 public:
-    Board(int width, int height, int seed);
-    Board(std::vector<std::vector<ShellType>> shells, int seed);
+    Board(int width, int height, int seed, bool isRelaxedMode=false);
+    Board(std::vector<std::vector<ShellType>> shells, int seed, bool isRelaxedMode=false);
     ~Board();
 
     std::vector<Match> match();
