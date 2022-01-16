@@ -21,6 +21,8 @@ GameState::GameState(SDL_Renderer * renderer, FontManager * fonts, SoundManager 
     this->sounds = sounds;
     this->options = options;
 
+    this->current_theme = (int) Theme::THEME1;
+
     this->total_levels = getTotalLevels();
     loadLevel(this->options->getStandardModeLevel());
 }

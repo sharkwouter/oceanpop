@@ -47,7 +47,7 @@ private:
     int required_matches;
     int width;
     int height;
-    int current_theme = 1;
+    int current_theme;
     std::vector<std::vector<ShellType>> shells;
     SDL_Point position;
 
