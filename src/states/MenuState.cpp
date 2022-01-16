@@ -7,7 +7,7 @@
 MenuState::MenuState(SDL_Renderer * renderer, FontManager * fonts, SoundManager * sounds) : renderer(renderer), fonts(fonts), sounds(sounds),
     theme(renderer, Theme::MENU)
 {
-    this->text_title = fonts->getTexture(renderer, "Oceanpop", true, {COLOR_MENU_TITLE.r, COLOR_MENU_TITLE.g, COLOR_MENU_TITLE.b, COLOR_MENU_TITLE.a});
+    this->text_title = fonts->getTexture(renderer, "OceanPop", true, {COLOR_MENU_TITLE.r, COLOR_MENU_TITLE.g, COLOR_MENU_TITLE.b, COLOR_MENU_TITLE.a});
 
     for (int i = 1; i < ((int) State::EXIT + 1); i++) {
         std::string option_text;
