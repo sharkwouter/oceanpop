@@ -22,16 +22,9 @@ BoardManager::~BoardManager() {
     SDL_DestroyTexture(text_level);
     SDL_DestroyTexture(text_matches);
     SDL_DestroyTexture(text_moves);
-
-    if(text_plus_one != NULL) {
-        SDL_DestroyTexture(text_plus_one);
-    }
-    if(text_plus_three != NULL) {
-        SDL_DestroyTexture(text_plus_three);
-    }
-    if(text_minus_three != NULL) {
-        SDL_DestroyTexture(text_minus_three);
-    }
+    SDL_DestroyTexture(text_plus_one);
+    SDL_DestroyTexture(text_plus_three);
+    SDL_DestroyTexture(text_minus_three);
 }
 
 void BoardManager::loadLevel(int x, int y, int width, int height, int moves, int required_matches, int level, int seed) {
