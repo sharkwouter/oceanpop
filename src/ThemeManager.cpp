@@ -26,7 +26,7 @@ ThemeManager::~ThemeManager() {
         Mix_FreeMusic(this->music);
     }
     if (this->next_music != NULL) {
-        Mix_FreeMusic(this->music);
+        Mix_FreeMusic(this->next_music);
     }
     SDL_DestroyTexture(this->background);
 }
