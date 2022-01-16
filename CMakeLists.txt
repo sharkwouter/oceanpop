@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.10)
 
-project(match-theory VERSION 0.1.0)
+project(oceanpop VERSION 0.1.0)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
@@ -15,9 +15,9 @@ endif()
 
 file(GLOB_RECURSE SRC src/*.cpp)
 if(WIN32)
-     add_executable(match-theory WIN32 ${SRC})
+     add_executable(oceanpop WIN32 ${SRC})
 else()
-     add_executable(match-theory ${SRC})
+     add_executable(oceanpop ${SRC})
 endif()
 
 if (VITA)
@@ -34,21 +34,21 @@ if (VITA)
 
 
      # Project start
-     set(VITA_APPNAME Match-Theory)
-     set(VITA_TITLEID "MATH00001")
+     set(VITA_APPNAME Oceanpop)
+     set(VITA_TITLEID "OPOP00001")
      set(VITA_VERSION "01.00")
 
      set(VITA_INCLUDE_DIR "$ENV{VITASDK}/arm-vita-eabi/include/")
      set(SDL2_INCLUDE_DIR "$ENV{VITASDK}/arm-vita-eabi/include/SDL2")
      set(JSON_INCLUDE_DIR "$ENV{VITASDK}/arm-vita-eabi/include/jsoncpp")
 
-     target_include_directories(match-theory PRIVATE
+     target_include_directories(oceanpop PRIVATE
           ${VITA_INCLUDE_DIR}
           ${SDL2_INCLUDE_DIR}
           ${JSON_INCLUDE_DIR}
      )
 
-     target_link_libraries(match-theory
+     target_link_libraries(oceanpop
           SDL2_image
           SDL2_ttf
           SDL2_mixer
@@ -80,9 +80,9 @@ if (VITA)
           SceMotion_stub
      )
 
-     vita_create_self(match-theory.self match-theory)
+     vita_create_self(oceanpop.self oceanpop)
 
-     vita_create_vpk(match-theory.vpk ${VITA_TITLEID} match-theory.self
+     vita_create_vpk(oceanpop.vpk ${VITA_TITLEID} oceanpop.self
           VERSION ${VITA_VERSION}
           NAME ${VITA_APPNAME}
           FILE platform/vita/sce_sys sce_sys
@@ -96,11 +96,11 @@ if (VITA)
 elseif(PLATFORM_PSP)
      set(SDL2_INCLUDE_DIR "${PSPDEV}/psp/include/SDL2")
 
-     target_include_directories(match-theory PRIVATE
+     target_include_directories(oceanpop PRIVATE
           ${SDL2_INCLUDE_DIR}
      )
 
-     target_link_libraries(match-theory PRIVATE
+     target_link_libraries(oceanpop PRIVATE
           SDL2_image
           SDL2_mixer
           SDL2
@@ -128,11 +128,11 @@ elseif(PLATFORM_PSP)
      )
 
      create_pbp_file(
-          TARGET match-theory
+          TARGET oceanpop
           ICON_PATH NULL
           BACKGROUND_PATH NULL
           PREVIEW_PATH NULL
-          TITLE Match-Theory
+          TITLE Oceanpop
      )
 
      file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/assets)
@@ -156,7 +156,7 @@ elseif(WIN32)
      find_package(sdl2-mixer CONFIG REQUIRED)
      find_package(jsoncpp CONFIG REQUIRED)
 
-     target_link_libraries(match-theory PRIVATE
+     target_link_libraries(oceanpop PRIVATE
           SDL2::SDL2
           SDL2::SDL2main
           SDL2::SDL2_image
@@ -166,7 +166,7 @@ elseif(WIN32)
           jsoncpp_object
           JsonCpp::JsonCpp
      )
-     target_include_directories(match-theory PRIVATE
+     target_include_directories(oceanpop PRIVATE
           ${SDL2_INCLUDE_DIRS}
           ${SDL2_IMAGE_INCLUDE_DIRS}
           ${SDL2_TTF_INCLUDE_DIRS}
@@ -188,9 +188,9 @@ else()
      pkg_search_module(SDL2_MIXER REQUIRED SDL2_mixer)
 	pkg_search_module(JSONCPP REQUIRED jsoncpp)
 
-     target_include_directories(match-theory PRIVATE ${SDL2_INCLUDE_DIRS} ${JSONCPP_INCLUDE_DIRS})
+     target_include_directories(oceanpop PRIVATE ${SDL2_INCLUDE_DIRS} ${JSONCPP_INCLUDE_DIRS})
      
-     target_link_libraries(match-theory
+     target_link_libraries(oceanpop
           ${SDL2_TTF_LIBRARIES}
           ${SDL2_IMAGE_LIBRARIES}
           ${SDL2_MIXER_LIBRARIES}

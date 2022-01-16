@@ -1,11 +1,11 @@
 # Building
 
-This document contains information on how to build Match Theory for each supported platform.
+This document contains information on how to build Oceanpop for each supported platform.
 
-For each platform the instrutions assume that the code has already been downloaded. When this isn't the case yet, head over to the [Github page](https://github.com/match-theory/match-theory) to download the latest version of the code or clone it with the following git command: 
+For each platform the instrutions assume that the code has already been downloaded. When this isn't the case yet, head over to the [Github page](https://github.com/sharkwouter/oceanpop) to download the latest version of the code or clone it with the following git command:
 
 ```
-git clone https://github.com/match-theory/match-theory.git
+git clone https://github.com/sharkwouter/oceanpop.git
 ```
 
 ## Ubuntu
@@ -28,7 +28,7 @@ make
 Then the game can be started with:
 
 ```
-./match-theory
+./oceanpop
 ```
 
 ## Windows
@@ -46,7 +46,7 @@ cmake -DCMAKE_TOOLCHAIN_FILE=C:\vcpkg\scripts\buildsystems\vcpkg.cmake .
 cmake --build .
 ```
 
-Then the game can be started through ``match-theory.exe`` in the resulting ``Debug`` directory.
+Then the game can be started through ``oceanpop.exe`` in the resulting ``Debug`` directory.
 
 
 ## Playstation Vita
@@ -62,7 +62,7 @@ cmake -DCMAKE_TOOLCHAIN_FILE="${VITASDK}/share/vita.toolchain.cmake" ..
 make
 ```
 
-The resulting ``match-theory.vpk`` file can be copied to the Vita and installed with Vitashell. Then it can be started from the home screen.
+The resulting ``oceanpop.vpk`` file can be copied to the Vita and installed with Vitashell. Then it can be started from the home screen.
 
 ## Playstation Portable
 
@@ -77,4 +77,4 @@ psp-cmake ..
 make
 ```
 
-The resulting ``EBOOT.PBP`` and ``assets`` directory can be copied into the ``PSP/GAME/Match-Theory`` directory on the PSP memory card. If this directory does not exist yet, create it.
+The resulting ``EBOOT.PBP`` and ``assets`` directory can be copied into the ``PSP/GAME/oceanpop`` directory on the PSP memory card. If this directory does not exist yet, create it.

@@ -17,13 +17,13 @@ jobs:
         run: |
           cmake -DCMAKE_BUILD_TYPE=Release .
           make
-          strip --strip-unneeded match-theory
+          strip --strip-unneeded oceanpop
       - name: Publish artifacts
         uses: actions/upload-artifact@v2
         with:
-          name: match-theory-ubuntu
+          name: oceanpop-ubuntu
           path: |
-            match-theory
+            oceanpop
             assets
             LICENSE.txt
             README.md
@@ -45,7 +45,7 @@ jobs:
       - name: Publish artifacts
         uses: actions/upload-artifact@v2
         with:
-          name: match-theory-windows
+          name: oceanpop-windows
           path: |
             Release
 
@@ -60,8 +60,8 @@ jobs:
         uses: actions/checkout@v2
       - name: Build
         run: |
-          mkdir match-theory
-          cd match-theory
+          mkdir oceanpop
+          cd oceanpop
           cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=$PSPDEV/psp/share/pspdev.cmake ..
           make
           cp ../LICENSE.txt ./
@@ -69,12 +69,12 @@ jobs:
       - name: Publish artifacts
         uses: actions/upload-artifact@v2
         with:
-          name: match-theory-psp
+          name: oceanpop-psp
           path: |
-            match-theory/EBOOT.PBP
-            match-theory/assets
-            match-theory/LICENSE.txt
-            match-theory/README.md
+            oceanpop/EBOOT.PBP
+            oceanpop/assets
+            oceanpop/LICENSE.txt
+            oceanpop/README.md
 
   Vita:
     runs-on: ubuntu-latest
@@ -89,9 +89,9 @@ jobs:
       - name: Publish artifacts
         uses: actions/upload-artifact@v2
         with:
-          name: match-theory-vita
+          name: oceanpop-vita
           path: |
-            match-theory.vpk
+            oceanpop.vpk
             LICENSE.txt
             README.md
 
@@ -109,12 +109,12 @@ jobs:
     - uses: actions/download-artifact@v2
     - name: Zip artifacts
       run: |
-        zip -r match-theory-${{matrix.build}}.zip match-theory-${{matrix.build}}
+        zip -r oceanpop-${{matrix.build}}.zip oceanpop-${{matrix.build}}
     - name: Create pre-release
       if: github.ref == 'refs/heads/master'
       uses: softprops/action-gh-release@v1
       with:
-        files: match-theory-${{matrix.build}}.zip
+        files: oceanpop-${{matrix.build}}.zip
         prerelease: true
         name: "Development build"
         tag_name: "latest"
@@ -124,7 +124,7 @@ jobs:
       if: startsWith(github.ref, 'refs/tags/')
       uses: softprops/action-gh-release@v1
       with:
-        files: match-theory-${{matrix.build}}.zip
+        files: oceanpop-${{matrix.build}}.zip
         tag_name: ${{ steps.tag.outputs.VERSION }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

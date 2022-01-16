@@ -1,8 +1,8 @@
 # Contributing
 
-Thank you for considering contributing to Match Theory.
+Thank you for considering contributing to Oceanpop.
 
-There are many ways to contribute to Match Theory, for example you can submit bug reports, write code or modify code comments to make them more clear.
+There are many ways to contribute to Oceanpop, for example you can submit bug reports, write code or modify code comments to make them more clear.
 
 When contributing, please follow this guidelines:
 

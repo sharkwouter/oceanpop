@@ -30,7 +30,7 @@
 *.exe
 *.out
 *.app
-match-theory
+oceanpop
 
 # IDEs and text editors
 .vscode
