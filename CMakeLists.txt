@@ -129,7 +129,7 @@ elseif(PLATFORM_PSP)
 
      create_pbp_file(
           TARGET oceanpop
-          ICON_PATH NULL
+          ICON_PATH ${CMAKE_SOURCE_DIR}/platform/psp/icon.png
           BACKGROUND_PATH NULL
           PREVIEW_PATH NULL
           TITLE OceanPop
