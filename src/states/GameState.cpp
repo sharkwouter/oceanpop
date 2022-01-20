@@ -105,7 +105,7 @@ void GameState::draw(SDL_Renderer *renderer) {
 int GameState::getTotalLevels() {
     int levels = 0;
 
-    std::filesystem::directory_iterator level_files("assets/levels/");
+    std::filesystem::directory_iterator level_files(getResourcePath("assets/levels/"));
     int highest_level = 0;
     for (auto &entry : level_files) {
         if (std::regex_match(entry.path().string(), level_regex)) {
@@ -141,7 +141,7 @@ void GameState::loadLevel(int level) {
 
     std::sprintf(filename, filename_base, this->level);
     SDL_Log("Loading level: %s", filename);
-    levelStream.open(filename, std::ios::binary);
+    levelStream.open(getResourcePath(filename).c_str(), std::ios::binary);
     Json::parseFromStream(builder, levelStream, &json, &errors);
     levelStream.close();
     free(filename);

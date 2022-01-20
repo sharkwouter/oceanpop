@@ -15,7 +15,7 @@ TextureManager::~TextureManager() {
 }
 
 void TextureManager::add_texture(const std::string &file, SDL_Renderer *renderer) {
-    SDL_Surface *img = IMG_Load(file.c_str());
+    SDL_Surface *img = IMG_Load(getResourcePath(file).c_str());
 
     if (img == nullptr) {
         panic("couldn't load image: " + std::string(IMG_GetError()));

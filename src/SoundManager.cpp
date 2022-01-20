@@ -1,5 +1,7 @@
 #include "SoundManager.hpp"
 
+#include "utils.hpp"
+
 SoundManager::SoundManager(OptionManager * options) : options(options) {
     this->uneven_match = false;
     load();
@@ -16,13 +18,13 @@ SoundManager::~SoundManager() {
 }
 
 void SoundManager::load() {
-    sound_pick = Mix_LoadWAV("assets/sounds/pick.wav");
-    sound_drop = Mix_LoadWAV("assets/sounds/drop.wav");
-    sound_match1 = Mix_LoadWAV("assets/sounds/match1.wav");
-    sound_match2 = Mix_LoadWAV("assets/sounds/match2.wav");
-    sound_pain = Mix_LoadWAV("assets/sounds/pain.wav");
-    sound_completed = Mix_LoadWAV("assets/sounds/completed.wav");
-    sound_failed = Mix_LoadWAV("assets/sounds/failed.wav");
+    sound_pick = Mix_LoadWAV(getResourcePath("assets/sounds/pick.wav").c_str());
+    sound_drop = Mix_LoadWAV(getResourcePath("assets/sounds/drop.wav").c_str());
+    sound_match1 = Mix_LoadWAV(getResourcePath("assets/sounds/match1.wav").c_str());
+    sound_match2 = Mix_LoadWAV(getResourcePath("assets/sounds/match2.wav").c_str());
+    sound_pain = Mix_LoadWAV(getResourcePath("assets/sounds/pain.wav").c_str());
+    sound_completed = Mix_LoadWAV(getResourcePath("assets/sounds/completed.wav").c_str());
+    sound_failed = Mix_LoadWAV(getResourcePath("assets/sounds/failed.wav").c_str());
 
     if (sound_drop == NULL ||
         sound_drop == NULL ||

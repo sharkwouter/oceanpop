@@ -66,16 +66,16 @@ void ThemeManager::loadMusic(Theme theme) {
     }
     switch (theme) {
         case Theme::THEME1:
-            this->next_music = Mix_LoadMUS("assets/music/song1.mp3");
+            this->next_music = Mix_LoadMUS(getResourcePath("assets/music/song1.mp3").c_str());
             break;
         case Theme::THEME2:
-            this->next_music = Mix_LoadMUS("assets/music/song2.mp3");
+            this->next_music = Mix_LoadMUS(getResourcePath("assets/music/song2.mp3").c_str());
             break;
         case Theme::THEME3:
-            this->next_music = Mix_LoadMUS("assets/music/song3.mp3");
+            this->next_music = Mix_LoadMUS(getResourcePath("assets/music/song3.mp3").c_str());
             break;
         case Theme::THEME4:
-            this->next_music = Mix_LoadMUS("assets/music/song4.mp3");
+            this->next_music = Mix_LoadMUS(getResourcePath("assets/music/song4.mp3").c_str());
             break;
         default:
             this->next_music = NULL;
@@ -170,7 +170,7 @@ void ThemeManager::unpause() {
 
 
 SDL_Texture * ThemeManager::createBackgroundTexture(std::string filename) {
-    std::string path = "assets/backgrounds/" + filename;
+    std::string path = getResourcePath("assets/backgrounds/" + filename);
     SDL_Surface *img = IMG_Load(path.c_str());
 
     if (img == nullptr) {

@@ -9,4 +9,6 @@ inline void todo() {
     panic("not yet implemented");
 }
 
+std::string getResourcePath(std::string file);
+
 #endif // UTILS_HPP
