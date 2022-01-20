@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=OceanPop
+GenericName=Match 3 game
+Comment=A relaxing match 3 puzzle game with a twist
+Exec=oceanpop
+Icon=@install_prefix@/share/icons/128x128/oceanpop.png
+Type=Application
+Keywords=match3;games;game;
+Categories=Game;
+StartupWMClass=oceanpop
