@@ -18,8 +18,7 @@ jobs:
           cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr .
           make
           strip --strip-unneeded oceanpop
-          mkdir AppDir
-          make install DESTDIR=Appdir
+          make install DESTDIR=AppDir
           wget https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage
           chmod +x linuxdeploy*.AppImage
           ./linuxdeploy-x86_64.AppImage --appdir AppDir --output appimage
