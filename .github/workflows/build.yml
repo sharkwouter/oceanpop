@@ -4,27 +4,31 @@ on:
   push:
 
 jobs:
-  Ubuntu:
+  Linux:
     runs-on: ubuntu-latest
     steps:
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y cmake libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev libjsoncpp-dev
+          sudo apt-get install -y wget cmake libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev libjsoncpp-dev
       - name: Checkout
         uses: actions/checkout@v2
       - name: Build
         run: |
-          cmake -DCMAKE_BUILD_TYPE=Release .
+          cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr .
           make
           strip --strip-unneeded oceanpop
+          mkdir AppDir
+          make install DESTDIR=Appdir
+          wget https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage
+          chmod +x linuxdeploy*.AppImage
+          ./linuxdeploy-x86_64.AppImage --appdir AppDir --output appimage
       - name: Publish artifacts
         uses: actions/upload-artifact@v2
         with:
-          name: oceanpop-ubuntu
+          name: oceanpop-linux
           path: |
-            oceanpop
-            assets
+            *.AppImage
             LICENSE.txt
             README.md
 
@@ -96,11 +100,11 @@ jobs:
             README.md
 
   Publish:
-    needs: [Ubuntu, Windows, PSP, Vita]
+    needs: [Linux, Windows, PSP, Vita]
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        build: [ubuntu, windows, psp, vita]
+        build: [linux, windows, psp, vita]
     steps:
     - name: Extract tag name
       if: startsWith(github.ref, 'refs/tags/')
