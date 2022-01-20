@@ -27,7 +27,7 @@ jobs:
         with:
           name: oceanpop-linux
           path: |
-            *.AppImage
+            OceanPop*.AppImage
             LICENSE.txt
             README.md
 
