@@ -201,15 +201,10 @@ else()
      file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/assets
           DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 
-     # Set icon path in desktop file
-     file(READ ${CMAKE_CURRENT_SOURCE_DIR}/platform/unix/oceanpop.desktop FILE_CONTENTS)
-     string(REPLACE "@install_prefix@" ${CMAKE_INSTALL_PREFIX} FILE_CONTENTS ${FILE_CONTENTS})
-     file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/oceanpop.desktop ${FILE_CONTENTS})
-
      # Set install paths
      install(TARGETS oceanpop DESTINATION bin)
      install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/assets DESTINATION share/oceanpop)
-     install(FILES ${CMAKE_CURRENT_BINARY_DIR}/oceanpop.desktop DESTINATION share/applications)
+     install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/platform/unix/oceanpop.desktop DESTINATION share/applications)
      install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/platform/unix/icons DESTINATION share)
      install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/README.md DESTINATION share/doc/oceanpop)
 endif()
