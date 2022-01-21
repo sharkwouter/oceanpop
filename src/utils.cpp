@@ -9,7 +9,13 @@ void panic(const std::string &reason) {
 }
 
 std::string getResourcePath(std::string file) {
-    std::string path = SDL_GetBasePath();
+    std::string path = "";
+
+    char * base_path = SDL_GetBasePath();
+    if (base_path) {
+        path += base_path;
+        SDL_free(base_path);
+    }
 
     #if !defined(WIN32) && !defined(__PSP__) && !defined(__vita__)
         std::string share = path + "../share/oceanpop/";
