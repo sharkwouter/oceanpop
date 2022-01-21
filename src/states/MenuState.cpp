@@ -72,7 +72,6 @@ void MenuState::handleEvents(std::vector<Event> events) {
                 this->done = true;
                 break;
             case Event::QUIT:
-            case Event::CANCEL:
                 this->current_option = (int) State::EXIT  - 1;
                 this->done = true;
                 break;
