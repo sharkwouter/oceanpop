@@ -9,7 +9,16 @@
 #include "utils.hpp"
 
 OptionManager::OptionManager() {
-    this->optionsFile = SDL_GetPrefPath(NULL,"oceanpop") + std::string("options.json");
+    // Set path of options file
+    this->optionsFile = "";
+    char * pref_path = SDL_GetPrefPath(NULL,"oceanpop");
+    if (pref_path) {
+        this->optionsFile += pref_path;
+        SDL_free(pref_path);
+    }
+    this->optionsFile += "options.json";
+
+    // Load configuration
     load();
 }
 
@@ -21,7 +30,7 @@ void OptionManager::load() {
     Json::CharReaderBuilder builder;
     std::ifstream optionsStream;
     JSONCPP_STRING errors;
-    bool errors_found = false;
+    bool parsing_failed = false;
 
     optionsStream.open(this->optionsFile, std::ios::in);
     try {
@@ -30,11 +39,11 @@ void OptionManager::load() {
         // Make sure the file can be read
         this->options.get("test", 1).asInt();
     } catch (...) {
-        errors_found = true;
+        parsing_failed = true;
     }
     optionsStream.close();
 
-    if(errors_found) {
+    if(parsing_failed) {
         SDL_Log("Couldn't load configuration at %s", this->optionsFile.c_str());
         if (std::filesystem::remove(this->optionsFile)) {
             SDL_Log("Deleted %s", this->optionsFile.c_str());
@@ -46,7 +55,7 @@ void OptionManager::load() {
     }
 
     if (!errors.empty()) {
-        SDL_Log("Could not parse configuration at %s: %s", this->optionsFile.c_str(), errors.c_str());
+        SDL_Log("Got warning while parsing configuration %s: %s", this->optionsFile.c_str(), errors.c_str());
         return;
     }
 
