@@ -31,6 +31,7 @@ void HighscoreState::handleEvents(std::vector<Event> events) {
     for(Event event :events) {
         switch (event) {
             case Event::QUIT:
+            case Event::MENU:
             case Event::CANCEL:
             case Event::CONFIRM:
                 this->done = true;

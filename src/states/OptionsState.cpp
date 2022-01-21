@@ -105,6 +105,7 @@ void OptionsState::handleEvents(std::vector<Event> events) {
                 }
                 break;
             case Event::QUIT:
+            case Event::MENU:
             case Event::CANCEL:
                 this->done = true;
                 break;
