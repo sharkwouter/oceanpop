@@ -36,17 +36,18 @@ Then the game can be started with:
 On Windows make sure [vcpkg](https://vcpkg.io/) and cmake are installed and in your PATH. Then install the following packages with it:
 
 ```
-vcpkg install --triplet x64-windows sdl2 sdl2-image[libjpeg-turbo] sdl2-ttf sdl2-mixer[libvorbis,mpg123] jsoncpp
+vcpkg install --triplet x64-windows-static sdl2 sdl2-image[libjpeg-turbo] sdl2-ttf sdl2-mixer[libvorbis,mpg123] jsoncpp
 ```
 
 To build execute the following commands from a terminal in the directory where the code is found:
 
 ```
-cmake -DCMAKE_TOOLCHAIN_FILE=C:\vcpkg\scripts\buildsystems\vcpkg.cmake .
-cmake --build .
+cmake -DCMAKE_TOOLCHAIN_FILE=C:\vcpkg\scripts\buildsystems\vcpkg.cmake -DVCPKG_TARGET_TRIPLET=x64-windows-static .
+cmake --build . --config Release
+cp Release/oceanpop.exe .
 ```
 
-Then the game can be started through ``oceanpop.exe`` in the resulting ``Debug`` directory.
+Then the game can be started through ``oceanpop.exe`.
 
 
 ## Playstation Vita
