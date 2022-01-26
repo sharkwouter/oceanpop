@@ -15,7 +15,7 @@ endif()
 
 file(GLOB_RECURSE SRC src/*.cpp)
 if(WIN32)
-     add_executable(oceanpop WIN32 ${SRC})
+     add_executable(oceanpop WIN32 ${SRC} ${CMAKE_CURRENT_SOURCE_DIR}/platform/windows/appicon.rc)
 else()
      add_executable(oceanpop ${SRC})
 endif()
