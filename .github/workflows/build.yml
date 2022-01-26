@@ -36,21 +36,23 @@ jobs:
     steps:
       - name: Install dependencies
         run: |
-          vcpkg install --triplet x64-windows sdl2 sdl2-image[libjpeg-turbo] sdl2-ttf sdl2-mixer[mpg123] jsoncpp
+          vcpkg install --triplet x64-windows-static sdl2 sdl2-image[libjpeg-turbo] sdl2-ttf sdl2-mixer[mpg123] jsoncpp
       - name: Checkout
         uses: actions/checkout@v2
       - name: Build
         run: |
-          cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=C:\vcpkg\scripts\buildsystems\vcpkg.cmake -D-DVCPKG_TARGET_TRIPLET=x64-windows -A x64 .
+          cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=C:\vcpkg\scripts\buildsystems\vcpkg.cmake -D-DVCPKG_TARGET_TRIPLET=x64-windows-static .
           cmake --build . --config Release
-          cp LICENSE.txt Release
-          cp README.md Release
+          cp Release/oceanpop.exe .
       - name: Publish artifacts
         uses: actions/upload-artifact@v2
         with:
           name: oceanpop-windows
           path: |
-            Release
+            oceanpop.exe
+            assets
+            LICENSE.txt
+            README.md
 
   PSP:
     runs-on: ubuntu-latest

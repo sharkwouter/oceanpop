@@ -20,6 +20,10 @@ else()
      add_executable(oceanpop ${SRC})
 endif()
 
+if(WIN32)
+     option(BUILD_STATIC "Build a static binary (Windows only)" ON)
+endif()
+
 if (VITA)
      # VITASDK defines
      if(NOT DEFINED CMAKE_TOOLCHAIN_FILE)
@@ -150,22 +154,50 @@ elseif(PLATFORM_PSP)
           DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/assets)
 
 elseif(WIN32)
-     find_package(SDL2 CONFIG REQUIRED)
-     find_package(sdl2-image CONFIG REQUIRED)
-     find_package(sdl2-ttf CONFIG REQUIRED)
-     find_package(sdl2-mixer CONFIG REQUIRED)
-     find_package(jsoncpp CONFIG REQUIRED)
+     if(BUILD_STATIC)
+          set(CompilerFlags
+               CMAKE_CXX_FLAGS
+               CMAKE_CXX_FLAGS_DEBUG
+               CMAKE_CXX_FLAGS_RELEASE
+               CMAKE_CXX_FLAGS_MINSIZEREL
+               CMAKE_CXX_FLAGS_RELWITHDEBINFO
+               CMAKE_C_FLAGS
+               CMAKE_C_FLAGS_DEBUG
+               CMAKE_C_FLAGS_RELEASE
+               CMAKE_C_FLAGS_MINSIZEREL
+               CMAKE_C_FLAGS_RELWITHDEBINFO
+          )
+          foreach(CompilerFlag ${CompilerFlags})
+          string(REPLACE "/MD" "/MT" ${CompilerFlag} "${${CompilerFlag}}")
+          set(${CompilerFlag} "${${CompilerFlag}}" CACHE STRING "msvc compiler flags" FORCE)
+          message("MSVC flags: ${CompilerFlag}:${${CompilerFlag}}")
+          endforeach()
+     endif()
+
+    find_package(jsoncpp CONFIG REQUIRED)
+    find_package(SDL2 CONFIG REQUIRED)
+    find_package(sdl2-image CONFIG REQUIRED)
+    find_package(sdl2-mixer CONFIG REQUIRED)
+    find_package(sdl2-ttf CONFIG REQUIRED)
 
      target_link_libraries(oceanpop PRIVATE
           SDL2::SDL2
           SDL2::SDL2main
           SDL2::SDL2_image
-          SDL2::SDL2_ttf
           SDL2::SDL2_mixer
-          jsoncpp_lib
+          SDL2::SDL2_ttf
           jsoncpp_object
           JsonCpp::JsonCpp
      )
+
+     if(BUILD_STATIC)
+          target_link_libraries(oceanpop PRIVATE
+               SDL2::SDL2-static
+               jsoncpp_static
+               Shlwapi
+          )
+     endif()
+
      target_include_directories(oceanpop PRIVATE
           ${SDL2_INCLUDE_DIRS}
           ${SDL2_IMAGE_INCLUDE_DIRS}
@@ -173,12 +205,6 @@ elseif(WIN32)
           ${SDL2_MIXER_INCLUDE_DIRS}
           ${JSONCPP_INCLUDE_DIRS}
      )
-     if(NOT CMAKE_BUILD_TYPE MATCHES "Release")
-         set(CMAKE_BUILD_TYPE "Debug")
-     endif()
-     
-     file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/assets
-          DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/${CMAKE_BUILD_TYPE}/)
 else()
      include(FindPkgConfig)
 
