@@ -64,6 +64,7 @@ void Window::present() {
 Window::~Window() {
     SDL_DestroyRenderer(this->renderer);
     SDL_DestroyWindow(this->window);
+    Mix_Quit();
     Mix_CloseAudio();
     TTF_Quit();
     IMG_Quit();
