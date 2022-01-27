@@ -2,7 +2,8 @@
 
 #include "utils.hpp"
 
-ThemeManager::ThemeManager(SDL_Renderer * renderer, OptionManager * options, Theme theme) : renderer(renderer) {
+ThemeManager::ThemeManager(SDL_Renderer * renderer, OptionManager * options, Theme theme, bool isRelaxedMode) : renderer(renderer) {
+    this->isRelaxedMode = isRelaxedMode;
     this->change_music_on_switch = options->getChangeMusicOnSwitch();
     this->volume = MIX_MAX_VOLUME/8*options->getMusicVolume();
     this->current_volume = this->volume;
@@ -90,7 +91,11 @@ void ThemeManager::update() {
 
     if (!Mix_PlayingMusic()) {
         if (this->next_music == NULL) {
-            nextSong();
+            if (this->isRelaxedMode) {
+                next();
+            } else {
+                nextSong();
+            }
         }
         if (this->music != NULL) {
             Mix_FreeMusic(this->music);

@@ -25,6 +25,8 @@ private:
     int volume;
     int current_volume = 0;
 
+    bool isRelaxedMode = false;
+
     void load(Theme theme);
     void loadBackground(Theme theme);
     void loadMusic(Theme theme);
@@ -34,7 +36,7 @@ private:
     SDL_Texture * createBackgroundTexture(std::string filename);
 public:
     ThemeManager(SDL_Renderer * renderer, Theme theme);
-    ThemeManager(SDL_Renderer * renderer, OptionManager * options, Theme theme);
+    ThemeManager(SDL_Renderer * renderer, OptionManager * options, Theme theme, bool isRelaxedMode=false);
     ~ThemeManager();
 
     void update();
