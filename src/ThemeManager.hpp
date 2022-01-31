@@ -16,8 +16,9 @@ private:
     SDL_Renderer * renderer;
 
     Mix_Music * music = NULL;
-    Mix_Music * next_music = NULL;
     SDL_Texture * background = NULL;
+
+    std::string next_music = "";
 
     #ifdef __PSP__
         std::string music_file_type = "ogg";

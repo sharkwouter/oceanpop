@@ -26,9 +26,6 @@ ThemeManager::~ThemeManager() {
     if (this->music != NULL) {
         Mix_FreeMusic(this->music);
     }
-    if (this->next_music != NULL) {
-        Mix_FreeMusic(this->next_music);
-    }
     SDL_DestroyTexture(this->background);
 }
 
@@ -62,35 +59,32 @@ void ThemeManager::loadBackground(Theme theme) {
 }
 
 void ThemeManager::loadMusic(Theme theme) {
-    if (this->next_music != NULL) {
-        Mix_FreeMusic(this->next_music);
-    }
     switch (theme) {
         case Theme::THEME1:
-            this->next_music = Mix_LoadMUS(getResourcePath("assets/music/song1." + music_file_type).c_str());
+            this->next_music = getResourcePath("assets/music/song1." + music_file_type);
             break;
         case Theme::THEME2:
-            this->next_music = Mix_LoadMUS(getResourcePath("assets/music/song2." + music_file_type).c_str());
+            this->next_music = getResourcePath("assets/music/song2." + music_file_type);
             break;
         case Theme::THEME3:
-            this->next_music = Mix_LoadMUS(getResourcePath("assets/music/song3." + music_file_type).c_str());
+            this->next_music = getResourcePath("assets/music/song3." + music_file_type);
             break;
         case Theme::THEME4:
-            this->next_music = Mix_LoadMUS(getResourcePath("assets/music/song4." + music_file_type).c_str());
+            this->next_music = getResourcePath("assets/music/song4." + music_file_type);
             break;
         default:
-            this->next_music = NULL;
+            this->next_music = "";
             break;
     }
 }
 
 void ThemeManager::update() {
-    if ((this->music == NULL && this->next_music == NULL) || this->paused || this->volume == 0) {
+    if ((this->music == NULL && this->next_music.empty()) || this->paused || this->volume == 0) {
         return;
     }
 
     if (!Mix_PlayingMusic()) {
-        if (this->next_music == NULL) {
+        if (this->next_music.empty()) {
             if (this->isRelaxedMode) {
                 next();
             } else {
@@ -100,8 +94,8 @@ void ThemeManager::update() {
         if (this->music != NULL) {
             Mix_FreeMusic(this->music);
         }
-        this->music = std::move(this->next_music);
-        this->next_music = NULL;
+        this->music = Mix_LoadMUS(this->next_music.c_str());
+        this->next_music = "";
         Mix_PlayMusic(this->music, 0);
     }
 
