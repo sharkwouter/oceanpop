@@ -43,7 +43,7 @@ if [ -n "${MUSICFILETYPE}" ]; then
     mkdir -p "platform/${PLATFORM}/assets/music"
     for music in $(find assets/music/ -type f); do
         music_new_name="$(echo "${music}"|cut -f1 -d".").${MUSICFILETYPE}"
-        ffmpeg -i "${music}" "platform/${PLATFORM}/${music_new_name}"
+        ffmpeg -y -i "${music}" "platform/${PLATFORM}/${music_new_name}"
     done
 fi
 
