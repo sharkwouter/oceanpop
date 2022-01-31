@@ -22,6 +22,7 @@ WORKDIR="${PWD}"
 PLATFORM=${1}
 SHELLSIZE=${2}
 RESOLUTION=${3}
+MUSICFILETYPE=${4}
 SHELLRESOLUTION="$((${SHELLSIZE} * 7))x${SHELLSIZE}"
 
 BACKGROUNDS_DIR="platform/${PLATFORM}/assets/backgrounds"
@@ -37,6 +38,14 @@ convert -background none -density 1200 -resize "${SHELLRESOLUTION}" platform/she
 for background in $(find assets/backgrounds/ -type f); do
     convert -resize "${RESOLUTION}" "${background}" "platform/${PLATFORM}/${background}"
 done
+
+if [ -n "${MUSICFILETYPE}" ]; then
+    mkdir -p "platform/${PLATFORM}/assets/music"
+    for music in $(find assets/music/ -type f); do
+        music_new_name="$(echo "${music}"|cut -f1 -d".").${MUSICFILETYPE}"
+        ffmpeg -i "${music}" "platform/${PLATFORM}/${music_new_name}"
+    done
+fi
 
 echo "The platform directory has been created in platform/${PLATFORM}."
 echo "Please change the shell size in src/constants.h and make sure the assets are copied at build in CMakeLists.txt."

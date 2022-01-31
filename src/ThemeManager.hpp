@@ -19,6 +19,12 @@ private:
     Mix_Music * next_music = NULL;
     SDL_Texture * background = NULL;
 
+    #ifdef __PSP__
+        std::string music_file_type = "ogg";
+    #else
+        std::string music_file_type = "mp3";
+    #endif
+
     bool paused = false;
 
     bool change_music_on_switch;
