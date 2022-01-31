@@ -59,6 +59,11 @@ void ThemeManager::loadBackground(Theme theme) {
 }
 
 void ThemeManager::loadMusic(Theme theme) {
+     #ifdef __PSP__
+        std::string music_file_type = "ogg";
+    #else
+        std::string music_file_type = "mp3";
+    #endif
     switch (theme) {
         case Theme::THEME1:
             this->next_music = getResourcePath("assets/music/song1." + music_file_type);
