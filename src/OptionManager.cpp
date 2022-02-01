@@ -218,7 +218,7 @@ void OptionManager::setRelaxedModeShells(std::vector<std::vector<ShellType>> val
 }
 
 bool OptionManager::getFullscreen() {
-    return this->options.get("fullscreen", false).asBool();
+    return this->options.get("fullscreen", true).asBool();
 }
 
 void OptionManager::setFullscreen(bool value) {
@@ -241,6 +241,15 @@ int OptionManager::getScreenHeight() {
 
 void OptionManager::setScreenHeight(int value) {
     this->options["screen_height"] = value;
+    write();
+}
+
+int OptionManager::getScreenRefreshRate() {
+    return this->options.get("screen_refresh_rate", 0).asInt();
+}
+
+void OptionManager::setScreenRefreshRate(int value) {
+    this->options["screen_refresh_rate"] = value;
     write();
 }
 

@@ -169,7 +169,11 @@ std::string OptionsState::getFullscreenString() {
 }
 
 std::string OptionsState::getResolutionString() {
-    return "Resolution: " + std::to_string(this->options->getScreenWidth()) + "x" + std::to_string(this->options->getScreenHeight());
+    std::string result = "Resolution: " + std::to_string(this->options->getScreenWidth()) + "x" + std::to_string(this->options->getScreenHeight());
+    if (this->options->getScreenRefreshRate() > 0) {
+         result += " (" + std::to_string(this->options->getScreenRefreshRate()) + " hz)";
+    }
+    return result;
 }
 
 void OptionsState::changeChangeMusic() {
@@ -220,23 +224,25 @@ void OptionsState::changeFullscreen() {
 
 void OptionsState::changeResolution(int amount) {
     std::vector<SDL_DisplayMode> modes = getDisplayModes();
-
     if (modes.size() > 1) {
         int new_res;
         int current_res = 0;
         for (size_t i = 0; i < modes.size(); i++) {
-            if (modes[i].w == this->options->getScreenWidth() && modes[i].h == this->options->getScreenHeight()) {
+            if (modes[i].w == this->options->getScreenWidth() && modes[i].h == this->options->getScreenHeight() && modes[i].refresh_rate == this->options->getScreenRefreshRate()) {
                 current_res = i;
             }
         }
+
         new_res = current_res + amount;
         if (new_res < 0) {
             new_res = (((int) modes.size()) - 1);
         } else if (new_res >= ((int) modes.size())) {
             new_res = 0;
         }
+
         this->options->setScreenWidth(modes[new_res].w);
         this->options->setScreenHeight(modes[new_res].h);
+        this->options->setScreenRefreshRate(modes[new_res].refresh_rate);
         SDL_SetWindowDisplayMode(this->window, &modes[new_res]);
         SDL_SetWindowSize(window, modes[new_res].w, modes[new_res].h);
 

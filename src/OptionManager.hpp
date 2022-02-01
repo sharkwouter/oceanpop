@@ -38,6 +38,8 @@ public:
     bool getFullscreen();
     int getScreenWidth();
     int getScreenHeight();
+    int getScreenRefreshRate();
+
     int getShellSize();
 
     void setMusicVolume(int value);
@@ -54,6 +56,7 @@ public:
     void setFullscreen(bool value);
     void setScreenWidth(int value);
     void setScreenHeight(int value);
+    void setScreenRefreshRate(int value);
 
     void resetChallengeMode();
     void resetStandardMode();
