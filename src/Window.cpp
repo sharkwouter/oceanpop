@@ -26,6 +26,16 @@ Window::Window(const std::string &title, OptionManager * options) {
 		panic("couldn't init SDL_mixer: " + std::string(Mix_GetError()));
     }
 
+    // Set default screen resolution and refresh rate if they haven't been set yet
+    if (options->getScreenRefreshRate() == 0) {
+        std::vector<SDL_DisplayMode> modes = getDisplayModes();
+        if (!modes.empty()) {
+            options->setScreenWidth(modes[0].w);
+            options->setScreenHeight(modes[0].h);
+            options->setScreenRefreshRate(modes[0].refresh_rate);
+        }
+    }
+
     Uint32 window_flags = SDL_WINDOW_SHOWN;
     if (options->getFullscreen()) {
         window_flags |= SDL_WINDOW_FULLSCREEN;
