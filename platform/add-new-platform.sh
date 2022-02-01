@@ -31,7 +31,7 @@ IMAGES_DIR="platform/${PLATFORM}/assets/images"
 mkdir -p "${BACKGROUNDS_DIR}" "${IMAGES_DIR}"
 
 # Create image
-convert -background none -density 1200 -resize "${SHELLRESOLUTION}" platform/shells.svgz platform/${PLATFORM}/assets/images/shells.png
+convert -background none -density 1200 -resize "${SHELLRESOLUTION}" platform/shells.svgz assets/images/shells${SHELLSIZE}.png
 
 # Convert backgrounds to right size
 for background in $(find assets/backgrounds/ -type f); do
