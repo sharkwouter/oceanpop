@@ -18,7 +18,7 @@
 void run() {
     OptionManager option_manager;
     Window window("OceanPop", &option_manager);
-    FontManager font_manager;
+    FontManager font_manager(&option_manager);
     SoundManager sound_manager(&option_manager);
     StateManager state_manager(window.renderer, &font_manager, &sound_manager, &option_manager);
     EventManager input_manager;
