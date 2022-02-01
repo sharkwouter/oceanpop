@@ -5,40 +5,10 @@
 #include "../utils.hpp"
 #include "GameState.hpp"
 
-OptionsState::OptionsState(SDL_Renderer * renderer, FontManager * fonts, SoundManager * sounds, OptionManager * options) : renderer(renderer), fonts(fonts), sounds(sounds), options(options),
+OptionsState::OptionsState(SDL_Renderer * renderer, FontManager * fonts, SoundManager * sounds, OptionManager * options, SDL_Window * window) : renderer(renderer), fonts(fonts), sounds(sounds), options(options), window(window),
     theme(renderer, options, Theme::MENU)
 {
-    this->text_title = fonts->getTexture(renderer, "Options", true, {COLOR_MENU_TITLE.r, COLOR_MENU_TITLE.g, COLOR_MENU_TITLE.b, COLOR_MENU_TITLE.a});
-
-    for (int i = 0; i < (((int) Option::GO_BACK) + 1); i++) {
-        std::string current_text;
-        switch ((Option) i) {
-            case Option::SOUND_VOLUME:
-                current_text = getSoundVolumeString();
-                break;
-            case Option::MUSIC_VOLUME:
-                current_text = getMusicVolumeString();
-                break;
-            case Option::CHANGE_MUSIC:
-                current_text = getChangeMusicString();
-                break;
-            case Option::FULLSCREEN:
-                current_text = getFullscreenString();
-                break;
-            case Option::RESOLUTION:
-                current_text = getResolutionString();
-                break;
-            case Option::GO_BACK:
-                current_text = "Return to menu";
-                break;
-            default:
-                current_text = "?????????";
-                break;
-        }
-        texts.push_back(fonts->getTexture(renderer, current_text, false, {255, 255, 255, 255}));
-    }
-
-    this->text_start_y = getTextY(0);
+    loadTexts();
 }
 
 OptionsState::~OptionsState() {
@@ -242,6 +212,8 @@ void OptionsState::changeMusicVolume(int amount) {
 void OptionsState::changeFullscreen() {
     this->options->setFullscreen(!this->options->getFullscreen());
 
+    SDL_SetWindowFullscreen(this->window, this->options->getFullscreen() ? SDL_WINDOW_FULLSCREEN : 0);
+
     SDL_DestroyTexture(this->texts[this->selection]);
     this->texts[this->selection] = fonts->getTexture(renderer, getFullscreenString(), false, {255, 255, 255, 255});
 }
@@ -265,10 +237,54 @@ void OptionsState::changeResolution(int amount) {
         }
         this->options->setScreenWidth(modes[new_res].w);
         this->options->setScreenHeight(modes[new_res].h);
+        SDL_SetWindowDisplayMode(this->window, &modes[new_res]);
+        SDL_SetWindowSize(window, modes[new_res].w, modes[new_res].h);
 
-        SDL_DestroyTexture(this->texts[this->selection]);
-        this->texts[this->selection] = fonts->getTexture(renderer, getResolutionString(), false, {255, 255, 255, 255});
+        updateTexts();
     }
+}
+
+void OptionsState::loadTexts() {
+    this->text_title = fonts->getTexture(this->renderer, "Options", true, {COLOR_MENU_TITLE.r, COLOR_MENU_TITLE.g, COLOR_MENU_TITLE.b, COLOR_MENU_TITLE.a});
+
+    for (int i = 0; i < (((int) Option::GO_BACK) + 1); i++) {
+        std::string current_text;
+        switch ((Option) i) {
+            case Option::SOUND_VOLUME:
+                current_text = getSoundVolumeString();
+                break;
+            case Option::MUSIC_VOLUME:
+                current_text = getMusicVolumeString();
+                break;
+            case Option::CHANGE_MUSIC:
+                current_text = getChangeMusicString();
+                break;
+            case Option::FULLSCREEN:
+                current_text = getFullscreenString();
+                break;
+            case Option::RESOLUTION:
+                current_text = getResolutionString();
+                break;
+            case Option::GO_BACK:
+                current_text = "Return to menu";
+                break;
+            default:
+                current_text = "?????????";
+                break;
+        }
+        texts.push_back(fonts->getTexture(renderer, current_text, false, {255, 255, 255, 255}));
+    }
+
+    this->text_start_y = getTextY(0);
+}
+
+void OptionsState::updateTexts() {
+    SDL_DestroyTexture(this->text_title);
+    for (size_t i = 0; i < this->texts.size(); i++) {
+        SDL_DestroyTexture(this->texts[i]);
+    }
+    this->texts.clear();
+    loadTexts();
 }
 
 int OptionsState::getTextY(int number) {

@@ -26,6 +26,7 @@ private:
     FontManager * fonts;
     SoundManager * sounds;
     OptionManager * options;
+    SDL_Window * window;
 
     ThemeManager theme;
 
@@ -49,8 +50,11 @@ private:
     void changeMusicVolume(int amount);
     void changeFullscreen();
     void changeResolution(int amount);
+
+    void updateTexts();
+    void loadTexts();
 public:
-    OptionsState(SDL_Renderer * renderer, FontManager * fonts, SoundManager * sounds, OptionManager * options);
+    OptionsState(SDL_Renderer * renderer, FontManager * fonts, SoundManager * sounds, OptionManager * options, SDL_Window * window);
     ~OptionsState();
 
     void handleEvents(std::vector<Event> events);

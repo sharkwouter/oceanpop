@@ -12,7 +12,7 @@
 #include "states/WonState.hpp"
 #include "states/State.hpp"
 
-StateManager::StateManager(SDL_Renderer * renderer, FontManager * fonts, SoundManager * sounds, OptionManager * options) : renderer(renderer), fonts(fonts), sounds(sounds), options(options),
+StateManager::StateManager(SDL_Renderer * renderer, FontManager * fonts, SoundManager * sounds, OptionManager * options, SDL_Window * window) : renderer(renderer), fonts(fonts), sounds(sounds), options(options), window(window),
     state(new MenuState(renderer, fonts, sounds, options)) {
 
 }
@@ -60,7 +60,7 @@ void StateManager::switchState() {
                 this->state = new HighscoreState(renderer, fonts, sounds, options);
                 break;
             case State::OPTIONS:
-                this->state = new OptionsState(renderer, fonts, sounds, options);
+                this->state = new OptionsState(renderer, fonts, sounds, options, window);
                 break;
             case State::GAMEOVER:
                 this->state = new GameOverState(renderer, fonts, sounds, options);

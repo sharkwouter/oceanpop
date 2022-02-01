@@ -15,6 +15,7 @@ private:
     FontManager * fonts;
     SoundManager * sounds;
     OptionManager * options;
+    SDL_Window * window;
 
     BaseState * state = NULL;
 
@@ -22,7 +23,7 @@ private:
     void clearState();
     void switchState();
 public:
-    StateManager(SDL_Renderer * renderer, FontManager * fonts, SoundManager * sounds, OptionManager * options);
+    StateManager(SDL_Renderer * renderer, FontManager * fonts, SoundManager * sounds, OptionManager * options, SDL_Window * window);
     ~StateManager();
 
     void handleEvents(std::vector<Event> events);

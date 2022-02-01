@@ -20,7 +20,7 @@ void run() {
     Window window("OceanPop", &option_manager);
     FontManager font_manager(&option_manager);
     SoundManager sound_manager(&option_manager);
-    StateManager state_manager(window.renderer, &font_manager, &sound_manager, &option_manager);
+    StateManager state_manager(window.renderer, &font_manager, &sound_manager, &option_manager, window.window);
     EventManager input_manager;
 
     while (!state_manager.isDone()) {
