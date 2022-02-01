@@ -50,8 +50,6 @@ private:
 
     bool bubbles_matched = false;
 
-    std::string image_shells;
-
     Action current_action;
 
     std::vector<std::vector<ShellType>> preview;

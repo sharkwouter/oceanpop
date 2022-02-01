@@ -2,19 +2,15 @@
 #include "TextureManager.hpp"
 #include "utils.hpp"
 
-TextureManager::TextureManager() {}
-
-TextureManager::~TextureManager() {
-    for (auto &pair : this->textures) {
-        if (pair.second != nullptr) {
-            SDL_DestroyTexture(pair.second);
-            pair.second = nullptr;
-        }
-    }
-    this->textures.clear();
+TextureManager::TextureManager(SDL_Renderer * renderer, OptionManager * options) : options(options) {
+    texture_shell = load(renderer, "assets/images/shells" + std::to_string(this->options->getShellSize()) + ".png");
 }
 
-void TextureManager::add_texture(const std::string &file, SDL_Renderer *renderer) {
+TextureManager::~TextureManager() {
+    SDL_DestroyTexture(texture_shell);
+}
+
+SDL_Texture * TextureManager::load(SDL_Renderer * renderer, const std::string &file) {
     SDL_Surface *img = IMG_Load(getResourcePath(file).c_str());
 
     if (img == nullptr) {
@@ -27,10 +23,6 @@ void TextureManager::add_texture(const std::string &file, SDL_Renderer *renderer
     if (texture == nullptr) {
         panic("couldn't create texture from surface: " + std::string(SDL_GetError()));
     }
-
-    this->textures[file] = texture;
+    return std::move(texture);
 }
 
-SDL_Texture *TextureManager::get(const std::string &file) {
-    return this->textures[file];
-}

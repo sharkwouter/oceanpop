@@ -7,17 +7,13 @@
 #include "Sound.hpp"
 #include "colors.hpp"
 
-BoardManager::BoardManager(SDL_Renderer *renderer, FontManager *fonts, SoundManager * sounds, OptionManager * options, int x, int y, int width, int height, int moves, int required_matches, int level, int seed) : fonts(fonts), sounds(sounds), options(options) {
-    image_shells = "assets/images/shells" + std::to_string(this->options->getShellSize()) + ".png";
-    SDL_Log("Loading %s", image_shells.c_str());
-    textures.add_texture(image_shells, renderer);
+BoardManager::BoardManager(SDL_Renderer *renderer, FontManager *fonts, SoundManager * sounds, OptionManager * options, int x, int y, int width, int height, int moves, int required_matches, int level, int seed) : fonts(fonts), sounds(sounds), options(options),
+    textures(renderer, options) {
     loadLevel(x, y, width, height, moves, required_matches, level, seed);
 }
 
-BoardManager::BoardManager(SDL_Renderer *renderer, FontManager *fonts, SoundManager * sounds, OptionManager * options, int x, int y, std::vector<std::vector<ShellType>> shells, int moves, int required_matches, int level, int seed) : fonts(fonts), sounds(sounds), options(options) {
-    image_shells = "assets/images/shells" + std::to_string(this->options->getShellSize()) + ".png";
-    SDL_Log("Loading %s", image_shells.c_str());
-    textures.add_texture(image_shells, renderer);
+BoardManager::BoardManager(SDL_Renderer *renderer, FontManager *fonts, SoundManager * sounds, OptionManager * options, int x, int y, std::vector<std::vector<ShellType>> shells, int moves, int required_matches, int level, int seed) : fonts(fonts), sounds(sounds), options(options),
+    textures(renderer, options) {
     loadLevel(x, y, shells, moves, required_matches, level, seed);
 }
 
@@ -427,7 +423,7 @@ void BoardManager::drawShells(SDL_Renderer * renderer) {
             dstrect.w = this->options->getShellSize();
             dstrect.h = this->options->getShellSize();
 
-            SDL_RenderCopy(renderer, textures.get(image_shells), &srcrect, &dstrect);
+            SDL_RenderCopy(renderer, textures.getShellTexture(), &srcrect, &dstrect);
         }
     }
 }
@@ -455,7 +451,7 @@ void BoardManager::drawFallingShells(SDL_Renderer * renderer) {
             srcrect.h = dstrect.h;
         }
 
-        SDL_RenderCopy(renderer, textures.get(image_shells), &srcrect, &dstrect);
+        SDL_RenderCopy(renderer, textures.getShellTexture(), &srcrect, &dstrect);
     }
 }
 
@@ -523,7 +519,7 @@ void BoardManager::drawMatches(SDL_Renderer * renderer) {
                 dstrect.y += (rect_matches.y-dstrect.y)/MATCH_STEPS*animation;
             }
 
-            SDL_RenderCopy(renderer, textures.get(image_shells), &srcrect, &dstrect);
+            SDL_RenderCopy(renderer, textures.getShellTexture(), &srcrect, &dstrect);
         }
     }
 }
