@@ -274,11 +274,11 @@ void BoardManager::update() {
             break;
         case Action::ANIMATE_FALLING:
             delta = SDL_GetTicks() - this->animation_start;
-            if(delta >= DROP_DELAY) {
-                this->animation += delta/DROP_DELAY;
+            if(delta >= (DROP_TIME/this->options->getShellSize())) {
+                this->animation += delta/(DROP_TIME/this->options->getShellSize());
                 this->animation_start = SDL_GetTicks();
             }
-            if (this->animation > DROP_STEPS) {
+            if (this->animation > this->options->getShellSize()) {
                 this->current_action = Action::FALLING_START;
                 this->preview = this->board->getShells();
             }
