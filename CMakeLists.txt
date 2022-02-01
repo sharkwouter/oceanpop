@@ -144,11 +144,11 @@ elseif(PLATFORM_PSP)
           DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/assets)
      file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/assets/sounds
           DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/assets)
-     file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/assets/music
-          DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/assets)
      file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/assets/levels
           DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/assets)
      file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/assets/images
+          DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/assets)
+     file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/platform/psp/assets/music
           DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/assets)
      file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/platform/psp/assets/backgrounds
           DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/assets)
