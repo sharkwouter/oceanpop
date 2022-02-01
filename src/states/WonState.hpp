@@ -8,14 +8,17 @@
 #include "BaseState.hpp"
 #include "../BoardManager.hpp"
 #include "../ThemeManager.hpp"
+#include "../FontManager.hpp"
 #include "../SoundManager.hpp"
+#include "../OptionManager.hpp"
 #include "../PauseScreen.hpp"
 
 class WonState : public BaseState {
 private:
     SDL_Renderer * renderer;
-    SoundManager * sounds;
     FontManager * fonts;
+    SoundManager * sounds;
+    OptionManager * options;
 
     ThemeManager theme;
 
@@ -23,7 +26,7 @@ private:
 
     bool sound_played = false;
 public:
-    WonState(SDL_Renderer *renderer, FontManager * fonts, SoundManager * sounds);
+    WonState(SDL_Renderer *renderer, FontManager * fonts, SoundManager * sounds, OptionManager * options);
     ~WonState();
 
     void handleEvents(std::vector<Event> events);

@@ -8,8 +8,9 @@
 #include "constants.hpp"
 #include "Shell.hpp"
 #include "TextureManager.hpp"
-#include "SoundManager.hpp"
 #include "FontManager.hpp"
+#include "SoundManager.hpp"
+#include "OptionManager.hpp"
 #include "Event.hpp"
 #include "Action.hpp"
 
@@ -18,6 +19,7 @@ class BoardManager {
 private:
     FontManager * fonts;
     SoundManager * sounds;
+    OptionManager * options;
 
     Board * board = NULL;
 
@@ -48,7 +50,7 @@ private:
 
     bool bubbles_matched = false;
 
-    std::string image_shells = "assets/images/shells.png";
+    std::string image_shells;
 
     Action current_action;
 
@@ -93,8 +95,8 @@ private:
     void drawMatches(SDL_Renderer * renderer);
     void storeLevel(int x, int y, Board * board, int moves, int required_matches, int level);
 public:
-    BoardManager(SDL_Renderer *renderer, FontManager *fonts, SoundManager * sounds, int x, int y, int width, int height, int moves, int required_matches=0, int level=0, int seed=0);
-    BoardManager(SDL_Renderer *renderer, FontManager *fonts, SoundManager * sounds, int x, int y, std::vector<std::vector<ShellType>> shells, int moves, int required_matches=0, int level=0, int seed=0);
+    BoardManager(SDL_Renderer *renderer, FontManager *fonts, SoundManager * sounds, OptionManager * options, int x, int y, int width, int height, int moves, int required_matches=0, int level=0, int seed=0);
+    BoardManager(SDL_Renderer *renderer, FontManager *fonts, SoundManager * sounds, OptionManager * options, int x, int y, std::vector<std::vector<ShellType>> shells, int moves, int required_matches=0, int level=0, int seed=0);
     ~BoardManager();
 
     void handleEvents(std::vector<Event> events);

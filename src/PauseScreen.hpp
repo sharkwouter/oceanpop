@@ -7,17 +7,19 @@
 #include <vector>
 
 #include "FontManager.hpp"
+#include "OptionManager.hpp"
 #include "Event.hpp"
 
 class PauseScreen {
 
 private:
-    FontManager fonts;
+    FontManager * fonts;
+    OptionManager * options;
 
     SDL_Texture * title = NULL;
     SDL_Texture * subtitle = NULL;
 public:
-    PauseScreen(SDL_Renderer * renderer, std::string title, std::string subtitle);
+    PauseScreen(SDL_Renderer * renderer, FontManager * fonts, OptionManager * options, std::string title, std::string subtitle);
     ~PauseScreen();
 
     void draw(SDL_Renderer *renderer);

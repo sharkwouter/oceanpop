@@ -11,7 +11,7 @@ public:
     SDL_Window *window;
     SDL_Renderer *renderer;
 
-    Window(const std::string &title, int width, int height, OptionManager * options);
+    Window(const std::string &title, OptionManager * options);
     ~Window();
 
     unsigned int start_frame;

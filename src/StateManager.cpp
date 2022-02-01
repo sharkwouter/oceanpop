@@ -13,7 +13,7 @@
 #include "states/State.hpp"
 
 StateManager::StateManager(SDL_Renderer * renderer, FontManager * fonts, SoundManager * sounds, OptionManager * options) : renderer(renderer), fonts(fonts), sounds(sounds), options(options),
-    state(new MenuState(renderer, fonts, sounds)) {
+    state(new MenuState(renderer, fonts, sounds, options)) {
 
 }
 
@@ -45,7 +45,7 @@ void StateManager::switchState() {
         clearState();
         switch (next_state) {
             case State::MENU:
-                this->state = new MenuState(renderer, fonts, sounds);
+                this->state = new MenuState(renderer, fonts, sounds, options);
                 break;
             case State::STANDARD:
                 this->state = new GameState(renderer, fonts, sounds, options);
@@ -63,13 +63,13 @@ void StateManager::switchState() {
                 this->state = new OptionsState(renderer, fonts, sounds, options);
                 break;
             case State::GAMEOVER:
-                this->state = new GameOverState(renderer, fonts, sounds);
+                this->state = new GameOverState(renderer, fonts, sounds, options);
                 break;
             case State::WON:
-                this->state = new WonState(renderer, fonts, sounds);
+                this->state = new WonState(renderer, fonts, sounds, options);
                 break;
             default:
-                this->state = new NotImplementedState(renderer, fonts, sounds);
+                this->state = new NotImplementedState(renderer, fonts, sounds, options);
                 break;
         }
     }

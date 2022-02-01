@@ -8,6 +8,7 @@
 #include "../ThemeManager.hpp"
 #include "../FontManager.hpp"
 #include "../SoundManager.hpp"
+#include "../OptionManager.hpp"
 #include "../PauseScreen.hpp"
 
 class MenuState : public BaseState {
@@ -15,20 +16,21 @@ private:
     SDL_Renderer * renderer;
     FontManager * fonts;
     SoundManager * sounds;
+    OptionManager * options;
 
     ThemeManager theme;
 
     SDL_Texture * text_title;
-    std::vector<SDL_Texture*> options;
+    std::vector<SDL_Texture*> texts;
 
-    int options_offset = 2;
-    int options_start_y;
+    int text_offset = 2;
+    int text_start_y;
 
-    int current_option = 0;
+    int selection = 0;
 
     int getOptionY(int number);
 public:
-    MenuState(SDL_Renderer * renderer, FontManager * fonts, SoundManager * sounds);
+    MenuState(SDL_Renderer * renderer, FontManager * fonts, SoundManager * sounds, OptionManager * options);
     ~MenuState();
 
     void handleEvents(std::vector<Event> events);

@@ -36,6 +36,9 @@ public:
     unsigned int getRelaxedModeSeed();
     std::vector<std::vector<ShellType>> getRelaxedModeShells();
     bool getFullscreen();
+    int getScreenWidth();
+    int getScreenHeight();
+    int getShellSize();
 
     void setMusicVolume(int value);
     void setSoundVolume(int value);
@@ -49,6 +52,8 @@ public:
     void setRelaxedModeSeed(unsigned int value);
     void setRelaxedModeShells(std::vector<std::vector<ShellType>> value);
     void setFullscreen(bool value);
+    void setScreenWidth(int value);
+    void setScreenHeight(int value);
 
     void resetChallengeMode();
     void resetStandardMode();

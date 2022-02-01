@@ -6,6 +6,7 @@
 #include <iostream>
 #include <filesystem>
 
+#include "constants.hpp"
 #include "utils.hpp"
 
 OptionManager::OptionManager() {
@@ -223,4 +224,40 @@ bool OptionManager::getFullscreen() {
 void OptionManager::setFullscreen(bool value) {
     this->options["fullscreen"] = value;
     write();
+}
+
+int OptionManager::getScreenWidth() {
+    return this->options.get("screen_width", SCREEN_WIDTH).asInt();
+}
+
+void OptionManager::setScreenWidth(int value) {
+    this->options["screen_width"] = value;
+    write();
+}
+
+int OptionManager::getScreenHeight() {
+    return this->options.get("screen_height", SCREEN_HEIGHT).asInt();
+}
+
+void OptionManager::setScreenHeight(int value) {
+    this->options["screen_height"] = value;
+    write();
+}
+
+int OptionManager::getShellSize() {
+    int shellSize = SHELL_SIZE;
+    if (!(this->getScreenWidth() == SCREEN_WIDTH) || !(this->getScreenHeight() == SCREEN_HEIGHT)) {
+        bool sizeFits = false;
+        while (!sizeFits) {
+            int widthRequired = shellSize * 8;
+            int heightRequired = widthRequired;
+            if (this->getScreenWidth() > widthRequired && this->getScreenHeight() > heightRequired) {
+                sizeFits = true;
+            } else {
+                shellSize = shellSize/2;
+            }
+        }
+    }
+    
+    return shellSize;
 }

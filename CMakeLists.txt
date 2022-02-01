@@ -90,8 +90,8 @@ if (VITA)
           VERSION ${VITA_VERSION}
           NAME ${VITA_APPNAME}
           FILE platform/vita/sce_sys sce_sys
-          FILE platform/vita/assets/images assets/images
           FILE platform/vita/assets/backgrounds assets/backgrounds
+          FILE assets/images assets/images
           FILE assets/fonts assets/fonts
           FILE assets/sounds assets/sounds
           FILE assets/music assets/music
@@ -148,7 +148,7 @@ elseif(PLATFORM_PSP)
           DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/assets)
      file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/assets/levels
           DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/assets)
-     file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/platform/psp/assets/images
+     file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/assets/images
           DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/assets)
      file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/platform/psp/assets/backgrounds
           DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/assets)

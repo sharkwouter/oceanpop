@@ -1,12 +1,13 @@
 #include "NotImplementedState.hpp"
 
-NotImplementedState::NotImplementedState(SDL_Renderer * renderer, FontManager * fonts, SoundManager * sounds) :
-    theme(renderer, Theme::MENU),
-    screen_text(renderer, "Not yet implemented", "Press the confirm button to continue")
+NotImplementedState::NotImplementedState(SDL_Renderer * renderer, FontManager * fonts, SoundManager * sounds, OptionManager * options) :
+    theme(renderer, options, Theme::MENU),
+    screen_text(renderer, fonts, options, "Not yet implemented", "Press the confirm button to continue")
 {
     this->renderer = renderer;
     this->fonts = fonts;
     this->sounds = sounds;
+    this->options = options;
 }
 
 NotImplementedState::~NotImplementedState() {

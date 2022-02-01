@@ -4,8 +4,8 @@
 #include "../colors.hpp"
 #include "GameState.hpp"
 
-MenuState::MenuState(SDL_Renderer * renderer, FontManager * fonts, SoundManager * sounds) : renderer(renderer), fonts(fonts), sounds(sounds),
-    theme(renderer, Theme::MENU)
+MenuState::MenuState(SDL_Renderer * renderer, FontManager * fonts, SoundManager * sounds, OptionManager * options) : renderer(renderer), fonts(fonts), sounds(sounds), options(options),
+    theme(renderer, options, Theme::MENU)
 {
     this->text_title = fonts->getTexture(renderer, "OceanPop", true, {COLOR_MENU_TITLE.r, COLOR_MENU_TITLE.g, COLOR_MENU_TITLE.b, COLOR_MENU_TITLE.a});
 
@@ -34,17 +34,17 @@ MenuState::MenuState(SDL_Renderer * renderer, FontManager * fonts, SoundManager 
                 option_text = "?????????";
                 break;
         }
-        options.push_back(fonts->getTexture(renderer, option_text,false, {255, 255, 255, 255}));
+        texts.push_back(fonts->getTexture(renderer, option_text,false, {255, 255, 255, 255}));
     }
 
-    this->options_start_y = getOptionY(0);
+    this->text_start_y = getOptionY(0);
 }
 
 MenuState::~MenuState() {
     SDL_DestroyTexture(text_title);
-    for (int i = 0; i < (int) options.size(); i++) {
-        SDL_DestroyTexture(options[i]);
-        options[i] = NULL;
+    for (int i = 0; i < (int) texts.size(); i++) {
+        SDL_DestroyTexture(texts[i]);
+        texts[i] = NULL;
     }
 }
 
@@ -55,30 +55,30 @@ void MenuState::handleEvents(std::vector<Event> events) {
     for(Event event :events) {
         switch (event) {
             case Event::UP:
-                if (current_option != 0) {
-                    current_option--;
+                if (selection != 0) {
+                    selection--;
                 } else {
-                    current_option = (int) options.size() - 1;
+                    selection = (int) texts.size() - 1;
                 }
                 break;
             case Event::DOWN:
-                if (current_option < ((int) options.size() - 1)) {
-                    current_option++;
+                if (selection < ((int) texts.size() - 1)) {
+                    selection++;
                 } else {
-                    current_option = 0;
+                    selection = 0;
                 }
                 break;
             case Event::CONFIRM:
                 this->done = true;
                 break;
             case Event::QUIT:
-                this->current_option = (int) State::EXIT  - 1;
+                this->selection = (int) State::EXIT  - 1;
                 this->done = true;
                 break;
             case Event::MOUSEMOVE:
                 SDL_GetMouseState(&mouse.x, &mouse.y);
-                if (mouse.y >= this->options_start_y) {
-                    this->current_option = mouse.y/(SCREEN_HEIGHT/((int) this->options.size() + options_offset)) - options_offset;
+                if (mouse.y >= this->text_start_y) {
+                    this->selection = mouse.y/(this->options->getScreenHeight()/((int) this->texts.size() + text_offset)) - text_offset;
                 }
                 break;
             default:
@@ -96,22 +96,22 @@ void MenuState::draw(SDL_Renderer * renderer) {
     this->theme.draw(renderer);
 
     // Draw title
-    SDL_Rect rect_title = {SCREEN_WIDTH / 2, SHELL_SIZE / 2, 0, 0};
+    SDL_Rect rect_title = {this->options->getScreenWidth() / 2, this->options->getShellSize() / 2, 0, 0};
     SDL_QueryTexture(text_title, NULL, NULL, &rect_title.w, &rect_title.h);
     rect_title.x -= rect_title.w/2;
     SDL_RenderCopy(renderer, text_title, NULL, &rect_title);
 
     // Draw options
-    for(int i = 0; i < (int) options.size(); i++) {
+    for(int i = 0; i < (int) texts.size(); i++) {
         // Draw the option title
-        SDL_Rect rect = {SCREEN_WIDTH/2, getOptionY(i), 0, 0};
-        SDL_QueryTexture(options[i], NULL, NULL, &rect.w, &rect.h);
+        SDL_Rect rect = {this->options->getScreenWidth()/2, getOptionY(i), 0, 0};
+        SDL_QueryTexture(texts[i], NULL, NULL, &rect.w, &rect.h);
         rect.x -= rect.w/2;
 
         // Set the texture color
-        if(i == current_option) {
+        if(i == selection) {
             // Draw selection box
-            SDL_Rect rect_selection = {0, rect.y, SCREEN_WIDTH, rect.h};
+            SDL_Rect rect_selection = {0, rect.y, this->options->getScreenWidth(), rect.h};
             SDL_SetRenderDrawColor(renderer, COLOR_BOARD.r, COLOR_BOARD.g, COLOR_BOARD.b, COLOR_BOARD.a);
             SDL_RenderFillRect(renderer, &rect_selection);
 
@@ -122,14 +122,14 @@ void MenuState::draw(SDL_Renderer * renderer) {
         }
 
         // Render the option text
-        SDL_RenderCopy(renderer, options[i], NULL, &rect);
+        SDL_RenderCopy(renderer, texts[i], NULL, &rect);
     }
 }
 
 int MenuState::getOptionY(int number) {
-    return SCREEN_HEIGHT/(((int) options.size())+this->options_offset)*(number+this->options_offset);
+    return this->options->getScreenHeight()/(((int) texts.size())+this->text_offset)*(number+this->text_offset);
 }
 
 State MenuState::getNextState() {
-    return (State) (this->current_option + 1);
+    return (State) (this->selection + 1);
 }

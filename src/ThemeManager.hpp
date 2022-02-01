@@ -14,6 +14,7 @@ class ThemeManager {
 private:
     Theme theme;
     SDL_Renderer * renderer;
+    OptionManager * options;
 
     Mix_Music * music = NULL;
     Mix_Music * next_music = NULL;
@@ -33,7 +34,6 @@ private:
 
     SDL_Texture * createBackgroundTexture(std::string filename);
 public:
-    ThemeManager(SDL_Renderer * renderer, Theme theme);
     ThemeManager(SDL_Renderer * renderer, OptionManager * options, Theme theme);
     ~ThemeManager();
 

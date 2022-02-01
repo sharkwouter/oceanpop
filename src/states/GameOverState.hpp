@@ -13,6 +13,7 @@
 #include "../BoardManager.hpp"
 #include "../ThemeManager.hpp"
 #include "../SoundManager.hpp"
+#include "../OptionManager.hpp"
 #include "../PauseScreen.hpp"
 
 #include "../Shell.hpp"
@@ -22,6 +23,7 @@ private:
     SDL_Renderer * renderer;
     SoundManager * sounds;
     FontManager * fonts;
+    OptionManager * options;
 
     ThemeManager theme;
 
@@ -29,7 +31,7 @@ private:
 
     bool sound_played = false;
 public:
-    GameOverState(SDL_Renderer *renderer, FontManager * fonts, SoundManager * sounds);
+    GameOverState(SDL_Renderer *renderer, FontManager * fonts, SoundManager * sounds, OptionManager * options);
     ~GameOverState();
 
     void handleEvents(std::vector<Event> events);

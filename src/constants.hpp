@@ -15,8 +15,8 @@ inline constexpr int SCREEN_WIDTH = 480;
 inline constexpr int SCREEN_HEIGHT = 272;
 inline constexpr int SHELL_SIZE = 32;
 #else
-inline constexpr int SCREEN_WIDTH = 1920;
-inline constexpr int SCREEN_HEIGHT = 1080;
+inline constexpr int SCREEN_WIDTH = 2560;
+inline constexpr int SCREEN_HEIGHT = 1440;
 inline constexpr int SHELL_SIZE = 128;
 #endif
 

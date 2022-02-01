@@ -12,9 +12,9 @@
 
 GameState::GameState(SDL_Renderer * renderer, FontManager * fonts, SoundManager * sounds, OptionManager * options) :
     theme(renderer, options, Theme::THEME1),
-    pause_screen(renderer, "Game Paused", "Press the confirm button to exit"),
-    win_screen(renderer, "Level Finished!", "Press the confirm button to continue"),
-    lose_screen(renderer, "Level Failed", "Press the confirm button to restart")
+    pause_screen(renderer, fonts, options, "Game Paused", "Press the confirm button to exit"),
+    win_screen(renderer, fonts, options, "Level Finished!", "Press the confirm button to continue"),
+    lose_screen(renderer, fonts, options, "Level Failed", "Press the confirm button to restart")
 {
     this->renderer = renderer;
     this->fonts = fonts;
@@ -173,6 +173,7 @@ void GameState::loadLevel(int level) {
             renderer,
             this->fonts,
             this->sounds,
+            this->options,
             this->position.x,
             this->position.y,
             this->width,
@@ -187,6 +188,7 @@ void GameState::loadLevel(int level) {
             renderer,
             this->fonts,
             this->sounds,
+            this->options,
             this->position.x,
             this->position.y,
             this->shells,
@@ -229,7 +231,7 @@ std::vector<std::vector<ShellType>> GameState::loadShells(Json::Value array) {
 }
 
 SDL_Point GameState::calculatePosition(int width, int height) {
-    return {(SCREEN_WIDTH-SHELL_SIZE*width)/2, (SCREEN_HEIGHT-SHELL_SIZE*(height+1))/2};
+    return {(this->options->getScreenWidth()-this->options->getShellSize()*width)/2, (this->options->getScreenHeight()-this->options->getShellSize()*(height+1))/2};
 }
 
 State GameState::getNextState() {

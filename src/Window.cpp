@@ -4,7 +4,7 @@
 #include "Window.hpp"
 #include "utils.hpp"
 
-Window::Window(const std::string &title, int width, int height, OptionManager * options) {
+Window::Window(const std::string &title, OptionManager * options) {
     #ifdef __vita__
         // Disable back touch
         SDL_SetHint(SDL_HINT_TOUCH_MOUSE_EVENTS_DIRECT_ONLY, "1");
@@ -26,7 +26,11 @@ Window::Window(const std::string &title, int width, int height, OptionManager * 
 		panic("couldn't init SDL_mixer: " + std::string(Mix_GetError()));
     }
 
-    this->window = SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, SDL_WINDOW_SHOWN);
+    Uint32 window_flags = SDL_WINDOW_SHOWN;
+    if (options->getFullscreen()) {
+        window_flags |= SDL_WINDOW_FULLSCREEN;
+    }
+    this->window = SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, options->getScreenWidth(), options->getScreenHeight(), window_flags);
     if (this->window == nullptr) {
         panic("couldn't create window: " + std::string(SDL_GetError()));
     }
@@ -41,10 +45,6 @@ Window::Window(const std::string &title, int width, int height, OptionManager * 
 
     this->start_frame = SDL_GetTicks();
     this->frame_delay = 1000 / 60; // Target 60 fps
-
-    if (options->getFullscreen()) {
-        SDL_SetWindowFullscreen(this->window, SDL_WINDOW_FULLSCREEN);
-    }
 }
 
 void Window::clear() {

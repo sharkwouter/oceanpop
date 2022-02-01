@@ -6,7 +6,7 @@
 
 GameStateRelaxed::GameStateRelaxed(SDL_Renderer * renderer, FontManager * fonts, SoundManager * sounds, OptionManager * options) :
     theme(renderer, options, Theme::THEME1),
-    pause_screen(renderer, "Game Paused", "Press the confirm button to exit")
+    pause_screen(renderer, fonts, options, "Game Paused", "Press the confirm button to exit")
 {
     this->renderer = renderer;
     this->fonts = fonts;
@@ -79,6 +79,7 @@ void GameStateRelaxed::loadLevel() {
             renderer,
             this->fonts,
             this->sounds,
+            this->options,
             this->position.x,
             this->position.y,
             this->width,
@@ -93,6 +94,7 @@ void GameStateRelaxed::loadLevel() {
             renderer,
             this->fonts,
             this->sounds,
+            this->options,
             this->position.x,
             this->position.y,
             this->options->getRelaxedModeShells(),
@@ -107,7 +109,7 @@ void GameStateRelaxed::loadLevel() {
 }
 
 SDL_Point GameStateRelaxed::calculatePosition(int width, int height) {
-    return {(SCREEN_WIDTH-SHELL_SIZE*width)/2, (SCREEN_HEIGHT-SHELL_SIZE*(height+1))/2};
+    return {(this->options->getScreenWidth()-this->options->getShellSize()*width)/2, (this->options->getScreenHeight()-this->options->getShellSize()*(height+1))/2};
 }
 
 State GameStateRelaxed::getNextState() {

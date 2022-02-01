@@ -1,12 +1,13 @@
 #include "WonState.hpp"
 
-WonState::WonState(SDL_Renderer * renderer, FontManager * fonts, SoundManager * sounds) :
-    theme(renderer, Theme::MENU),
-    screen_text(renderer, "Game mode completed!", "Press the confirm button to exit")
+WonState::WonState(SDL_Renderer * renderer, FontManager * fonts, SoundManager * sounds, OptionManager * options) :
+    theme(renderer, options, Theme::MENU),
+    screen_text(renderer, fonts, options, "Game mode completed!", "Press the confirm button to exit")
 {
     this->renderer = renderer;
     this->fonts = fonts;
     this->sounds = sounds;
+    this->options = options;
 }
 
 WonState::~WonState() {

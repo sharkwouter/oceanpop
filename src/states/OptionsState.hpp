@@ -16,6 +16,7 @@ enum class Option {
     SOUND_VOLUME,
     MUSIC_VOLUME,
     FULLSCREEN,
+    RESOLUTION,
     GO_BACK
 };
 
@@ -41,11 +42,13 @@ private:
     std::string getSoundVolumeString();
     std::string getMusicVolumeString();
     std::string getFullscreenString();
+    std::string getResolutionString();
 
     void changeChangeMusic();
     void changeSoundVolume(int amount);
     void changeMusicVolume(int amount);
     void changeFullscreen();
+    void changeResolution(int amount);
 public:
     OptionsState(SDL_Renderer * renderer, FontManager * fonts, SoundManager * sounds, OptionManager * options);
     ~OptionsState();

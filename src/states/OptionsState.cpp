@@ -2,6 +2,7 @@
 
 #include "../constants.hpp"
 #include "../colors.hpp"
+#include "../utils.hpp"
 #include "GameState.hpp"
 
 OptionsState::OptionsState(SDL_Renderer * renderer, FontManager * fonts, SoundManager * sounds, OptionManager * options) : renderer(renderer), fonts(fonts), sounds(sounds), options(options),
@@ -23,6 +24,9 @@ OptionsState::OptionsState(SDL_Renderer * renderer, FontManager * fonts, SoundMa
                 break;
             case Option::FULLSCREEN:
                 current_text = getFullscreenString();
+                break;
+            case Option::RESOLUTION:
+                current_text = getResolutionString();
                 break;
             case Option::GO_BACK:
                 current_text = "Return to menu";
@@ -80,6 +84,9 @@ void OptionsState::handleEvents(std::vector<Event> events) {
                     case Option::FULLSCREEN:
                         changeFullscreen();
                         break;
+                    case Option::RESOLUTION:
+                        changeResolution(1);
+                        break;
                     case Option::GO_BACK:
                         this->done = true;
                         break;
@@ -99,6 +106,9 @@ void OptionsState::handleEvents(std::vector<Event> events) {
                     case Option::FULLSCREEN:
                         changeFullscreen();
                         break;
+                    case Option::RESOLUTION:
+                        changeResolution(-1);
+                        break;
                     case Option::GO_BACK:
                         this->done = true;
                         break;
@@ -112,7 +122,7 @@ void OptionsState::handleEvents(std::vector<Event> events) {
             case Event::MOUSEMOVE:
                 SDL_GetMouseState(&mouse.x, &mouse.y);
                 if (mouse.y >= this->text_start_y) {
-                    this->selection = mouse.y/(SCREEN_HEIGHT/((int) this->texts.size() + text_offset)) - text_offset;
+                    this->selection = mouse.y/(this->options->getScreenHeight()/((int) this->texts.size() + text_offset)) - text_offset;
                 }
                 break;
             default:
@@ -130,7 +140,7 @@ void OptionsState::draw(SDL_Renderer * renderer) {
     this->theme.draw(renderer);
 
     // Draw title
-    SDL_Rect rect_title = {SCREEN_WIDTH / 2, SHELL_SIZE / 2, 0, 0};
+    SDL_Rect rect_title = {this->options->getScreenWidth() / 2, this->options->getShellSize() / 2, 0, 0};
     SDL_QueryTexture(text_title, NULL, NULL, &rect_title.w, &rect_title.h);
     rect_title.x -= rect_title.w/2;
     SDL_RenderCopy(renderer, text_title, NULL, &rect_title);
@@ -138,14 +148,14 @@ void OptionsState::draw(SDL_Renderer * renderer) {
     // Draw options
     for(int i = 0; i < (int) texts.size(); i++) {
         // Draw the option title
-        SDL_Rect rect = {SCREEN_WIDTH/2, getTextY(i), 0, 0};
+        SDL_Rect rect = {this->options->getScreenWidth()/2, getTextY(i), 0, 0};
         SDL_QueryTexture(texts[i], NULL, NULL, &rect.w, &rect.h);
         rect.x -= rect.w/2;
 
         // Set the texture color
         if(i == selection) {
             // Draw selection box
-            SDL_Rect rect_selection = {0, rect.y, SCREEN_WIDTH, rect.h};
+            SDL_Rect rect_selection = {0, rect.y, this->options->getScreenWidth(), rect.h};
             SDL_SetRenderDrawColor(renderer, COLOR_BOARD.r, COLOR_BOARD.g, COLOR_BOARD.b, COLOR_BOARD.a);
             SDL_RenderFillRect(renderer, &rect_selection);
 
@@ -188,8 +198,14 @@ std::string OptionsState::getFullscreenString() {
     return "Full screen: " + std::string(this->options->getFullscreen() ? "yes" : "no");
 }
 
+std::string OptionsState::getResolutionString() {
+    return "Resolution: " + std::to_string(this->options->getScreenWidth()) + "x" + std::to_string(this->options->getScreenHeight());
+}
+
 void OptionsState::changeChangeMusic() {
     this->options->setChangeMusicOnSwitch(!this->options->getChangeMusicOnSwitch());
+
+    SDL_DestroyTexture(this->texts[this->selection]);
     this->texts[this->selection] = fonts->getTexture(renderer, getChangeMusicString(), false, {255, 255, 255, 255});
 }
 
@@ -203,6 +219,8 @@ void OptionsState::changeSoundVolume(int amount) {
         new_value = 0;
     }
     this->options->setSoundVolume(new_value);
+
+    SDL_DestroyTexture(this->texts[this->selection]);
     this->texts[this->selection] = fonts->getTexture(renderer, getSoundVolumeString(), false, {255, 255, 255, 255});
 }
 
@@ -216,16 +234,45 @@ void OptionsState::changeMusicVolume(int amount) {
         new_value = 0;
     }
     this->options->setMusicVolume(new_value);
+
+    SDL_DestroyTexture(this->texts[this->selection]);
     this->texts[this->selection] = fonts->getTexture(renderer, getMusicVolumeString(), false, {255, 255, 255, 255});
 }
 
 void OptionsState::changeFullscreen() {
     this->options->setFullscreen(!this->options->getFullscreen());
+
+    SDL_DestroyTexture(this->texts[this->selection]);
     this->texts[this->selection] = fonts->getTexture(renderer, getFullscreenString(), false, {255, 255, 255, 255});
 }
 
+void OptionsState::changeResolution(int amount) {
+    std::vector<SDL_DisplayMode> modes = getDisplayModes();
+
+    if (modes.size() > 1) {
+        int new_res;
+        int current_res = 0;
+        for (size_t i = 0; i < modes.size(); i++) {
+            if (modes[i].w == this->options->getScreenWidth() && modes[i].h == this->options->getScreenHeight()) {
+                current_res = i;
+            }
+        }
+        new_res = current_res + amount;
+        if (new_res < 0) {
+            new_res = (((int) modes.size()) - 1);
+        } else if (new_res >= ((int) modes.size())) {
+            new_res = 0;
+        }
+        this->options->setScreenWidth(modes[new_res].w);
+        this->options->setScreenHeight(modes[new_res].h);
+
+        SDL_DestroyTexture(this->texts[this->selection]);
+        this->texts[this->selection] = fonts->getTexture(renderer, getResolutionString(), false, {255, 255, 255, 255});
+    }
+}
+
 int OptionsState::getTextY(int number) {
-    return SCREEN_HEIGHT/(((int) texts.size())+this->text_offset)*(number+this->text_offset);
+    return this->options->getScreenHeight()/(((int) texts.size())+this->text_offset)*(number+this->text_offset);
 }
 
 State OptionsState::getNextState() {

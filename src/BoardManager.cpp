@@ -7,12 +7,16 @@
 #include "Sound.hpp"
 #include "colors.hpp"
 
-BoardManager::BoardManager(SDL_Renderer *renderer, FontManager *fonts, SoundManager * sounds, int x, int y, int width, int height, int moves, int required_matches, int level, int seed) : fonts(fonts), sounds(sounds) {
+BoardManager::BoardManager(SDL_Renderer *renderer, FontManager *fonts, SoundManager * sounds, OptionManager * options, int x, int y, int width, int height, int moves, int required_matches, int level, int seed) : fonts(fonts), sounds(sounds), options(options) {
+    image_shells = "assets/images/shells" + std::to_string(this->options->getShellSize()) + ".png";
+    SDL_Log("Loading %s", image_shells.c_str());
     textures.add_texture(image_shells, renderer);
     loadLevel(x, y, width, height, moves, required_matches, level, seed);
 }
 
-BoardManager::BoardManager(SDL_Renderer *renderer, FontManager *fonts, SoundManager * sounds, int x, int y, std::vector<std::vector<ShellType>> shells, int moves, int required_matches, int level, int seed) : fonts(fonts), sounds(sounds) {
+BoardManager::BoardManager(SDL_Renderer *renderer, FontManager *fonts, SoundManager * sounds, OptionManager * options, int x, int y, std::vector<std::vector<ShellType>> shells, int moves, int required_matches, int level, int seed) : fonts(fonts), sounds(sounds), options(options) {
+    image_shells = "assets/images/shells" + std::to_string(this->options->getShellSize()) + ".png";
+    SDL_Log("Loading %s", image_shells.c_str());
     textures.add_texture(image_shells, renderer);
     loadLevel(x, y, shells, moves, required_matches, level, seed);
 }
@@ -57,8 +61,8 @@ void BoardManager::storeLevel(int x, int y, Board * board, int moves, int requir
     this->rect_board.x = x;
     this->rect_board.y = y;
 
-    this->rect_board.w = SHELL_SIZE * this->board->getWidth();
-    this->rect_board.h = SHELL_SIZE * this->board->getHeight();
+    this->rect_board.w = this->options->getShellSize() * this->board->getWidth();
+    this->rect_board.h = this->options->getShellSize() * this->board->getHeight();
 
     this->selected.x = this->board->getWidth() / 2;
     this->selected.y = this->board->getHeight() / 2;
@@ -176,7 +180,7 @@ void BoardManager::moveCursorMouse() {
     SDL_GetMouseState(&mouse.x, &mouse.y);
     // Make sure the mouse cursor is on the board
     if (mouse.x > rect_board.x && mouse.x < (rect_board.x + rect_board.w) && mouse.y > rect_board.y && mouse.y < (rect_board.y + rect_board.h)) {
-        SDL_Point newSelected = {(mouse.x - rect_board.x)/SHELL_SIZE, (mouse.y - rect_board.y)/SHELL_SIZE};
+        SDL_Point newSelected = {(mouse.x - rect_board.x)/this->options->getShellSize(), (mouse.y - rect_board.y)/this->options->getShellSize()};
         if (this->current_action == Action::MOVING) {
             if (newSelected.x != this->picked.x && newSelected.y != this->picked.y) {
                 // Snap to the nearest allowed position
@@ -342,15 +346,15 @@ void BoardManager::drawCursor(SDL_Renderer * renderer) {
     if (this->current_action == Action::MOVING) {
         SDL_Rect pickrect_hor;
         pickrect_hor.x = this->rect_board.x + 1;
-        pickrect_hor.y = SHELL_SIZE * this->picked.y + this->rect_board.y + 1;
-        pickrect_hor.w = SHELL_SIZE * this->board->getWidth() - 1;
-        pickrect_hor.h = SHELL_SIZE - 1;
+        pickrect_hor.y = this->options->getShellSize() * this->picked.y + this->rect_board.y + 1;
+        pickrect_hor.w = this->options->getShellSize() * this->board->getWidth() - 1;
+        pickrect_hor.h = this->options->getShellSize() - 1;
 
         SDL_Rect pickrect_ver;
-        pickrect_ver.x = SHELL_SIZE * this->picked.x + this->rect_board.x + 1;
+        pickrect_ver.x = this->options->getShellSize() * this->picked.x + this->rect_board.x + 1;
         pickrect_ver.y = this->rect_board.y + 1;
-        pickrect_ver.w = SHELL_SIZE - 1;
-        pickrect_ver.h =  SHELL_SIZE * this->board->getHeight() - 1;
+        pickrect_ver.w = this->options->getShellSize() - 1;
+        pickrect_ver.h =  this->options->getShellSize() * this->board->getHeight() - 1;
 
         SDL_SetRenderDrawColor(renderer, COLOR_PICKED.r, COLOR_PICKED.g, COLOR_PICKED.b, COLOR_PICKED.a);
         SDL_RenderFillRect(renderer, &pickrect_ver);
@@ -359,10 +363,10 @@ void BoardManager::drawCursor(SDL_Renderer * renderer) {
 
     // Draw selection rectangle
     SDL_Rect selrect;
-    selrect.x = SHELL_SIZE * selected.x + this->rect_board.x + 1;
-    selrect.y = SHELL_SIZE * selected.y + this->rect_board.y + 1;
-    selrect.w = SHELL_SIZE - 1;
-    selrect.h = SHELL_SIZE - 1;
+    selrect.x = this->options->getShellSize() * selected.x + this->rect_board.x + 1;
+    selrect.y = this->options->getShellSize() * selected.y + this->rect_board.y + 1;
+    selrect.w = this->options->getShellSize() - 1;
+    selrect.h = this->options->getShellSize() - 1;
 
     SDL_SetRenderDrawColor(renderer, COLOR_SELECT.r, COLOR_SELECT.g, COLOR_SELECT.b, COLOR_SELECT.a);
     SDL_RenderFillRect(renderer, &selrect);
@@ -370,14 +374,14 @@ void BoardManager::drawCursor(SDL_Renderer * renderer) {
 
 void BoardManager::drawBoard(SDL_Renderer * renderer) {
     // Draw background rectangle
-    SDL_Rect background = {this->rect_board.x, this->rect_board.y, this->board->getWidth() * SHELL_SIZE, (this->board->getHeight() + 1) * SHELL_SIZE};
+    SDL_Rect background = {this->rect_board.x, this->rect_board.y, this->board->getWidth() * this->options->getShellSize(), (this->board->getHeight() + 1) * this->options->getShellSize()};
     SDL_SetRenderDrawColor(renderer, COLOR_BOARD.r, COLOR_BOARD.g, COLOR_BOARD.b, COLOR_BOARD.a);
     SDL_RenderFillRect(renderer, &background);
 
     // Draw board lines
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     for (int x = 0; x <= this->board->getWidth(); x++) {
-        int current_x = this->rect_board.x + x * SHELL_SIZE;
+        int current_x = this->rect_board.x + x * this->options->getShellSize();
         SDL_RenderDrawLine(
                 renderer,
                 current_x,
@@ -387,7 +391,7 @@ void BoardManager::drawBoard(SDL_Renderer * renderer) {
                 );
     }
     for (int y = 0; y <= this->board->getHeight(); y++) {
-        int current_y = this->rect_board.y + y * SHELL_SIZE;
+        int current_y = this->rect_board.y + y * this->options->getShellSize();
         SDL_RenderDrawLine(
                 renderer,
                 this->rect_board.x,
@@ -398,9 +402,9 @@ void BoardManager::drawBoard(SDL_Renderer * renderer) {
     }
 
     // Draw lines around scoreboard
-    SDL_RenderDrawLine(renderer,this->rect_board.x,(this->rect_board.y + this->rect_board.h) + 1,this->rect_board.x,(this->rect_board.y + this->rect_board.h) + SHELL_SIZE);
-    SDL_RenderDrawLine(renderer,(this->rect_board.x + this->rect_board.w),(this->rect_board.y + this->rect_board.h) + 1,(this->rect_board.x + this->rect_board.w),(this->rect_board.y + this->rect_board.h) + SHELL_SIZE );
-    SDL_RenderDrawLine(renderer,this->rect_board.x,(this->rect_board.y + this->rect_board.h) + SHELL_SIZE,(this->rect_board.x + this->rect_board.w),(this->rect_board.y + this->rect_board.h) + SHELL_SIZE);
+    SDL_RenderDrawLine(renderer,this->rect_board.x,(this->rect_board.y + this->rect_board.h) + 1,this->rect_board.x,(this->rect_board.y + this->rect_board.h) + this->options->getShellSize());
+    SDL_RenderDrawLine(renderer,(this->rect_board.x + this->rect_board.w),(this->rect_board.y + this->rect_board.h) + 1,(this->rect_board.x + this->rect_board.w),(this->rect_board.y + this->rect_board.h) + this->options->getShellSize() );
+    SDL_RenderDrawLine(renderer,this->rect_board.x,(this->rect_board.y + this->rect_board.h) + this->options->getShellSize(),(this->rect_board.x + this->rect_board.w),(this->rect_board.y + this->rect_board.h) + this->options->getShellSize());
 }
 
 void BoardManager::drawShells(SDL_Renderer * renderer) {
@@ -412,16 +416,16 @@ void BoardManager::drawShells(SDL_Renderer * renderer) {
             }
 
             SDL_Rect srcrect;
-            srcrect.x = SHELL_SIZE * (int) this->preview[x][y];
+            srcrect.x = this->options->getShellSize() * (int) this->preview[x][y];
             srcrect.y = 0;
-            srcrect.w = SHELL_SIZE;
-            srcrect.h = SHELL_SIZE;
+            srcrect.w = this->options->getShellSize();
+            srcrect.h = this->options->getShellSize();
 
             SDL_Rect dstrect;
-            dstrect.x = SHELL_SIZE * x + this->rect_board.x;
-            dstrect.y = SHELL_SIZE * y + this->rect_board.y;
-            dstrect.w = SHELL_SIZE;
-            dstrect.h = SHELL_SIZE;
+            dstrect.x = this->options->getShellSize() * x + this->rect_board.x;
+            dstrect.y = this->options->getShellSize() * y + this->rect_board.y;
+            dstrect.w = this->options->getShellSize();
+            dstrect.h = this->options->getShellSize();
 
             SDL_RenderCopy(renderer, textures.get(image_shells), &srcrect, &dstrect);
         }
@@ -432,21 +436,21 @@ void BoardManager::drawFallingShells(SDL_Renderer * renderer) {
     // Draw the shells
     for(Shell shell : this->shells_to_drop) {
         SDL_Rect srcrect;
-        srcrect.x = SHELL_SIZE * (int) shell.type;
+        srcrect.x = this->options->getShellSize() * (int) shell.type;
         srcrect.y = 0;
-        srcrect.w = SHELL_SIZE;
-        srcrect.h = SHELL_SIZE;
+        srcrect.w = this->options->getShellSize();
+        srcrect.h = this->options->getShellSize();
 
         SDL_Rect dstrect;
-        dstrect.x = SHELL_SIZE * shell.x + this->rect_board.x;
-        dstrect.y = SHELL_SIZE * shell.y + this->rect_board.y + animation;
-        dstrect.w = SHELL_SIZE;
-        dstrect.h = SHELL_SIZE;
+        dstrect.x = this->options->getShellSize() * shell.x + this->rect_board.x;
+        dstrect.y = this->options->getShellSize() * shell.y + this->rect_board.y + animation;
+        dstrect.w = this->options->getShellSize();
+        dstrect.h = this->options->getShellSize();
 
         if (shell.y == -1) {
             int start_y = this->rect_board.y - dstrect.y;
             dstrect.y = this->rect_board.y;
-            dstrect.h = SHELL_SIZE - start_y;
+            dstrect.h = this->options->getShellSize() - start_y;
             srcrect.y = start_y;
             srcrect.h = dstrect.h;
         }
@@ -477,14 +481,14 @@ void BoardManager::drawMatches(SDL_Renderer * renderer) {
                 text = text_plus_three;
             }
 
-            SDL_Rect rect_plus_one = {SHELL_SIZE * match.x + this->rect_board.x, SHELL_SIZE * match.y + this->rect_board.y, 0, 0};
+            SDL_Rect rect_plus_one = {this->options->getShellSize() * match.x + this->rect_board.x, this->options->getShellSize() * match.y + this->rect_board.y, 0, 0};
             SDL_QueryTexture(text, NULL, NULL, &rect_plus_one.w, &rect_plus_one.h);
-            rect_plus_one.x += SHELL_SIZE/2 - rect_plus_one.w/2;
-            rect_plus_one.y += SHELL_SIZE/2 - rect_plus_one.h/2;
+            rect_plus_one.x += this->options->getShellSize()/2 - rect_plus_one.w/2;
+            rect_plus_one.y += this->options->getShellSize()/2 - rect_plus_one.h/2;
             if (match.direction == Direction::HORIZONTAL) {
-                rect_plus_one.x += SHELL_SIZE;
+                rect_plus_one.x += this->options->getShellSize();
             } else {
-                rect_plus_one.y += SHELL_SIZE;
+                rect_plus_one.y += this->options->getShellSize();
             }
 
             SDL_RenderCopy(renderer, text, NULL, &rect_plus_one);
@@ -493,21 +497,21 @@ void BoardManager::drawMatches(SDL_Renderer * renderer) {
         // Draw the shells
         for(int i = 0; i < 3; i++) {
             SDL_Rect srcrect;
-            srcrect.x = SHELL_SIZE * (int) match.type;
+            srcrect.x = this->options->getShellSize() * (int) match.type;
             srcrect.y = 0;
-            srcrect.w = SHELL_SIZE;
-            srcrect.h = SHELL_SIZE;
+            srcrect.w = this->options->getShellSize();
+            srcrect.h = this->options->getShellSize();
 
             SDL_Rect dstrect;
-            dstrect.x = SHELL_SIZE * match.x + this->rect_board.x;
-            dstrect.y = SHELL_SIZE * match.y + this->rect_board.y;
-            dstrect.w = SHELL_SIZE;
-            dstrect.h = SHELL_SIZE;
+            dstrect.x = this->options->getShellSize() * match.x + this->rect_board.x;
+            dstrect.y = this->options->getShellSize() * match.y + this->rect_board.y;
+            dstrect.w = this->options->getShellSize();
+            dstrect.h = this->options->getShellSize();
 
             if (match.direction == Direction::HORIZONTAL) {
-                dstrect.x += SHELL_SIZE*i;
+                dstrect.x += this->options->getShellSize()*i;
             } else {
-                dstrect.y += SHELL_SIZE*i;
+                dstrect.y += this->options->getShellSize()*i;
             }
 
             // Move towards score/moves
@@ -568,8 +572,8 @@ void BoardManager::drawInfo(SDL_Renderer * renderer) {
     if (!this->isRelaxedMode) {
         SDL_Rect rect_level = {rect_board.x, rect_board.y + rect_board.h, 0, 0};
         SDL_QueryTexture(text_level, NULL, NULL, &rect_level.w, &rect_level.h);
-        rect_level.x += SHELL_SIZE / 2;
-        rect_level.y += SHELL_SIZE / 2 - rect_level.h / 2;
+        rect_level.x += this->options->getShellSize() / 2;
+        rect_level.y += this->options->getShellSize() / 2 - rect_level.h / 2;
         SDL_RenderCopy(renderer, text_level, NULL, &rect_level);
     }
 
@@ -577,15 +581,15 @@ void BoardManager::drawInfo(SDL_Renderer * renderer) {
     this->rect_matches = {rect_board.x + rect_board.w / 2 , rect_board.y + rect_board.h, 0, 0};
     SDL_QueryTexture(text_matches, NULL, NULL, &rect_matches.w, &rect_matches.h);
     rect_matches.x -= rect_matches.w / 2;
-    rect_matches.y += SHELL_SIZE / 2 - rect_matches.h / 2;
+    rect_matches.y += this->options->getShellSize() / 2 - rect_matches.h / 2;
     SDL_RenderCopy(renderer, text_matches, NULL, &rect_matches);
 
     // Render moves
     if (!this->isRelaxedMode) {
         this->rect_moves = {rect_board.x + rect_board.w, rect_board.y + rect_board.h, 0, 0};
         SDL_QueryTexture(text_moves, NULL, NULL, &rect_moves.w, &rect_moves.h);
-        rect_moves.x -= SHELL_SIZE / 2 + rect_moves.w;
-        rect_moves.y += SHELL_SIZE / 2 - rect_moves.h / 2;
+        rect_moves.x -= this->options->getShellSize() / 2 + rect_moves.w;
+        rect_moves.y += this->options->getShellSize() / 2 - rect_moves.h / 2;
         SDL_RenderCopy(renderer, text_moves, NULL, &rect_moves);
     }
 }

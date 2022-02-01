@@ -7,9 +7,9 @@
 
 GameStateChallenge::GameStateChallenge(SDL_Renderer * renderer, FontManager * fonts, SoundManager * sounds, OptionManager * options) :
     theme(renderer, options, Theme::THEME1),
-    pause_screen(renderer, "Game Paused", "Press the confirm button to exit"),
-    win_screen(renderer, "Level Finished!", "Press the confirm button to continue"),
-    lose_screen(renderer, "Level failed", "Press the confirm button to restart")
+    pause_screen(renderer, fonts, options, "Game Paused", "Press the confirm button to exit"),
+    win_screen(renderer, fonts, options, "Level Finished!", "Press the confirm button to continue"),
+    lose_screen(renderer, fonts, options, "Level failed", "Press the confirm button to restart")
 {
     this->renderer = renderer;
     this->fonts = fonts;
@@ -112,7 +112,7 @@ void GameStateChallenge::drawAttempts(SDL_Renderer * renderer) {
     // Render
     SDL_Rect rect_attempts = {this->position.x, this->position.y, 0, 0};
     SDL_QueryTexture(text_attempts, NULL, NULL, &rect_attempts.w, &rect_attempts.h);
-    rect_attempts.x -= rect_attempts.w + SHELL_SIZE / 2;
+    rect_attempts.x -= rect_attempts.w + this->options->getShellSize() / 2;
     SDL_RenderCopy(renderer, text_attempts, NULL, &rect_attempts);
 
     // Render number
@@ -139,6 +139,7 @@ void GameStateChallenge::loadLevel() {
         renderer,
         this->fonts,
         this->sounds,
+        this->options,
         this->position.x,
         this->position.y,
         this->width,
@@ -159,7 +160,7 @@ void GameStateChallenge::loadLevel() {
 }
 
 SDL_Point GameStateChallenge::calculatePosition(int width, int height) {
-    return {(SCREEN_WIDTH-SHELL_SIZE*width)/2, (SCREEN_HEIGHT-SHELL_SIZE*(height+1))/2};
+    return {(this->options->getScreenWidth()-this->options->getShellSize()*width)/2, (this->options->getScreenHeight()-this->options->getShellSize()*(height+1))/2};
 }
 
 State GameStateChallenge::getNextState() {
