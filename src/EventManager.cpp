@@ -21,21 +21,26 @@ std::vector<Event> EventManager::getEvents() {
                 input = Event::QUIT;
                 break;
             case SDL_KEYDOWN:
+                SDL_ShowCursor(0);
                 input = getEventFromKeyboard(event.key.keysym.sym);
                 break;
             case SDL_CONTROLLERBUTTONDOWN:
+                SDL_ShowCursor(0);
                 input = getEventFromControllerButton(event.cbutton.button);
                 break;
             case SDL_MOUSEBUTTONDOWN:
+                SDL_ShowCursor(1);
                 input = getEventFromMouseButton(event.button.button);
                 break;
             case SDL_MOUSEBUTTONUP:
                 input = getEventFromMouseButtonUp(event.button.button);
                 break;
             case SDL_MOUSEMOTION:
+                SDL_ShowCursor(1);
                 input = Event::MOUSEMOVE;
                 break;
             case SDL_CONTROLLERAXISMOTION:
+                SDL_ShowCursor(0);
                 input = getEventFromControllerAxis(event.caxis.axis, event.caxis.value);
                 break;
             case SDL_CONTROLLERDEVICEADDED:
