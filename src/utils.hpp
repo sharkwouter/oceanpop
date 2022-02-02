@@ -21,6 +21,7 @@ inline void todo() {
 
 std::string getResourcePath(std::string file);
 
+SDL_DisplayMode getStandardDisplayMode();
 std::vector<SDL_DisplayMode> getDisplayModes();
 
 #endif // UTILS_HPP

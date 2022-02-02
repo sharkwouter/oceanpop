@@ -225,11 +225,19 @@ void OptionManager::setFullscreen(bool value) {
 }
 
 int OptionManager::getScreenWidth() {
-    return this->options.get("screen_width", DEFAULT_SCREEN_WIDTH).asInt();
+    int result = this->options.get("screen_width", 0).asInt();
+    if (result == 0) {
+        panic("Could not find a valid display mode!");
+    }
+    return result;
 }
 
 int OptionManager::getScreenHeight() {
-    return this->options.get("screen_height", DEFAULT_SCREEN_HEIGHT).asInt();
+    int result = this->options.get("screen_height", 0).asInt();
+    if (result == 0) {
+        panic("Could not find a valid display mode!");
+    }
+    return result;
 }
 
 int OptionManager::getScreenRefreshRate() {

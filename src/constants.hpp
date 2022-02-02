@@ -14,15 +14,4 @@ inline constexpr int DEFAULT_BOARD_WIDTH = 8;
 inline constexpr int DEFAULT_BOARD_HEIGHT = 7;
 inline constexpr int DEFAULT_SHELL_SIZE = 256; // The default should be the largest
 
-#if defined(__vita__)
-inline constexpr int DEFAULT_SCREEN_WIDTH = 960;
-inline constexpr int DEFAULT_SCREEN_HEIGHT = 544;
-#elif defined(__PSP__)
-inline constexpr int DEFAULT_SCREEN_WIDTH = 480;
-inline constexpr int DEFAULT_SCREEN_HEIGHT = 272;
-#else
-inline constexpr int DEFAULT_SCREEN_WIDTH = 1920;
-inline constexpr int DEFAULT_SCREEN_HEIGHT = 1080;
-#endif
-
 #endif // CONSTANTS_HPP

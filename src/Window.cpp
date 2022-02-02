@@ -28,10 +28,8 @@ Window::Window(const std::string &title, OptionManager * options) {
 
     // Set default screen resolution and refresh rate if they haven't been set yet
     if (options->getScreenRefreshRate() == 0) {
-        std::vector<SDL_DisplayMode> modes = getDisplayModes();
-        if (!modes.empty()) {
-            options->setScreenResolution(modes[0].w, modes[0].h, modes[0].refresh_rate);
-        }
+        SDL_DisplayMode mode = getStandardDisplayMode();
+        options->setScreenResolution(mode.w, mode.h, mode.refresh_rate);
     }
 
     Uint32 window_flags = SDL_WINDOW_SHOWN;
@@ -41,6 +39,14 @@ Window::Window(const std::string &title, OptionManager * options) {
     this->window = SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, options->getScreenWidth(), options->getScreenHeight(), window_flags);
     if (this->window == nullptr) {
         panic("couldn't create window: " + std::string(SDL_GetError()));
+    }
+
+    // Set the refresh rate
+    for(SDL_DisplayMode mode : getDisplayModes()) {
+        if (mode.w == options->getScreenWidth() && mode.h == options->getScreenHeight() && mode.refresh_rate == options->getScreenRefreshRate()) {
+            SDL_SetWindowDisplayMode(window, &mode);
+            break;
+        }
     }
 
     this->renderer = SDL_CreateRenderer(this->window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
