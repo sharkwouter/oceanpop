@@ -51,7 +51,7 @@ void HighscoreState::draw(SDL_Renderer * renderer) {
     this->theme.draw(renderer);
 
     // Draw title
-    SDL_Rect rect_title = {SCREEN_WIDTH / 2, this->options->getShellSize() / 2, 0, 0};
+    SDL_Rect rect_title = {this->options->getScreenWidth() / 2, this->options->getShellSize() / 2, 0, 0};
     SDL_QueryTexture(text_title, NULL, NULL, &rect_title.w, &rect_title.h);
     rect_title.x -= rect_title.w/2;
     SDL_RenderCopy(renderer, text_title, NULL, &rect_title);
@@ -59,7 +59,7 @@ void HighscoreState::draw(SDL_Renderer * renderer) {
     // Draw options
     for(int i = 0; i < (int) texts.size(); i++) {
         // Draw the option title
-        SDL_Rect rect = {SCREEN_WIDTH/2, getTextY(i), 0, 0};
+        SDL_Rect rect = {this->options->getScreenWidth()/2, getTextY(i), 0, 0};
         SDL_QueryTexture(texts[i], NULL, NULL, &rect.w, &rect.h);
         rect.x -= rect.w/2;
 
@@ -67,7 +67,7 @@ void HighscoreState::draw(SDL_Renderer * renderer) {
         SDL_RenderCopy(renderer, texts[i], NULL, &rect);
     }
 
-    SDL_Rect rect_bottom = {SCREEN_WIDTH/2, getTextY(((int) texts.size()) + 1), 0, 0};
+    SDL_Rect rect_bottom = {this->options->getScreenWidth()/2, getTextY(((int) texts.size()) + 1), 0, 0};
     SDL_QueryTexture(text_bottom, NULL, NULL, &rect_bottom.w, &rect_bottom.h);
     rect_bottom.x -= rect_bottom.w/2;
     SDL_RenderCopy(renderer, text_bottom, NULL, &rect_bottom);

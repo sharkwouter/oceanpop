@@ -123,8 +123,8 @@ void GameStateChallenge::drawAttempts(SDL_Renderer * renderer) {
 }
 
 void GameStateChallenge::loadLevel() {
-    this->width = BOARD_WIDTH;
-    this->height = BOARD_HEIGHT;
+    this->width = DEFAULT_BOARD_WIDTH;
+    this->height = DEFAULT_BOARD_HEIGHT;
 
     this->position = calculatePosition(this->width, this->height);
 

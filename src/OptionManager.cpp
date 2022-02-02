@@ -227,46 +227,31 @@ void OptionManager::setFullscreen(bool value) {
 }
 
 int OptionManager::getScreenWidth() {
-    return this->options.get("screen_width", SCREEN_WIDTH).asInt();
-}
-
-void OptionManager::setScreenWidth(int value) {
-    this->options["screen_width"] = value;
-    write();
+    return this->options.get("screen_width", DEFAULT_SCREEN_WIDTH).asInt();
 }
 
 int OptionManager::getScreenHeight() {
-    return this->options.get("screen_height", SCREEN_HEIGHT).asInt();
-}
-
-void OptionManager::setScreenHeight(int value) {
-    this->options["screen_height"] = value;
-    write();
+    return this->options.get("screen_height", DEFAULT_SCREEN_HEIGHT).asInt();
 }
 
 int OptionManager::getScreenRefreshRate() {
     return this->options.get("screen_refresh_rate", 0).asInt();
 }
 
-void OptionManager::setScreenRefreshRate(int value) {
-    this->options["screen_refresh_rate"] = value;
+void OptionManager::setScreenResolution(int width, int height, int refresh_rate) {
+    this->options["screen_width"] = width;
+    this->options["screen_height"] = height;
+    this->options["screen_refresh_rate"] = refresh_rate;
+
+    // Set the shell size to match the screen size
+    this->options["shell_size"] = DEFAULT_SHELL_SIZE;
+    while (width < (getShellSize() * DEFAULT_BOARD_WIDTH) || height < (getShellSize() * (DEFAULT_BOARD_HEIGHT +1))) {
+        this->options["shell_size"] = getShellSize()/2;
+    }
+
     write();
 }
 
 int OptionManager::getShellSize() {
-    int shellSize = SHELL_SIZE;
-    if (!(this->getScreenWidth() == SCREEN_WIDTH) || !(this->getScreenHeight() == SCREEN_HEIGHT)) {
-        bool sizeFits = false;
-        while (!sizeFits) {
-            int widthRequired = shellSize * 8;
-            int heightRequired = widthRequired;
-            if (this->getScreenWidth() > widthRequired && this->getScreenHeight() > heightRequired) {
-                sizeFits = true;
-            } else {
-                shellSize = shellSize/2;
-            }
-        }
-    }
-    
-    return shellSize;
+    return this->options.get("shell_size", DEFAULT_SHELL_SIZE).asInt();
 }

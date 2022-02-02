@@ -30,9 +30,7 @@ Window::Window(const std::string &title, OptionManager * options) {
     if (options->getScreenRefreshRate() == 0) {
         std::vector<SDL_DisplayMode> modes = getDisplayModes();
         if (!modes.empty()) {
-            options->setScreenWidth(modes[0].w);
-            options->setScreenHeight(modes[0].h);
-            options->setScreenRefreshRate(modes[0].refresh_rate);
+            options->setScreenResolution(modes[0].w, modes[0].h, modes[0].refresh_rate);
         }
     }
 

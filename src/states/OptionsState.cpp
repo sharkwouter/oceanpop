@@ -240,11 +240,9 @@ void OptionsState::changeResolution(int amount) {
             new_res = 0;
         }
 
-        this->options->setScreenWidth(modes[new_res].w);
-        this->options->setScreenHeight(modes[new_res].h);
-        this->options->setScreenRefreshRate(modes[new_res].refresh_rate);
-        SDL_SetWindowDisplayMode(this->window, &modes[new_res]);
+        this->options->setScreenResolution(modes[new_res].w, modes[new_res].h, modes[new_res].refresh_rate);
         SDL_SetWindowSize(window, modes[new_res].w, modes[new_res].h);
+        SDL_SetWindowDisplayMode(this->window, &modes[new_res]);
 
         updateTexts();
     }

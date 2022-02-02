@@ -50,7 +50,7 @@ std::vector<SDL_DisplayMode> getDisplayModes() {
 
     if (result.empty()) {
         SDL_Log("Display mode list is empty, using defaults");
-        result.push_back({SDL_PIXELFORMAT_RGBA8888, SCREEN_WIDTH, SCREEN_HEIGHT, 0, 0});
+        result.push_back({SDL_PIXELFORMAT_RGBA8888, DEFAULT_SCREEN_WIDTH, DEFAULT_SCREEN_HEIGHT, 0, 0});
     }
 
     return result;

@@ -54,9 +54,7 @@ public:
     void setRelaxedModeSeed(unsigned int value);
     void setRelaxedModeShells(std::vector<std::vector<ShellType>> value);
     void setFullscreen(bool value);
-    void setScreenWidth(int value);
-    void setScreenHeight(int value);
-    void setScreenRefreshRate(int value);
+    void setScreenResolution(int width, int height, int refresh_rate);
 
     void resetChallengeMode();
     void resetStandardMode();

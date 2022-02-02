@@ -152,8 +152,8 @@ void GameState::loadLevel(int level) {
 
     this->shells = loadShells(json["shells"]);
     if ((int) this->shells.size() == 0) {
-        this->width = json.get("width", BOARD_WIDTH).asInt();
-        this->height = json.get("height", BOARD_HEIGHT).asInt();
+        this->width = json.get("width", DEFAULT_BOARD_WIDTH).asInt();
+        this->height = json.get("height", DEFAULT_BOARD_HEIGHT).asInt();
     } else {
         this->width = this->shells.size();
         this->height = this->shells[0].size();

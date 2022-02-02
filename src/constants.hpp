@@ -3,29 +3,26 @@
 
 inline constexpr float ANALOG_DEADZONE_MULTIPLIER = 0.5;
 
-inline constexpr int DROP_TIME = 300;
+inline constexpr int DROP_TIME = 300; // in ms
 
-inline constexpr int MATCH_TIME = 500;
+inline constexpr int MATCH_TIME = 500; // in ms
 inline constexpr int MATCH_STEPS = 30;
 inline constexpr float MATCH_DELAY = MATCH_TIME/MATCH_STEPS;
 
 // Everything below this are defaults
-
-inline constexpr int BOARD_WIDTH = 8;
-inline constexpr int BOARD_HEIGHT = 7;
+inline constexpr int DEFAULT_BOARD_WIDTH = 8;
+inline constexpr int DEFAULT_BOARD_HEIGHT = 7;
+inline constexpr int DEFAULT_SHELL_SIZE = 256; // The default should be the largest
 
 #if defined(__vita__)
-inline constexpr int SCREEN_WIDTH = 960;
-inline constexpr int SCREEN_HEIGHT = 544;
-inline constexpr int SHELL_SIZE = 64;
+inline constexpr int DEFAULT_SCREEN_WIDTH = 960;
+inline constexpr int DEFAULT_SCREEN_HEIGHT = 544;
 #elif defined(__PSP__)
-inline constexpr int SCREEN_WIDTH = 480;
-inline constexpr int SCREEN_HEIGHT = 272;
-inline constexpr int SHELL_SIZE = 32;
+inline constexpr int DEFAULT_SCREEN_WIDTH = 480;
+inline constexpr int DEFAULT_SCREEN_HEIGHT = 272;
 #else
-inline constexpr int SCREEN_WIDTH = 1920;
-inline constexpr int SCREEN_HEIGHT = 1080;
-inline constexpr int SHELL_SIZE = 128;
+inline constexpr int DEFAULT_SCREEN_WIDTH = 1920;
+inline constexpr int DEFAULT_SCREEN_HEIGHT = 1080;
 #endif
 
 #endif // CONSTANTS_HPP
