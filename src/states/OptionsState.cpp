@@ -216,7 +216,17 @@ void OptionsState::changeMusicVolume(int amount) {
 void OptionsState::changeFullscreen() {
     this->options->setFullscreen(!this->options->getFullscreen());
 
-    SDL_SetWindowFullscreen(this->window, this->options->getFullscreen() ? SDL_WINDOW_FULLSCREEN : 0);
+    // Set the refresh rate
+    if (options->getFullscreen()) {
+        for(SDL_DisplayMode mode : getDisplayModes()) {
+            if (mode.w == options->getScreenWidth() && mode.h == options->getScreenHeight() && mode.refresh_rate == options->getScreenRefreshRate()) {
+                SDL_SetWindowDisplayMode(window, &mode);
+                break;
+            }
+        }
+    }
+
+   SDL_SetWindowFullscreen(this->window, this->options->getFullscreen() ? SDL_WINDOW_FULLSCREEN : 0);
 
     SDL_DestroyTexture(this->texts[this->selection]);
     this->texts[this->selection] = fonts->getTexture(renderer, getFullscreenString(), false, {255, 255, 255, 255});
