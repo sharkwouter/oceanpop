@@ -104,7 +104,6 @@ void OptionManager::writeShells(std::string field, std::vector<std::vector<Shell
     write();
 }
 
-
 int OptionManager::getMusicVolume() {
     return this->options.get("music_volume", 4).asInt();
 }
@@ -137,9 +136,8 @@ void OptionManager::resetStandardMode() {
     write();
 }
 
-
 bool OptionManager::getStandardModeCompleted() {
-    return this->options.get("standard_mode_completed", true).asBool();
+    return this->options.get("standard_mode_completed", false).asBool();
 }
 
 void OptionManager::setStandardModeCompleted(bool value) {
