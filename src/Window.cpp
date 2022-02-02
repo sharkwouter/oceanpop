@@ -42,10 +42,12 @@ Window::Window(const std::string &title, OptionManager * options) {
     }
 
     // Set the refresh rate
-    for(SDL_DisplayMode mode : getDisplayModes()) {
-        if (mode.w == options->getScreenWidth() && mode.h == options->getScreenHeight() && mode.refresh_rate == options->getScreenRefreshRate()) {
-            SDL_SetWindowDisplayMode(window, &mode);
-            break;
+    if (options->getFullscreen()) {
+        for(SDL_DisplayMode mode : getDisplayModes()) {
+            if (mode.w == options->getScreenWidth() && mode.h == options->getScreenHeight() && mode.refresh_rate == options->getScreenRefreshRate()) {
+                SDL_SetWindowDisplayMode(window, &mode);
+                break;
+            }
         }
     }
 

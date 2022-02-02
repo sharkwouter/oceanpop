@@ -242,7 +242,9 @@ void OptionsState::changeResolution(int amount) {
 
         this->options->setScreenResolution(modes[new_res].w, modes[new_res].h, modes[new_res].refresh_rate);
         SDL_SetWindowSize(window, modes[new_res].w, modes[new_res].h);
-        SDL_SetWindowDisplayMode(this->window, &modes[new_res]);
+        if (this->options->getFullscreen()) {
+            SDL_SetWindowDisplayMode(this->window, &modes[new_res]);
+        }
 
         updateTexts();
     }
