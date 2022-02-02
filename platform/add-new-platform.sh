@@ -1,15 +1,15 @@
 #!/bin/bash
 
 usage() {
-    echo "Usage: ${0} name shellSize resolution"
+    echo "Usage: ${0} name resolution [music]"
     echo ""
     echo "name: the name of the platform"
-    echo "shellSize: the size of the shells. The screen should be at least 8x8 shell sizes"
     echo "resolution: the resolution of the target device's screen"
+    echo "music (optional): the file type the music, ogg for example"
     exit 1
 }
 
-if [ -z "${1}" ]||[ -z "${2}" ]||[ -z "${3}" ]; then
+if [ -z "${1}" ]||[ -z "${2}" ]; then
     echo "Please fill in all required fields"
     usage
 fi
@@ -20,32 +20,38 @@ WORKDIR="${PWD}"
 
 # Store input under readable names
 PLATFORM=${1}
-SHELLSIZE=${2}
-RESOLUTION=${3}
-MUSICFILETYPE=${4}
-SHELLRESOLUTION="$((${SHELLSIZE} * 7))x${SHELLSIZE}"
+RESOLUTION=${2}
+MUSICFILETYPE=${3}
 
 BACKGROUNDS_DIR="platform/${PLATFORM}/assets/backgrounds"
-IMAGES_DIR="platform/${PLATFORM}/assets/images"
 
 # Make directories
-mkdir -p "${BACKGROUNDS_DIR}" "${IMAGES_DIR}"
+mkdir -p "${BACKGROUNDS_DIR}"
 
-# Create image
-convert -background none -density 1200 -resize "${SHELLRESOLUTION}" platform/shells.svgz assets/images/shells${SHELLSIZE}.png
+FILES_CHANGED=false
 
 # Convert backgrounds to right size
 for background in $(find assets/backgrounds/ -type f); do
-    convert -resize "${RESOLUTION}" "${background}" "platform/${PLATFORM}/${background}"
+    background_new="platform/${PLATFORM}/${background}"
+    if [ ! -f "${background_new}" ]; then
+        convert -resize "${RESOLUTION}" "${background}" "${background_new}"
+        FILES_CHANGED=true
+    fi
 done
 
 if [ -n "${MUSICFILETYPE}" ]; then
     mkdir -p "platform/${PLATFORM}/assets/music"
     for music in $(find assets/music/ -type f); do
-        music_new_name="$(echo "${music}"|cut -f1 -d".").${MUSICFILETYPE}"
-        ffmpeg -i "${music}" "platform/${PLATFORM}/${music_new_name}"
+        music_new="platform/${PLATFORM}/$(echo "${music}"|cut -f1 -d".").${MUSICFILETYPE}"
+        if [ ! -f "${music_new}" ]; then
+            ffmpeg -i "${music}" "${music_new}"
+            FILES_CHANGED=true
+        fi
     done
 fi
 
-echo "The platform directory has been created in platform/${PLATFORM}."
-echo "Please change the shell size in src/constants.h and make sure the assets are copied at build in CMakeLists.txt."
+if [ "${FILES_CHANGED}" = true ]; then
+    echo "The platform ${PLATFORM} was updated, changes can be found in platform/${PLATFORM}"
+else
+    echo "The platform ${PLATFORM} was up to date already, nothing was changed"
+fi
