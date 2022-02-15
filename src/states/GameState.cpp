@@ -112,13 +112,13 @@ int GameState::getTotalLevels() {
             std::string name = entry.path().stem().string();
             int number = std::stoi(name.substr(5));
 
-            SDL_Log("Found level: %d", number);
             if (number > highest_level) {
                 highest_level = number;
             }
             levels++;
         }
     }
+    SDL_Log("Amount of level found: %d", levels);
     if (levels != highest_level) {
         panic("The amount of levels (" + std::to_string(levels) + ") has to match the highest level number (" + std::to_string(highest_level) + ")!");
     }
