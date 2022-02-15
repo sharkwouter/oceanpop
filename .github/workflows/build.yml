@@ -100,8 +100,9 @@ jobs:
             LICENSE.txt
             README.md
 
-  Publish:
+  Release:
     needs: [Linux, Windows, PSP, Vita]
+    if: startsWith(github.ref, 'refs/tags/')
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -115,18 +116,7 @@ jobs:
     - name: Zip artifacts
       run: |
         zip -r oceanpop-${{matrix.build}}.zip oceanpop-${{matrix.build}}
-    - name: Create pre-release
-      if: github.ref == 'refs/heads/master'
-      uses: softprops/action-gh-release@v1
-      with:
-        files: oceanpop-${{matrix.build}}.zip
-        prerelease: true
-        name: "Development build"
-        tag_name: "latest"
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - name: Release
-      if: startsWith(github.ref, 'refs/tags/')
       uses: softprops/action-gh-release@v1
       with:
         files: oceanpop-${{matrix.build}}.zip
