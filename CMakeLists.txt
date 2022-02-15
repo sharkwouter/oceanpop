@@ -7,10 +7,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
      add_compile_options(-Wall -Wextra -pedantic)
-elseif(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
-     if(CMAKE_BUILD_TYPE STREQUAL "Release")
-          add_compile_options("")
-     endif()
 endif()
 
 file(GLOB_RECURSE SRC src/*.cpp)
@@ -18,10 +14,6 @@ if(WIN32)
      add_executable(oceanpop WIN32 ${SRC} ${CMAKE_CURRENT_SOURCE_DIR}/platform/windows/appicon.rc)
 else()
      add_executable(oceanpop ${SRC})
-endif()
-
-if(WIN32)
-     option(BUILD_STATIC "Build a static binary (Windows only)" ON)
 endif()
 
 if (VITA)
@@ -154,25 +146,7 @@ elseif(PLATFORM_PSP)
           DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/assets)
 
 elseif(WIN32)
-     if(BUILD_STATIC)
-          set(CompilerFlags
-               CMAKE_CXX_FLAGS
-               CMAKE_CXX_FLAGS_DEBUG
-               CMAKE_CXX_FLAGS_RELEASE
-               CMAKE_CXX_FLAGS_MINSIZEREL
-               CMAKE_CXX_FLAGS_RELWITHDEBINFO
-               CMAKE_C_FLAGS
-               CMAKE_C_FLAGS_DEBUG
-               CMAKE_C_FLAGS_RELEASE
-               CMAKE_C_FLAGS_MINSIZEREL
-               CMAKE_C_FLAGS_RELWITHDEBINFO
-          )
-          foreach(CompilerFlag ${CompilerFlags})
-          string(REPLACE "/MD" "/MT" ${CompilerFlag} "${${CompilerFlag}}")
-          set(${CompilerFlag} "${${CompilerFlag}}" CACHE STRING "msvc compiler flags" FORCE)
-          message("MSVC flags: ${CompilerFlag}:${${CompilerFlag}}")
-          endforeach()
-     endif()
+     option(BUILD_STATIC "Build a static binary (Windows only)" OFF)
 
     find_package(jsoncpp CONFIG REQUIRED)
     find_package(SDL2 CONFIG REQUIRED)
@@ -191,6 +165,20 @@ elseif(WIN32)
      )
 
      if(BUILD_STATIC)
+          if(MSVC)
+               set(CompilerFlags
+                    CMAKE_CXX_FLAGS
+                    CMAKE_CXX_FLAGS_DEBUG
+                    CMAKE_CXX_FLAGS_RELEASE
+                    CMAKE_CXX_FLAGS_MINSIZEREL
+                    CMAKE_CXX_FLAGS_RELWITHDEBINFO
+               )
+               foreach(CompilerFlag ${CompilerFlags})
+                    string(REPLACE "/MD" "/MT" ${CompilerFlag} "${${CompilerFlag}}")
+                    set(${CompilerFlag} "${${CompilerFlag}}" CACHE STRING "msvc compiler flags" FORCE)
+                    message("MSVC flags: ${CompilerFlag}:${${CompilerFlag}}")
+               endforeach()
+          endif()
           target_link_libraries(oceanpop PRIVATE
                SDL2::SDL2-static
                jsoncpp_static

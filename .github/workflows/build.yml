@@ -41,7 +41,7 @@ jobs:
         uses: actions/checkout@v2
       - name: Build
         run: |
-          cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=C:\vcpkg\scripts\buildsystems\vcpkg.cmake -DVCPKG_TARGET_TRIPLET=x64-windows-static .
+          cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=C:\vcpkg\scripts\buildsystems\vcpkg.cmake -DVCPKG_TARGET_TRIPLET=x64-windows-static -DBUILD_STATIC=ON .
           cmake --build . --config Release
           cp Release/oceanpop.exe .
       - name: Publish artifacts
