@@ -58,13 +58,15 @@ void ThemeManager::loadMusic(Theme theme) {
         Mix_FreeMusic(this->music);
     }
 
+    this->music_theme = theme;
+
     #ifdef __PSP__
         std::string music_file_type = "ogg";
     #else
         std::string music_file_type = "mp3";
     #endif
 
-    switch (theme) {
+    switch (this->music_theme) {
         case Theme::THEME1:
             this->music = Mix_LoadMUS(getResourcePath("assets/music/song1." + music_file_type).c_str());
             break;
@@ -85,11 +87,10 @@ void ThemeManager::loadMusic(Theme theme) {
 
     this->current_volume = 0;
     Mix_PlayMusic(this->music, 0);
-    this->music_theme = theme;
 }
 
 void ThemeManager::update() {
-    if ((this->music == NULL && this->music_theme != Theme::MENU) || this->paused || this->volume == 0) {
+    if (this->music_theme == Theme::MENU || this->paused || this->volume == 0) {
         return;
     }
 
@@ -119,7 +120,7 @@ Theme ThemeManager::getNextTheme() {
 Theme ThemeManager::getNextMusicTheme() {
     Theme theme = Theme::THEME1;
 
-    if ((((int) this->theme) + 1) < (int) Theme::AMOUNT) {
+    if ((((int) this->music_theme) + 1) < (int) Theme::AMOUNT) {
         theme = (Theme) (((int) this->music_theme) + 1);
     }
     return theme;
