@@ -1,6 +1,6 @@
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.12)
 
-project(oceanpop VERSION 0.1.0)
+project(oceanpop)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
@@ -11,9 +11,9 @@ endif()
 
 file(GLOB_RECURSE SRC src/*.cpp)
 if(WIN32)
-     add_executable(oceanpop WIN32 ${SRC} ${CMAKE_CURRENT_SOURCE_DIR}/platform/windows/appicon.rc)
+     add_executable(${CMAKE_PROJECT_NAME} WIN32 ${SRC} ${CMAKE_CURRENT_SOURCE_DIR}/platform/windows/appicon.rc)
 else()
-     add_executable(oceanpop ${SRC})
+     add_executable(${CMAKE_PROJECT_NAME} ${SRC})
 endif()
 
 if (VITA)
@@ -38,13 +38,13 @@ if (VITA)
      set(SDL2_INCLUDE_DIR "$ENV{VITASDK}/arm-vita-eabi/include/SDL2")
      set(JSON_INCLUDE_DIR "$ENV{VITASDK}/arm-vita-eabi/include/jsoncpp")
 
-     target_include_directories(oceanpop PRIVATE
+     target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE
           ${VITA_INCLUDE_DIR}
           ${SDL2_INCLUDE_DIR}
           ${JSON_INCLUDE_DIR}
      )
 
-     target_link_libraries(oceanpop
+     target_link_libraries(${CMAKE_PROJECT_NAME}
           SDL2_image
           SDL2_ttf
           SDL2_mixer
@@ -76,9 +76,9 @@ if (VITA)
           SceMotion_stub
      )
 
-     vita_create_self(oceanpop.self oceanpop)
+     vita_create_self(${CMAKE_PROJECT_NAME}.self ${CMAKE_PROJECT_NAME})
 
-     vita_create_vpk(oceanpop.vpk ${VITA_TITLEID} oceanpop.self
+     vita_create_vpk(${CMAKE_PROJECT_NAME}.vpk ${VITA_TITLEID} ${CMAKE_PROJECT_NAME}.self
           VERSION ${VITA_VERSION}
           NAME ${VITA_APPNAME}
           FILE platform/vita/sce_sys sce_sys
@@ -92,11 +92,11 @@ if (VITA)
 elseif(PLATFORM_PSP)
      set(SDL2_INCLUDE_DIR "${PSPDEV}/psp/include/SDL2")
 
-     target_include_directories(oceanpop PRIVATE
+     target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE
           ${SDL2_INCLUDE_DIR}
      )
 
-     target_link_libraries(oceanpop PRIVATE
+     target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE
           SDL2_image
           SDL2_mixer
           SDL2
@@ -124,7 +124,7 @@ elseif(PLATFORM_PSP)
      )
 
      create_pbp_file(
-          TARGET oceanpop
+          TARGET ${CMAKE_PROJECT_NAME}
           ICON_PATH ${CMAKE_SOURCE_DIR}/platform/psp/icon.png
           BACKGROUND_PATH NULL
           PREVIEW_PATH NULL
@@ -154,7 +154,7 @@ elseif(WIN32)
     find_package(sdl2-mixer CONFIG REQUIRED)
     find_package(sdl2-ttf CONFIG REQUIRED)
 
-     target_link_libraries(oceanpop PRIVATE
+     target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE
           SDL2::SDL2
           SDL2::SDL2main
           SDL2::SDL2_image
@@ -179,14 +179,14 @@ elseif(WIN32)
                     message("MSVC flags: ${CompilerFlag}:${${CompilerFlag}}")
                endforeach()
           endif()
-          target_link_libraries(oceanpop PRIVATE
+          target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE
                SDL2::SDL2-static
                jsoncpp_static
                Shlwapi
           )
      endif()
 
-     target_include_directories(oceanpop PRIVATE
+     target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE
           ${SDL2_INCLUDE_DIRS}
           ${SDL2_IMAGE_INCLUDE_DIRS}
           ${SDL2_TTF_INCLUDE_DIRS}
@@ -202,9 +202,9 @@ else()
      pkg_search_module(SDL2_MIXER REQUIRED SDL2_mixer)
 	pkg_search_module(JSONCPP REQUIRED jsoncpp)
 
-     target_include_directories(oceanpop PRIVATE ${SDL2_INCLUDE_DIRS} ${JSONCPP_INCLUDE_DIRS})
+     target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ${SDL2_INCLUDE_DIRS} ${JSONCPP_INCLUDE_DIRS})
      
-     target_link_libraries(oceanpop
+     target_link_libraries(${CMAKE_PROJECT_NAME}
           ${SDL2_TTF_LIBRARIES}
           ${SDL2_IMAGE_LIBRARIES}
           ${SDL2_MIXER_LIBRARIES}
@@ -216,9 +216,9 @@ else()
           DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
 
      # Set install paths
-     install(TARGETS oceanpop DESTINATION bin)
-     install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/assets DESTINATION share/oceanpop)
-     install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/platform/unix/oceanpop.desktop DESTINATION share/applications)
-     install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/platform/unix/icons/128x128/oceanpop.png DESTINATION share/icons/hicolor/128x128/apps)
-     install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/README.md DESTINATION share/doc/oceanpop)
+     install(TARGETS ${CMAKE_PROJECT_NAME} DESTINATION bin)
+     install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/assets DESTINATION share/${CMAKE_PROJECT_NAME})
+     install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/platform/unix/${CMAKE_PROJECT_NAME}.desktop DESTINATION share/applications)
+     install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/platform/unix/icons/128x128/${CMAKE_PROJECT_NAME}.png DESTINATION share/icons/hicolor/128x128/apps)
+     install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/README.md DESTINATION share/doc/${CMAKE_PROJECT_NAME})
 endif()
