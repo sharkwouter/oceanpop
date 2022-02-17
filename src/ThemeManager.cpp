@@ -150,14 +150,13 @@ void ThemeManager::switchTheme(int theme) {
         theme = 1;
     }
 
-    if ((Theme) theme == this->theme) {
-        return;
-    }
-    this->theme = (Theme) theme;
+    if ((Theme) theme != this->theme) {
+        this->theme = (Theme) theme;
 
-    loadBackground(this->theme);
-    if (change_music_on_switch) {
-        loadMusic(this->theme);
+        loadBackground(this->theme);
+        if (change_music_on_switch) {
+            loadMusic(this->theme);
+        }
     }
     unpause();
 }
@@ -172,10 +171,8 @@ void ThemeManager::pause() {
 
 void ThemeManager::unpause() {
     if (this->paused) {
-        if (this->change_music_on_switch) {
-            this->current_volume = this->volume;
-            Mix_VolumeMusic(this->current_volume);
-        }
+        this->current_volume = this->volume;
+        Mix_VolumeMusic(this->current_volume);
         this->paused = false;
     }
 }
