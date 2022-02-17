@@ -1,17 +1,17 @@
 #include "GameStateRelaxed.hpp"
 
-#include <SDL_ttf.h>
-#include <cmath>
-#include "../colors.hpp"
-
 GameStateRelaxed::GameStateRelaxed(SDL_Renderer * renderer, FontManager * fonts, SoundManager * sounds, OptionManager * options) :
-    theme(renderer, options, Theme::THEME1),
+    theme(renderer, options, Theme::MENU),
     pause_screen(renderer, fonts, options, "Game Paused", "Press the confirm button to exit")
 {
     this->renderer = renderer;
     this->fonts = fonts;
     this->sounds = sounds;
     this->options = options;
+
+    // Set a random theme
+    srand(SDL_GetTicks());
+    theme.switchTheme((rand() % ((int) Theme::AMOUNT - 1)) + 1);
 
     loadLevel();
 }
