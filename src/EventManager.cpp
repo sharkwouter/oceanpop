@@ -86,6 +86,12 @@ Event EventManager::getEventFromKeyboard(SDL_Keycode key) {
         case SDLK_BACKSPACE:
             event = Event::CANCEL;
             break;
+        case SDLK_PAGEUP:
+            event = Event::NEXT;
+            break;
+        case SDLK_PAGEDOWN:
+            event = Event::PREVIOUS;
+            break;
         case SDLK_ESCAPE:
             event = Event::MENU;
             break;

@@ -12,6 +12,8 @@ enum class Event {
     MENU,
     MOUSEMOVE,
     QUIT,
+    NEXT,
+    PREVIOUS,
     OTHER
 };
 
