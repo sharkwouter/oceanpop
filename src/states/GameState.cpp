@@ -86,7 +86,7 @@ void GameState::handleEvents(std::vector<Event> events) {
             this->paused = true;
             return;
         } else if(event == Event::NEXT) {
-            if ((this->level + 1) < this->total_levels) {
+            if ((this->level) < this->total_levels) {
                 this->loadLevel(this->level + 1);
             }
         }  else if(event == Event::PREVIOUS) {
