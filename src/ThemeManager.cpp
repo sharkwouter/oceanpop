@@ -16,16 +16,13 @@ ThemeManager::~ThemeManager() {
     if (this->music != NULL) {
         Mix_FreeMusic(this->music);
     }
-    if (this->next_music != NULL) {
-        Mix_FreeMusic(this->next_music);
-    }
     SDL_DestroyTexture(this->background);
 }
 
 void ThemeManager::load(Theme theme) {
-    this->theme = theme;
     loadBackground(theme);
     loadMusic(theme);
+    this->theme = theme;
 }
 
 void ThemeManager::loadBackground(Theme theme) {
@@ -52,50 +49,52 @@ void ThemeManager::loadBackground(Theme theme) {
 }
 
 void ThemeManager::loadMusic(Theme theme) {
+    if (this->volume == 0 || theme == this->music_theme) {
+        return;
+    }
+
+    if (this->music != NULL) {
+        Mix_HaltMusic();
+        Mix_FreeMusic(this->music);
+    }
+
     #ifdef __PSP__
         std::string music_file_type = "ogg";
     #else
         std::string music_file_type = "mp3";
     #endif
 
-    if (this->next_music != NULL) {
-        Mix_FreeMusic(this->next_music);
-    }
-
     switch (theme) {
         case Theme::THEME1:
-            this->next_music = Mix_LoadMUS(getResourcePath("assets/music/song1." + music_file_type).c_str());
+            this->music = Mix_LoadMUS(getResourcePath("assets/music/song1." + music_file_type).c_str());
             break;
         case Theme::THEME2:
-            this->next_music = Mix_LoadMUS(getResourcePath("assets/music/song2." + music_file_type).c_str());
+            this->music = Mix_LoadMUS(getResourcePath("assets/music/song2." + music_file_type).c_str());
             break;
         case Theme::THEME3:
-            this->next_music = Mix_LoadMUS(getResourcePath("assets/music/song3." + music_file_type).c_str());
+            this->music = Mix_LoadMUS(getResourcePath("assets/music/song3." + music_file_type).c_str());
             break;
         case Theme::THEME4:
-            this->next_music = Mix_LoadMUS(getResourcePath("assets/music/song4." + music_file_type).c_str());
+            this->music = Mix_LoadMUS(getResourcePath("assets/music/song4." + music_file_type).c_str());
             break;
         default:
-            this->next_music = NULL;
+            this->music = NULL;
+            return;
             break;
     }
+
+    this->current_volume = 0;
+    Mix_PlayMusic(this->music, 0);
+    this->music_theme = theme;
 }
 
 void ThemeManager::update() {
-    if ((this->music == NULL && this->next_music == NULL) || this->paused || this->volume == 0) {
+    if ((this->music == NULL && this->music_theme != Theme::MENU) || this->paused || this->volume == 0) {
         return;
     }
 
     if (!Mix_PlayingMusic()) {
-        if (this->next_music == NULL) {
-            nextSong();
-        }
-        if (this->music != NULL) {
-            Mix_FreeMusic(this->music);
-        }
-        this->music = std::move(this->next_music);
-        this->next_music = NULL;
-        Mix_PlayMusic(this->music, 0);
+        nextSong();
     }
 
     if(this->current_volume < this->volume) {
@@ -117,21 +116,26 @@ Theme ThemeManager::getNextTheme() {
     return theme;
 }
 
+Theme ThemeManager::getNextMusicTheme() {
+    Theme theme = Theme::THEME1;
+
+    if ((((int) this->theme) + 1) < (int) Theme::AMOUNT) {
+        theme = (Theme) (((int) this->music_theme) + 1);
+    }
+    return theme;
+}
+
 void ThemeManager::next() {
-    load(getNextTheme());
+    this->theme = getNextTheme();
+    loadBackground(this->theme);
     if (change_music_on_switch) {
-        Mix_HaltMusic();
+        loadMusic(this->theme);
     }
     unpause();
 }
 
 void ThemeManager::nextSong() {
-    loadMusic(getNextTheme());
-    if (change_music_on_switch) {
-        Mix_HaltMusic();
-        this->current_volume = this->volume;
-        Mix_VolumeMusic(this->current_volume);
-    }
+    loadMusic(getNextMusicTheme());
     unpause();
 }
 
@@ -145,7 +149,16 @@ void ThemeManager::switchTheme(int theme) {
         theme = 1;
     }
 
-    load((Theme) theme);
+    if ((Theme) theme == this->theme) {
+        return;
+    }
+    this->theme = (Theme) theme;
+
+    loadBackground(this->theme);
+    if (change_music_on_switch) {
+        loadMusic(this->theme);
+    }
+    unpause();
 }
 
 void ThemeManager::pause() {

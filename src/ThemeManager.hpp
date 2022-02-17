@@ -12,12 +12,13 @@
 
 class ThemeManager {
 private:
-    Theme theme;
     SDL_Renderer * renderer;
     OptionManager * options;
 
+    Theme theme;
+    Theme music_theme;
+
     Mix_Music * music = NULL;
-    Mix_Music * next_music = NULL;
     SDL_Texture * background = NULL;
 
     bool paused = false;
@@ -31,6 +32,7 @@ private:
     void loadMusic(Theme theme);
 
     Theme getNextTheme();
+    Theme getNextMusicTheme();
 
     SDL_Texture * createBackgroundTexture(std::string filename);
 public:
