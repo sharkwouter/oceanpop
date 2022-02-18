@@ -93,9 +93,10 @@ std::vector<Shell> Board::dropShells() {
 }
 
 void Board::dropNewShell(int x) {
-    if (getCount(ShellType::BUBBLE) < 6 && (this->rand() % 20) == 1) {
+    int total_shells = getHeight() * getWidth();
+    if (getCount(ShellType::BUBBLE) < std::min(6,total_shells/9) && (this->rand() % 20) == 1) {
         this->shells[x][0] = ShellType::BUBBLE;
-    } else if (!this->isRelaxedMode && getCount(ShellType::URCHIN) < 8 && (this->rand() % 20) == 1) {
+    } else if (!this->isRelaxedMode && getCount(ShellType::URCHIN) < std::min(8,total_shells/7) && (this->rand() % 20) == 1) {
         this->shells[x][0] = ShellType::URCHIN;
     } else {
         this->shells[x][0] = (ShellType) (this->rand() % ((int) ShellType::NUMBER_OF_COLORS - 2));
