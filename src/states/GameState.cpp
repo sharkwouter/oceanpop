@@ -11,7 +11,7 @@
 #include "../utils.hpp"
 
 GameState::GameState(SDL_Renderer * renderer, FontManager * fonts, SoundManager * sounds, OptionManager * options) :
-    theme(renderer, options, Theme::THEME1),
+    theme(renderer, options, Theme::NONE),
     pause_screen(renderer, fonts, options, "Game Paused", "Press the confirm button to exit"),
     win_screen(renderer, fonts, options, "Level Finished!", "Press the confirm button to continue"),
     lose_screen(renderer, fonts, options, "Level Failed", "Press the confirm button to restart")
@@ -21,7 +21,7 @@ GameState::GameState(SDL_Renderer * renderer, FontManager * fonts, SoundManager 
     this->sounds = sounds;
     this->options = options;
 
-    this->current_theme = (int) Theme::THEME1;
+    this->current_theme = (int) Theme::NONE;
 
     this->total_levels = getTotalLevels();
     loadLevel(this->options->getStandardModeLevel());

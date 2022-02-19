@@ -42,8 +42,11 @@ void ThemeManager::loadBackground(Theme theme) {
         case Theme::THEME4:
             this->background = createBackgroundTexture("background4.jpg");
             break;
-        default:
+        case Theme::MENU:
             this->background = createBackgroundTexture("menu.jpg");
+            break;
+        default:
+            this->background = NULL;
             break;
     }
 }
@@ -90,7 +93,7 @@ void ThemeManager::loadMusic(Theme theme) {
 }
 
 void ThemeManager::update() {
-    if (this->music_theme == Theme::MENU || this->paused || this->volume == 0) {
+    if (this->music_theme == Theme::MENU || this->music_theme == Theme::NONE || this->paused || this->volume == 0) {
         return;
     }
 
@@ -105,7 +108,9 @@ void ThemeManager::update() {
 }
 
 void ThemeManager::draw(SDL_Renderer * renderer) {
-    SDL_RenderCopy(renderer, this->background, NULL, NULL);
+    if (this->background) {
+        SDL_RenderCopy(renderer, this->background, NULL, NULL);
+    }
 }
 
 Theme ThemeManager::getNextTheme() {

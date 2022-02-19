@@ -1,7 +1,7 @@
 #include "GameStateRelaxed.hpp"
 
 GameStateRelaxed::GameStateRelaxed(SDL_Renderer * renderer, FontManager * fonts, SoundManager * sounds, OptionManager * options) :
-    theme(renderer, options, Theme::MENU),
+    theme(renderer, options, Theme::NONE),
     pause_screen(renderer, fonts, options, "Game Paused", "Press the confirm button to exit")
 {
     this->renderer = renderer;

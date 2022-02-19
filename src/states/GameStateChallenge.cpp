@@ -6,7 +6,7 @@
 #include "../colors.hpp"
 
 GameStateChallenge::GameStateChallenge(SDL_Renderer * renderer, FontManager * fonts, SoundManager * sounds, OptionManager * options) :
-    theme(renderer, options, Theme::THEME1),
+    theme(renderer, options, Theme::NONE),
     pause_screen(renderer, fonts, options, "Game Paused", "Press the confirm button to exit"),
     win_screen(renderer, fonts, options, "Level Finished!", "Press the confirm button to continue"),
     lose_screen(renderer, fonts, options, "Level failed", "Press the confirm button to restart")
@@ -150,9 +150,9 @@ void GameStateChallenge::loadLevel() {
         this->seed
     );
 
+    this->theme.switchTheme(this->level);
     if (this->level > 1) {
         this->attempts = this->options->getChallengeModeLives();
-        this->theme.switchTheme(this->level);
     } else {
         this->attempts = 3;
     }

@@ -7,7 +7,8 @@ enum class Theme {
     THEME2,
     THEME3,
     THEME4,
-    AMOUNT
+    AMOUNT,
+    NONE
 };
 
 #endif // THEME_HPP
