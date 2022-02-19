@@ -207,7 +207,7 @@ void GameState::loadLevel(int level) {
         );
     }
 
-    int new_theme = json.get("theme", 1).asInt();
+    int new_theme = json.get("theme", 1).asInt() - 1;
     if (new_theme != this->current_theme) {
         this->theme.switchTheme(new_theme);
         this->current_theme = new_theme;

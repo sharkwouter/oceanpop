@@ -150,7 +150,7 @@ void GameStateChallenge::loadLevel() {
         this->seed
     );
 
-    this->theme.switchTheme(this->level);
+    this->theme.switchTheme(this->level - 1);
     if (this->level > 1) {
         this->attempts = this->options->getChallengeModeLives();
     } else {

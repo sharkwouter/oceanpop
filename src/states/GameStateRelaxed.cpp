@@ -11,7 +11,7 @@ GameStateRelaxed::GameStateRelaxed(SDL_Renderer * renderer, FontManager * fonts,
 
     // Set a random theme
     srand(SDL_GetTicks());
-    theme.switchTheme((rand() % ((int) Theme::AMOUNT - 1)) + 1);
+    theme.switchTheme(rand() % ((int) Theme::AMOUNT));
 
     loadLevel();
 }

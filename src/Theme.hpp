@@ -2,12 +2,12 @@
 #define THEME_HPP
 
 enum class Theme {
-    MENU,
     THEME1,
     THEME2,
     THEME3,
     THEME4,
     AMOUNT,
+    MENU,
     NONE
 };
 

@@ -93,7 +93,7 @@ void ThemeManager::loadMusic(Theme theme) {
 }
 
 void ThemeManager::update() {
-    if (this->music_theme == Theme::MENU || this->music_theme == Theme::NONE || this->paused || this->volume == 0) {
+    if (((int) this->music_theme) >= ((int) Theme::AMOUNT) || this->paused || this->volume == 0) {
         return;
     }
 
@@ -147,12 +147,7 @@ void ThemeManager::nextSong() {
 
 void ThemeManager::switchTheme(int theme) {
     if (theme >= (int) Theme::AMOUNT) {
-        theme = theme % (((int) Theme::AMOUNT) - 1);
-        if (theme == 0) {
-            theme = ((int) Theme::AMOUNT) - 1;
-        }
-    } else if (theme < 1) {
-        theme = 1;
+        theme = theme % ((int) Theme::AMOUNT);
     }
 
     if ((Theme) theme != this->theme) {
