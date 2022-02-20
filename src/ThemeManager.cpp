@@ -151,12 +151,11 @@ void ThemeManager::switchTheme(int theme) {
     }
 
     if ((Theme) theme != this->theme) {
-        this->theme = (Theme) theme;
-
-        loadBackground(this->theme);
-        if (change_music_on_switch) {
-            loadMusic(this->theme);
+        loadBackground((Theme) theme);
+        if (change_music_on_switch || this->theme == Theme::NONE) {
+            loadMusic((Theme) theme);
         }
+        this->theme = (Theme) theme;
     }
     unpause();
 }
