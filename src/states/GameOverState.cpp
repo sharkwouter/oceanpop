@@ -2,7 +2,7 @@
 
 GameOverState::GameOverState(SDL_Renderer * renderer, FontManager * fonts, SoundManager * sounds, OptionManager * options) :
     theme(renderer, options, Theme::MENU),
-    screen_text(renderer, fonts, options, "Game Over!", "Press the confirm button to exit")
+    screen_text(renderer, fonts, options, "Game Over!", "press the confirm button to exit")
 {
     this->renderer = renderer;
     this->fonts = fonts;

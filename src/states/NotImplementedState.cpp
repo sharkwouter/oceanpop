@@ -2,7 +2,7 @@
 
 NotImplementedState::NotImplementedState(SDL_Renderer * renderer, FontManager * fonts, SoundManager * sounds, OptionManager * options) :
     theme(renderer, options, Theme::MENU),
-    screen_text(renderer, fonts, options, "Not Yet Implemented", "Press the confirm button to continue")
+    screen_text(renderer, fonts, options, "Not Yet Implemented", "press the confirm button to continue")
 {
     this->renderer = renderer;
     this->fonts = fonts;

@@ -8,12 +8,12 @@ HighscoreState::HighscoreState(SDL_Renderer * renderer, FontManager * fonts, Sou
     theme(renderer, options, Theme::MENU)
 {
     this->text_title = fonts->getTexture(renderer, "High Scores", true, {COLOR_MENU_TITLE.r, COLOR_MENU_TITLE.g, COLOR_MENU_TITLE.b, COLOR_MENU_TITLE.a});
-    this->text_bottom = fonts->getTexture(renderer, "Press confirm to go back", false, {255, 255, 255, 255});
+    this->text_bottom = fonts->getTexture(renderer, "press confirm to go back", false, {255, 255, 255, 255});
 
     std::string standard_mode_completed = options->getStandardModeCompleted() ? "yes" : "no";
-    texts.push_back(fonts->getTexture(renderer, "Standard mode completed: " + standard_mode_completed, false, {255, 255, 255, 255}));
-    texts.push_back(fonts->getTexture(renderer, "Highest level reached in challenge mode: " + std::to_string(options->getChallengeModeHighscore()), false, {255, 255, 255, 255}));
-    texts.push_back(fonts->getTexture(renderer, "Matches in relaxed mode: " + std::to_string(options->getRelaxedModeScore()), false, {255, 255, 255, 255}));
+    texts.push_back(fonts->getTexture(renderer, "standard mode completed: " + standard_mode_completed, false, {255, 255, 255, 255}));
+    texts.push_back(fonts->getTexture(renderer, "highest level reached in challenge mode: " + std::to_string(options->getChallengeModeHighscore()), false, {255, 255, 255, 255}));
+    texts.push_back(fonts->getTexture(renderer, "matches in relaxed mode: " + std::to_string(options->getRelaxedModeScore()), false, {255, 255, 255, 255}));
 
     this->text_start_y = getTextY(0);
 }

@@ -2,7 +2,7 @@
 
 WonState::WonState(SDL_Renderer * renderer, FontManager * fonts, SoundManager * sounds, OptionManager * options) :
     theme(renderer, options, Theme::MENU),
-    screen_text(renderer, fonts, options, "Game mode completed!", "Press the confirm button to exit")
+    screen_text(renderer, fonts, options, "Game Mode Completed!", "press the confirm button to exit")
 {
     this->renderer = renderer;
     this->fonts = fonts;

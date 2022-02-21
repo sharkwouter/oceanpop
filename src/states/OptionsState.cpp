@@ -141,7 +141,7 @@ void OptionsState::draw(SDL_Renderer * renderer) {
 }
 
 std::string OptionsState::getSoundVolumeString() {
-    std::string result = "Sound volume: ";
+    std::string result = "sound volume: ";
     for (int i = 0; i < this->options->getSoundVolume(); i++)
     {
         result += "|";
@@ -151,7 +151,7 @@ std::string OptionsState::getSoundVolumeString() {
 }
 
 std::string OptionsState::getMusicVolumeString() {
-        std::string result = "Music volume: ";
+        std::string result = "music volume: ";
     for (int i = 0; i < this->options->getMusicVolume(); i++)
     {
         result += "|";
@@ -161,15 +161,15 @@ std::string OptionsState::getMusicVolumeString() {
 }
 
 std::string OptionsState::getChangeMusicString() {
-    return "Change music upon level switch: " + std::string(this->options->getChangeMusicOnSwitch() ? "yes" : "no");
+    return "change music upon level switch: " + std::string(this->options->getChangeMusicOnSwitch() ? "yes" : "no");
 }
 
 std::string OptionsState::getFullscreenString() {
-    return "Full screen: " + std::string(this->options->getFullscreen() ? "yes" : "no");
+    return "full screen: " + std::string(this->options->getFullscreen() ? "yes" : "no");
 }
 
 std::string OptionsState::getResolutionString() {
-    std::string result = "Resolution: " + std::to_string(this->options->getScreenWidth()) + "x" + std::to_string(this->options->getScreenHeight());
+    std::string result = "resolution: " + std::to_string(this->options->getScreenWidth()) + "x" + std::to_string(this->options->getScreenHeight());
     if (this->options->getScreenRefreshRate() > 0) {
          result += " (" + std::to_string(this->options->getScreenRefreshRate()) + " hz)";
     }
@@ -282,7 +282,7 @@ void OptionsState::loadTexts() {
                 current_text = getResolutionString();
                 break;
             case Option::GO_BACK:
-                current_text = "Return to menu";
+                current_text = "return to menu";
                 break;
             default:
                 current_text = "?????????";
