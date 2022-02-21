@@ -9,7 +9,7 @@ GameStateChallenge::GameStateChallenge(SDL_Renderer * renderer, FontManager * fo
     theme(renderer, options, Theme::NONE),
     pause_screen(renderer, fonts, options, "Game Paused", "Press the confirm button to exit"),
     win_screen(renderer, fonts, options, "Level Finished!", "Press the confirm button to continue"),
-    lose_screen(renderer, fonts, options, "Level failed", "Press the confirm button to restart")
+    lose_screen(renderer, fonts, options, "Level Failed", "Press the confirm button to restart")
 {
     this->renderer = renderer;
     this->fonts = fonts;

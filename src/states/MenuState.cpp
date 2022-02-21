@@ -13,22 +13,22 @@ MenuState::MenuState(SDL_Renderer * renderer, FontManager * fonts, SoundManager 
         std::string option_text;
         switch ((State) i) {
             case State::STANDARD:
-                option_text = "Standard mode";
+                option_text = "standard mode";
                 break;
             case State::CHALLENGE:
-                option_text = "Challenge mode";
+                option_text = "challenge mode";
                 break;
             case State::RELAXED:
-                option_text = "Relaxed mode";
+                option_text = "relaxed mode";
                 break;
             case State::HIGHSCORES:
-                option_text = "High scores";
+                option_text = "high scores";
                 break;
             case State::OPTIONS:
-                option_text = "Options";
+                option_text = "options";
                 break;
             case State::EXIT:
-                option_text = "Exit";
+                option_text = "exit";
                 break;
             default:
                 option_text = "?????????";

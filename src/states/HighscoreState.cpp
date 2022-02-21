@@ -7,7 +7,7 @@
 HighscoreState::HighscoreState(SDL_Renderer * renderer, FontManager * fonts, SoundManager * sounds, OptionManager * options) : renderer(renderer), fonts(fonts), sounds(sounds), options(options),
     theme(renderer, options, Theme::MENU)
 {
-    this->text_title = fonts->getTexture(renderer, "High scores", true, {COLOR_MENU_TITLE.r, COLOR_MENU_TITLE.g, COLOR_MENU_TITLE.b, COLOR_MENU_TITLE.a});
+    this->text_title = fonts->getTexture(renderer, "High Scores", true, {COLOR_MENU_TITLE.r, COLOR_MENU_TITLE.g, COLOR_MENU_TITLE.b, COLOR_MENU_TITLE.a});
     this->text_bottom = fonts->getTexture(renderer, "Press confirm to go back", false, {255, 255, 255, 255});
 
     std::string standard_mode_completed = options->getStandardModeCompleted() ? "yes" : "no";
