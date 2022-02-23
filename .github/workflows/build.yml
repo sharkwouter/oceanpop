@@ -32,29 +32,6 @@ jobs:
             README.md
 
   Windows:
-    runs-on: windows-latest
-    steps:
-      - name: Install dependencies
-        run: |
-          vcpkg install --triplet x64-windows-static sdl2 sdl2-image[libjpeg-turbo] sdl2-ttf sdl2-mixer[mpg123] jsoncpp
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Build
-        run: |
-          cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=C:\vcpkg\scripts\buildsystems\vcpkg.cmake -DVCPKG_TARGET_TRIPLET=x64-windows-static -DBUILD_STATIC=ON .
-          cmake --build . --config Release
-          cp Release/oceanpop.exe .
-      - name: Publish artifacts
-        uses: actions/upload-artifact@v2
-        with:
-          name: oceanpop-windows
-          path: |
-            oceanpop.exe
-            assets
-            LICENSE.txt
-            README.md
-
-  MinGW:
     runs-on: ubuntu-latest
     container: ghcr.io/sharkwouter/mingw-game-builder:latest
     steps:
@@ -121,7 +98,7 @@ jobs:
             README.md
 
   Release:
-    needs: [Linux, Windows, PSP, Vita]
+    needs: [Linux, Windows, MinGW, PSP, Vita]
     if: startsWith(github.ref, 'refs/tags/')
     runs-on: ubuntu-latest
     strategy:
