@@ -145,7 +145,7 @@ elseif(PLATFORM_PSP)
      file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/platform/psp/assets/backgrounds
           DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/assets)
 
-elseif(WIN32)
+elseif(WIN32 AND MSVC)
      option(BUILD_STATIC "Build a static binary (Windows only)" OFF)
 
     find_package(jsoncpp CONFIG REQUIRED)
