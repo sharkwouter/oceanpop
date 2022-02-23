@@ -204,13 +204,17 @@ else()
 
      target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ${SDL2_INCLUDE_DIRS} ${JSONCPP_INCLUDE_DIRS})
      
-     target_link_libraries(${CMAKE_PROJECT_NAME}
+     target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE
           ${SDL2_TTF_LIBRARIES}
           ${SDL2_IMAGE_LIBRARIES}
           ${SDL2_MIXER_LIBRARIES}
           ${SDL2_LIBRARIES}
           ${JSONCPP_LIBRARIES}
      )
+
+     if(MINGW)
+          target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE rpcrt4)
+     endif()
 
      file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/assets
           DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
