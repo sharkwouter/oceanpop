@@ -39,12 +39,8 @@ int main(int argv, char** args) {
     (void) argv;
     (void) args;
 
-    try {
-        run();
-    } catch (const Json::LogicError&) {
-        SDL_Log("Configuration file invalid, please delete it");
-        return EXIT_FAILURE;
-    }
+    run();
+
 
     return EXIT_SUCCESS;
 }
