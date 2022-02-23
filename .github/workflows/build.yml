@@ -54,6 +54,26 @@ jobs:
             LICENSE.txt
             README.md
 
+  MinGW:
+    runs-on: ubuntu-latest
+    container: ghcr.io/sharkwouter/mingw-game-builder:latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Build
+        run: |
+          cmake -DCMAKE_TOOLCHAIN_FILE=/usr/x86_64-w64-mingw32/share/toolchain.cmake -DBUILD_STATIC=ON .
+          make
+      - name: Publish artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: oceanpop-windows
+          path: |
+            oceanpop.exe
+            assets
+            LICENSE.txt
+            README.md
+
   PSP:
     runs-on: ubuntu-latest
     container: pspdev/pspdev:latest
