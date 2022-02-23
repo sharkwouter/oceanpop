@@ -62,7 +62,7 @@ jobs:
         uses: actions/checkout@v2
       - name: Build
         run: |
-          cmake -DCMAKE_TOOLCHAIN_FILE=/usr/x86_64-w64-mingw32/share/toolchain.cmake -DBUILD_STATIC=ON .
+          cmake -DCMAKE_TOOLCHAIN_FILE=/usr/x86_64-w64-mingw32/share/toolchain.cmake -DSDL2_INCLUDE_DIRS="/usr/x86_64-w64-mingw32/include/SDL2/" .
           make
       - name: Publish artifacts
         uses: actions/upload-artifact@v2
