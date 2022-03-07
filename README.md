@@ -6,7 +6,7 @@ Dive into the relaxing world of OceanPop and experience waves of match-3 gamepla
 
 Don‘t get crushed by the tides before completing the 35 levels in _regular mode_, feel the rush of the currents in _challenge mode_ or just go with the flow of the ocean breeze in _relaxed mode_!
 
-## How to play
+## How to Play
 
 In OceanPop the goal is to reach the target score before running out of moves. Earn points by lining up 3 or more shells of the same type. This is done by moving one shell as far horizontally or vertically as the user would like, but it can only be placed if it creates a match. Each time this is done, a move is used.
 
