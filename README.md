@@ -1,15 +1,10 @@
 ![screenshot](screenshot.jpg?raw=true)
 
-## Features
+## Summary
 
-OceanPop boasts at least the following features:
+Dive into the relaxing world of OceonPop and experience waves of match-3 gameplay with the three modes available! 
 
-- Match 3 gameplay with a twist
-- Full controller support
-- 3 game modes:
-  - Standard mode: complete a set of pre-made levels
-  - Challenge mode: each level has 10 moves and an increasing amount of matches required
-  - Relaxed mode: match without win or lose condition
+Don‘t get crushed by the tides before completing the 35 levels in _regular mode_, feel the rush of the current in _challenge mode_ or just go with the flow of the ocean breeze in _relaxed mode_!
 
 ## How to play
 
