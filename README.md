@@ -4,7 +4,7 @@
 
 Dive into the relaxing world of OceanPop and experience waves of match-3 gameplay with the three modes available! 
 
-Don‘t get crushed by the tides before completing the 35 levels in _regular mode_, feel the rush of the current in _challenge mode_ or just go with the flow of the ocean breeze in _relaxed mode_!
+Don‘t get crushed by the tides before completing the 35 levels in _regular mode_, feel the rush of the currents in _challenge mode_ or just go with the flow of the ocean breeze in _relaxed mode_!
 
 ## How to play
 
