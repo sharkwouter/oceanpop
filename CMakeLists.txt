@@ -83,6 +83,8 @@ if (VITA)
           NAME ${VITA_APPNAME}
           FILE platform/vita/sce_sys sce_sys
           FILE platform/vita/assets/backgrounds assets/backgrounds
+	  FILE README.md README.md
+	  FILE LICENSE.txt LICENSE.txt
           FILE assets/images assets/images
           FILE assets/fonts assets/fonts
           FILE assets/sounds assets/sounds
@@ -200,7 +202,7 @@ else()
      pkg_search_module(SDL2_IMAGE REQUIRED SDL2_image >= 2.0.0)
      pkg_search_module(SDL2_TTF REQUIRED SDL2_ttf)
      pkg_search_module(SDL2_MIXER REQUIRED SDL2_mixer)
-	pkg_search_module(JSONCPP REQUIRED jsoncpp)
+     pkg_search_module(JSONCPP REQUIRED jsoncpp)
 
      target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ${SDL2_INCLUDE_DIRS} ${JSONCPP_INCLUDE_DIRS})
      
