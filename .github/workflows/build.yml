@@ -31,6 +31,28 @@ jobs:
             LICENSE.txt
             README.md
 
+  Mac:
+    runs-on: macos-latest
+    steps:
+      - name: Install dependencies
+        run: |
+          brew install cmake make gcc binutils sdl2 sdl2_image sdl2_ttf sdl2_mixer jsoncpp
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Build
+        run: |
+          cmake -DCMAKE_BUILD_TYPE=Release .
+          make
+          strip --strip-unneeded oceanpop
+      - name: Publish artifacts
+        uses: actions/upload-artifact@v2
+        with:
+          name: oceanpop-mac
+          path: |
+            oceanpop
+            assets
+            LICENSE.txt
+            README.md
   Windows:
     runs-on: windows-latest
     steps:
@@ -101,12 +123,12 @@ jobs:
             README.md
 
   Release:
-    needs: [Linux, Windows, PSP, Vita]
+    needs: [Linux, Windows, Mac, PSP, Vita]
     if: startsWith(github.ref, 'refs/tags/')
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        build: [linux, windows, psp, vita]
+        build: [linux, windows, mac, psp, vita]
     steps:
     - name: Extract tag name
       if: startsWith(github.ref, 'refs/tags/')
