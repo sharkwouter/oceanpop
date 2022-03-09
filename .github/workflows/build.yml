@@ -121,5 +121,9 @@ jobs:
       with:
         files: oceanpop-${{matrix.build}}.zip
         tag_name: ${{ steps.tag.outputs.VERSION }}
+        name: OceanPop ${{ steps.tag.outputs.VERSION }}
+        body: |
+          A new release of the relaxing match-3 game with a twist. Enjoy!
+          ![screenshot](https://raw.githubusercontent.com/sharkwouter/oceanpop/${{ steps.tag.outputs.VERSION }}/screenshot.jpg)
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
