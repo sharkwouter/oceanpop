@@ -31,6 +31,12 @@ Then the game can be started with:
 ./oceanpop
 ```
 
+Installing can be done with:
+
+```
+make install
+```
+
 ## Windows
 
 On Windows make sure [vcpkg](https://vcpkg.io/) and cmake are installed and in your PATH. Then install the following packages with it:
