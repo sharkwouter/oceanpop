@@ -12,9 +12,9 @@ endif()
 file(GLOB_RECURSE SRC src/*.cpp)
 
 if(WIN32)
-    add_executable(${CMAKE_PROJECT_NAME} WIN32 ${SRC} ${CMAKE_CURRENT_SOURCE_DIR}/platform/windows/appicon.rc)
+    add_executable(${PROJECT_NAME} WIN32 ${SRC} ${CMAKE_CURRENT_SOURCE_DIR}/platform/windows/appicon.rc)
 else()
-    add_executable(${CMAKE_PROJECT_NAME} ${SRC})
+    add_executable(${PROJECT_NAME} ${SRC})
 endif()
 
 set(ASSETS_FONTS "${CMAKE_SOURCE_DIR}/assets/fonts")
@@ -40,7 +40,7 @@ if(WIN32)
     find_package(sdl2-mixer CONFIG REQUIRED)
     find_package(sdl2-ttf CONFIG REQUIRED)
 
-    target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE
+    target_link_libraries(${PROJECT_NAME} PRIVATE
         SDL2::SDL2
         SDL2::SDL2main
         SDL2::SDL2_image
@@ -65,14 +65,14 @@ if(WIN32)
                 message("MSVC flags: ${CompilerFlag}:${${CompilerFlag}}")
             endforeach()
         endif()
-        target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE
+        target_link_libraries(${PROJECT_NAME} PRIVATE
             SDL2::SDL2-static
             jsoncpp_static
             Shlwapi
         )
     endif()
 
-    target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE
+    target_include_directories(${PROJECT_NAME} PRIVATE
         ${SDL2_INCLUDE_DIRS}
         ${SDL2_IMAGE_INCLUDE_DIRS}
         ${SDL2_TTF_INCLUDE_DIRS}
@@ -88,13 +88,13 @@ else()
     pkg_search_module(SDL2_MIXER REQUIRED SDL2_mixer)
     pkg_search_module(JSONCPP REQUIRED jsoncpp)
 
-    target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ${SDL2_INCLUDE_DIRS} ${JSONCPP_INCLUDE_DIRS})
+    target_include_directories(${PROJECT_NAME} PRIVATE ${SDL2_INCLUDE_DIRS} ${JSONCPP_INCLUDE_DIRS})
 
     if(PSP)
-        target_link_libraries(${CMAKE_PROJECT_NAME} SDL2main)
+        target_link_libraries(${PROJECT_NAME} SDL2main)
     endif()
 
-    target_link_libraries(${CMAKE_PROJECT_NAME}
+    target_link_libraries(${PROJECT_NAME}
         ${SDL2_TTF_LIBRARIES}
         ${SDL2_IMAGE_LIBRARIES}
         ${SDL2_MIXER_LIBRARIES}
@@ -104,44 +104,58 @@ else()
 
     # Set install paths
     if(NOT PSP AND NOT VITA)
-        install(TARGETS ${CMAKE_PROJECT_NAME} DESTINATION bin)
-        install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/assets DESTINATION share/${CMAKE_PROJECT_NAME})
-        install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/platform/unix/${CMAKE_PROJECT_NAME}.desktop DESTINATION share/applications)
-        install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/platform/unix/icons/128x128/${CMAKE_PROJECT_NAME}.png DESTINATION share/icons/hicolor/128x128/apps)
-        install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/README.md DESTINATION share/doc/${CMAKE_PROJECT_NAME})
+        install(TARGETS ${PROJECT_NAME} DESTINATION bin)
+        install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/assets DESTINATION share/${PROJECT_NAME})
+        install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/platform/unix/${PROJECT_NAME}.desktop DESTINATION share/applications)
+        install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/platform/unix/icons/128x128/${PROJECT_NAME}.png DESTINATION share/icons/hicolor/128x128/apps)
+        install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/README.md DESTINATION share/doc/${PROJECT_NAME})
     endif()
 endif()
 
 
 # Copy the assets if neeeded
-file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/assets)
-file(COPY ${ASSETS_BACKGROUNDS} DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/assets/backgrounds)
-file(COPY ${ASSETS_FONTS} DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/assets/fonts)
-file(COPY ${ASSETS_IMAGES} DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/assets/images)
-file(COPY ${ASSETS_LEVELS} DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/assets/levels)
-file(COPY ${ASSETS_MUSIC} DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/assets/music)
-file(COPY ${ASSETS_SOUNDS} DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/assets/sounds)
+if(NOT VITA)
+    file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/assets)
+    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+        ${ASSETS_BACKGROUNDS} ${CMAKE_CURRENT_BINARY_DIR}/assets/backgrounds)
+    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+        ${ASSETS_FONTS} ${CMAKE_CURRENT_BINARY_DIR}/assets/fonts)
+    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+        ${ASSETS_IMAGES} ${CMAKE_CURRENT_BINARY_DIR}/assets/images)
+    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+        ${ASSETS_LEVELS} ${CMAKE_CURRENT_BINARY_DIR}/assets/levels)
+    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+        ${ASSETS_MUSIC} ${CMAKE_CURRENT_BINARY_DIR}/assets/music)
+    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_directory
+        ${ASSETS_SOUNDS} ${CMAKE_CURRENT_BINARY_DIR}/assets/sounds)
+endif()
 
 # Package in case needed
 if (VITA)
     include("$ENV{VITASDK}/share/vita.cmake" REQUIRED)
-    vita_create_self(${CMAKE_PROJECT_NAME}.self ${CMAKE_PROJECT_NAME})
-    vita_create_vpk(${CMAKE_PROJECT_NAME}.vpk "OPOP00001" ${CMAKE_PROJECT_NAME}.self
+    vita_create_self(${PROJECT_NAME}.self ${PROJECT_NAME})
+    vita_create_vpk(${PROJECT_NAME}.vpk "OPOP00001" ${PROJECT_NAME}.self
         VERSION "01.00"
         NAME OceanPop
         FILE platform/vita/sce_sys sce_sys
         FILE README.md README.md
         FILE LICENSE.txt LICENSE.txt
-        FILE ${ASSETS_BACKGROUNDS} assets/backgrounds
-        FILE ${ASSETS_FONTS} assets/fonts
-        FILE ${ASSETS_IMAGES} assets/images
-        FILE ${ASSETS_LEVELS} assets/levels
-        FILE ${ASSETS_MUSIC} assets/music
-        FILE ${ASSETS_SOUNDS} assets/sounds
+        FILE "${ASSETS_BACKGROUNDS}" assets/backgrounds
+        FILE "${ASSETS_FONTS}" assets/fonts
+        FILE "${ASSETS_IMAGES}" assets/images
+        FILE "${ASSETS_LEVELS}" assets/levels
+        FILE "${ASSETS_MUSIC}" assets/music
+        FILE "${ASSETS_SOUNDS}" assets/sounds
     )
 elseif(PSP)
     create_pbp_file(
-        TARGET ${CMAKE_PROJECT_NAME}
+        TARGET ${PROJECT_NAME}
         ICON_PATH ${CMAKE_SOURCE_DIR}/platform/psp/icon.png
         BACKGROUND_PATH NULL
         PREVIEW_PATH NULL

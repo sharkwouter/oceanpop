@@ -60,7 +60,7 @@ jobs:
     steps:
       - name: Install dependencies
         run: |
-          apk add cmake
+          apk add cmake bash pkgconfig
       - name: Checkout
         uses: actions/checkout@v2
       - name: Build
