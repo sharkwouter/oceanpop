@@ -83,22 +83,35 @@ else()
     include(FindPkgConfig)
 
     pkg_search_module(SDL2 REQUIRED sdl2)
-    pkg_search_module(SDL2_IMAGE REQUIRED SDL2_image >= 2.0.0)
     pkg_search_module(SDL2_TTF REQUIRED SDL2_ttf)
-    pkg_search_module(SDL2_MIXER REQUIRED SDL2_mixer)
     pkg_search_module(JSONCPP REQUIRED jsoncpp)
+
+    if(NOT VITA)
+        # The vita does not have pkg config files for SDL2_image and SDL2_mixer
+        pkg_search_module(SDL2_IMAGE REQUIRED SDL2_image >= 2.0.0)
+        pkg_search_module(SDL2_MIXER REQUIRED SDL2_mixer)
+    endif()
 
     target_include_directories(${PROJECT_NAME} PRIVATE ${SDL2_INCLUDE_DIRS} ${JSONCPP_INCLUDE_DIRS})
 
+    # Load additional required libraries per platform
     if(PSP)
-        target_link_libraries(${PROJECT_NAME} SDL2main)
+        list(APPEND SDL2_LIBRARIES SDL2main)
+        list(APPEND SDL2_MIXER_LIBRARIES vorbisfile vorbis ogg)
+        list(APPEND SDL2_IMAGE_LIBRARIES jpeg png z)
+        list(APPEND SDL2_TTF_LIBRARIES freetype)
+    elseif(VITA)
+        list(APPEND SDL2_MIXER_LIBRARIES SDL2_mixer pthread vorbisfile vorbis ogg mikmod mpg123 FLAC)
+        list(APPEND SDL2_IMAGE_LIBRARIES SDL2_image webp jpeg png z)
+        list(APPEND SDL2_TTF_LIBRARIES freetype)
+        list(APPEND JSONCPP_LIBRARIES stdc++)
     endif()
 
     target_link_libraries(${PROJECT_NAME}
-        ${SDL2_TTF_LIBRARIES}
-        ${SDL2_IMAGE_LIBRARIES}
-        ${SDL2_MIXER_LIBRARIES}
         ${SDL2_LIBRARIES}
+        ${SDL2_MIXER_LIBRARIES}
+        ${SDL2_IMAGE_LIBRARIES}
+        ${SDL2_TTF_LIBRARIES}
         ${JSONCPP_LIBRARIES}
     )
 
