@@ -85,6 +85,10 @@ jobs:
     runs-on: ubuntu-latest
     container: gnuton/vitasdk-docker:latest
     steps:
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y pkgconf
       - name: Checkout
         uses: actions/checkout@v2
       - name: Build
