@@ -147,7 +147,7 @@ elseif(PLATFORM_PSP)
      file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/platform/psp/assets/backgrounds
           DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/assets)
 
-elseif(WIN32)
+elseif(MSVC)
      option(BUILD_STATIC "Build a static binary (Windows only)" OFF)
 
     find_package(jsoncpp CONFIG REQUIRED)
@@ -167,20 +167,18 @@ elseif(WIN32)
      )
 
      if(BUILD_STATIC)
-          if(MSVC)
-               set(CompilerFlags
-                    CMAKE_CXX_FLAGS
-                    CMAKE_CXX_FLAGS_DEBUG
-                    CMAKE_CXX_FLAGS_RELEASE
-                    CMAKE_CXX_FLAGS_MINSIZEREL
-                    CMAKE_CXX_FLAGS_RELWITHDEBINFO
-               )
-               foreach(CompilerFlag ${CompilerFlags})
-                    string(REPLACE "/MD" "/MT" ${CompilerFlag} "${${CompilerFlag}}")
-                    set(${CompilerFlag} "${${CompilerFlag}}" CACHE STRING "msvc compiler flags" FORCE)
-                    message("MSVC flags: ${CompilerFlag}:${${CompilerFlag}}")
-               endforeach()
-          endif()
+       set(CompilerFlags
+	    CMAKE_CXX_FLAGS
+	    CMAKE_CXX_FLAGS_DEBUG
+	    CMAKE_CXX_FLAGS_RELEASE
+	    CMAKE_CXX_FLAGS_MINSIZEREL
+	    CMAKE_CXX_FLAGS_RELWITHDEBINFO
+       )
+       foreach(CompilerFlag ${CompilerFlags})
+	    string(REPLACE "/MD" "/MT" ${CompilerFlag} "${${CompilerFlag}}")
+	    set(${CompilerFlag} "${${CompilerFlag}}" CACHE STRING "msvc compiler flags" FORCE)
+	    message("MSVC flags: ${CompilerFlag}:${${CompilerFlag}}")
+       endforeach()
           target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE
                SDL2::SDL2-static
                jsoncpp_static
