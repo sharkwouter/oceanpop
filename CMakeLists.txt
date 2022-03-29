@@ -16,6 +16,12 @@ else()
      add_executable(${CMAKE_PROJECT_NAME} ${SRC})
 endif()
 
+option(BUILD_STATIC "Build a static binary" OFF)
+if(BUILD_STATIC)
+    set(CMAKE_FIND_LIBRARY_SUFFIXES ".a")
+    add_compile_options(-static)
+endif()
+
 if (VITA)
      # VITASDK defines
      if(NOT DEFINED CMAKE_TOOLCHAIN_FILE)
@@ -204,13 +210,23 @@ else()
 
      target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ${SDL2_INCLUDE_DIRS} ${JSONCPP_INCLUDE_DIRS})
      
-     target_link_libraries(${CMAKE_PROJECT_NAME}
-          ${SDL2_TTF_LIBRARIES}
-          ${SDL2_IMAGE_LIBRARIES}
-          ${SDL2_MIXER_LIBRARIES}
-          ${SDL2_LIBRARIES}
-          ${JSONCPP_LIBRARIES}
-     )
+     if(BUILD_STATIC)
+         target_link_libraries(${CMAKE_PROJECT_NAME}
+             ${SDL2_TTF_STATIC_LIBRARIES}
+             ${SDL2_IMAGE_STATIC_LIBRARIES}
+             ${SDL2_MIXER_STATIC_LIBRARIES}
+             ${SDL2_STATIC_LIBRARIES}
+             ${JSONCPP_STATIC_LIBRARIES}
+         )
+     else()
+         target_link_libraries(${CMAKE_PROJECT_NAME}
+             ${SDL2_TTF_LIBRARIES}
+             ${SDL2_IMAGE_LIBRARIES}
+             ${SDL2_MIXER_LIBRARIES}
+             ${SDL2_LIBRARIES}
+             ${JSONCPP_LIBRARIES}
+         )
+     endif()
 
      file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/assets
           DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
