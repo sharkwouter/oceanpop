@@ -54,7 +54,7 @@ jobs:
       - name: Build
         shell: msys2 {0}
         run: |
-          cmake -DCMAKE_BUILD_TYPE=Release -G "MinGW Makefiles" .
+          cmake -DCMAKE_BUILD_TYPE=Release -G "MinGW Makefiles" -DBUILD_STATIC=ON .
           cmake --build .
       - name: Publish artifacts
         uses: actions/upload-artifact@v2
