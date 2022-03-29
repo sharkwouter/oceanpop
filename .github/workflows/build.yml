@@ -55,8 +55,7 @@ jobs:
         shell: msys2 {0}
         run: |
           cmake -DCMAKE_BUILD_TYPE=Release -G "MinGW Makefiles" .
-          cmake --build . --config Release
-          cp Release/oceanpop.exe .
+          cmake --build .
       - name: Publish artifacts
         uses: actions/upload-artifact@v2
         with:
