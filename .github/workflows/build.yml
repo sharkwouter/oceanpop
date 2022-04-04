@@ -36,13 +36,13 @@ jobs:
     steps:
       - name: Install dependencies
         run: |
-          brew install make pkgconf sdl2 sdl2_image sdl2_ttf sdl2_mixer jsoncpp
+          brew install make sdl2 sdl2_image sdl2_ttf sdl2_mixer jsoncpp
       - name: Checkout
         uses: actions/checkout@v2
       - name: Build
         run: |
           cmake -DCMAKE_BUILD_TYPE=Release .
-          make
+          gmake
           strip --strip-unneeded oceanpop
       - name: Publish artifacts
         uses: actions/upload-artifact@v2
