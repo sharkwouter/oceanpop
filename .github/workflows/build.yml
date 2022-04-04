@@ -37,6 +37,7 @@ jobs:
       - name: Install dependencies
         run: |
           brew install make sdl2 sdl2_image sdl2_ttf sdl2_mixer jsoncpp
+          ls -R /opt
       - name: Checkout
         uses: actions/checkout@v2
       - name: Build
