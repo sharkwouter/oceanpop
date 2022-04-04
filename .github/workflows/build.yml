@@ -37,7 +37,7 @@ jobs:
       - name: Install dependencies
         run: |
           brew install make sdl2 sdl2_image sdl2_ttf sdl2_mixer jsoncpp
-          find /usr/local/opt -type f -name "*.pc"
+          find /usr/local -type f -name "*.pc"
       - name: Checkout
         uses: actions/checkout@v2
       - name: Build
