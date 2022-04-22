@@ -19,10 +19,14 @@ endif()
 option(BUILD_STATIC "Build a static binary" ${BUILD_STATIC_DEFAULT})
 
 if(CMAKE_CXX_COMPILER_ID STREQUAL "GNU" OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-     add_compile_options(-Wall -Wextra -pedantic)
+     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -fpermissive")
      if(BUILD_STATIC)
-          add_compile_options(-static)
+          set(CMAKE_CXX_FLAGS "-static ${CMAKE_CXX_FLAGS}")
      endif()
+endif()
+
+if(MINGW)
+     target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE mingw32 SDL2main)
 endif()
 
 if (VITA)
