@@ -11,7 +11,7 @@ jobs:
       - name: Install dependencies
         run: |
           apt-get update
-          apt-get install -y fuse libfuse2 wget build-essential cmake libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev libjsoncpp-dev
+          apt-get install -y wget build-essential cmake libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev libjsoncpp-dev
       - name: Checkout
         uses: actions/checkout@v2
       - name: Build
@@ -22,7 +22,7 @@ jobs:
           make install DESTDIR=AppDir
           wget https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage
           chmod +x linuxdeploy*.AppImage
-          ./linuxdeploy-x86_64.AppImage --appdir AppDir --output appimage
+          ./linuxdeploy-x86_64.AppImage --appimage-extract-and-run --appdir AppDir --output appimage
       - name: Publish artifacts
         uses: actions/upload-artifact@v2
         with:
