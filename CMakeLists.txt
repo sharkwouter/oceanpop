@@ -218,7 +218,7 @@ else()
      target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE ${SDL2_INCLUDE_DIRS} ${JSONCPP_INCLUDE_DIRS})
      
      if(BUILD_STATIC)
-         target_link_libraries(${CMAKE_PROJECT_NAME}
+         target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE
              ${SDL2_TTF_STATIC_LIBRARIES}
              ${SDL2_IMAGE_STATIC_LIBRARIES}
              ${SDL2_MIXER_STATIC_LIBRARIES}
@@ -226,7 +226,7 @@ else()
              ${JSONCPP_STATIC_LIBRARIES}
          )
      else()
-         target_link_libraries(${CMAKE_PROJECT_NAME}
+         target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE
              ${SDL2_TTF_LIBRARIES}
              ${SDL2_IMAGE_LIBRARIES}
              ${SDL2_MIXER_LIBRARIES}
