@@ -40,6 +40,7 @@ jobs:
           msystem: MINGW64
           install: >-
             mingw-w64-x86_64-gcc
+            mingw-w64-x86_64-binutils
             mingw-w64-x86_64-make
             mingw-w64-x86_64-cmake
             mingw-w64-x86_64-pkgconf
@@ -56,6 +57,7 @@ jobs:
         run: |
           cmake -DCMAKE_BUILD_TYPE=Release -G "MinGW Makefiles" -DBUILD_STATIC=ON .
           cmake --build .
+          strip --strip-unneeded oceanpop.exe
       - name: Publish artifacts
         uses: actions/upload-artifact@v2
         with:
