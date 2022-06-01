@@ -84,7 +84,7 @@ jobs:
         uses: actions/checkout@v2
       - name: Build
         run: |
-          cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=$PSPDEV/psp/share/pspdev.cmake -B oceanpop ..
+          cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=$PSPDEV/psp/share/pspdev.cmake -B oceanpop .
           cmake --build oceanpop
           cp LICENSE.txt oceanpop/
           cp README.md oceanpop/
