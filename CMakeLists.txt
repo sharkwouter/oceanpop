@@ -89,12 +89,18 @@ if(MSVC)
 else()
     include(FindPkgConfig)
     pkg_search_module(SDL2 REQUIRED sdl2)
-    pkg_search_module(SDL2_TTF REQUIRED SDL2_ttf)
-    pkg_search_module(SDL2_IMAGE REQUIRED SDL2_image)
     pkg_search_module(SDL2_MIXER REQUIRED SDL2_mixer)
+    pkg_search_module(SDL2_IMAGE REQUIRED SDL2_image)
+    pkg_search_module(SDL2_TTF REQUIRED SDL2_ttf)
     pkg_search_module(JSONCPP REQUIRED jsoncpp)
 
-    target_include_directories(${PROJECT_NAME} PRIVATE ${SDL2_INCLUDE_DIRS} ${JSONCPP_INCLUDE_DIRS})
+    target_include_directories(${PROJECT_NAME} PRIVATE
+        ${SDL2_INCLUDE_DIRS}
+        ${SDL2_MIXER_INCLUDE_DIRS}
+        ${SDL2_IMAGE_INCLUDE_DIRS}
+        ${SDL2_TTF_INCLUDE_DIRS}
+        ${JSONCPP_INCLUDE_DIRS}
+    )
 
     # Load additional required libraries per platform
     if(PSP)
@@ -152,7 +158,7 @@ else()
     endif()
 
     # Package/install
-    if (VITA)
+    if(VITA)
         include("$ENV{VITASDK}/share/vita.cmake" REQUIRED)
         vita_create_self(${PROJECT_NAME}.self ${PROJECT_NAME})
         vita_create_vpk(${PROJECT_NAME}.vpk "OPOP00001" ${PROJECT_NAME}.self
@@ -176,7 +182,7 @@ else()
             PREVIEW_PATH NULL
             TITLE OceanPop
         )
-    elseif()
+    else()
         install(TARGETS ${PROJECT_NAME} DESTINATION bin)
         install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/assets DESTINATION share/${PROJECT_NAME})
         install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/platform/unix/${PROJECT_NAME}.desktop DESTINATION share/applications)
