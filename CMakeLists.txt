@@ -31,7 +31,7 @@ endif()
 
 # Build static for specific platforms
 set(BUILD_STATIC_DEFAULT OFF)
-if(WINDOWS)
+if(WIN32)
     set(BUILD_STATIC_DEFAULT ON)
 endif()
 option(BUILD_STATIC "Build a static binary" ${BUILD_STATIC_DEFAULT})
