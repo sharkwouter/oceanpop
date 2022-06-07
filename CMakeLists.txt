@@ -61,6 +61,7 @@ if (VITA)
           jpeg
           z
           m
+	  modplug
           mikmod
           mpg123
           FLAC
