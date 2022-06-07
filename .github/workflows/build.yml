@@ -15,9 +15,11 @@ jobs:
         uses: actions/checkout@v2
       - name: Build
         run: |
-          cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr .
-          make
-          strip --strip-unneeded oceanpop
+          cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -B oceanpop .
+          cmake --build oceanpop
+          cp LICENSE.txt oceanpop/
+          cp README.md oceanpop/
+          cd oceanpop
           make install DESTDIR=AppDir
           wget https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage
           chmod +x linuxdeploy*.AppImage
@@ -27,32 +29,49 @@ jobs:
         with:
           name: oceanpop-linux
           path: |
-            OceanPop*.AppImage
-            LICENSE.txt
-            README.md
+            oceanpop/OceanPop*.AppImage
+            oceanpop/LICENSE.txt
+            oceanpop/README.md
 
   Windows:
     runs-on: windows-latest
+    defaults:
+      run:
+        shell: msys2 {0}
     steps:
       - name: Install dependencies
-        run: |
-          vcpkg install --triplet x64-windows-static sdl2 sdl2-image[libjpeg-turbo] sdl2-ttf sdl2-mixer[mpg123] jsoncpp
+        uses: msys2/setup-msys2@v2
+        with:
+          msystem: MINGW64
+          install: >-
+            mingw-w64-x86_64-gcc
+            mingw-w64-x86_64-binutils
+            mingw-w64-x86_64-make
+            mingw-w64-x86_64-cmake
+            mingw-w64-x86_64-pkgconf
+            mingw-w64-x86_64-SDL2
+            mingw-w64-x86_64-SDL2_ttf
+            mingw-w64-x86_64-SDL2_mixer
+            mingw-w64-x86_64-SDL2_image
+          update: true
       - name: Checkout
         uses: actions/checkout@v2
       - name: Build
         run: |
-          cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=C:\vcpkg\scripts\buildsystems\vcpkg.cmake -DVCPKG_TARGET_TRIPLET=x64-windows-static -DBUILD_STATIC=ON .
-          cmake --build . --config Release
-          cp Release/oceanpop.exe .
+          cmake -DCMAKE_BUILD_TYPE=Release -G "MinGW Makefiles" -B oceanpop .
+          cmake --build oceanpop
+          cp LICENSE.txt oceanpop/
+          cp README.md oceanpop/
+          strip --strip-unneeded oceanpop/oceanpop.exe
       - name: Publish artifacts
         uses: actions/upload-artifact@v2
         with:
           name: oceanpop-windows
           path: |
-            oceanpop.exe
-            assets
-            LICENSE.txt
-            README.md
+            oceanpop/oceanpop.exe
+            oceanpop/assets
+            oceanpop/LICENSE.txt
+            oceanpop/README.md
 
   PSP:
     runs-on: ubuntu-latest
@@ -60,17 +79,15 @@ jobs:
     steps:
       - name: Install dependencies
         run: |
-          apk add cmake
+          apk add cmake bash pkgconf
       - name: Checkout
         uses: actions/checkout@v2
       - name: Build
         run: |
-          mkdir oceanpop
-          cd oceanpop
-          cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=$PSPDEV/psp/share/pspdev.cmake ..
-          make
-          cp ../LICENSE.txt ./
-          cp ../README.md ./
+          cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=$PSPDEV/psp/share/pspdev.cmake -B oceanpop .
+          cmake --build oceanpop
+          cp LICENSE.txt oceanpop/
+          cp README.md oceanpop/
       - name: Publish artifacts
         uses: actions/upload-artifact@v2
         with:
@@ -85,6 +102,10 @@ jobs:
     runs-on: ubuntu-latest
     container: gnuton/vitasdk-docker:latest
     steps:
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y pkg-config
       - name: Checkout
         uses: actions/checkout@v2
       - name: Build
