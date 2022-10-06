@@ -156,8 +156,8 @@ elseif(WIN32)
     find_package(jsoncpp CONFIG REQUIRED)
     find_package(SDL2 CONFIG REQUIRED)
     find_package(sdl2-image CONFIG REQUIRED)
-    find_package(sdl2-mixer CONFIG REQUIRED)
-    find_package(sdl2-ttf CONFIG REQUIRED)
+    find_package(SDL2_mixer CONFIG REQUIRED)
+    find_package(SDL2_ttf CONFIG REQUIRED)
 
      target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE
           SDL2::SDL2
@@ -186,6 +186,8 @@ elseif(WIN32)
           endif()
           target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE
                SDL2::SDL2-static
+	       SDL2_mixer::SDL2_mixer-static
+	       SDL2_ttf::SDL2_ttf-static
                jsoncpp_static
                Shlwapi
           )
