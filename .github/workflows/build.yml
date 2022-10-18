@@ -100,7 +100,9 @@ jobs:
 
   Vita:
     runs-on: ubuntu-latest
-    container: vitasdk/vitasdk:latest
+    container:
+      image: vitasdk/vitasdk:latest
+      options: --user 0
     steps:
       - name: Checkout
         uses: actions/checkout@v3
