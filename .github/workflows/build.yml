@@ -12,7 +12,7 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y wget cmake libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev libjsoncpp-dev
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Build
         run: |
           cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr -B oceanpop .
@@ -25,7 +25,7 @@ jobs:
           chmod +x linuxdeploy*.AppImage
           ./linuxdeploy-x86_64.AppImage --appdir AppDir --output appimage
       - name: Publish artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: oceanpop-linux
           path: |
@@ -55,7 +55,7 @@ jobs:
             mingw-w64-x86_64-SDL2_image
           update: true
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Build
         run: |
           cmake -DCMAKE_BUILD_TYPE=Release -G "MinGW Makefiles" -B oceanpop .
@@ -64,7 +64,7 @@ jobs:
           cp README.md oceanpop/
           strip --strip-unneeded oceanpop/oceanpop.exe
       - name: Publish artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: oceanpop-windows
           path: |
@@ -81,7 +81,7 @@ jobs:
         run: |
           apk add cmake bash pkgconf
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Build
         run: |
           cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=$PSPDEV/psp/share/pspdev.cmake -B oceanpop .
@@ -89,7 +89,7 @@ jobs:
           cp LICENSE.txt oceanpop/
           cp README.md oceanpop/
       - name: Publish artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: oceanpop-psp
           path: |
@@ -103,13 +103,13 @@ jobs:
     container: vitasdk/vitasdk:latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: Build
         run: |
           cmake -DCMAKE_TOOLCHAIN_FILE="${VITASDK}/share/vita.toolchain.cmake" .
           make
       - name: Publish artifacts
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: oceanpop-vita
           path: |
@@ -129,7 +129,7 @@ jobs:
       if: startsWith(github.ref, 'refs/tags/')
       id: tag
       run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
-    - uses: actions/download-artifact@v2
+    - uses: actions/download-artifact@v3
     - name: Zip artifacts
       run: |
         zip -r oceanpop-${{matrix.build}}.zip oceanpop-${{matrix.build}}
