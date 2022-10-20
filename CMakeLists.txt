@@ -105,11 +105,7 @@ else()
 
     # Load additional required libraries per platform
     if(PSP)
-        list(APPEND SDL2_MIXER_LIBRARIES vorbisfile vorbis ogg)
         list(APPEND SDL2_IMAGE_LIBRARIES jpeg png z)
-    elseif(VITA)
-        list(APPEND SDL2_MIXER_LIBRARIES pthread vorbisfile vorbis ogg mikmod modplug mpg123 FLAC)
-        list(APPEND SDL2_IMAGE_LIBRARIES webp jpeg png z)
     endif()
 
     # Use SDL2main for systems which use it
