@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2013 First Lastname <your@email.com> -->
+<component type="desktop-application">
+  <id>org.gnome.gnome-power-statistics</id>
+  <metadata_license>FSFAP</metadata_license>
+  <project_license>GPL-2.0+</project_license>
+  <name>Power Statistics</name>
+  <summary>Observe power management</summary>
+
+  <description>
+    <p>
+      Power Statistics is a program used to view historical and current battery
+      information and will show programs running on your computer using power.
+    </p>
+    <p>Example list:</p>
+    <ul>
+      <li>First item</li>
+      <li>Second item</li>
+    </ul>
+    <p>
+      You probably only need to install this application if you are having problems
+      with your laptop battery, or are trying to work out what programs are using
+      significant amounts of power.
+    </p>
+  </description>
+
+  <launchable type="desktop-id">org.gnome.gnome-power-statistics.desktop</launchable>
+
+  <screenshots>
+    <screenshot type="default">
+      <caption>OceanPop</caption>
+      <image>https://raw.githubusercontent.com/sharkwouter/oceanpop/1.0/screenshot.jpg</image>
+    </screenshot>
+  </screenshots>
+
+  <url type="homepage">https://sharkwouter.github.io/oceanpop/</url>
+ 
+
+  <provides>
+    <binary>oceanpop</binary>
+  </provides>
+
+  <releases>
+    <release version="1.0" date="2022-03-09">
+      <description>
+        <p>First Release</p>
+      </description>
+    </release>
+  </releases>
+</component>
