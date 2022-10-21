@@ -1,30 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Copyright 2013 First Lastname <your@email.com> -->
 <component type="desktop-application">
-  <id>org.gnome.gnome-power-statistics</id>
-  <metadata_license>FSFAP</metadata_license>
-  <project_license>GPL-2.0+</project_license>
-  <name>Power Statistics</name>
-  <summary>Observe power management</summary>
+  <id>io.github.sharkwouter.oceanpop</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>MIT</project_license>
+  <name>OceanPop</name>
+  <summary>A relaxing match 3 puzzle game with a twist</summary>
 
   <description>
     <p>
-      Power Statistics is a program used to view historical and current battery
-      information and will show programs running on your computer using power.
+        Dive into the relaxing world of OceanPop and experience waves of match-3 gameplay with the three modes available! 
     </p>
-    <p>Example list:</p>
-    <ul>
-      <li>First item</li>
-      <li>Second item</li>
-    </ul>
-    <p>
-      You probably only need to install this application if you are having problems
-      with your laptop battery, or are trying to work out what programs are using
-      significant amounts of power.
+    <p>   
+        Do not get crushed by the tides before completing the 35 levels in regular mode, feel the rush of the currents in challenge mode or just go with the flow of the ocean breeze in relaxed mode!
     </p>
   </description>
 
-  <launchable type="desktop-id">org.gnome.gnome-power-statistics.desktop</launchable>
+  <launchable type="desktop-id">io.github.sharkwouter.oceanpop.desktop</launchable>
 
   <screenshots>
     <screenshot type="default">
