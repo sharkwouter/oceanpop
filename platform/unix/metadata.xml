@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>io.github.sharkwouter.oceanpop</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>MIT</project_license>
+  <name>OceanPop</name>
+  <summary>A relaxing match 3 puzzle game with a twist</summary>
+
+  <description>
+    <p>
+        Dive into the relaxing world of OceanPop and experience waves of match-3 gameplay with the three modes available! 
+    </p>
+    <p>   
+        Do not get crushed by the tides before completing the 35 levels in regular mode, feel the rush of the currents in challenge mode or just go with the flow of the ocean breeze in relaxed mode!
+    </p>
+  </description>
+
+  <launchable type="desktop-id">io.github.sharkwouter.oceanpop.desktop</launchable>
+
+  <screenshots>
+    <screenshot type="default">
+      <caption>OceanPop</caption>
+      <image>https://raw.githubusercontent.com/sharkwouter/oceanpop/1.0/screenshot.jpg</image>
+    </screenshot>
+  </screenshots>
+
+  <url type="homepage">https://sharkwouter.github.io/oceanpop/</url>
+ 
+
+  <provides>
+    <binary>oceanpop</binary>
+  </provides>
+
+  <releases>
+    <release version="1.0" date="2022-03-09">
+      <description>
+        <p>First Release</p>
+      </description>
+    </release>
+  </releases>
+</component>
