@@ -34,7 +34,7 @@ FILES_CHANGED=false
 for background in $(find assets/backgrounds/ -type f); do
     background_new="platform/${PLATFORM}/${background}"
     if [ ! -f "${background_new}" ]; then
-        convert -resize "${RESOLUTION}" "${background}" "${background_new}"
+        convert -resize "${RESOLUTION}!" "${background}" "${background_new}"
         FILES_CHANGED=true
     fi
 done
