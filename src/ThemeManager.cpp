@@ -63,7 +63,7 @@ void ThemeManager::loadMusic(Theme theme) {
 
     this->music_theme = theme;
 
-    #ifdef __PSP__
+    #if defined(__PSP__) || defined(__PS2__)
         std::string music_file_type = "ogg";
     #else
         std::string music_file_type = "mp3";
