@@ -147,7 +147,11 @@ void GameState::loadLevel(int level) {
     Json::CharReaderBuilder builder;
     Json::Value json;
     JSONCPP_STRING errors;
+    #ifdef NXDK
+    const char * filename_base = "D:\\assets\\levels\\level%03d.json";
+    #else
     const char * filename_base = "assets/levels/level%03d.json";
+    #endif
     char * filename = (char*) malloc(std::strlen(filename_base));
     this->level = level;
 

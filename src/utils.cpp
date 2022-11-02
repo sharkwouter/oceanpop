@@ -10,8 +10,11 @@ void panic(const std::string &reason) {
 }
 
 std::string getResourcePath(std::string file) {
+    #ifdef NXDK
     std::string path = "";
-
+    #else
+    std::string path = "D:\\";
+    #endif
     char * base_path = SDL_GetBasePath();
     if (base_path) {
         path += base_path;

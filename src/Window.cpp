@@ -31,6 +31,7 @@ Window::Window(const std::string &title, OptionManager * options) {
     }
     #endif
 
+    #ifndef NXDK
     // Set default screen resolution and refresh rate if they haven't been set yet
     if (options->getScreenRefreshRate() == 0) {
         SDL_DisplayMode mode = getStandardDisplayMode();
@@ -42,6 +43,9 @@ Window::Window(const std::string &title, OptionManager * options) {
         window_flags |= SDL_WINDOW_FULLSCREEN;
     }
     this->window = SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, options->getScreenWidth(), options->getScreenHeight(), window_flags);
+    #else
+    this->window = SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 640, 480, SDL_WINDOW_SHOWN);
+    #endif
     if (this->window == nullptr) {
         panic("couldn't create window: " + std::string(SDL_GetError()));
     }

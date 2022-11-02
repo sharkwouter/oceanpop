@@ -14,8 +14,8 @@ FontManager::~FontManager() {
 
 void FontManager::load() {
     this->shellSize = this->options->getShellSize();
-    font = TTF_OpenFont(getResourcePath("assets/fonts/2K4sRegular.ttf").c_str(), this->shellSize/2);
-    font_title = TTF_OpenFont(getResourcePath("assets/fonts/2K4sRegular.ttf").c_str(), this->shellSize);
+    font = TTF_OpenFont(getAssetPath("fonts", "2K4sRegular.ttf").c_str(), this->shellSize/2);
+    font_title = TTF_OpenFont(getAssetPath("fonts", "2K4sRegular.ttf").c_str(), this->shellSize);
     if (font == NULL || font_title == NULL) {
         panic("Couldn't load font: " + std::string(TTF_GetError()));
     }
