@@ -1,5 +1,5 @@
 #include <vector>
-#include <SDL2/SDL.h>
+#include <SDL.h>
 
 #include "Window.hpp"
 #include "Event.hpp"

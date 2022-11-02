@@ -8,6 +8,7 @@ SoundManager::SoundManager(OptionManager * options) : options(options) {
 }
 
 SoundManager::~SoundManager() {
+    #ifndef NXDK
     Mix_FreeChunk(sound_pick);
     Mix_FreeChunk(sound_drop);
     Mix_FreeChunk(sound_match1);
@@ -15,9 +16,11 @@ SoundManager::~SoundManager() {
     Mix_FreeChunk(sound_pain);
     Mix_FreeChunk(sound_completed);
     Mix_FreeChunk(sound_failed);
+    #endif
 }
 
 void SoundManager::load() {
+    #ifndef NXDK
     sound_pick = Mix_LoadWAV(getResourcePath("assets/sounds/pick.wav").c_str());
     sound_drop = Mix_LoadWAV(getResourcePath("assets/sounds/drop.wav").c_str());
     sound_match1 = Mix_LoadWAV(getResourcePath("assets/sounds/match1.wav").c_str());
@@ -35,9 +38,11 @@ void SoundManager::load() {
         sound_failed == NULL) {
             SDL_Log("Couldn't load all sounds: %s", Mix_GetError());
     }
+    #endif
 }
 
 void SoundManager::play(Sound sound) {
+    #ifndef NXDK
     int volume = MIX_MAX_VOLUME/4*this->options->getSoundVolume();
     switch (sound) {
         case Sound::PICK:
@@ -77,4 +82,5 @@ void SoundManager::play(Sound sound) {
             Mix_PlayChannel(channel_notify, sound_failed, SDL_FALSE);
             break;
     }
+    #endif
 }

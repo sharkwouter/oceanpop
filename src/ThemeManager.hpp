@@ -3,7 +3,9 @@
 
 #include <SDL.h>
 #include <SDL_image.h>
+#ifndef NXDK
 #include <SDL_mixer.h>
+#endif
 #include <string>
 
 #include "OptionManager.hpp"
@@ -18,7 +20,9 @@ private:
     Theme theme;
     Theme music_theme;
 
+    #ifndef NXDK
     Mix_Music * music = NULL;
+    #endif
     SDL_Texture * background = NULL;
 
     bool paused = false;

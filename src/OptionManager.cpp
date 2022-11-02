@@ -34,23 +34,25 @@ void OptionManager::load() {
     bool parsing_failed = false;
 
     optionsStream.open(this->optionsFile, std::ios::in);
-    try {
+    // try {
         parseFromStream(builder, optionsStream, &this->options, &errors);
 
         // Make sure the file can be read
         this->options.get("test", 1).asInt();
-    } catch (...) {
-        parsing_failed = true;
-    }
+    // } catch (...) {
+    //     parsing_failed = true;
+    // }
     optionsStream.close();
 
     if(parsing_failed) {
         SDL_Log("Couldn't load configuration at %s", this->optionsFile.c_str());
+        #ifndef NXDK
         if (std::filesystem::remove(this->optionsFile)) {
             SDL_Log("Deleted %s", this->optionsFile.c_str());
         } else {
             SDL_Log("Couldn't delete %s", this->optionsFile.c_str());
         }
+        #endif
         this->options = Json::Value();
         return;
     }

@@ -1,0 +1,46 @@
+XBE_TITLE = OceanPop
+GEN_XISO = $(XBE_TITLE).iso
+
+NXDK_CXX = y
+NXDK_JSONCPP = y
+NXDK_SDL = y
+
+SRCS = $(CURDIR)/src/main.cpp \
+	$(CURDIR)/src/Board.cpp \
+	$(CURDIR)/src/BoardManager.cpp \
+	$(CURDIR)/src/EventManager.cpp \
+	$(CURDIR)/src/FontManager.cpp \
+	$(CURDIR)/src/OptionManager.cpp \
+	$(CURDIR)/src/PauseScreen.cpp \
+	$(CURDIR)/src/StateManager.cpp \
+	$(CURDIR)/src/TextureManager.cpp \
+	$(CURDIR)/src/ThemeManager.cpp \
+	$(CURDIR)/src/SoundManager.cpp \
+	$(CURDIR)/src/utils.cpp \
+	$(CURDIR)/src/Window.cpp \
+	$(CURDIR)/src/states/GameOverState.cpp \
+	$(CURDIR)/src/states/GameState.cpp \
+	$(CURDIR)/src/states/GameStateChallenge.cpp \
+	$(CURDIR)/src/states/GameStateRelaxed.cpp \
+	$(CURDIR)/src/states/HighscoreState.cpp \
+	$(CURDIR)/src/states/MenuState.cpp \
+	$(CURDIR)/src/states/NotImplementedState.cpp \
+	$(CURDIR)/src/states/OptionsState.cpp \
+	$(CURDIR)/src/states/WonState.cpp
+
+NXDK_CXXFLAGS += -I $(CURDIR)/src -std=c++20
+
+new_all: copy_resources all
+
+include $(NXDK_DIR)/Makefile
+
+TARGET += $(OUTPUT_DIR)/assets
+$(GEN_XISO): $(OUTPUT_DIR)/assets
+$(OUTPUT_DIR)/assets: $(CURDIR)/assets $(OUTPUT_DIR)
+	$(VE)cp -r '$<' '$@'
+
+copy_resources:
+	@mkdir -p $(OUTPUT_DIR)
+	@cp -r $(CURDIR)/assets $(OUTPUT_DIR)/
+	@rm -rf $(OUTPUT_DIR)/assets/backgrounds
+	@cp -R $(CURDIR)/platform/xbox/assets/backgrounds $(OUTPUT_DIR)/assets/

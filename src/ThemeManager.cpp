@@ -3,19 +3,23 @@
 #include "utils.hpp"
 
 ThemeManager::ThemeManager(SDL_Renderer * renderer, OptionManager * options, Theme theme) : renderer(renderer), options(options) {
+    #ifndef NXDK
     this->change_music_on_switch = this->options->getChangeMusicOnSwitch();
     this->volume = MIX_MAX_VOLUME/8*this->options->getMusicVolume();
     this->current_volume = this->volume;
     Mix_VolumeMusic(this->current_volume);
+    #endif
 
     load(theme);
 }
 
 ThemeManager::~ThemeManager() {
+    #ifndef NXDK
     Mix_HaltMusic();
     if (this->music != NULL) {
         Mix_FreeMusic(this->music);
     }
+    #endif
     SDL_DestroyTexture(this->background);
 }
 
@@ -52,6 +56,7 @@ void ThemeManager::loadBackground(Theme theme) {
 }
 
 void ThemeManager::loadMusic(Theme theme) {
+    #ifndef NXDK
     if (this->volume == 0 || theme == this->music_theme) {
         return;
     }
@@ -90,9 +95,11 @@ void ThemeManager::loadMusic(Theme theme) {
 
     this->current_volume = 0;
     Mix_PlayMusic(this->music, 0);
+    #endif
 }
 
 void ThemeManager::update() {
+    #ifndef NXDK
     if (((int) this->music_theme) >= ((int) Theme::AMOUNT) || this->paused || this->volume == 0) {
         return;
     }
@@ -105,6 +112,7 @@ void ThemeManager::update() {
         this->current_volume++;
         Mix_VolumeMusic(this->current_volume);
     }
+    #endif
 }
 
 void ThemeManager::draw(SDL_Renderer * renderer) {
@@ -162,16 +170,20 @@ void ThemeManager::switchTheme(int theme) {
 
 void ThemeManager::pause() {
     if (!this->paused) {
+        #ifndef NXDK
         this->current_volume = 0;
         Mix_VolumeMusic(this->current_volume);
+        #endif
         this->paused = true;
     }
 }
 
 void ThemeManager::unpause() {
     if (this->paused) {
+        #ifndef NXDK
         this->current_volume = this->volume;
         Mix_VolumeMusic(this->current_volume);
+        #endif
         this->paused = false;
     }
 }

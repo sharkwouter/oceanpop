@@ -112,9 +112,9 @@ void GameState::draw(SDL_Renderer *renderer) {
 
 int GameState::getTotalLevels() {
     int levels = 0;
-
-    std::filesystem::directory_iterator level_files(getResourcePath("assets/levels/"));
     int highest_level = 0;
+    #ifndef NXDK
+    std::filesystem::directory_iterator level_files(getResourcePath("assets/levels/"));
     for (auto &entry : level_files) {
         if (std::regex_match(entry.path().string(), level_regex)) {
             std::string name = entry.path().stem().string();
@@ -126,6 +126,10 @@ int GameState::getTotalLevels() {
             levels++;
         }
     }
+    #else
+        levels = 35;
+        highest_level = 35;
+    #endif
     SDL_Log("Amount of level found: %d", levels);
     if (levels != highest_level) {
         panic("The amount of levels (" + std::to_string(levels) + ") has to match the highest level number (" + std::to_string(highest_level) + ")!");

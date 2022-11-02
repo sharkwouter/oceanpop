@@ -1,10 +1,18 @@
 #include <SDL_image.h>
 #include <SDL_ttf.h>
-#include <SDL_mixer.h>
+#ifdef NXDK
+    #include <hal/video.h>
+#else
+    #include <SDL_mixer.h>
+#endif
 #include "Window.hpp"
 #include "utils.hpp"
 
 Window::Window(const std::string &title, OptionManager * options) {
+    #ifdef NXDK
+        XVideoSetMode(640, 480, 16, REFRESH_DEFAULT);
+    #endif
+    
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_GAMECONTROLLER | SDL_INIT_TIMER) != 0) {
         panic("couldn't init SDL: " + std::string(SDL_GetError()));
     }
@@ -17,9 +25,11 @@ Window::Window(const std::string &title, OptionManager * options) {
         panic("couldn't init SDL_ttf: " + std::string(TTF_GetError()));
     }
 
+    #ifndef NXDK
     if( Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 1024) == -1 ) {
 		panic("couldn't init SDL_mixer: " + std::string(Mix_GetError()));
     }
+    #endif
 
     // Set default screen resolution and refresh rate if they haven't been set yet
     if (options->getScreenRefreshRate() == 0) {
@@ -75,8 +85,10 @@ void Window::present() {
 Window::~Window() {
     SDL_DestroyRenderer(this->renderer);
     SDL_DestroyWindow(this->window);
+    #ifndef NXDK
     Mix_Quit();
     Mix_CloseAudio();
+    #endif
     TTF_Quit();
     IMG_Quit();
     SDL_Quit();

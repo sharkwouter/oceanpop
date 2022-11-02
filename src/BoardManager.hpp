@@ -3,7 +3,9 @@
 
 #include <vector>
 #include <SDL.h>
+#ifndef NXDK
 #include <SDL_mixer.h>
+#endif
 #include "Board.hpp"
 #include "constants.hpp"
 #include "Shell.hpp"

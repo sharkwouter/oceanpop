@@ -6,7 +6,7 @@
 #include "constants.hpp"
 
 void panic(const std::string &reason) {
-    throw std::runtime_error(reason.c_str());
+    // throw std::runtime_error(reason.c_str());
 }
 
 std::string getResourcePath(std::string file) {
@@ -18,7 +18,7 @@ std::string getResourcePath(std::string file) {
         SDL_free(base_path);
     }
 
-    #if !defined(WIN32) && !defined(__PSP__) && !defined(__vita__)
+    #if !defined(WIN32) && !defined(__PSP__) && !defined(__vita__) && !defined(NXDK)
         std::string share = path + "../share/oceanpop/";
         std::filesystem::path share_path{share};
 
