@@ -150,6 +150,48 @@ elseif(PLATFORM_PSP)
      file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/platform/psp/assets/backgrounds
           DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/assets)
 
+elseif(PLATFORM_PS2)
+     set(SDL2_INCLUDE_DIR "${PS2DEV}/ps2sdk/ports/include/SDL2")
+
+     target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE
+          ${SDL2_INCLUDE_DIR}
+     )
+
+     target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE
+          SDL2_image
+          SDL2_mixer
+          SDL2
+          SDL2_ttf
+          SDL2main
+          png
+          jpeg
+          jsoncpp
+          vorbisfile
+          vorbis
+          ogg
+          freetype
+          z
+	  patches
+	  gskit
+	  dmakit
+	  ps2_drivers
+     )
+
+
+     file(MAKE_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/assets)
+     file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/assets/fonts
+          DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/assets)
+     file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/assets/sounds
+          DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/assets)
+     file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/assets/levels
+          DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/assets)
+     file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/assets/images
+          DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/assets)
+     file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/platform/psp/assets/music
+          DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/assets)
+     file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/platform/ps2/assets/backgrounds
+          DESTINATION ${CMAKE_CURRENT_BINARY_DIR}/assets)
+
 elseif(WIN32)
      option(BUILD_STATIC "Build a static binary (Windows only)" OFF)
 
