@@ -3,7 +3,7 @@
 #include "utils.hpp"
 
 TextureManager::TextureManager(SDL_Renderer * renderer, OptionManager * options) : options(options) {
-    texture_shell = load(renderer, "assets/images/shells" + std::to_string(this->options->getShellSize()) + ".png");
+    texture_shell = load(renderer, "shells" + std::to_string(this->options->getShellSize()) + ".png");
 }
 
 TextureManager::~TextureManager() {
@@ -11,7 +11,7 @@ TextureManager::~TextureManager() {
 }
 
 SDL_Texture * TextureManager::load(SDL_Renderer * renderer, const std::string &file) {
-    SDL_Surface *img = IMG_Load(getResourcePath(file).c_str());
+    SDL_Surface *img = IMG_Load(getAssetPath("images", file).c_str());
 
     if (img == nullptr) {
         panic("couldn't load image: " + std::string(IMG_GetError()));

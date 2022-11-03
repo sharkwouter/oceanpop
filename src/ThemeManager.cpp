@@ -190,7 +190,7 @@ void ThemeManager::unpause() {
 
 
 SDL_Texture * ThemeManager::createBackgroundTexture(std::string filename) {
-    std::string path = getResourcePath("assets/backgrounds/" + filename);
+    std::string path = getAssetPath("backgrounds", filename);
     SDL_Surface *img = IMG_Load(path.c_str());
 
     if (img == nullptr) {

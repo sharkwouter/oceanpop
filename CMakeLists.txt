@@ -124,6 +124,7 @@ elseif(PLATFORM_PSP)
           vorbis
           ogg
           freetype
+	  bz2
           z
      )
 

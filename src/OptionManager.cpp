@@ -10,6 +10,7 @@
 #include "utils.hpp"
 
 OptionManager::OptionManager() {
+    #ifndef NXDK
     // Set path of options file
     this->optionsFile = "";
     char * pref_path = SDL_GetPrefPath(NULL,"oceanpop");
@@ -18,6 +19,7 @@ OptionManager::OptionManager() {
         SDL_free(pref_path);
     }
     this->optionsFile += "options.json";
+    #endif
 
     // Load configuration
     load();
@@ -28,6 +30,7 @@ OptionManager::~OptionManager() {
 }
 
 void OptionManager::load() {
+    #ifndef NXDK
     Json::CharReaderBuilder builder;
     std::ifstream optionsStream;
     JSONCPP_STRING errors;
@@ -46,13 +49,11 @@ void OptionManager::load() {
 
     if(parsing_failed) {
         SDL_Log("Couldn't load configuration at %s", this->optionsFile.c_str());
-        #ifndef NXDK
         if (std::filesystem::remove(this->optionsFile)) {
             SDL_Log("Deleted %s", this->optionsFile.c_str());
         } else {
             SDL_Log("Couldn't delete %s", this->optionsFile.c_str());
         }
-        #endif
         this->options = Json::Value();
         return;
     }
@@ -63,12 +64,17 @@ void OptionManager::load() {
     }
 
     SDL_Log("Configuration loaded at %s", this->optionsFile.c_str());
+    #else
+    this->options = Json::Value();
+    #endif
 }
 
 void OptionManager::write() {
+    #ifndef NXDK
     std::ofstream optionsStream(this->optionsFile, std::ios::binary);
     optionsStream << this->options;
     optionsStream.close();
+    #endif
 }
 
 std::vector<std::vector<ShellType>> OptionManager::loadShells(std::string field) {

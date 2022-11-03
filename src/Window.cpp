@@ -12,13 +12,16 @@ Window::Window(const std::string &title, OptionManager * options) {
     #ifdef NXDK
         XVideoSetMode(640, 480, 16, REFRESH_DEFAULT);
     #endif
-    
+    #ifndef NXDK
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_GAMECONTROLLER | SDL_INIT_TIMER) != 0) {
         panic("couldn't init SDL: " + std::string(SDL_GetError()));
     }
+    #else
+        SDL_Init(SDL_INIT_VIDEO | SDL_INIT_GAMECONTROLLER | SDL_INIT_TIMER);
+    #endif
 
     if ((IMG_Init(IMG_INIT_PNG) & IMG_INIT_PNG) != IMG_INIT_PNG) {
-        panic("couldn't init SDL_image: " + std::string(IMG_GetError()));
+        SDL_Log("couldn't init SDL_image: %s", IMG_GetError());
     }
 
      if (TTF_Init() == -1) {
@@ -31,6 +34,7 @@ Window::Window(const std::string &title, OptionManager * options) {
     }
     #endif
 
+    #ifndef NXDK
     // Set default screen resolution and refresh rate if they haven't been set yet
     if (options->getScreenRefreshRate() == 0) {
         SDL_DisplayMode mode = getStandardDisplayMode();
@@ -42,10 +46,13 @@ Window::Window(const std::string &title, OptionManager * options) {
         window_flags |= SDL_WINDOW_FULLSCREEN;
     }
     this->window = SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, options->getScreenWidth(), options->getScreenHeight(), window_flags);
+    #else
+    this->window = SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 640, 480, SDL_WINDOW_SHOWN);
+    #endif
     if (this->window == nullptr) {
         panic("couldn't create window: " + std::string(SDL_GetError()));
     }
-
+    #ifndef NXDK
     // Set the refresh rate
     if (options->getFullscreen()) {
         for(SDL_DisplayMode mode : getDisplayModes()) {
@@ -55,6 +62,7 @@ Window::Window(const std::string &title, OptionManager * options) {
             }
         }
     }
+    #endif
 
     this->renderer = SDL_CreateRenderer(this->window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
     if (this->renderer == nullptr) {
