@@ -164,8 +164,6 @@ elseif(WIN32)
           SDL2::SDL2
           SDL2::SDL2main
           SDL2::SDL2_image
-	  SDL2_ttf::SDL2_ttf
-          SDL2_mixer::SDL2_mixer
           jsoncpp_object
           JsonCpp::JsonCpp
      )
@@ -192,6 +190,11 @@ elseif(WIN32)
                jsoncpp_static
                Shlwapi
           )
+     else()
+         target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE
+	     SDL2_ttf::SDL2_ttf
+	     SDL2_mixer::SDL2_mixer
+        )
      endif()
 
      target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE
