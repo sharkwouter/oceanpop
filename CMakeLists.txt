@@ -123,6 +123,7 @@ elseif(PLATFORM_PSP)
           vorbisfile
           vorbis
           ogg
+	  xmp
           freetype
 	  bz2
           z
@@ -163,8 +164,8 @@ elseif(WIN32)
           SDL2::SDL2
           SDL2::SDL2main
           SDL2::SDL2_image
-          SDL2::SDL2_mixer
-          SDL2::SDL2_ttf
+	  SDL2::SDL2_ttf
+          SDL2_mixer::SDL2_mixer
           jsoncpp_object
           JsonCpp::JsonCpp
      )
