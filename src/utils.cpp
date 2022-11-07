@@ -18,7 +18,7 @@ std::string getResourcePath(std::string file) {
         SDL_free(base_path);
     }
 
-    #if !defined(WIN32) && !defined(__PSP__) && !defined(__vita__)
+    #if !defined(WIN32) && !defined(__PSP__) && !defined(__vita__) && !defined(__PS2__)
         std::string share = path + "../share/oceanpop/";
         std::filesystem::path share_path{share};
 
