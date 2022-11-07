@@ -61,13 +61,13 @@ if (VITA)
           jpeg
           z
           m
-	  modplug
+          modplug
           mikmod
           mpg123
           FLAC
           SceAppUtil_stub
           SceAudio_stub
-	  SceAudioIn_stub
+          SceAudioIn_stub
           SceCommonDialog_stub
           SceCtrl_stub
           SceDisplay_stub
@@ -185,8 +185,8 @@ elseif(WIN32)
           endif()
           target_link_libraries(${CMAKE_PROJECT_NAME} PRIVATE
                SDL2::SDL2-static
-	       SDL2_mixer::SDL2_mixer-static
-	       SDL2_ttf::SDL2_ttf-static
+               SDL2_mixer::SDL2_mixer-static
+               SDL2_ttf::SDL2_ttf-static
                jsoncpp_static
                Shlwapi
           )
@@ -229,7 +229,8 @@ else()
      # Set install paths
      install(TARGETS ${CMAKE_PROJECT_NAME} DESTINATION bin)
      install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/assets DESTINATION share/${CMAKE_PROJECT_NAME})
-     install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/platform/unix/${CMAKE_PROJECT_NAME}.desktop DESTINATION share/applications)
-     install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/platform/unix/icons/128x128/${CMAKE_PROJECT_NAME}.png DESTINATION share/icons/hicolor/128x128/apps)
+     install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/platform/unix/io.github.sharkwouter.OceanPop.desktop DESTINATION share/applications)
+     install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/platform/unix/io.github.sharkwouter.OceanPop.metainfo.xml DESTINATION share/metainfo)
+     install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/platform/unix/icons/128x128/io.github.sharkwouter.OceanPop.png DESTINATION share/icons/hicolor/128x128/apps)
      install(FILES ${CMAKE_CURRENT_SOURCE_DIR}/README.md DESTINATION share/doc/${CMAKE_PROJECT_NAME})
 endif()
