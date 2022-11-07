@@ -171,6 +171,7 @@ elseif(PLATFORM_PS2)
           ogg
           freetype
           z
+	  modplug
 	  patches
 	  gskit
 	  dmakit
