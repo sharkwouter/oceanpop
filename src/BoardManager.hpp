@@ -64,8 +64,11 @@ private:
     SDL_Texture * text_level = NULL;
 
     SDL_Texture * text_plus_one = NULL;
+    SDL_Texture * text_plus_two = NULL;
     SDL_Texture * text_minus_three = NULL;
+    SDL_Texture * text_minus_six = NULL;
     SDL_Texture * text_plus_three = NULL;
+    SDL_Texture * text_plus_six = NULL;
 
     SDL_Rect rect_matches;
     SDL_Rect rect_moves;
@@ -84,6 +87,7 @@ private:
     void match();
 
     bool isFalling(SDL_Point point);
+    bool isDoubleMatch(Match match);
 
     void drawCursor(SDL_Renderer * renderer);
     void drawBoard(SDL_Renderer * renderer);
