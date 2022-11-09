@@ -140,7 +140,7 @@ void MenuState::draw(SDL_Renderer * renderer) {
 
         // Render the option text
         SDL_RenderCopy(renderer, texts[i], NULL, &rect);
-        if (sub_texts[i] != NULL && sub_rect.y + sub_rect.h < getOptionY(i+1)) {
+        if (sub_texts[i] != NULL && sub_rect.y + sub_rect.h < getOptionY(i+1) && selection == i) {
             SDL_RenderCopy(renderer, sub_texts[i], NULL, &sub_rect);
         }
     }
