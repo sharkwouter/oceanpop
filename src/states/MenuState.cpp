@@ -2,24 +2,29 @@
 
 #include "../constants.hpp"
 #include "../colors.hpp"
+#include "../FontType.hpp"
 #include "GameState.hpp"
 
 MenuState::MenuState(SDL_Renderer * renderer, FontManager * fonts, SoundManager * sounds, OptionManager * options) : renderer(renderer), fonts(fonts), sounds(sounds), options(options),
     theme(renderer, options, Theme::MENU)
 {
-    this->text_title = fonts->getTexture(renderer, "OceanPop", true, {COLOR_MENU_TITLE.r, COLOR_MENU_TITLE.g, COLOR_MENU_TITLE.b, COLOR_MENU_TITLE.a});
+    this->text_title = fonts->getTexture(renderer, "OceanPop", FontType::TITLE, {COLOR_MENU_TITLE.r, COLOR_MENU_TITLE.g, COLOR_MENU_TITLE.b, COLOR_MENU_TITLE.a});
 
     for (int i = 1; i < ((int) State::EXIT + 1); i++) {
         std::string option_text;
+        std::string option_sub_text;
         switch ((State) i) {
             case State::STANDARD:
                 option_text = "standard mode";
+                option_sub_text = "play pre-made levels";
                 break;
             case State::CHALLENGE:
                 option_text = "challenge mode";
+                option_sub_text = "ends only when lives run out";
                 break;
             case State::RELAXED:
                 option_text = "relaxed mode";
+                option_sub_text = "match without consequences";
                 break;
             case State::HIGHSCORES:
                 option_text = "high scores";
@@ -34,7 +39,12 @@ MenuState::MenuState(SDL_Renderer * renderer, FontManager * fonts, SoundManager 
                 option_text = "?????????";
                 break;
         }
-        texts.push_back(fonts->getTexture(renderer, option_text,false, {255, 255, 255, 255}));
+        texts.push_back(fonts->getTexture(renderer, option_text, FontType::NORMAL, {255, 255, 255, 255}));
+        if (!option_sub_text.empty()) {
+            sub_texts.push_back(fonts->getTexture(renderer, option_sub_text, FontType::SMALL, {255, 255, 255, 255}));
+        } else {
+            sub_texts.push_back(NULL);
+        }
     }
 
     this->text_start_y = getOptionY(0);
@@ -108,6 +118,13 @@ void MenuState::draw(SDL_Renderer * renderer) {
         SDL_QueryTexture(texts[i], NULL, NULL, &rect.w, &rect.h);
         rect.x -= rect.w/2;
 
+        SDL_Rect sub_rect;
+        if (sub_texts[i] != NULL) {
+            sub_rect = {this->options->getScreenWidth()/2, rect.y+rect.h, 0, 0};
+            SDL_QueryTexture(sub_texts[i], NULL, NULL, &sub_rect.w, &sub_rect.h);
+            sub_rect.x -= sub_rect.w/2;
+        }
+
         // Set the texture color
         if(i == selection) {
             // Draw selection box
@@ -123,6 +140,9 @@ void MenuState::draw(SDL_Renderer * renderer) {
 
         // Render the option text
         SDL_RenderCopy(renderer, texts[i], NULL, &rect);
+        if (sub_texts[i] != NULL && sub_rect.y + sub_rect.h < getOptionY(i+1)) {
+            SDL_RenderCopy(renderer, sub_texts[i], NULL, &sub_rect);
+        }
     }
 }
 

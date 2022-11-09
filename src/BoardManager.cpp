@@ -6,6 +6,7 @@
 
 #include "Sound.hpp"
 #include "colors.hpp"
+#include "FontType.hpp"
 
 BoardManager::BoardManager(SDL_Renderer *renderer, FontManager *fonts, SoundManager * sounds, OptionManager * options, int x, int y, int width, int height, int moves, int required_matches, int level, int seed) : fonts(fonts), sounds(sounds), options(options),
     textures(renderer, options) {
@@ -477,22 +478,22 @@ bool BoardManager::isDoubleMatch(Match match) {
 
 void BoardManager::drawMatches(SDL_Renderer * renderer) {
     if (this->text_plus_one == NULL) {
-        this->text_plus_one = fonts->getTexture(renderer, "+1", false, {255, 255, 255, 255});
+        this->text_plus_one = fonts->getTexture(renderer, "+1", FontType::NORMAL, {255, 255, 255, 255});
     }
     if (this->text_plus_two == NULL) {
-        this->text_plus_two = fonts->getTexture(renderer, "+2", false, {255, 255, 255, 255});
+        this->text_plus_two = fonts->getTexture(renderer, "+2", FontType::NORMAL, {255, 255, 255, 255});
     }
     if (!this->isRelaxedMode && this->text_minus_three == NULL) {
-        this->text_minus_three = fonts->getTexture(renderer, "-3", false, {0, 0, 0, 255});
+        this->text_minus_three = fonts->getTexture(renderer, "-3", FontType::NORMAL, {0, 0, 0, 255});
     }
     if (!this->isRelaxedMode && this->text_minus_six == NULL) {
-        this->text_minus_six = fonts->getTexture(renderer, "-6", false, {0, 0, 0, 255});
+        this->text_minus_six = fonts->getTexture(renderer, "-6", FontType::NORMAL, {0, 0, 0, 255});
     }
     if (this->isRelaxedMode && this->text_plus_three == NULL) {
-        this->text_plus_three = fonts->getTexture(renderer, "+3", false, {255, 255, 255, 255});
+        this->text_plus_three = fonts->getTexture(renderer, "+3", FontType::NORMAL, {255, 255, 255, 255});
     }
     if (this->isRelaxedMode && this->text_plus_six == NULL) {
-        this->text_plus_six = fonts->getTexture(renderer, "+6", false, {255, 255, 255, 255});
+        this->text_plus_six = fonts->getTexture(renderer, "+6", FontType::NORMAL, {255, 255, 255, 255});
     }
 
     for(Match match : this->matches_made) {
@@ -576,7 +577,7 @@ void BoardManager::drawInfo(SDL_Renderer * renderer) {
         if (text_level != NULL) {
             SDL_DestroyTexture(text_level);
         }
-        text_level = fonts->getTexture(renderer, str_level, false, {255, 255, 255, 255});
+        text_level = fonts->getTexture(renderer, str_level, FontType::NORMAL, {255, 255, 255, 255});
         level_updated = false;
     }
     if (this->matches_updated) {
@@ -587,7 +588,7 @@ void BoardManager::drawInfo(SDL_Renderer * renderer) {
         if (text_matches != NULL) {
             SDL_DestroyTexture(text_matches);
         }
-        text_matches = fonts->getTexture(renderer, str_matches, false, {255, 255, 255, 255});
+        text_matches = fonts->getTexture(renderer, str_matches, FontType::NORMAL, {255, 255, 255, 255});
         matches_updated = false;
     }
     if (this->moves_updated) {
@@ -600,7 +601,7 @@ void BoardManager::drawInfo(SDL_Renderer * renderer) {
         if (text_moves != NULL) {
             SDL_DestroyTexture(text_moves);
         }
-        text_moves = fonts->getTexture(renderer, str_moves, false, {255, 255, 255, 255});
+        text_moves = fonts->getTexture(renderer, str_moves, FontType::NORMAL, {255, 255, 255, 255});
         moves_updated = false;
     }
 

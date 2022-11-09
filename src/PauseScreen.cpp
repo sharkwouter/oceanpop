@@ -2,10 +2,11 @@
 
 #include "constants.hpp"
 #include "colors.hpp"
+#include "FontType.hpp"
 
 PauseScreen::PauseScreen(SDL_Renderer * renderer, FontManager * fonts, OptionManager * options, std::string title, std::string subtitle) : fonts(fonts), options(options) {
-        this->title = fonts->getTexture(renderer, title, true, {255, 255, 255, 255});
-        this->subtitle = fonts->getTexture(renderer, subtitle, false, {255, 255, 255, 255});
+        this->title = fonts->getTexture(renderer, title, FontType::TITLE, {255, 255, 255, 255});
+        this->subtitle = fonts->getTexture(renderer, subtitle, FontType::NORMAL, {255, 255, 255, 255});
 }
 
 PauseScreen::~PauseScreen() {

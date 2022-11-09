@@ -3,6 +3,7 @@
 #include "../constants.hpp"
 #include "../colors.hpp"
 #include "../utils.hpp"
+#include "../FontType.hpp"
 #include "GameState.hpp"
 
 OptionsState::OptionsState(SDL_Renderer * renderer, FontManager * fonts, SoundManager * sounds, OptionManager * options, SDL_Window * window) : renderer(renderer), fonts(fonts), sounds(sounds), options(options), window(window),
@@ -180,7 +181,7 @@ void OptionsState::changeChangeMusic() {
     this->options->setChangeMusicOnSwitch(!this->options->getChangeMusicOnSwitch());
 
     SDL_DestroyTexture(this->texts[this->selection]);
-    this->texts[this->selection] = fonts->getTexture(renderer, getChangeMusicString(), false, {255, 255, 255, 255});
+    this->texts[this->selection] = fonts->getTexture(renderer, getChangeMusicString(), FontType::NORMAL, {255, 255, 255, 255});
 }
 
 void OptionsState::changeSoundVolume(int amount) {
@@ -195,7 +196,7 @@ void OptionsState::changeSoundVolume(int amount) {
     this->options->setSoundVolume(new_value);
 
     SDL_DestroyTexture(this->texts[this->selection]);
-    this->texts[this->selection] = fonts->getTexture(renderer, getSoundVolumeString(), false, {255, 255, 255, 255});
+    this->texts[this->selection] = fonts->getTexture(renderer, getSoundVolumeString(), FontType::NORMAL, {255, 255, 255, 255});
 }
 
 void OptionsState::changeMusicVolume(int amount) {
@@ -210,7 +211,7 @@ void OptionsState::changeMusicVolume(int amount) {
     this->options->setMusicVolume(new_value);
 
     SDL_DestroyTexture(this->texts[this->selection]);
-    this->texts[this->selection] = fonts->getTexture(renderer, getMusicVolumeString(), false, {255, 255, 255, 255});
+    this->texts[this->selection] = fonts->getTexture(renderer, getMusicVolumeString(), FontType::NORMAL, {255, 255, 255, 255});
 }
 
 void OptionsState::changeFullscreen() {
@@ -229,7 +230,7 @@ void OptionsState::changeFullscreen() {
    SDL_SetWindowFullscreen(this->window, this->options->getFullscreen() ? SDL_WINDOW_FULLSCREEN : 0);
 
     SDL_DestroyTexture(this->texts[this->selection]);
-    this->texts[this->selection] = fonts->getTexture(renderer, getFullscreenString(), false, {255, 255, 255, 255});
+    this->texts[this->selection] = fonts->getTexture(renderer, getFullscreenString(), FontType::NORMAL, {255, 255, 255, 255});
 }
 
 void OptionsState::changeResolution(int amount) {
@@ -261,7 +262,7 @@ void OptionsState::changeResolution(int amount) {
 }
 
 void OptionsState::loadTexts() {
-    this->text_title = fonts->getTexture(this->renderer, "Options", true, {COLOR_MENU_TITLE.r, COLOR_MENU_TITLE.g, COLOR_MENU_TITLE.b, COLOR_MENU_TITLE.a});
+    this->text_title = fonts->getTexture(this->renderer, "Options", FontType::TITLE, {COLOR_MENU_TITLE.r, COLOR_MENU_TITLE.g, COLOR_MENU_TITLE.b, COLOR_MENU_TITLE.a});
 
     for (int i = 0; i < (((int) Option::GO_BACK) + 1); i++) {
         std::string current_text;
@@ -288,7 +289,7 @@ void OptionsState::loadTexts() {
                 current_text = "?????????";
                 break;
         }
-        texts.push_back(fonts->getTexture(renderer, current_text, false, {255, 255, 255, 255}));
+        texts.push_back(fonts->getTexture(renderer, current_text, FontType::NORMAL, {255, 255, 255, 255}));
     }
 
     this->text_start_y = getTextY(0);

@@ -4,6 +4,7 @@
 #include <cmath>
 #include <string>
 #include "../colors.hpp"
+#include "../FontType.hpp"
 
 GameStateChallenge::GameStateChallenge(SDL_Renderer * renderer, FontManager * fonts, SoundManager * sounds, OptionManager * options) :
     theme(renderer, options, Theme::NONE),
@@ -100,13 +101,13 @@ void GameStateChallenge::draw(SDL_Renderer *renderer) {
 
 void GameStateChallenge::drawAttempts(SDL_Renderer * renderer) {
     if(text_attempts == NULL) {
-        text_attempts = fonts->getTexture(renderer, "lives left", false, {255, 255, 255, 255});
+        text_attempts = fonts->getTexture(renderer, "lives left", FontType::NORMAL, {255, 255, 255, 255});
     }
     if (this->attempts_changed) {
         if (text_attempts_number != NULL) {
             SDL_DestroyTexture(text_attempts_number);
         }
-        text_attempts_number = fonts->getTexture(renderer, std::to_string(this->attempts), false, {255, 255, 255, 255});
+        text_attempts_number = fonts->getTexture(renderer, std::to_string(this->attempts), FontType::NORMAL, {255, 255, 255, 255});
         this->attempts_changed = false;
     }
     // Render
