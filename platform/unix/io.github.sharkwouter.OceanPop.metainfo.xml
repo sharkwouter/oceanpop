@@ -32,6 +32,15 @@
   </provides>
 
   <releases>
+    <release version="1.1" date="2022-11-10">
+      <description>
+        <p>Add a short explanation for each mode to the main menu</p>
+        <p>Overlapping score indicators are now added together</p>
+        <p>Linux AppImage should now work on more systems</p>
+        <p>Preparations for a Flathub release</p>
+      </description>
+    </release>
+
     <release version="1.0" date="2022-03-09">
       <description>
         <p>First Release</p>
