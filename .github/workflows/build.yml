@@ -102,16 +102,12 @@ jobs:
 
   Release:
     needs: [Linux, Windows, PSP, Vita]
-    if: startsWith(github.ref, 'refs/tags/')
+    if: ${{ github.ref_type == 'tag' }}
     runs-on: ubuntu-latest
     strategy:
       matrix:
         build: [linux, windows, psp, vita]
     steps:
-    - name: Extract tag name
-      if: startsWith(github.ref, 'refs/tags/')
-      id: tag
-      run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
     - uses: actions/download-artifact@v3
     - name: Zip artifacts
       run: |
@@ -120,10 +116,8 @@ jobs:
       uses: softprops/action-gh-release@v1
       with:
         files: oceanpop-${{matrix.build}}.zip
-        tag_name: ${{ steps.tag.outputs.VERSION }}
-        name: OceanPop ${{ steps.tag.outputs.VERSION }}
-        body: |
-          A new release of the relaxing match-3 game with a twist. Enjoy!
-          ![screenshot](https://raw.githubusercontent.com/sharkwouter/oceanpop/${{ steps.tag.outputs.VERSION }}/screenshot.jpg)
+        prerelease: true
+        name: OceanPop ${{ github.ref_name }}
+        tag_name: ${{ github.ref_name }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
