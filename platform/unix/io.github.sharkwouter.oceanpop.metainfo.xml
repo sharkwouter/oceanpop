@@ -25,6 +25,7 @@
   </screenshots>
 
   <url type="homepage">https://sharkwouter.github.io/oceanpop/</url>
+  <developer_name>Wouter "sharkwouter" Wijsman</developer_name>
 
   <provides>
     <binary>oceanpop</binary>
