@@ -16,7 +16,7 @@ jobs:
       - name: Build
         run: |
           mkdir oceanpop && cd oceanpop
-          cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr .
+          cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr ..
           cmake --build .
           strip --strip-unneeded oceanpop
           make install DESTDIR=AppDir
@@ -60,7 +60,7 @@ jobs:
       - name: Build
         run: |
           mkdir oceanpop && cd oceanpop
-          cmake -DCMAKE_BUILD_TYPE=Release -G "MinGW Makefiles" .
+          cmake -DCMAKE_BUILD_TYPE=Release -G "MinGW Makefiles" ..
           cmake --build .
           strip --strip-unneeded oceanpop.exe
           cp ../LICENSE.txt ../README.md ./
@@ -86,7 +86,7 @@ jobs:
       - name: Build
         run: |
           mkdir oceanpop && cd oceanpop
-          cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=$PSPDEV/psp/share/pspdev.cmake ..
+          cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=${PSPDEV}/psp/share/pspdev.cmake ..
           cmake --build .
           cp ../LICENSE.txt ../README.md ./
       - name: Publish artifacts
@@ -108,7 +108,7 @@ jobs:
       - name: Build
         run: |
           mkdir oceanpop && cd oceanpop
-          cmake -DCMAKE_TOOLCHAIN_FILE="${VITASDK}/share/vita.toolchain.cmake" .
+          cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE="${VITASDK}/share/vita.toolchain.cmake" ..
           cmake --build .
           cp ../LICENSE.txt ../README.md ./
       - name: Publish artifacts
