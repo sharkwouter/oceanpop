@@ -63,14 +63,14 @@ set(ASSETS_FONTS "${CMAKE_SOURCE_DIR}/assets/fonts")
 set(ASSETS_IMAGES "${CMAKE_SOURCE_DIR}/assets/images")
 set(ASSETS_LEVELS "${CMAKE_SOURCE_DIR}/assets/levels")
 set(ASSETS_SOUNDS "${CMAKE_SOURCE_DIR}/assets/sounds")
-set(ASSETS_BACKGROUNDS "${CMAKE_SOURCE_DIR}/assets/backgrounds/1920x1080")
-set(ASSETS_MUSIC "${CMAKE_SOURCE_DIR}/assets/music/mp3")
+set(ASSETS_MUSIC "${CMAKE_SOURCE_DIR}/assets/music")
+set(ASSETS_BACKGROUNDS "${CMAKE_SOURCE_DIR}/assets/backgrounds")
 
 if(PSP)
-    set(ASSETS_BACKGROUNDS "${CMAKE_SOURCE_DIR}/assets/backgrounds/480x272")
-    set(ASSETS_MUSIC "${CMAKE_SOURCE_DIR}/assets/music/ogg")
+    set(ASSETS_BACKGROUNDS "${CMAKE_CURRENT_SOURCE_DIR}/platform/psp/assets/backgrounds")
+    set(ASSETS_MUSIC "${CMAKE_CURRENT_SOURCE_DIR}/platform/psp/assets/music")
 elseif(VITA)
-    set(ASSETS_BACKGROUNDS "${CMAKE_SOURCE_DIR}/assets/backgrounds/960x540")
+    set(ASSETS_BACKGROUNDS "${CMAKE_SOURCE_DIR}/platform/vita/assets/backgrounds")
 endif()
 
 # Copy assets
@@ -96,7 +96,7 @@ if(NOT VITA)
         ${ASSETS_SOUNDS} ${CMAKE_CURRENT_BINARY_DIR}/assets/sounds)
 endif()
 
-# Platform specific conversions
+# Platform specific install
 if (VITA)
     include("$ENV{VITASDK}/share/vita.cmake" REQUIRED)
     vita_create_self(${CMAKE_PROJECT_NAME}.self ${CMAKE_PROJECT_NAME})
