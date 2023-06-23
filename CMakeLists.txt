@@ -123,7 +123,7 @@ elseif(PLATFORM_PSP)
         TITLE OceanPop
     )
 elseif(win32)
-    # Nothing here yet, but we don't want an install
+    # Nothing here yet
 else()
     install(TARGETS ${PROJECT_NAME} DESTINATION bin)
     install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/assets DESTINATION share/${PROJECT_NAME})
