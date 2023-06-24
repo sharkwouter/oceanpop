@@ -101,7 +101,7 @@ jobs:
 
   Vita:
     runs-on: ubuntu-latest
-    container: gnuton/vitasdk-docker:latest
+    container: vitasdk/vitasdk:latest
     steps:
       - name: Checkout
         uses: actions/checkout@v3
