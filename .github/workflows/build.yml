@@ -29,9 +29,9 @@ jobs:
         with:
           name: oceanpop-linux
           path: |
-            OceanPop*.AppImage
-            LICENSE.txt
-            README.md
+            oceanpop/OceanPop*.AppImage
+            oceanpop/LICENSE.txt
+            oceanpop/README.md
 
   Windows:
     runs-on: windows-latest
@@ -69,10 +69,10 @@ jobs:
         with:
           name: oceanpop-windows
           path: |
-            oceanpop.exe
-            assets
-            LICENSE.txt
-            README.md
+            oceanpop/oceanpop.exe
+            oceanpop/assets
+            oceanpop/LICENSE.txt
+            oceanpop/README.md
 
   PSP:
     runs-on: ubuntu-latest
@@ -116,9 +116,9 @@ jobs:
         with:
           name: oceanpop-vita
           path: |
-            oceanpop.vpk
-            LICENSE.txt
-            README.md
+            oceanpop/oceanpop.vpk
+            oceanpop/LICENSE.txt
+            oceanpop/README.md
 
   Release:
     needs: [Linux, Windows, PSP, Vita]
