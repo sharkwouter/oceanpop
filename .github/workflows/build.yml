@@ -10,49 +10,69 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y wget cmake libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev libjsoncpp-dev
+          sudo apt-get install -y wget cmake libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev libjsoncpp-dev libfuse2
       - name: Checkout
         uses: actions/checkout@v3
       - name: Build
         run: |
-          cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr .
-          make
+          mkdir oceanpop && cd oceanpop
+          cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr ..
+          cmake --build .
           strip --strip-unneeded oceanpop
           make install DESTDIR=AppDir
           wget https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage
           chmod +x linuxdeploy*.AppImage
           ./linuxdeploy-x86_64.AppImage --appdir AppDir --output appimage
+          cp ../LICENSE.txt ../README.md ./
       - name: Publish artifacts
         uses: actions/upload-artifact@v3
         with:
           name: oceanpop-linux
           path: |
-            OceanPop*.AppImage
-            LICENSE.txt
-            README.md
+            oceanpop/OceanPop*.AppImage
+            oceanpop/LICENSE.txt
+            oceanpop/README.md
 
   Windows:
     runs-on: windows-latest
+    defaults:
+      run:
+        shell: msys2 {0}
     steps:
       - name: Install dependencies
-        run: |
-          vcpkg install --triplet x64-windows-static sdl2 sdl2-image[libjpeg-turbo] sdl2-ttf sdl2-mixer[mpg123] jsoncpp
+        uses: msys2/setup-msys2@v2
+        with:
+          msystem: MINGW64
+          install: >-
+            mingw-w64-x86_64-gcc
+            mingw-w64-x86_64-binutils
+            mingw-w64-x86_64-make
+            mingw-w64-x86_64-cmake
+            mingw-w64-x86_64-pkgconf
+            mingw-w64-x86_64-SDL2
+            mingw-w64-x86_64-SDL2_image
+            mingw-w64-x86_64-SDL2_mixer
+            mingw-w64-x86_64-SDL2_ttf
+            mingw-w64-x86_64-jsoncpp
+          update: true
       - name: Checkout
         uses: actions/checkout@v3
       - name: Build
         run: |
-          cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=C:\vcpkg\scripts\buildsystems\vcpkg.cmake -DVCPKG_TARGET_TRIPLET=x64-windows-static -DBUILD_STATIC=ON .
-          cmake --build . --config Release
-          cp Release/oceanpop.exe .
+          mkdir oceanpop && cd oceanpop
+          cmake -DCMAKE_BUILD_TYPE=Release -G "MinGW Makefiles" ..
+          cmake --build .
+          strip --strip-unneeded oceanpop.exe
+          cp ../LICENSE.txt ../README.md ./
       - name: Publish artifacts
         uses: actions/upload-artifact@v3
         with:
           name: oceanpop-windows
           path: |
-            oceanpop.exe
-            assets
-            LICENSE.txt
-            README.md
+            oceanpop/oceanpop.exe
+            oceanpop/assets
+            oceanpop/LICENSE.txt
+            oceanpop/README.md
 
   PSP:
     runs-on: ubuntu-latest
@@ -65,12 +85,10 @@ jobs:
         uses: actions/checkout@v3
       - name: Build
         run: |
-          mkdir oceanpop
-          cd oceanpop
-          cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=$PSPDEV/psp/share/pspdev.cmake ..
-          make
-          cp ../LICENSE.txt ./
-          cp ../README.md ./
+          mkdir oceanpop && cd oceanpop
+          cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=${PSPDEV}/psp/share/pspdev.cmake ..
+          cmake --build .
+          cp ../LICENSE.txt ../README.md ./
       - name: Publish artifacts
         uses: actions/upload-artifact@v3
         with:
@@ -83,22 +101,24 @@ jobs:
 
   Vita:
     runs-on: ubuntu-latest
-    container: gnuton/vitasdk-docker:latest
+    container: vitasdk/vitasdk:latest
     steps:
       - name: Checkout
         uses: actions/checkout@v3
       - name: Build
         run: |
-          cmake -DCMAKE_TOOLCHAIN_FILE="${VITASDK}/share/vita.toolchain.cmake" .
-          make
+          mkdir oceanpop && cd oceanpop
+          cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE="${VITASDK}/share/vita.toolchain.cmake" ..
+          cmake --build .
+          cp ../LICENSE.txt ../README.md ./
       - name: Publish artifacts
         uses: actions/upload-artifact@v3
         with:
           name: oceanpop-vita
           path: |
-            oceanpop.vpk
-            LICENSE.txt
-            README.md
+            oceanpop/oceanpop.vpk
+            oceanpop/LICENSE.txt
+            oceanpop/README.md
 
   Release:
     needs: [Linux, Windows, PSP, Vita]
