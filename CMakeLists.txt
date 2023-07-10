@@ -72,7 +72,6 @@ set(ASSETS_BACKGROUNDS "${CMAKE_SOURCE_DIR}/assets/backgrounds")
 
 if(PSP)
     set(ASSETS_BACKGROUNDS "${CMAKE_CURRENT_SOURCE_DIR}/platform/psp/assets/backgrounds")
-    set(ASSETS_MUSIC "${CMAKE_CURRENT_SOURCE_DIR}/platform/psp/assets/music")
 elseif(VITA)
     set(ASSETS_BACKGROUNDS "${CMAKE_SOURCE_DIR}/platform/vita/assets/backgrounds")
 endif()
