@@ -24,6 +24,9 @@ void WonState::handleEvents(std::vector<Event> events) {
     for(Event event: events) {
         if (event == Event::CONFIRM) {
             this->done = true;
+        } else if (event == Event::QUIT) {
+            this->next_state = State::EXIT;
+            this->done = true;
         }
     }
 }
@@ -34,5 +37,5 @@ void WonState::draw(SDL_Renderer *renderer) {
 }
 
 State WonState::getNextState() {
-    return State::MENU;
+    return this->next_state;
 }

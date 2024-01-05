@@ -86,6 +86,9 @@ void OptionsState::handleEvents(std::vector<Event> events) {
                 }
                 break;
             case Event::QUIT:
+                this->next_state = State::EXIT;
+                this->done = true;
+                break;
             case Event::MENU:
             case Event::CANCEL:
                 this->done = true;
@@ -309,5 +312,5 @@ int OptionsState::getTextY(int number) {
 }
 
 State OptionsState::getNextState() {
-    return State::MENU;
+    return this->next_state;
 }

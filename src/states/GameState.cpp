@@ -57,13 +57,23 @@ void GameState::handleEvents(std::vector<Event> events) {
     }
 
     for(Event event: events) {
+        if (event == Event::QUIT) {
+            if (this->completed) {
+                this->options->setStandardModeLevel(this->level+1);
+            } else {
+                this->options->setStandardModeLevel(this->level);
+            }
+            this->next_state = State::EXIT;
+            this->done = true;
+            return;
+        }
          if (this->completed) {
             if (event == Event::CONFIRM) {
                 this->completed = false;
                 int next_level = this->level+1;
                 if (next_level > this->total_levels ) {
                     this->options->resetStandardMode();
-                    this->finished = true;
+                    this->next_state = State::WON;
                     this->done = true;
                 } else {
                     this->loadLevel(next_level);
@@ -77,12 +87,12 @@ void GameState::handleEvents(std::vector<Event> events) {
                 this->failed = false;
             }
         } else if (this->paused) {
-            if (event == Event::CONFIRM || event == Event::QUIT) {
+            if (event == Event::CONFIRM) {
                 this->done = true;
             } else if (event == Event::CANCEL || event == Event::MENU) {
                 this->paused = false;
             }
-        } else if (event == Event::MENU || event == Event::QUIT) {
+        } else if (event == Event::MENU) {
             this->paused = true;
             return;
         } else if(event == Event::NEXT) {
@@ -243,9 +253,5 @@ SDL_Point GameState::calculatePosition(int width, int height) {
 }
 
 State GameState::getNextState() {
-    if(this->finished) {
-        return State::WON;
-    } else {
-        return State::MENU;
-    }
+    return this->next_state;
 }

@@ -51,6 +51,8 @@ private:
     std::vector<std::vector<ShellType>> shells;
     SDL_Point position;
 
+    State next_state = State::MENU;
+
     SDL_Point calculatePosition(int width, int height);
     int getTotalLevels();
     void loadLevel(int level);

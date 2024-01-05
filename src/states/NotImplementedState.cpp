@@ -19,7 +19,10 @@ void NotImplementedState::update() {
 
 void NotImplementedState::handleEvents(std::vector<Event> events) {
     for(Event event: events) {
-        if (event == Event::CONFIRM || event == Event::CANCEL || event == Event::MENU) {
+        if (event == Event::QUIT) {
+            this->next_state = State::EXIT;
+            this->done = true;
+        } else if (event == Event::CONFIRM || event == Event::CANCEL || event == Event::MENU) {
             this->done = true;
         }
     }
@@ -31,5 +34,5 @@ void NotImplementedState::draw(SDL_Renderer *renderer) {
 }
 
 State NotImplementedState::getNextState() {
-    return State::MENU;
+    return this->next_state;
 }

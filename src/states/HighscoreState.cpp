@@ -32,6 +32,9 @@ void HighscoreState::handleEvents(std::vector<Event> events) {
     for(Event event :events) {
         switch (event) {
             case Event::QUIT:
+                this->next_state = State::EXIT;
+                this->done = true;
+                break;
             case Event::MENU:
             case Event::CANCEL:
             case Event::CONFIRM:
@@ -79,5 +82,5 @@ int HighscoreState::getTextY(int number) {
 }
 
 State HighscoreState::getNextState() {
-    return State::MENU;
+    return this->next_state;
 }

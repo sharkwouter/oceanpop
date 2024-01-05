@@ -23,6 +23,8 @@ private:
     ThemeManager theme;
 
     PauseScreen screen_text;
+
+    State next_state = State::MENU;
 public:
     NotImplementedState(SDL_Renderer *renderer, FontManager * fonts, SoundManager * sounds, OptionManager * options);
     ~NotImplementedState();
