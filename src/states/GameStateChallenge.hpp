@@ -32,7 +32,6 @@ private:
     bool paused = false;
     bool completed = false;
     bool failed = false;
-    bool game_over = false;
 
     int level;
     int seed;
@@ -44,6 +43,8 @@ private:
 
     int attempts;
     bool attempts_changed;
+
+    State next_state = State::MENU;
 
     SDL_Point calculatePosition(int width, int height);
     void loadLevel();

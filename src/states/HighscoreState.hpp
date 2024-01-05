@@ -27,6 +27,8 @@ private:
     int text_offset = 2;
     int text_start_y;
 
+    State next_state = State::MENU;
+
     int getTextY(int number);
 public:
     HighscoreState(SDL_Renderer * renderer, FontManager * fonts, SoundManager * sounds, OptionManager * options);

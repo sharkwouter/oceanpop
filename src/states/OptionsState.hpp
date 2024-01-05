@@ -33,6 +33,8 @@ private:
     SDL_Texture * text_title;
     std::vector<SDL_Texture*> texts;
 
+    State next_state = State::MENU;
+
     int text_offset = 2;
     int text_start_y;
 

@@ -25,6 +25,8 @@ private:
     PauseScreen screen_text;
 
     bool sound_played = false;
+
+    State next_state = State::EXIT;
 public:
     WonState(SDL_Renderer *renderer, FontManager * fonts, SoundManager * sounds, OptionManager * options);
     ~WonState();

@@ -32,7 +32,7 @@ void GameStateChallenge::update() {
             this->options->setChallengeModeHighscore(this->level);
         }
         this->options->resetChallengeMode();
-        this->game_over = true;
+        this->next_state = State::GAMEOVER;
         this->done = true;
     } else if (this->board->isCompleted() && !this->completed) {
         this->theme.pause();
@@ -58,6 +58,13 @@ void GameStateChallenge::handleEvents(std::vector<Event> events) {
     }
 
     for(Event event: events) {
+        if (event == Event::QUIT) {
+            this->options->setChallengeModeLevel(this->level);
+            this->options->setChallengeModeLives(this->attempts);
+            this->next_state = State::EXIT;
+            this->done = true;
+            return;
+        }
         if (this->completed) {
             if (event == Event::CONFIRM) {
                 this->completed = false;
@@ -71,14 +78,14 @@ void GameStateChallenge::handleEvents(std::vector<Event> events) {
                 this->theme.unpause();
             }
         } else if (this->paused) {
-            if (event == Event::CONFIRM || event == Event::QUIT) {
+            if (event == Event::CONFIRM) {
                 this->options->setChallengeModeLevel(this->level);
                 this->options->setChallengeModeLives(this->attempts);
                 this->done = true;
             } else if (event == Event::CANCEL || event == Event::MENU) {
                 this->paused = false;
             }
-        } else if (event == Event::MENU || event == Event::QUIT) {
+        } else if (event == Event::MENU) {
             this->paused = true;
             return;
         }
@@ -165,9 +172,5 @@ SDL_Point GameStateChallenge::calculatePosition(int width, int height) {
 }
 
 State GameStateChallenge::getNextState() {
-    if (this->game_over) {
-        return State::GAMEOVER;
-    } else {
-        return State::MENU;
-    }
+    return this->next_state;
 }

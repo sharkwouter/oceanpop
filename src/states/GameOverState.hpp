@@ -30,6 +30,8 @@ private:
     PauseScreen screen_text;
 
     bool sound_played = false;
+
+    State next_state = State::MENU;
 public:
     GameOverState(SDL_Renderer *renderer, FontManager * fonts, SoundManager * sounds, OptionManager * options);
     ~GameOverState();
