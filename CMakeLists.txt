@@ -74,6 +74,8 @@ if(PSP)
     set(ASSETS_BACKGROUNDS "${CMAKE_CURRENT_SOURCE_DIR}/platform/psp/assets/backgrounds")
 elseif(VITA)
     set(ASSETS_BACKGROUNDS "${CMAKE_SOURCE_DIR}/platform/vita/assets/backgrounds")
+elseif(CMAKE_SYSTEM_NAME MATCHES "NintendoWii")
+    set(ASSETS_BACKGROUNDS "${CMAKE_SOURCE_DIR}/platform/wii/assets/backgrounds")
 endif()
 
 # Copy assets
@@ -125,6 +127,8 @@ elseif(PLATFORM_PSP)
         PREVIEW_PATH NULL
         TITLE OceanPop
     )
+elseif(CMAKE_SYSTEM_NAME MATCHES "NintendoWii")
+    ogc_create_dol(oceanpop)
 elseif(win32)
     # Nothing here yet
 else()

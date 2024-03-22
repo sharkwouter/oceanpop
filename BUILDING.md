@@ -85,3 +85,36 @@ make
 ```
 
 The resulting ``EBOOT.PBP`` and ``assets`` directory can be copied into the ``PSP/GAME/oceanpop`` directory on the PSP memory card. If this directory does not exist yet, create it.
+
+
+## Nintendo Wii
+
+To build for the Nintendo Wii you need to install the needed SDL2 dependencies via [devkitPro](https://devkitpro.org/):
+
+```
+sudo dkp-pacman -S wii-sdl2 wii-sdl2_image wii-sdl2_mixer wii-sdl2_ttf
+```
+
+You will also need to build `json-cpp` by yourself, since it's not part of devkitPro. This can be done with the following commands:
+
+```
+# This assumes that you are located in a clean checkout of the json-cpp repo:
+source /etc/profile.d/devkit-env.sh
+cmake -S. -Bbuild \
+          -DCMAKE_TOOLCHAIN_FILE="$DEVKITPRO/cmake/Wii.cmake" \
+          -DJSONCPP_WITH_TESTS=OFF
+cd build
+make
+sudo make install
+```
+
+Once this is done, change the current directory to the oceanpop source tree and type
+```
+./platform/add-new-platform.sh wii 640x480
+source /etc/profile.d/devkit-env.sh
+cmake -S. -Bbuild -DCMAKE_TOOLCHAIN_FILE="$DEVKITPRO/cmake/Wii.cmake"
+cd build
+make
+```
+
+The resulting ``oceanpop.dol`` and ``assets`` directory can be copied into the ``apps/oceanpop`` directory on the Wii SD card. If this directory does not exist yet, create it.
