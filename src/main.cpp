@@ -44,6 +44,9 @@ int main(int argv, char** args) {
     } catch (const Json::LogicError&) {
         SDL_Log("Configuration file invalid, please delete it");
         return EXIT_FAILURE;
+    } catch (const std::runtime_error &e) {
+        SDL_Log("Error: %s", e.what());
+        return EXIT_FAILURE;
     }
 
     return EXIT_SUCCESS;
