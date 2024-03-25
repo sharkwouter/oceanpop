@@ -117,13 +117,48 @@ jobs:
             oceanpop/LICENSE.txt
             oceanpop/README.md
 
+  Wii:
+    runs-on: ubuntu-latest
+    container: devkitpro/devkitppc:latest
+    steps:
+      - name: Checkout json-cpp
+        uses: actions/checkout@v3
+        with:
+          repository: open-source-parsers/jsoncpp
+          path: jsoncpp
+          ref: 1.9.5
+      - name: Build json-cpp
+        run: |
+          cd jsoncpp
+          /opt/devkitpro/portlibs/wii/bin/powerpc-eabi-cmake -S. -Bbuild \
+            -DJSONCPP_WITH_TESTS=OFF
+          cd build
+          make
+          sudo make install
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Build
+        run: |
+          mkdir oceanpop && cd oceanpop
+          /opt/devkitpro/portlibs/wii/bin/powerpc-eabi-cmake -DCMAKE_BUILD_TYPE=Release ..
+          make
+      - name: Prepare package
+        run: |
+          ./platform/wii/make_release.sh oceanpop ${{ github.ref_name }}
+      - name: Publish artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: oceanpop-wii
+          path: |
+            oceanpop/oceanpop*.zip
+
   Release:
-    needs: [Linux, Windows, PSP, Vita]
+    needs: [Linux, Windows, PSP, Vita, Wii]
     if: ${{ github.ref_type == 'tag' }}
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        build: [linux, windows, psp, vita]
+        build: [linux, windows, psp, vita, wii]
     steps:
     - uses: actions/download-artifact@v3
     - name: Zip artifacts
