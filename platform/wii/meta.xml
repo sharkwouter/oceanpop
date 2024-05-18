@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<app version="1">
+  <name>OceanPop</name>
+  <coder>Wouter Wijsman</coder>
+  <version>VERSION</version>
+  <release_date>20240322152132</release_date>
+  <short_description>A relaxing match 3 puzzle game</short_description>
+  <long_description>Dive into the relaxing world of OceanPop and experience waves of match-3 gameplay with the three modes available!
+  </long_description>
+</app>

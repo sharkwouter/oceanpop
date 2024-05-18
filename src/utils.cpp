@@ -12,7 +12,11 @@ void panic(const std::string &reason) {
 std::string getResourcePath(std::string file) {
     std::string path = "";
 
+#if defined(__wii__)
+    char * base_path = SDL_GetPrefPath(NULL,"oceanpop");
+#else
     char * base_path = SDL_GetBasePath();
+#endif
     if (base_path) {
         path += base_path;
         SDL_free(base_path);
