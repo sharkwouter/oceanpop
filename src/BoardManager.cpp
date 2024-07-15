@@ -64,6 +64,12 @@ void BoardManager::storeLevel(int x, int y, Board * board, int moves, int requir
     this->rect_board.w = this->options->getShellSize() * this->board->getWidth();
     this->rect_board.h = this->options->getShellSize() * this->board->getHeight();
 
+    this->rect_scoreboard.x = 0;
+    this->rect_scoreboard.y = this->options->getScreenHeight() - this->options->getShellSize();
+
+    this->rect_scoreboard.w = this->options->getScreenWidth();
+    this->rect_scoreboard.h = this->options->getShellSize();
+
     this->selected.x = this->board->getWidth() / 2;
     this->selected.y = this->board->getHeight() / 2;
 
@@ -374,9 +380,8 @@ void BoardManager::drawCursor(SDL_Renderer * renderer) {
 
 void BoardManager::drawBoard(SDL_Renderer * renderer) {
     // Draw background rectangle
-    SDL_Rect background = {this->rect_board.x, this->rect_board.y, this->board->getWidth() * this->options->getShellSize(), (this->board->getHeight() + 1) * this->options->getShellSize()};
     SDL_SetRenderDrawColor(renderer, COLOR_BOARD.r, COLOR_BOARD.g, COLOR_BOARD.b, COLOR_BOARD.a);
-    SDL_RenderFillRect(renderer, &background);
+    SDL_RenderFillRect(renderer, &this->rect_board);
 
     // Draw board lines
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
@@ -400,11 +405,6 @@ void BoardManager::drawBoard(SDL_Renderer * renderer) {
                 current_y
         );
     }
-
-    // Draw lines around scoreboard
-    SDL_RenderDrawLine(renderer,this->rect_board.x,(this->rect_board.y + this->rect_board.h) + 1,this->rect_board.x,(this->rect_board.y + this->rect_board.h) + this->options->getShellSize());
-    SDL_RenderDrawLine(renderer,(this->rect_board.x + this->rect_board.w),(this->rect_board.y + this->rect_board.h) + 1,(this->rect_board.x + this->rect_board.w),(this->rect_board.y + this->rect_board.h) + this->options->getShellSize() );
-    SDL_RenderDrawLine(renderer,this->rect_board.x,(this->rect_board.y + this->rect_board.h) + this->options->getShellSize(),(this->rect_board.x + this->rect_board.w),(this->rect_board.y + this->rect_board.h) + this->options->getShellSize());
 }
 
 void BoardManager::drawShells(SDL_Renderer * renderer) {
@@ -497,6 +497,39 @@ void BoardManager::drawMatches(SDL_Renderer * renderer) {
     }
 
     for(Match match : this->matches_made) {
+        // Draw the shells
+        int current_shell_size = this->options->getShellSize();
+        if (match.type != ShellType::BUBBLE || this->isRelaxedMode) {
+            current_shell_size = (this->options->getShellSize()*(MATCH_STEPS-animation))/MATCH_STEPS;
+        }
+        for(int i = 0; i < 3; i++) {
+            SDL_Rect srcrect;
+            srcrect.x = this->options->getShellSize() * (int) match.type;
+            srcrect.y = 0;
+            srcrect.w = this->options->getShellSize();
+            srcrect.h = this->options->getShellSize();
+
+            SDL_Rect dstrect;
+            dstrect.x = this->options->getShellSize() * match.x + this->rect_board.x + (this->options->getShellSize() - current_shell_size) / 2;
+            dstrect.y = this->options->getShellSize() * match.y + this->rect_board.y + (this->options->getShellSize() - current_shell_size) / 2;
+            dstrect.w = current_shell_size;
+            dstrect.h = current_shell_size;
+
+            if (match.direction == Direction::HORIZONTAL) {
+                dstrect.x += this->options->getShellSize()*i;
+            } else {
+                dstrect.y += this->options->getShellSize()*i;
+            }
+
+            // Move towards score/moves
+            if (match.type == ShellType::BUBBLE && !this->isRelaxedMode) {
+                dstrect.x += (rect_moves.x-dstrect.x)/MATCH_STEPS*animation;
+                dstrect.y += (rect_moves.y-dstrect.y)/MATCH_STEPS*animation;
+            }
+
+            SDL_RenderCopy(renderer, textures.getShellTexture(), &srcrect, &dstrect);
+        }
+
         if (this->isRelaxedMode || match.type != ShellType::BUBBLE) {
             // Draw the score text
             SDL_Texture * text = text_plus_one;
@@ -528,52 +561,32 @@ void BoardManager::drawMatches(SDL_Renderer * renderer) {
                 rect_plus_one.y += this->options->getShellSize();
             }
 
+            // Move towards score
+            rect_plus_one.x += (rect_matches.x-rect_plus_one.x)/MATCH_STEPS*animation;
+            rect_plus_one.y += (rect_matches.y-rect_plus_one.y)/MATCH_STEPS*animation;
+
             SDL_RenderCopy(renderer, text, NULL, &rect_plus_one);
-        }
-
-        // Draw the shells
-        for(int i = 0; i < 3; i++) {
-            SDL_Rect srcrect;
-            srcrect.x = this->options->getShellSize() * (int) match.type;
-            srcrect.y = 0;
-            srcrect.w = this->options->getShellSize();
-            srcrect.h = this->options->getShellSize();
-
-            SDL_Rect dstrect;
-            dstrect.x = this->options->getShellSize() * match.x + this->rect_board.x;
-            dstrect.y = this->options->getShellSize() * match.y + this->rect_board.y;
-            dstrect.w = this->options->getShellSize();
-            dstrect.h = this->options->getShellSize();
-
-            if (match.direction == Direction::HORIZONTAL) {
-                dstrect.x += this->options->getShellSize()*i;
-            } else {
-                dstrect.y += this->options->getShellSize()*i;
-            }
-
-            // Move towards score/moves
-            if (match.type == ShellType::BUBBLE && !this->isRelaxedMode) {
-                dstrect.x += (rect_moves.x-dstrect.x)/MATCH_STEPS*animation;
-                dstrect.y += (rect_moves.y-dstrect.y)/MATCH_STEPS*animation;
-            } else {
-                dstrect.x += (rect_matches.x-dstrect.x)/MATCH_STEPS*animation;
-                dstrect.y += (rect_matches.y-dstrect.y)/MATCH_STEPS*animation;
-            }
-
-            SDL_RenderCopy(renderer, textures.getShellTexture(), &srcrect, &dstrect);
         }
     }
 }
 
 void BoardManager::drawInfo(SDL_Renderer * renderer) {
+    // Draw score board box
+    SDL_SetRenderDrawColor(renderer, COLOR_BOARD.r, COLOR_BOARD.g, COLOR_BOARD.b, COLOR_BOARD.a);
+    SDL_RenderFillRect(renderer, &rect_scoreboard);
+
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+    SDL_RenderDrawLine(renderer,
+        rect_scoreboard.x,
+        rect_scoreboard.y,
+        rect_scoreboard.x +rect_scoreboard.w,
+        rect_scoreboard.y
+    );
+
     // Generate texture with text
     if (this->level_updated) {
         std::string str_level = std::to_string(level);
-        if (this->board->getWidth() > 7) {
-            str_level = "level " + str_level;
-        } else if (this->board->getWidth() > 3) {
-            str_level = "L" + str_level;
-        }
+        str_level = "level " + str_level;
         if (text_level != NULL) {
             SDL_DestroyTexture(text_level);
         }
@@ -593,11 +606,7 @@ void BoardManager::drawInfo(SDL_Renderer * renderer) {
     }
     if (this->moves_updated) {
         std::string str_moves = std::to_string(this->moves);
-        if (this->board->getWidth() > 7) {
-            str_moves += " moves";
-        } else if (this->board->getWidth() > 3) {
-            str_moves += "M";
-        }
+        str_moves += " moves";
         if (text_moves != NULL) {
             SDL_DestroyTexture(text_moves);
         }
@@ -607,7 +616,7 @@ void BoardManager::drawInfo(SDL_Renderer * renderer) {
 
     // Render level
     if (!this->isRelaxedMode) {
-        SDL_Rect rect_level = {rect_board.x, rect_board.y + rect_board.h, 0, 0};
+        SDL_Rect rect_level = {rect_scoreboard.x, rect_scoreboard.y, 0, 0};
         SDL_QueryTexture(text_level, NULL, NULL, &rect_level.w, &rect_level.h);
         rect_level.x += this->options->getShellSize() / 2;
         rect_level.y += this->options->getShellSize() / 2 - rect_level.h / 2;
@@ -615,7 +624,7 @@ void BoardManager::drawInfo(SDL_Renderer * renderer) {
     }
 
     // Render matches
-    this->rect_matches = {rect_board.x + rect_board.w / 2 , rect_board.y + rect_board.h, 0, 0};
+    this->rect_matches = {rect_scoreboard.x + rect_scoreboard.w / 2 , rect_scoreboard.y, 0, 0};
     SDL_QueryTexture(text_matches, NULL, NULL, &rect_matches.w, &rect_matches.h);
     rect_matches.x -= rect_matches.w / 2;
     rect_matches.y += this->options->getShellSize() / 2 - rect_matches.h / 2;
@@ -623,7 +632,7 @@ void BoardManager::drawInfo(SDL_Renderer * renderer) {
 
     // Render moves
     if (!this->isRelaxedMode) {
-        this->rect_moves = {rect_board.x + rect_board.w, rect_board.y + rect_board.h, 0, 0};
+        this->rect_moves = {rect_scoreboard.x + rect_scoreboard.w, rect_scoreboard.y, 0, 0};
         SDL_QueryTexture(text_moves, NULL, NULL, &rect_moves.w, &rect_moves.h);
         rect_moves.x -= this->options->getShellSize() / 2 + rect_moves.w;
         rect_moves.y += this->options->getShellSize() / 2 - rect_moves.h / 2;

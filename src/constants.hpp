@@ -6,7 +6,7 @@ inline constexpr float ANALOG_DEADZONE_MULTIPLIER = 0.5;
 inline constexpr int DROP_TIME = 300; // in ms
 
 inline constexpr int MATCH_TIME = 500; // in ms
-inline constexpr int MATCH_STEPS = 30;
+inline constexpr int MATCH_STEPS = 100;
 inline constexpr float MATCH_DELAY = MATCH_TIME/MATCH_STEPS;
 
 // Everything below this are defaults

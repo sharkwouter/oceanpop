@@ -26,6 +26,7 @@ private:
     TextureManager textures;
 
     SDL_Rect rect_board;
+    SDL_Rect rect_scoreboard;
     SDL_Point selected;
     SDL_Point picked;
 
