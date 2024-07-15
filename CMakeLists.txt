@@ -31,6 +31,7 @@ pkg_search_module(SDL2_IMAGE REQUIRED SDL2_image)
 pkg_search_module(SDL2_MIXER REQUIRED SDL2_mixer)
 pkg_search_module(SDL2_TTF REQUIRED SDL2_ttf)
 pkg_search_module(JSONCPP REQUIRED jsoncpp)
+pkg_search_module(TINYGETTEXT REQUIRED tinygettext)
 
 
 # Link libraries
