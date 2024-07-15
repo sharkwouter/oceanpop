@@ -52,12 +52,14 @@ void OptionsState::handleEvents(std::vector<Event> events) {
                     case Option::MUSIC_VOLUME:
                         changeMusicVolume(1);
                         break;
+#ifdef SHOW_RESOLUTION_OPTIONS
                     case Option::FULLSCREEN:
                         changeFullscreen();
                         break;
                     case Option::RESOLUTION:
                         changeResolution(1);
                         break;
+#endif
                     case Option::GO_BACK:
                         this->done = true;
                         break;
@@ -74,12 +76,14 @@ void OptionsState::handleEvents(std::vector<Event> events) {
                     case Option::MUSIC_VOLUME:
                         changeMusicVolume(-1);
                         break;
+#ifdef SHOW_RESOLUTION_OPTIONS
                     case Option::FULLSCREEN:
                         changeFullscreen();
                         break;
                     case Option::RESOLUTION:
                         changeResolution(-1);
                         break;
+#endif
                     case Option::GO_BACK:
                         this->done = true;
                         break;
@@ -279,12 +283,14 @@ void OptionsState::loadTexts() {
             case Option::CHANGE_MUSIC:
                 current_text = getChangeMusicString();
                 break;
+#ifdef SHOW_RESOLUTION_OPTIONS
             case Option::FULLSCREEN:
                 current_text = getFullscreenString();
                 break;
             case Option::RESOLUTION:
                 current_text = getResolutionString();
                 break;
+#endif
             case Option::GO_BACK:
                 current_text = "return to menu";
                 break;

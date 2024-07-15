@@ -10,13 +10,16 @@
 #include "../SoundManager.hpp"
 #include "../OptionManager.hpp"
 #include "../PauseScreen.hpp"
+#include "../constants.hpp"
 
 enum class Option {
     CHANGE_MUSIC,
     SOUND_VOLUME,
     MUSIC_VOLUME,
+#ifdef SHOW_RESOLUTION_OPTIONS
     FULLSCREEN,
     RESOLUTION,
+#endif
     GO_BACK
 };
 
