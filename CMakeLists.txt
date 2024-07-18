@@ -43,6 +43,7 @@ if(BUILD_STATIC)
         ${SDL2_MIXER_STATIC_LIBRARIES}
         ${SDL2_TTF_STATIC_LIBRARIES}
         ${JSONCPP_STATIC_LIBRARIES}
+        ${TINYGETTEXT_STATIC_LIBRARIES}
     )
 else()
     target_link_libraries(${PROJECT_NAME} PRIVATE
@@ -51,6 +52,7 @@ else()
         ${SDL2_MIXER_LIBRARIES}
         ${SDL2_TTF_LIBRARIES}
         ${JSONCPP_LIBRARIES}
+        ${TINYGETTEXT_LIBRARIES}
     )
 endif()
 
