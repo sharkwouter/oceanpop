@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.12)
+cmake_minimum_required(VERSION 3.20)
 
 if(CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_CURRENT_BINARY_DIR)
   message(FATAL_ERROR "Please create a build directory. Building inside the oceanpop directory directly would prevent the asset directory from being build correctly.")
@@ -31,7 +31,6 @@ pkg_search_module(SDL2_IMAGE REQUIRED SDL2_image)
 pkg_search_module(SDL2_MIXER REQUIRED SDL2_mixer)
 pkg_search_module(SDL2_TTF REQUIRED SDL2_ttf)
 pkg_search_module(JSONCPP REQUIRED jsoncpp)
-pkg_search_module(TINYGETTEXT REQUIRED tinygettext)
 
 
 # Link libraries
@@ -43,7 +42,6 @@ if(BUILD_STATIC)
         ${SDL2_MIXER_STATIC_LIBRARIES}
         ${SDL2_TTF_STATIC_LIBRARIES}
         ${JSONCPP_STATIC_LIBRARIES}
-        ${TINYGETTEXT_STATIC_LIBRARIES}
     )
 else()
     target_link_libraries(${PROJECT_NAME} PRIVATE
@@ -52,7 +50,6 @@ else()
         ${SDL2_MIXER_LIBRARIES}
         ${SDL2_TTF_LIBRARIES}
         ${JSONCPP_LIBRARIES}
-        ${TINYGETTEXT_LIBRARIES}
     )
 endif()
 
@@ -65,6 +62,20 @@ include_directories(
     ${JSONCPP_INCLUDE_DIRS}
 )
 
+option(TRANSLATION_SUPPORT "Add support for loading translations, requires tinygettext" OFF)
+
+# Create translations
+if(TRANSLATION_SUPPORT)
+    pkg_search_module(TINYGETTEXT REQUIRED tinygettext)
+    if(BUILD_STATIC)
+        target_link_libraries(${PROJECT_NAME} PRIVATE ${TINYGETTEXT_STATIC_LIBRARIES})
+    else()
+        target_link_libraries(${PROJECT_NAME} PRIVATE  ${TINYGETTEXT_LIBRARIES})
+    endif()
+
+    add_compile_definitions(TRANSLATION_SUPPORT=1)
+endif()
+
 # Set asset paths
 set(ASSETS_FONTS "${CMAKE_SOURCE_DIR}/assets/fonts")
 set(ASSETS_IMAGES "${CMAKE_SOURCE_DIR}/assets/images")
@@ -72,6 +83,9 @@ set(ASSETS_LEVELS "${CMAKE_SOURCE_DIR}/assets/levels")
 set(ASSETS_SOUNDS "${CMAKE_SOURCE_DIR}/assets/sounds")
 set(ASSETS_MUSIC "${CMAKE_SOURCE_DIR}/assets/music")
 set(ASSETS_BACKGROUNDS "${CMAKE_SOURCE_DIR}/assets/backgrounds")
+if(TRANSLATION_SUPPORT)
+    set(ASSETS_LANGUAGES "${CMAKE_SOURCE_DIR}/assets/languages")
+endif()
 
 if(PSP)
     set(ASSETS_BACKGROUNDS "${CMAKE_CURRENT_SOURCE_DIR}/platform/psp/assets/backgrounds")
@@ -102,6 +116,11 @@ if(NOT VITA)
     add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_directory
         ${ASSETS_SOUNDS} ${CMAKE_CURRENT_BINARY_DIR}/assets/sounds)
+    if(TRANSLATION_SUPPORT)
+        add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy_directory
+            ${ASSETS_LANGUAGES} ${CMAKE_CURRENT_BINARY_DIR}/assets/languages)
+    endif()
 endif()
 
 # Platform specific install

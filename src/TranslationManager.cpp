@@ -1,3 +1,5 @@
+#ifdef TRANSLATION_SUPPORT
+
 #include "TranslationManager.hpp"
 
 #include <iostream>
@@ -21,22 +23,53 @@ TranslationManager::~TranslationManager() {
 }
 
 void TranslationManager::loadTranslations() {
-    std::string system_language = getSystemLanguage();
     std::string language_dir = getResourcePath("assets/languages/");
-    
     dictionary_manager.add_directory(language_dir);
-    tinygettext::Language language = tinygettext::Language::from_name(system_language);
-    if (language) {
-        dictionary_manager.set_language(language);
-    } else {
-        SDL_Log("Couldn't load language %s", system_language.c_str());
+
+    
+    for(std::string system_language : getSystemLanguageList()) {
+        tinygettext::Language language = tinygettext::Language::from_name(system_language);
+        if (language) {
+            for (tinygettext::Language l: dictionary_manager.get_languages()) {
+                if (l == language) {
+                    dictionary_manager.set_language(language);
+                    SDL_Log("Using language %s", language.get_language().c_str());
+                    language_set = true;
+                    return;
+                }
+            }
+        }
     }
+    SDL_Log("Using default language English");;
 }
 
-std::string TranslationManager::getSystemLanguage() {
-    return "";
+std::vector<std::string> TranslationManager::getSystemLanguageList() {
+    std::vector<std::string> locales;
+
+    #include <locale.h>
+    char * locale_c_str = setlocale(LC_ALL, "");
+    if (locale_c_str != NULL){
+        std::string locale(locale_c_str);
+        free(locale_c_str);
+
+        locales.push_back(locale);
+        if (locale.find(".") != std::string::npos) {
+            locales.push_back(locale.substr(0, locale.find(".")));
+        }
+        if (locale.find("_") != std::string::npos) {
+            locales.push_back(locale.substr(0, locale.find("_")));
+        }
+    }
+
+    return locales;
 }
 
 std::string TranslationManager::translate(std::string input) {
-    return dictionary_manager.get_dictionary().translate(input);
+    if (language_set) {
+        return dictionary_manager.get_dictionary().translate(input);
+    } else {
+        return input;
+    }
 }
+
+#endif // TRANSLATION_SUPPORT

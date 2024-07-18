@@ -1,0 +1,55 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: \n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-07-18 11:01+0200\n"
+"PO-Revision-Date: 2024-07-18 11:07+0200\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: nl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 3.4.4\n"
+
+#: src/states/MenuState.cpp:22
+msgid "challenge mode"
+msgstr "uitdagingsmodus"
+
+#: src/states/MenuState.cpp:23
+msgid "ends only when lives run out"
+msgstr "eindigt alleen als je levens op zijn"
+
+#: src/states/MenuState.cpp:36
+msgid "exit"
+msgstr "stoppen"
+
+#: src/states/MenuState.cpp:30
+msgid "high scores"
+msgstr "resultaten"
+
+#: src/states/MenuState.cpp:27
+msgid "match without consequences"
+msgstr "match zonder consequenties"
+
+#: src/states/MenuState.cpp:33
+msgid "options"
+msgstr "opties"
+
+#: src/states/MenuState.cpp:19
+msgid "play pre-made levels"
+msgstr "speel voorgeprogrammeerde levels"
+
+#: src/states/MenuState.cpp:26
+msgid "relaxed mode"
+msgstr "relaxmodus"
+
+#: src/states/MenuState.cpp:18
+msgid "standard mode"
+msgstr "standardmodus"
