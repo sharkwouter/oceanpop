@@ -35,9 +35,8 @@ msgid "Game Paused"
 msgstr "Spel gepauseerd"
 
 #: ../src/states/HighscoreState.cpp:12
-#, fuzzy
 msgid "High Scores"
-msgstr "resultaten"
+msgstr "Resultaten"
 
 #: ../src/states/GameStateChallenge.cpp:14 ../src/states/GameState.cpp:17
 msgid "Level Failed"
@@ -52,7 +51,6 @@ msgid "Not Yet Implemented"
 msgstr "Nog Niet Geimplementeerd"
 
 #: ../src/states/OptionsState.cpp:272
-#, fuzzy
 msgid "Options"
 msgstr "opties"
 
@@ -97,7 +95,6 @@ msgid "match without consequences"
 msgstr "match zonder consequenties"
 
 #: ../src/states/HighscoreState.cpp:18
-#, fuzzy
 msgid "matches in relaxed mode: "
 msgstr "matches in relaxmodus: "
 
