@@ -5,12 +5,13 @@
 #include <string>
 #include "../colors.hpp"
 #include "../FontType.hpp"
+#include "../utils.hpp"
 
 GameStateChallenge::GameStateChallenge(SDL_Renderer * renderer, FontManager * fonts, SoundManager * sounds, OptionManager * options) :
     theme(renderer, options, Theme::NONE),
-    pause_screen(renderer, fonts, options, "Game Paused", "press the confirm button to exit"),
-    win_screen(renderer, fonts, options, "Level Finished!", "press the confirm button to continue"),
-    lose_screen(renderer, fonts, options, "Level Failed", "press the confirm button to restart")
+    pause_screen(renderer, fonts, options, _("Game Paused"), _("press the confirm button to exit")),
+    win_screen(renderer, fonts, options, _("Level Finished!"), _("press the confirm button to continue")),
+    lose_screen(renderer, fonts, options, _("Level Failed"), _("press the confirm button to restart"))
 {
     this->renderer = renderer;
     this->fonts = fonts;
@@ -108,7 +109,7 @@ void GameStateChallenge::draw(SDL_Renderer *renderer) {
 
 void GameStateChallenge::drawAttempts(SDL_Renderer * renderer) {
     if(text_attempts == NULL) {
-        text_attempts = fonts->getTexture(renderer, "lives left", FontType::NORMAL, {255, 255, 255, 255});
+        text_attempts = fonts->getTexture(renderer, _("lives left"), FontType::NORMAL, {255, 255, 255, 255});
     }
     if (this->attempts_changed) {
         if (text_attempts_number != NULL) {

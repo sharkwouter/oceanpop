@@ -12,9 +12,9 @@
 
 GameState::GameState(SDL_Renderer * renderer, FontManager * fonts, SoundManager * sounds, OptionManager * options) :
     theme(renderer, options, Theme::NONE),
-    pause_screen(renderer, fonts, options, "Game Paused", "press the confirm button to exit"),
-    win_screen(renderer, fonts, options, "Level Finished!", "press the confirm button to continue"),
-    lose_screen(renderer, fonts, options, "Level Failed", "press the confirm button to restart")
+    pause_screen(renderer, fonts, options, _("Game Paused"), _("press the confirm button to exit")),
+    win_screen(renderer, fonts, options, _("Level Finished!"), _("press the confirm button to continue")),
+    lose_screen(renderer, fonts, options, _("Level Failed"), _("press the confirm button to restart"))
 {
     this->renderer = renderer;
     this->fonts = fonts;

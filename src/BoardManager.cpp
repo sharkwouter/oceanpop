@@ -7,6 +7,7 @@
 #include "Sound.hpp"
 #include "colors.hpp"
 #include "FontType.hpp"
+#include "utils.hpp"
 
 BoardManager::BoardManager(SDL_Renderer *renderer, FontManager *fonts, SoundManager * sounds, OptionManager * options, int x, int y, int width, int height, int moves, int required_matches, int level, int seed) : fonts(fonts), sounds(sounds), options(options),
     textures(renderer, options) {
@@ -586,7 +587,7 @@ void BoardManager::drawInfo(SDL_Renderer * renderer) {
     // Generate texture with text
     if (this->level_updated) {
         std::string str_level = std::to_string(level);
-        str_level = "level " + str_level;
+        str_level = _("level ") + str_level;
         if (text_level != NULL) {
             SDL_DestroyTexture(text_level);
         }
@@ -606,7 +607,7 @@ void BoardManager::drawInfo(SDL_Renderer * renderer) {
     }
     if (this->moves_updated) {
         std::string str_moves = std::to_string(this->moves);
-        str_moves += " moves";
+        str_moves += _(" moves");
         if (text_moves != NULL) {
             SDL_DestroyTexture(text_moves);
         }

@@ -3,18 +3,19 @@
 #include "../constants.hpp"
 #include "../colors.hpp"
 #include "../FontType.hpp"
+#include "../utils.hpp"
 #include "GameState.hpp"
 
 HighscoreState::HighscoreState(SDL_Renderer * renderer, FontManager * fonts, SoundManager * sounds, OptionManager * options) : renderer(renderer), fonts(fonts), sounds(sounds), options(options),
     theme(renderer, options, Theme::MENU)
 {
-    this->text_title = fonts->getTexture(renderer, "High Scores", FontType::TITLE, {COLOR_MENU_TITLE.r, COLOR_MENU_TITLE.g, COLOR_MENU_TITLE.b, COLOR_MENU_TITLE.a});
-    this->text_bottom = fonts->getTexture(renderer, "press confirm to go back", FontType::NORMAL, {255, 255, 255, 255});
+    this->text_title = fonts->getTexture(renderer, _("High Scores"), FontType::TITLE, {COLOR_MENU_TITLE.r, COLOR_MENU_TITLE.g, COLOR_MENU_TITLE.b, COLOR_MENU_TITLE.a});
+    this->text_bottom = fonts->getTexture(renderer, _("press confirm to go back"), FontType::NORMAL, {255, 255, 255, 255});
 
-    std::string standard_mode_completed = options->getStandardModeCompleted() ? "yes" : "no";
-    texts.push_back(fonts->getTexture(renderer, "standard mode completed: " + standard_mode_completed, FontType::NORMAL, {255, 255, 255, 255}));
-    texts.push_back(fonts->getTexture(renderer, "highest level reached in challenge mode: " + std::to_string(options->getChallengeModeHighscore()), FontType::NORMAL, {255, 255, 255, 255}));
-    texts.push_back(fonts->getTexture(renderer, "matches in relaxed mode: " + std::to_string(options->getRelaxedModeScore()), FontType::NORMAL, {255, 255, 255, 255}));
+    std::string standard_mode_completed = options->getStandardModeCompleted() ? _("yes") : _("no");
+    texts.push_back(fonts->getTexture(renderer, _("standard mode completed: ") + standard_mode_completed, FontType::NORMAL, {255, 255, 255, 255}));
+    texts.push_back(fonts->getTexture(renderer, _("highest level reached in challenge mode: ") + std::to_string(options->getChallengeModeHighscore()), FontType::NORMAL, {255, 255, 255, 255}));
+    texts.push_back(fonts->getTexture(renderer, _("matches in relaxed mode: ") + std::to_string(options->getRelaxedModeScore()), FontType::NORMAL, {255, 255, 255, 255}));
 
     this->text_start_y = getTextY(0);
 }
