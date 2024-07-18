@@ -11,9 +11,15 @@
 #include "StateManager.hpp"
 #include "EventManager.hpp"
 #include "OptionManager.hpp"
+#include "TranslationManager.hpp"
 #include "utils.hpp"
 #include "constants.hpp"
 #include "states/MenuState.hpp"
+
+#ifdef TRANSLATION_SUPPORT
+    // Create global TranslationManager object set in utils.h
+    TranslationManager translation_manager;
+#endif
 
 void run() {
     OptionManager option_manager;

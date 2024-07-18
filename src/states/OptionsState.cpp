@@ -149,7 +149,7 @@ void OptionsState::draw(SDL_Renderer * renderer) {
 }
 
 std::string OptionsState::getSoundVolumeString() {
-    std::string result = "sound volume: ";
+    std::string result = _("sound volume: ");
     for (int i = 0; i < this->options->getSoundVolume(); i++)
     {
         result += "|";
@@ -159,7 +159,7 @@ std::string OptionsState::getSoundVolumeString() {
 }
 
 std::string OptionsState::getMusicVolumeString() {
-        std::string result = "music volume: ";
+        std::string result = _("music volume: ");
     for (int i = 0; i < this->options->getMusicVolume(); i++)
     {
         result += "|";
@@ -169,15 +169,15 @@ std::string OptionsState::getMusicVolumeString() {
 }
 
 std::string OptionsState::getChangeMusicString() {
-    return "change music upon level switch: " + std::string(this->options->getChangeMusicOnSwitch() ? "yes" : "no");
+    return _("change music upon level switch: ") + std::string(this->options->getChangeMusicOnSwitch() ? _("yes") : _("no"));
 }
 
 std::string OptionsState::getFullscreenString() {
-    return "full screen: " + std::string(this->options->getFullscreen() ? "yes" : "no");
+    return _("full screen: ") + std::string(this->options->getFullscreen() ? _("yes") : _("no"));
 }
 
 std::string OptionsState::getResolutionString() {
-    std::string result = "resolution: " + std::to_string(this->options->getScreenWidth()) + "x" + std::to_string(this->options->getScreenHeight());
+    std::string result = _("resolution: ") + std::to_string(this->options->getScreenWidth()) + "x" + std::to_string(this->options->getScreenHeight());
     if (this->options->getScreenRefreshRate() > 0) {
          result += " (" + std::to_string(this->options->getScreenRefreshRate()) + " hz)";
     }
@@ -269,7 +269,7 @@ void OptionsState::changeResolution(int amount) {
 }
 
 void OptionsState::loadTexts() {
-    this->text_title = fonts->getTexture(this->renderer, "Options", FontType::TITLE, {COLOR_MENU_TITLE.r, COLOR_MENU_TITLE.g, COLOR_MENU_TITLE.b, COLOR_MENU_TITLE.a});
+    this->text_title = fonts->getTexture(this->renderer, _("Options"), FontType::TITLE, {COLOR_MENU_TITLE.r, COLOR_MENU_TITLE.g, COLOR_MENU_TITLE.b, COLOR_MENU_TITLE.a});
 
     for (int i = 0; i < (((int) Option::GO_BACK) + 1); i++) {
         std::string current_text;
@@ -292,7 +292,7 @@ void OptionsState::loadTexts() {
                 break;
 #endif
             case Option::GO_BACK:
-                current_text = "return to menu";
+                current_text = _("return to menu");
                 break;
             default:
                 current_text = "?????????";

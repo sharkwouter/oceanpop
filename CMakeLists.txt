@@ -62,6 +62,20 @@ include_directories(
     ${JSONCPP_INCLUDE_DIRS}
 )
 
+option(TRANSLATION_SUPPORT "Add support for loading translations, requires tinygettext" OFF)
+
+# Create translations
+if(TRANSLATION_SUPPORT)
+    pkg_search_module(TINYGETTEXT REQUIRED tinygettext)
+    if(BUILD_STATIC)
+        target_link_libraries(${PROJECT_NAME} PRIVATE ${TINYGETTEXT_STATIC_LIBRARIES})
+    else()
+        target_link_libraries(${PROJECT_NAME} PRIVATE  ${TINYGETTEXT_LIBRARIES})
+    endif()
+
+    add_compile_definitions(TRANSLATION_SUPPORT=1)
+endif()
+
 # Set asset paths
 set(ASSETS_FONTS "${CMAKE_SOURCE_DIR}/assets/fonts")
 set(ASSETS_IMAGES "${CMAKE_SOURCE_DIR}/assets/images")
@@ -69,6 +83,9 @@ set(ASSETS_LEVELS "${CMAKE_SOURCE_DIR}/assets/levels")
 set(ASSETS_SOUNDS "${CMAKE_SOURCE_DIR}/assets/sounds")
 set(ASSETS_MUSIC "${CMAKE_SOURCE_DIR}/assets/music")
 set(ASSETS_BACKGROUNDS "${CMAKE_SOURCE_DIR}/assets/backgrounds")
+if(TRANSLATION_SUPPORT)
+    set(ASSETS_LANGUAGES "${CMAKE_SOURCE_DIR}/assets/languages")
+endif()
 
 if(PSP)
     set(ASSETS_BACKGROUNDS "${CMAKE_CURRENT_SOURCE_DIR}/platform/psp/assets/backgrounds")
@@ -99,6 +116,11 @@ if(NOT VITA)
     add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy_directory
         ${ASSETS_SOUNDS} ${CMAKE_CURRENT_BINARY_DIR}/assets/sounds)
+    if(TRANSLATION_SUPPORT)
+        add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy_directory
+            ${ASSETS_LANGUAGES} ${CMAKE_CURRENT_BINARY_DIR}/assets/languages)
+    endif()
 endif()
 
 # Platform specific install
