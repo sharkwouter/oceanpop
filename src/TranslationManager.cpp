@@ -12,7 +12,7 @@
 
 #include "utils.hpp"
 
-TranslationManager::TranslationManager() : dictionary_manager(tinygettext::DictionaryManager(std::unique_ptr<tinygettext::FileSystem>(new tinygettext::UnixFileSystem))) {
+TranslationManager::TranslationManager() : dictionary_manager(std::unique_ptr<tinygettext::FileSystem>(new tinygettext::UnixFileSystem)) {
     loadTranslations();
 }
 
