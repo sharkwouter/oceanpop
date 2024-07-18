@@ -50,7 +50,9 @@ std::vector<std::string> TranslationManager::getSystemLanguageList() {
     char * locale_c_str = setlocale(LC_ALL, "");
     if (locale_c_str != NULL){
         std::string locale(locale_c_str);
-        free(locale_c_str);
+        if (strlen(locale_c_str) > 1) {
+            free(locale_c_str);
+        }
 
         locales.push_back(locale);
         if (locale.find(".") != std::string::npos) {
