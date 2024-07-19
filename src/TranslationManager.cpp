@@ -14,6 +14,13 @@
 
 #include "utils.hpp"
 
+#ifdef __PSP__
+    #include <psputility.h>
+#else
+    #include <locale.h>
+#endif
+
+
 TranslationManager::TranslationManager() : dictionary_manager(std::unique_ptr<tinygettext::FileSystem>(new tinygettext::UnixFileSystem)) {
     loadTranslations();
 }
@@ -46,21 +53,65 @@ void TranslationManager::loadTranslations() {
 std::vector<std::string> TranslationManager::getSystemLanguageList() {
     std::vector<std::string> locales;
 
-    #include <locale.h>
-    char * locale_c_str = setlocale(LC_ALL, "");
-    if (locale_c_str != NULL){
-        std::string locale(locale_c_str);
-        if (strlen(locale_c_str) > 1) {
-            free(locale_c_str);
+    std::string locale = "C";
+    #ifdef __PSP__
+        int current_locale_int;
+        sceUtilityGetSystemParamInt(PSP_SYSTEMPARAM_ID_INT_LANGUAGE, &current_locale_int);
+        switch(current_locale_int) {
+            case PSP_SYSTEMPARAM_LANGUAGE_JAPANESE:
+                locale = "ja_JP.UTF-8";
+                break;
+            case PSP_SYSTEMPARAM_LANGUAGE_ENGLISH:
+                locale = "en_US.UTF-8";
+                break;
+            case PSP_SYSTEMPARAM_LANGUAGE_FRENCH:
+                locale = "fr_FR.UTF-8";
+                break;
+            case PSP_SYSTEMPARAM_LANGUAGE_SPANISH:
+                locale = "es_ES.UTF-8";
+                break;
+            case PSP_SYSTEMPARAM_LANGUAGE_GERMAN:
+                locale = "de_DE.UTF-8";
+                break;
+            case PSP_SYSTEMPARAM_LANGUAGE_ITALIAN:
+                locale = "it_IT.UTF-8";
+                break;
+            case PSP_SYSTEMPARAM_LANGUAGE_DUTCH:
+                locale = "nl_NL.UTF-8";
+                break;
+            case PSP_SYSTEMPARAM_LANGUAGE_PORTUGUESE:
+                locale = "pt_PT.UTF-8";
+                break;
+            case PSP_SYSTEMPARAM_LANGUAGE_RUSSIAN:
+                locale = "ru_RU.UTF-8";
+                break;
+            case PSP_SYSTEMPARAM_LANGUAGE_KOREAN:
+                locale = "ko_KR.UTF-8";
+                break;
+            case PSP_SYSTEMPARAM_LANGUAGE_CHINESE_TRADITIONAL:
+                locale = "zh_CH.UTF-8";
+                break;
+            case PSP_SYSTEMPARAM_LANGUAGE_CHINESE_SIMPLIFIED:
+                locale = "zh_TW.UTF-8";
+                break;
         }
+    #else
+        char * locale_c_str = setlocale(LC_ALL, "");
+        if (locale_c_str){
+            locale = std::string(locale_c_str);
+            if (strlen(locale_c_str) > 1) {
+                free(locale_c_str);
+            }
+        }
+    #endif
+    
+    locales.push_back(locale);
 
-        locales.push_back(locale);
-        if (locale.find(".") != std::string::npos) {
-            locales.push_back(locale.substr(0, locale.find(".")));
-        }
-        if (locale.find("_") != std::string::npos) {
-            locales.push_back(locale.substr(0, locale.find("_")));
-        }
+    if (locale.find(".") != std::string::npos) {
+        locales.push_back(locale.substr(0, locale.find(".")));
+    }
+    if (locale.find("_") != std::string::npos) {
+        locales.push_back(locale.substr(0, locale.find("_")));
     }
 
     return locales;
