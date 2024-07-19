@@ -14,6 +14,13 @@
 
 #include "utils.hpp"
 
+#ifdef __PSP__
+    #include <psputility.h>
+#else
+    #include <locale.h>
+#endif
+
+
 TranslationManager::TranslationManager() : dictionary_manager(std::unique_ptr<tinygettext::FileSystem>(new tinygettext::UnixFileSystem)) {
     loadTranslations();
 }
@@ -48,7 +55,6 @@ std::vector<std::string> TranslationManager::getSystemLanguageList() {
 
     std::string locale = "C";
     #ifdef __PSP__
-        #include <psputility.h>
         int current_locale_int;
         sceUtilityGetSystemParamInt(PSP_SYSTEMPARAM_ID_INT_LANGUAGE, &current_locale_int);
         switch(current_locale_int) {
@@ -90,7 +96,6 @@ std::vector<std::string> TranslationManager::getSystemLanguageList() {
                 break;
         }
     #else
-        #include <locale.h>
         char * locale_c_str = setlocale(LC_ALL, "");
         if (locale_c_str){
             locale = std::string(locale_c_str);
