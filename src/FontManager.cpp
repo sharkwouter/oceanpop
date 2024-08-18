@@ -36,7 +36,7 @@ SDL_Texture * FontManager::getTexture(SDL_Renderer *renderer, std::string text, 
         reload();
     }
 
-    TTF_Font * current_font;
+    TTF_Font * current_font = NULL;
     switch (font_type)
     {
     case FontType::NORMAL:
