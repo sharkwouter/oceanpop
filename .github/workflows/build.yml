@@ -12,7 +12,7 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y wget cmake libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev libjsoncpp-dev libfuse2
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Build
         run: |
           mkdir oceanpop && cd oceanpop
@@ -25,7 +25,7 @@ jobs:
           ./linuxdeploy-x86_64.AppImage --appdir AppDir --output appimage
           cp ../LICENSE.txt ../README.md ./
       - name: Publish artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: oceanpop-linux
           path: |
@@ -56,7 +56,7 @@ jobs:
             mingw-w64-x86_64-jsoncpp
           update: true
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Build
         run: |
           mkdir oceanpop && cd oceanpop
@@ -65,7 +65,7 @@ jobs:
           strip --strip-unneeded oceanpop.exe
           cp ../LICENSE.txt ../README.md ./
       - name: Publish artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: oceanpop-windows
           path: |
@@ -79,7 +79,7 @@ jobs:
     container: pspdev/pspdev:latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Build
         run: |
           mkdir oceanpop && cd oceanpop
@@ -87,7 +87,7 @@ jobs:
           cmake --build .
           cp ../LICENSE.txt ../README.md ./
       - name: Publish artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: oceanpop-psp
           path: |
@@ -101,7 +101,7 @@ jobs:
     container: vitasdk/vitasdk:latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Build
         run: |
           mkdir oceanpop && cd oceanpop
@@ -109,7 +109,7 @@ jobs:
           cmake --build .
           cp ../LICENSE.txt ../README.md ./
       - name: Publish artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: oceanpop-vita
           path: |
@@ -122,7 +122,7 @@ jobs:
     container: devkitpro/devkitppc:latest
     steps:
       - name: Checkout json-cpp
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           repository: open-source-parsers/jsoncpp
           path: jsoncpp
@@ -136,7 +136,7 @@ jobs:
           make
           sudo make install
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Build
         run: |
           mkdir oceanpop && cd oceanpop
@@ -146,7 +146,7 @@ jobs:
         run: |
           ./platform/wii/make_release.sh oceanpop ${{ github.ref_name }}
       - name: Publish artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: oceanpop-wii
           path: |
