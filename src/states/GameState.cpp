@@ -45,9 +45,11 @@ void GameState::update() {
         this->failed = true;
     }
 
-    if (!this->paused && !this->completed && !this->failed) {
+    if (!this->completed && !this->failed) {
         this->theme.update();
-        this->board->update();
+        if(!this->paused) {
+            this->board->update();
+        }
     }
 }
 
