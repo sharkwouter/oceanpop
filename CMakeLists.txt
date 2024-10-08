@@ -32,7 +32,15 @@ pkg_search_module(SDL2_IMAGE REQUIRED SDL2_image)
 pkg_search_module(SDL2_MIXER REQUIRED SDL2_mixer)
 pkg_search_module(SDL2_TTF REQUIRED SDL2_ttf)
 pkg_search_module(JSONCPP REQUIRED jsoncpp)
+pkg_search_module(TINYGETTEXT QUIET tinygettext)
 
+# Enable translation support by default if the tinygettext library is found
+set(TRANSLATION_SUPPORT_DEFAULT OFF)
+if(TINYGETTEXT_FOUND)
+    message("-- Found tinygettext library")
+    set(TRANSLATION_SUPPORT_DEFAULT ON)
+endif()
+option(TRANSLATION_SUPPORT "Add support for loading translations, requires tinygettext" ${TRANSLATION_SUPPORT_DEFAULT})
 
 # Link libraries
 if(BUILD_STATIC)
@@ -63,11 +71,8 @@ include_directories(
     ${JSONCPP_INCLUDE_DIRS}
 )
 
-option(TRANSLATION_SUPPORT "Add support for loading translations, requires tinygettext" OFF)
-
-# Create translations
 if(TRANSLATION_SUPPORT)
-    pkg_search_module(TINYGETTEXT REQUIRED tinygettext)
+    message("-- Building with translation support")
     if(BUILD_STATIC)
         target_link_libraries(${PROJECT_NAME} PRIVATE ${TINYGETTEXT_STATIC_LIBRARIES})
     else()
@@ -75,6 +80,8 @@ if(TRANSLATION_SUPPORT)
     endif()
 
     add_compile_definitions(TRANSLATION_SUPPORT=1)
+else()
+    message("-- Building without translation support")
 endif()
 
 # Set asset paths
