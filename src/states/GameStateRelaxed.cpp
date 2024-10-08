@@ -23,8 +23,8 @@ GameStateRelaxed::~GameStateRelaxed() {
 }
 
 void GameStateRelaxed::update() {
+    this->theme.update();
     if (!this->paused) {
-        this->theme.update();
         this->board->update();
     }
 }
