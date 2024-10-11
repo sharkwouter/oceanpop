@@ -24,7 +24,6 @@ private:
     std::vector<SDL_Texture*> texts;
     std::vector<SDL_Texture*> sub_texts;
 
-    int text_offset = 2;
     int text_start_y;
 
     int selection = 0;

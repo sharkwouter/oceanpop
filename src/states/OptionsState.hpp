@@ -38,7 +38,6 @@ private:
 
     State next_state = State::MENU;
 
-    int text_offset = 2;
     int text_start_y;
 
     int selection = 0;

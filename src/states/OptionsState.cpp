@@ -100,7 +100,8 @@ void OptionsState::handleEvents(std::vector<Event> events) {
             case Event::MOUSEMOVE:
                 SDL_GetMouseState(&mouse.x, &mouse.y);
                 if (mouse.y >= this->text_start_y) {
-                    this->selection = mouse.y/(this->options->getScreenHeight()/((int) this->texts.size() + text_offset)) - text_offset;
+                    int item_size = (int)(((this->options->getScreenHeight() - this->text_start_y) / ((int) texts.size())));
+                    this->selection = (int)((mouse.y - this->text_start_y + item_size/4) / item_size);
                 }
                 break;
             default:
@@ -118,9 +119,10 @@ void OptionsState::draw(SDL_Renderer * renderer) {
     this->theme.draw(renderer);
 
     // Draw title
-    SDL_Rect rect_title = {this->options->getScreenWidth() / 2, this->options->getShellSize() / 2, 0, 0};
+    SDL_Rect rect_title = {this->options->getScreenWidth() / 2, this->text_start_y / 2, 0, 0};
     SDL_QueryTexture(text_title, NULL, NULL, &rect_title.w, &rect_title.h);
     rect_title.x -= rect_title.w/2;
+    rect_title.y -= rect_title.h/2;
     SDL_RenderCopy(renderer, text_title, NULL, &rect_title);
 
     // Draw options
@@ -270,6 +272,7 @@ void OptionsState::changeResolution(int amount) {
 
 void OptionsState::loadTexts() {
     this->text_title = fonts->getTexture(this->renderer, _("Options"), FontType::TITLE, {COLOR_MENU_TITLE.r, COLOR_MENU_TITLE.g, COLOR_MENU_TITLE.b, COLOR_MENU_TITLE.a});
+    this->text_start_y = this->options->getScreenHeight() / 4;
 
     for (int i = 0; i < (((int) Option::GO_BACK) + 1); i++) {
         std::string current_text;
@@ -300,8 +303,6 @@ void OptionsState::loadTexts() {
         }
         texts.push_back(fonts->getTexture(renderer, current_text, FontType::NORMAL, {255, 255, 255, 255}));
     }
-
-    this->text_start_y = getTextY(0);
 }
 
 void OptionsState::updateTexts() {
@@ -314,7 +315,7 @@ void OptionsState::updateTexts() {
 }
 
 int OptionsState::getTextY(int number) {
-    return this->options->getScreenHeight()/(((int) texts.size())+this->text_offset)*(number+this->text_offset);
+    return this->text_start_y + (int)(((this->options->getScreenHeight() - this->text_start_y) / ((int) texts.size()) * number));
 }
 
 State OptionsState::getNextState() {
