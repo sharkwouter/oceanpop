@@ -1,6 +1,6 @@
 #include "StateManager.hpp"
 
-
+#include "states/ModeSelectState.hpp"
 #include "states/GameState.hpp"
 #include "states/GameStateChallenge.hpp"
 #include "states/GameStateRelaxed.hpp"
@@ -46,6 +46,9 @@ void StateManager::switchState() {
         switch (next_state) {
             case State::MENU:
                 this->state = new MenuState(renderer, fonts, sounds, options);
+                break;
+            case State::PLAY:
+                this->state = new ModeSelectState(renderer, fonts, sounds, options);
                 break;
             case State::STANDARD:
                 this->state = new GameState(renderer, fonts, sounds, options);

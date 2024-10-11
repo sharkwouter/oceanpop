@@ -3,12 +3,15 @@
 
 enum class State {
     MENU,
+    PLAY,
+    HOWTO,
+    HIGHSCORES,
+    OPTIONS,
+    CREDITS,
+    EXIT,
     STANDARD,
     CHALLENGE,
     RELAXED,
-    HIGHSCORES,
-    OPTIONS,
-    EXIT,
     GAMEOVER,
     WON
 };
