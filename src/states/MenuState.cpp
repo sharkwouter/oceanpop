@@ -4,7 +4,7 @@
 #include "../colors.hpp"
 #include "../FontType.hpp"
 #include "../utils.hpp"
-#include "GameState.hpp"
+#include "State.hpp"
 
 MenuState::MenuState(SDL_Renderer * renderer, FontManager * fonts, SoundManager * sounds, OptionManager * options) : renderer(renderer), fonts(fonts), sounds(sounds), options(options),
     theme(renderer, options, Theme::MENU)
@@ -16,23 +16,20 @@ MenuState::MenuState(SDL_Renderer * renderer, FontManager * fonts, SoundManager 
         std::string option_text;
         std::string option_sub_text;
         switch ((State) i) {
-            case State::STANDARD:
-                option_text = _("standard mode");
-                option_sub_text = _("play pre-made levels");
+            case State::PLAY:
+                option_text = _("play");
                 break;
-            case State::CHALLENGE:
-                option_text = _("challenge mode");
-                option_sub_text = _("ends only when lives run out");
-                break;
-            case State::RELAXED:
-                option_text = _("relaxed mode");
-                option_sub_text = _("match without consequences");
+            case State::HOWTO:
+                option_text = _("how to play");
                 break;
             case State::HIGHSCORES:
                 option_text = _("high scores");
                 break;
             case State::OPTIONS:
                 option_text = _("options");
+                break;
+            case State::CREDITS:
+                option_text = _("credits");
                 break;
             case State::EXIT:
                 option_text = _("exit");
