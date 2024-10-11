@@ -10,6 +10,7 @@ MenuState::MenuState(SDL_Renderer * renderer, FontManager * fonts, SoundManager 
     theme(renderer, options, Theme::MENU)
 {
     this->text_title = fonts->getTexture(renderer, "OceanPop", FontType::TITLE, {COLOR_MENU_TITLE.r, COLOR_MENU_TITLE.g, COLOR_MENU_TITLE.b, COLOR_MENU_TITLE.a});
+    this->text_start_y = this->options->getScreenHeight() / 4;
 
     for (int i = 1; i < ((int) State::EXIT + 1); i++) {
         std::string option_text;
@@ -47,8 +48,6 @@ MenuState::MenuState(SDL_Renderer * renderer, FontManager * fonts, SoundManager 
             sub_texts.push_back(NULL);
         }
     }
-
-    this->text_start_y = getOptionY(0);
 }
 
 MenuState::~MenuState() {
@@ -89,7 +88,8 @@ void MenuState::handleEvents(std::vector<Event> events) {
             case Event::MOUSEMOVE:
                 SDL_GetMouseState(&mouse.x, &mouse.y);
                 if (mouse.y >= this->text_start_y) {
-                    this->selection = mouse.y/(this->options->getScreenHeight()/((int) this->texts.size() + text_offset)) - text_offset;
+                    int item_size = (int)(((this->options->getScreenHeight() - this->text_start_y) / ((int) texts.size())));
+                    this->selection = (int)((mouse.y - this->text_start_y + item_size/4) / item_size);
                 }
                 break;
             default:
@@ -107,9 +107,10 @@ void MenuState::draw(SDL_Renderer * renderer) {
     this->theme.draw(renderer);
 
     // Draw title
-    SDL_Rect rect_title = {this->options->getScreenWidth() / 2, this->options->getShellSize() / 2, 0, 0};
+    SDL_Rect rect_title = {this->options->getScreenWidth() / 2, this->text_start_y / 2, 0, 0};
     SDL_QueryTexture(text_title, NULL, NULL, &rect_title.w, &rect_title.h);
     rect_title.x -= rect_title.w/2;
+    rect_title.y -= rect_title.h/2;
     SDL_RenderCopy(renderer, text_title, NULL, &rect_title);
 
     // Draw options
@@ -141,14 +142,14 @@ void MenuState::draw(SDL_Renderer * renderer) {
 
         // Render the option text
         SDL_RenderCopy(renderer, texts[i], NULL, &rect);
-        if (sub_texts[i] != NULL && sub_rect.y + sub_rect.h < getOptionY(i+1) && selection == i) {
+        if (sub_texts[i] != NULL && selection == i) {
             SDL_RenderCopy(renderer, sub_texts[i], NULL, &sub_rect);
         }
     }
 }
 
 int MenuState::getOptionY(int number) {
-    return this->options->getScreenHeight()/(((int) texts.size())+this->text_offset)*(number+this->text_offset);
+    return this->text_start_y + (int)(((this->options->getScreenHeight() - this->text_start_y) / ((int) texts.size()) * number));
 }
 
 State MenuState::getNextState() {
