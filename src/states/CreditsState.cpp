@@ -6,12 +6,18 @@
 #include "../utils.hpp"
 #include "GameState.hpp"
 
+#include <fstream>
+#include <iostream>
+
 CreditsState::CreditsState(SDL_Renderer * renderer, FontManager * fonts, SoundManager * sounds, OptionManager * options) : renderer(renderer), fonts(fonts), sounds(sounds), options(options),
     theme(renderer, options, Theme::MENU)
 {
     this->text_title = fonts->getTexture(renderer, _("Credits"), FontType::TITLE, {COLOR_MENU_TITLE.r, COLOR_MENU_TITLE.g, COLOR_MENU_TITLE.b, COLOR_MENU_TITLE.a});
     this->text_bottom = fonts->getTexture(renderer, _("press confirm for next, cancel to go back"), FontType::NORMAL, {255, 255, 255, 255});
 
+    std::vector<std::string> credits = this->loadCredits();
+    
+    
     std::string standard_mode_completed = options->getStandardModeCompleted() ? _("yes") : _("no");
     texts.push_back(fonts->getTexture(renderer, _("standard mode completed: ") + standard_mode_completed, FontType::SMALL, {255, 255, 255, 255}));
     texts.push_back(fonts->getTexture(renderer, _("highest level reached in challenge mode: ") + std::to_string(options->getChallengeModeHighscore()), FontType::SMALL, {255, 255, 255, 255}));
@@ -81,6 +87,31 @@ void CreditsState::draw(SDL_Renderer * renderer) {
 
 int CreditsState::getTextY(int number) {
     return this->options->getScreenHeight()/(((int) texts.size())+this->text_offset*2)*(number+this->text_offset);
+}
+
+std::vector<std::string> CreditsState::loadCredits()
+{
+    std::vector<std::string> credits;
+    std::string credits_path = getResourcePath("CREDITS.md");
+
+    std::ifstream credits_file(credits_path);
+
+    std::string line;
+    if (credits_file.is_open()) {
+        while(std::getline(credits_file, line)) {
+            credits.push_back(line);
+        }
+    } else {
+        SDL_Log("Error: Could not open CREDITS.md at %s", credits_path.c_str());
+    }
+
+    for (std::string credits_line : credits)
+    {
+        /* code */
+        SDL_Log("%s", credits_line.c_str());
+    }
+    
+    return credits;
 }
 
 State CreditsState::getNextState() {

@@ -30,6 +30,7 @@ private:
     State next_state = State::MENU;
 
     int getTextY(int number);
+    std::vector<std::string> loadCredits();
 public:
     CreditsState(SDL_Renderer * renderer, FontManager * fonts, SoundManager * sounds, OptionManager * options);
     ~CreditsState();
