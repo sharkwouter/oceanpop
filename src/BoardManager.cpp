@@ -531,9 +531,9 @@ void BoardManager::drawIntroduction(SDL_Renderer * renderer) {
     if (this->text_introduction == NULL) {
         std::string introduction_string;
         if (this->isRelaxedMode) {
-            introduction_string = "Relax there is no goal";
+            introduction_string = _("Relax there is no goal");
         } else {
-            introduction_string = "Score " + std::to_string(required_matches) + " points in " + std::to_string(moves) + " moves";
+            introduction_string = _("Score ") + std::to_string(required_matches) + _(" points in ") + std::to_string(moves) + _(" moves");
         }
         this->text_introduction = fonts->getTexture(renderer, introduction_string, FontType::NORMAL, {255, 255, 255, 255});
     }
@@ -551,20 +551,20 @@ void BoardManager::drawIntroduction(SDL_Renderer * renderer) {
 }
 
 bool BoardManager::isDoubleMatch(Match match) {
-        for(Match m : this->matches_made) {
-            if (m.direction != match.direction) {
-                if (m.direction == Direction::HORIZONTAL) {
-                    if (m.x+1 == match.x && m.y == match.y+1) {
-                        return true;
-                    }
-                } else {
-                    if (m.x == match.x+1 && m.y+1 == match.y) {
-                        return true;
-                    }
+    for(Match m : this->matches_made) {
+        if (m.direction != match.direction) {
+            if (m.direction == Direction::HORIZONTAL) {
+                if (m.x+1 == match.x && m.y == match.y+1) {
+                    return true;
+                }
+            } else {
+                if (m.x == match.x+1 && m.y+1 == match.y) {
+                    return true;
                 }
             }
         }
-        return false;
+    }
+    return false;
 }
 
 void BoardManager::drawMatches(SDL_Renderer * renderer) {
