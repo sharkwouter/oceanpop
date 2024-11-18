@@ -13,7 +13,7 @@ CreditsState::CreditsState(SDL_Renderer * renderer, FontManager * fonts, SoundMa
     theme(renderer, options, Theme::MENU)
 {
     this->text_title = fonts->getTexture(renderer, _("Credits"), FontType::TITLE, {COLOR_MENU_TITLE.r, COLOR_MENU_TITLE.g, COLOR_MENU_TITLE.b, COLOR_MENU_TITLE.a});
-    this->text_bottom = fonts->getTexture(renderer, _("press confirm for next, cancel to go back"), FontType::NORMAL, {255, 255, 255, 255});
+    this->text_bottom = fonts->getTexture(renderer, _("use up, down, confirm and back to scroll. menu to go back"), FontType::NORMAL, {255, 255, 255, 255});
 
     this->loadCredits();
     this->empty_line_height = this->options->getShellSize()/4;
@@ -36,9 +36,20 @@ void CreditsState::handleEvents(std::vector<Event> events) {
                 this->done = true;
                 break;
             case Event::MENU:
-            case Event::CANCEL:
-            case Event::CONFIRM:
                 this->done = true;
+                break;
+            case Event::CANCEL:
+                this->position -= this->last_line_visible - this->position;
+                if (this->position <= 0) {
+                    this->position = 0;
+                }
+                break;
+            case Event::CONFIRM:
+                if (this->last_line_visible >= (int) this->credits.size() - 2) {
+                    this->done = true;
+                    break;
+                }
+                this->position = this->last_line_visible + 1;
                 break;
             case Event::DOWN:
                 if (this->last_line_visible == (int) this->credits.size() - 1) {
@@ -93,7 +104,6 @@ void CreditsState::draw(SDL_Renderer * renderer) {
             continue;
         }
         if (this->texts[i] == NULL) {
-            SDL_Log("Loading line %i: %s", i, this->credits[i].c_str());
             if (this->credits[i][0] == '#') {
                 std::string current_title = this->credits[i];
                 current_title.erase(0, 1);
@@ -110,13 +120,58 @@ void CreditsState::draw(SDL_Renderer * renderer) {
         // Break loop if there is no space left to draw
         current_y += (size_t) rect.h;
         if (current_y >= rect_bottom.y) {
-            this->last_line_visible = i;
+            this->last_line_visible = i - 1;
             break;
         }
 
         // Render the option text
         SDL_RenderCopy(renderer, this->texts[i], NULL, &rect);
+
+        // Also allow the last line to be set as the last line visible
+        if (i == (int) this->credits.size() - 1) {
+            this->last_line_visible = i;
+        }
     }
+
+    // Draw scroll bar
+    SDL_Rect rect_scrollbar;
+    rect_scrollbar.w = this->options->getShellSize() / 4;
+    rect_scrollbar.x = this->options->getScreenWidth() - rect_scrollbar.w;
+    rect_scrollbar.y = rect_title.y + rect_title.h;
+    rect_scrollbar.h = rect_bottom.y - rect_scrollbar.y;
+
+    SDL_SetRenderDrawColor(renderer, COLOR_BOARD.r, COLOR_BOARD.g, COLOR_BOARD.b, COLOR_BOARD.a);
+    SDL_RenderFillRect(renderer, &rect_scrollbar);
+
+    // Draw scroll bar
+    SDL_Rect rect_pointer;
+    rect_pointer.x = rect_scrollbar.x;
+    rect_pointer.w = rect_scrollbar.w;
+    rect_pointer.y = rect_scrollbar.y + ((float) rect_scrollbar.h / (float) this->credits.size() * this->position);
+    rect_pointer.h = (float) rect_scrollbar.h / (float) this->credits.size() * (this->last_line_visible - this->position);
+
+    SDL_SetRenderDrawColor(renderer, 255, 255, 255, COLOR_BOARD.a);
+    SDL_RenderFillRect(renderer, &rect_pointer);
+
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+    SDL_RenderDrawLine(renderer,
+        rect_scrollbar.x,
+        rect_scrollbar.y,
+        rect_scrollbar.x,
+        rect_scrollbar.y + rect_scrollbar.h
+    );
+    SDL_RenderDrawLine(renderer,
+        rect_scrollbar.x,
+        rect_scrollbar.y,
+        rect_scrollbar.x + rect_scrollbar.w,
+        rect_scrollbar.y
+    );
+    SDL_RenderDrawLine(renderer,
+        rect_scrollbar.x,
+        rect_scrollbar.y + rect_scrollbar.h,
+        rect_scrollbar.x + rect_scrollbar.w,
+        rect_scrollbar.y + rect_scrollbar.h
+    );
 }
 
 void CreditsState::loadCredits() {
