@@ -211,7 +211,7 @@ void BoardManager::addMatches(int matches) {
     matches_updated = true;
 }
 
-void BoardManager::increasLevel() {
+void BoardManager::increaseLevel() {
     level++;
     level_updated = true;
 }
@@ -265,7 +265,7 @@ void BoardManager::update() {
             if (!this->isRelaxedMode && this->matches >= this->required_matches) {
                 this->current_action = Action::COMPLETED;
                 this->required_matches += 1;
-                increasLevel();
+                increaseLevel();
             } else {
                 this->current_action = Action::PICKING;
             }
@@ -529,6 +529,10 @@ void BoardManager::drawIntroduction(SDL_Renderer * renderer) {
 
             SDL_RenderCopy(renderer, textures.getShellTexture(), &srcrect, &dstrect);
         }
+    }
+    if (this->level_updated) {
+        SDL_DestroyTexture(this->text_introduction);
+        this->text_introduction = NULL;
     }
     if (this->text_introduction == NULL) {
         std::string introduction_string;

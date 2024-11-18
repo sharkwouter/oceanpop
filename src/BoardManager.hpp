@@ -79,7 +79,7 @@ private:
     unsigned int animation_start;
 
     void addMatches(int matches);
-    void increasLevel();
+    void increaseLevel();
     void increaseMoves();
     void decreaseMoves();
 
