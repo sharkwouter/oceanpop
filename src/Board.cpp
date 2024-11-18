@@ -3,8 +3,8 @@
 Board::Board(int width, int height, int seed, bool isRelaxedMode) {
     this-> seed = seed;
     this->isRelaxedMode = isRelaxedMode;
-   // Create the shells vector
-   this->shells.reserve(width);
+    // Create the shells vector
+    this->shells.reserve(width);
     for (int x = 0; x < width; x++) {
         this->shells.push_back(std::move(std::vector<ShellType>()));
         this->shells[x].reserve(height);
