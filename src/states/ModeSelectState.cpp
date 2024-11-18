@@ -1,38 +1,36 @@
-#include "MenuState.hpp"
+#include "ModeSelectState.hpp"
 
 #include "../constants.hpp"
 #include "../colors.hpp"
 #include "../FontType.hpp"
 #include "../utils.hpp"
+#include "Mode.hpp"
 #include "State.hpp"
 
-MenuState::MenuState(SDL_Renderer * renderer, FontManager * fonts, SoundManager * sounds, OptionManager * options) : renderer(renderer), fonts(fonts), sounds(sounds), options(options),
+ModeSelectState::ModeSelectState(SDL_Renderer * renderer, FontManager * fonts, SoundManager * sounds, OptionManager * options) : renderer(renderer), fonts(fonts), sounds(sounds), options(options),
     theme(renderer, options, Theme::MENU)
 {
-    this->text_title = fonts->getTexture(renderer, "OceanPop", FontType::TITLE, {COLOR_MENU_TITLE.r, COLOR_MENU_TITLE.g, COLOR_MENU_TITLE.b, COLOR_MENU_TITLE.a});
+    this->text_title = fonts->getTexture(renderer, "Select a Mode", FontType::TITLE, {COLOR_MENU_TITLE.r, COLOR_MENU_TITLE.g, COLOR_MENU_TITLE.b, COLOR_MENU_TITLE.a});
     this->text_start_y = this->options->getScreenHeight() / 4;
 
-    for (int i = 1; i < ((int) State::EXIT + 1); i++) {
+    for (int i = 0; i < ((int) Mode::GO_BACK + 1); i++) {
         std::string option_text;
         std::string option_sub_text;
-        switch ((State) i) {
-            case State::PLAY:
-                option_text = _("play");
+        switch ((Mode) i) {
+            case Mode::STANDARD:
+                option_text = _("standard mode");
+                option_sub_text = _("play pre-made levels");
                 break;
-            case State::HOWTO:
-                option_text = _("how to play");
+            case Mode::CHALLENGE:
+                option_text = _("challenge mode");
+                option_sub_text = _("ends only when lives run out");
                 break;
-            case State::HIGHSCORES:
-                option_text = _("high scores");
+            case Mode::RELAXED:
+                option_text = _("relaxed mode");
+                option_sub_text = _("match without consequences");
                 break;
-            case State::OPTIONS:
-                option_text = _("options");
-                break;
-            case State::CREDITS:
-                option_text = _("credits");
-                break;
-            case State::EXIT:
-                option_text = _("exit");
+            case Mode::GO_BACK:
+                option_text = _("return to menu");
                 break;
             default:
                 option_text = "?????????";
@@ -47,7 +45,7 @@ MenuState::MenuState(SDL_Renderer * renderer, FontManager * fonts, SoundManager 
     }
 }
 
-MenuState::~MenuState() {
+ModeSelectState::~ModeSelectState() {
     SDL_DestroyTexture(text_title);
     for (int i = 0; i < (int) texts.size(); i++) {
         SDL_DestroyTexture(texts[i]);
@@ -56,7 +54,7 @@ MenuState::~MenuState() {
 }
 
 
-void MenuState::handleEvents(std::vector<Event> events) {
+void ModeSelectState::handleEvents(std::vector<Event> events) {
     SDL_Point mouse;
 
     for(Event event :events) {
@@ -78,8 +76,12 @@ void MenuState::handleEvents(std::vector<Event> events) {
             case Event::CONFIRM:
                 this->done = true;
                 break;
+            case Event::CANCEL:
+                this->selection = (int) Mode::GO_BACK  - 1;
+                this->done = true;
+                break;
             case Event::QUIT:
-                this->selection = (int) State::EXIT  - 1;
+                this->selection = (int) Mode::GO_BACK  - 1;
                 this->done = true;
                 break;
             case Event::MOUSEMOVE:
@@ -99,11 +101,11 @@ void MenuState::handleEvents(std::vector<Event> events) {
     
 }
 
-void MenuState::update() {
+void ModeSelectState::update() {
     this->theme.update();
 }
 
-void MenuState::draw(SDL_Renderer * renderer) {
+void ModeSelectState::draw(SDL_Renderer * renderer) {
     this->theme.draw(renderer);
 
     // Draw title
@@ -148,10 +150,24 @@ void MenuState::draw(SDL_Renderer * renderer) {
     }
 }
 
-int MenuState::getOptionY(int number) {
+int ModeSelectState::getOptionY(int number) {
     return this->text_start_y + (int)(((this->options->getScreenHeight() - this->text_start_y) / ((int) texts.size()) * number));
 }
 
-State MenuState::getNextState() {
-    return (State) (this->selection + 1);
+State ModeSelectState::getNextState() {
+    State state = State::MENU;
+    switch((Mode) (this->selection)) {
+        case Mode::STANDARD:
+                state = State::STANDARD;
+                break;
+            case Mode::CHALLENGE:
+                state = State::CHALLENGE;
+                break;
+            case Mode::RELAXED:
+                state = State::RELAXED;
+                break;
+            default:
+                break;
+    }
+    return state;
 }
