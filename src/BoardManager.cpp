@@ -139,6 +139,8 @@ void BoardManager::handleEvents(std::vector<Event> events) {
                         sounds->play(Sound::DROP);
                         this->current_action = Action::PICKING;
                     }
+                } else if (this->current_action == Action::ANIMATE_INTRODUCTION) {
+                    this->current_action = Action::PICKING;
                 }
                 break;
             case Event::CANCEL:
