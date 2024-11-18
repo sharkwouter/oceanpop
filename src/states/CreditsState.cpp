@@ -15,20 +15,13 @@ CreditsState::CreditsState(SDL_Renderer * renderer, FontManager * fonts, SoundMa
     this->text_title = fonts->getTexture(renderer, _("Credits"), FontType::TITLE, {COLOR_MENU_TITLE.r, COLOR_MENU_TITLE.g, COLOR_MENU_TITLE.b, COLOR_MENU_TITLE.a});
     this->text_bottom = fonts->getTexture(renderer, _("press confirm for next, cancel to go back"), FontType::NORMAL, {255, 255, 255, 255});
 
-    std::vector<std::string> credits = this->loadCredits();
-    
-    
-    std::string standard_mode_completed = options->getStandardModeCompleted() ? _("yes") : _("no");
-    texts.push_back(fonts->getTexture(renderer, _("standard mode completed: ") + standard_mode_completed, FontType::SMALL, {255, 255, 255, 255}));
-    texts.push_back(fonts->getTexture(renderer, _("highest level reached in challenge mode: ") + std::to_string(options->getChallengeModeHighscore()), FontType::SMALL, {255, 255, 255, 255}));
-    texts.push_back(fonts->getTexture(renderer, _("matches in relaxed mode: ") + std::to_string(options->getRelaxedModeScore()), FontType::SMALL, {255, 255, 255, 255}));
-
-    this->text_start_y = getTextY(0);
+    this->loadCredits();
+    this->empty_line_height = this->options->getShellSize()/4;
 }
 
 CreditsState::~CreditsState() {
     SDL_DestroyTexture(text_title);
-    for (int i = 0; i < (int) texts.size(); i++) {
+    for (int i = 0; i < (int) this->texts.size(); i++) {
         SDL_DestroyTexture(texts[i]);
         texts[i] = NULL;
     }
@@ -46,6 +39,23 @@ void CreditsState::handleEvents(std::vector<Event> events) {
             case Event::CANCEL:
             case Event::CONFIRM:
                 this->done = true;
+                break;
+            case Event::DOWN:
+                if (this->last_line_visible == (int) this->credits.size() - 1) {
+                    break;
+                }
+                this->position += 1;
+                if (this->position >= (int) this->credits.size()) {
+                    this->position = (int) this->credits.size() -1;
+                }
+                this->freeUnusedTexts();
+                break;
+            case Event::UP:
+                this->position -= 1;
+                if (this->position <= 0) {
+                    this->position = 0;
+                }
+                this->freeUnusedTexts();
                 break;
             default:
                 break;
@@ -68,50 +78,79 @@ void CreditsState::draw(SDL_Renderer * renderer) {
     rect_title.y -= rect_title.h/2;
     SDL_RenderCopy(renderer, text_title, NULL, &rect_title);
 
-    // Draw options
-    for(int i = 0; i < (int) texts.size(); i++) {
-        // Draw the option title
-        SDL_Rect rect = {this->options->getScreenWidth()/2, getTextY(i), 0, 0};
-        SDL_QueryTexture(texts[i], NULL, NULL, &rect.w, &rect.h);
-        rect.x -= rect.w/2;
-
-        // Render the option text
-        SDL_RenderCopy(renderer, texts[i], NULL, &rect);
-    }
-
-    SDL_Rect rect_bottom = {this->options->getScreenWidth()/2, getTextY(((int) texts.size()) + 1), 0, 0};
+    // Draw bottom text
+    SDL_Rect rect_bottom = {this->options->getScreenWidth()/2, this->options->getScreenHeight(), 0, 0};
     SDL_QueryTexture(text_bottom, NULL, NULL, &rect_bottom.w, &rect_bottom.h);
     rect_bottom.x -= rect_bottom.w/2;
+    rect_bottom.y -= rect_bottom.h * 1.5;
     SDL_RenderCopy(renderer, text_bottom, NULL, &rect_bottom);
+
+    // Draw options
+    size_t current_y = this->options->getScreenHeight()/4;
+    for(int i = this->position; i < (int) this->credits.size(); i++) {
+        if (this->credits[i].empty()) {
+            current_y += empty_line_height;
+            continue;
+        }
+        if (this->texts[i] == NULL) {
+            SDL_Log("Loading line %i: %s", i, this->credits[i].c_str());
+            if (this->credits[i][0] == '#') {
+                std::string current_title = this->credits[i];
+                current_title.erase(0, 1);
+                this->texts[i] = fonts->getTexture(renderer, current_title, FontType::NORMAL, {255, 255, 255, 255});
+            } else {
+                this->texts[i] = fonts->getTexture(renderer, this->credits[i], FontType::SMALL, {255, 255, 255, 255});
+            }
+        }
+
+        SDL_Rect rect = {this->options->getScreenWidth()/2, current_y, 0, 0};
+        SDL_QueryTexture(this->texts[i], NULL, NULL, &rect.w, &rect.h);
+        rect.x -= rect.w/2;
+
+        // Break loop if there is no space left to draw
+        current_y += (size_t) rect.h;
+        if (current_y >= rect_bottom.y) {
+            this->last_line_visible = i;
+            break;
+        }
+
+        // Render the option text
+        SDL_RenderCopy(renderer, this->texts[i], NULL, &rect);
+    }
 }
 
-int CreditsState::getTextY(int number) {
-    return this->options->getScreenHeight()/(((int) texts.size())+this->text_offset*2)*(number+this->text_offset);
-}
-
-std::vector<std::string> CreditsState::loadCredits()
-{
-    std::vector<std::string> credits;
+void CreditsState::loadCredits() {
     std::string credits_path = getResourcePath("CREDITS.md");
-
     std::ifstream credits_file(credits_path);
 
     std::string line;
     if (credits_file.is_open()) {
         while(std::getline(credits_file, line)) {
-            credits.push_back(line);
+            this->credits.push_back(line);
         }
     } else {
         SDL_Log("Error: Could not open CREDITS.md at %s", credits_path.c_str());
     }
-
-    for (std::string credits_line : credits)
-    {
-        /* code */
-        SDL_Log("%s", credits_line.c_str());
+    // Make sure the text texture array has the same amount of lines
+    this->texts.reserve(this->credits.size());
+    for(size_t i = 0; i < this->credits.size(); i++) {
+        this->texts.push_back(NULL);
     }
-    
-    return credits;
+}
+
+void CreditsState::freeUnusedTexts() {
+    if (this->position > cache_size) {
+        for (int i = this->position - cache_size; i > 0; i--) {
+            SDL_DestroyTexture(this->texts[i]);
+            this->texts[i] = NULL;
+        }
+    }
+    if (this->last_line_visible + cache_size < this->credits.size()) {
+        for (int i = this->last_line_visible + cache_size; i < this->credits.size(); i++) {
+            SDL_DestroyTexture(this->texts[i]);
+            this->texts[i] = NULL;
+        }
+    }
 }
 
 State CreditsState::getNextState() {

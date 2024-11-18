@@ -24,13 +24,17 @@ private:
     SDL_Texture * text_bottom;
     std::vector<SDL_Texture*> texts;
 
-    int text_offset = 2;
-    int text_start_y;
+    int position = 0;
+    int cache_size = 10;
+    int empty_line_height;
+    int last_line_visible;
+
+    std::vector<std::string> credits;
 
     State next_state = State::MENU;
 
-    int getTextY(int number);
-    std::vector<std::string> loadCredits();
+    void loadCredits();
+    void freeUnusedTexts();
 public:
     CreditsState(SDL_Renderer * renderer, FontManager * fonts, SoundManager * sounds, OptionManager * options);
     ~CreditsState();
