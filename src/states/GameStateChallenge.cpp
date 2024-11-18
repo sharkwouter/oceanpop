@@ -77,6 +77,11 @@ void GameStateChallenge::handleEvents(std::vector<Event> events) {
             if (event == Event::CONFIRM) {
                 this->completed = false;
                 this->theme.next();
+                this->level += 1;
+                this->seed += 1;
+                if (this->level % 5 == 0) {
+                    this->required_matches += 1;
+                }
                 this->board->loadLevel(this->width, this->height, this->moves, ++this->required_matches, ++this->level, ++this->seed);
             }
         } else if (this->failed) {
@@ -119,7 +124,7 @@ void GameStateChallenge::loadLevel() {
 
     this->moves = 10;
     this->level = this->options->getChallengeModeLevel();
-    this->required_matches = 11 + this->level;
+    this->required_matches = 11 + (this->level / 5);
     this->seed = this->level;
 
     this->board = new BoardManager(
