@@ -175,7 +175,7 @@ void CreditsState::draw(SDL_Renderer * renderer) {
 }
 
 void CreditsState::loadCredits() {
-    std::string credits_path = getResourcePath("CREDITS.md");
+    std::string credits_path = getResourcePath("assets/CREDITS.md");
     std::ifstream credits_file(credits_path);
 
     std::string line;
@@ -185,6 +185,7 @@ void CreditsState::loadCredits() {
         }
     } else {
         SDL_Log("Error: Could not open CREDITS.md at %s", credits_path.c_str());
+        this->credits.push_back(_("# could not open credits file"));
     }
     // Make sure the text texture array has the same amount of lines
     this->texts.reserve(this->credits.size());

@@ -131,7 +131,7 @@ if(NOT VITA)
     endif()
     add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
         COMMAND ${CMAKE_COMMAND} -E copy
-        CREDITS.md ${CMAKE_CURRENT_BINARY_DIR})
+        "${CMAKE_SOURCE_DIR}/assets/CREDITS.md" ${CMAKE_CURRENT_BINARY_DIR}/assets)
 endif()
 
 # Platform specific install
@@ -143,8 +143,6 @@ if (VITA)
         VERSION "01.00"
         NAME OceanPop
         FILE platform/vita/sce_sys sce_sys
-        FILE README.md README.md
-        FILE LICENSE.txt LICENSE.txt
         FILE CREDITS.md CREDITS.md
         FILE "${ASSETS_BACKGROUNDS}" assets/backgrounds
         FILE "${ASSETS_FONTS}" assets/fonts
