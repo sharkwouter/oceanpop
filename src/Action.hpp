@@ -2,6 +2,9 @@
 #define ACTION_HPP
 
 enum class Action {
+    INTRODUCTION_START,
+    ANIMATE_INTRODUCTION,
+    INTRODUCTION_END,
     PICKING,
     MOVING,
     MATCHING_START,

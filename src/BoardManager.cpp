@@ -39,7 +39,7 @@ void BoardManager::loadLevel(int x, int y, int width, int height, int moves, int
     }
     storeLevel(x, y, new Board(width, height, seed, this->isRelaxedMode), moves, required_matches, level);
     this->preview = this->board->getShells();
-    this->current_action = Action::PICKING;
+    this->current_action = Action::INTRODUCTION_START;
 }
 
 void BoardManager::loadLevel(int x, int y, std::vector<std::vector<ShellType>> shells, int moves, int required_matches, int level, int seed) {
@@ -50,7 +50,7 @@ void BoardManager::loadLevel(int x, int y, std::vector<std::vector<ShellType>> s
     }
     storeLevel(x, y, new Board(shells, seed, this->isRelaxedMode), moves, required_matches, level);
     this->preview = this->board->getShells();
-    this->current_action = Action::PICKING;
+    this->current_action = Action::INTRODUCTION_START;
 }
 
 void BoardManager::storeLevel(int x, int y, Board * board, int moves, int required_matches, int level) {
@@ -294,6 +294,34 @@ void BoardManager::update() {
             this->preview = this->board->getShells();
             this->current_action = Action::MATCHING_START;
             break;
+        case Action::INTRODUCTION_START:
+            this->preview = this->board->getShells();
+            this->animation = 0;
+            this->animation_start = SDL_GetTicks();
+            this->current_action = Action::ANIMATE_INTRODUCTION;
+            break;
+        case Action::ANIMATE_INTRODUCTION:
+            delta = SDL_GetTicks() - this->animation_start;
+            if(delta >= (DROP_TIME/this->options->getShellSize())) {
+                this->animation += delta/(DROP_TIME/this->options->getShellSize());
+                this->animation_start = SDL_GetTicks();
+            }
+            if (this->animation > this->board->getHeight() * this->options->getShellSize()) {
+                this->animation = 0;
+                this->animation_start = SDL_GetTicks();
+                this->current_action = Action::INTRODUCTION_END;
+            }
+            break;
+        case Action::INTRODUCTION_END:
+            delta = SDL_GetTicks() - this->animation_start;
+            if(delta >= (DROP_TIME/this->options->getShellSize())) {
+                this->animation += delta/(DROP_TIME/this->options->getShellSize());
+                this->animation_start = SDL_GetTicks();
+            }
+            if (this->animation > this->options->getShellSize()) {
+                this->current_action = Action::PICKING;
+            }
+            break;
         case Action::COMPLETED:
             // Do not add code here
             // We're waiting for the game state to clean us up
@@ -337,9 +365,14 @@ bool BoardManager::isFalling(SDL_Point point) {
 
 void BoardManager::draw(SDL_Renderer *renderer) {
     drawBoard(renderer);
-    drawCursor(renderer);
-    drawInfo(renderer);
-    drawShells(renderer);
+    drawScoringBox(renderer);
+    if (this->current_action > Action::INTRODUCTION_END) {
+        drawCursor(renderer);
+        drawShells(renderer);
+        drawInfo(renderer);
+    } else {
+        drawIntroduction(renderer);
+    }
 
     if (this->current_action == Action::ANIMATE_FALLING) {
         drawFallingShells(renderer);
@@ -449,15 +482,72 @@ void BoardManager::drawFallingShells(SDL_Renderer * renderer) {
         dstrect.h = this->options->getShellSize();
 
         if (shell.y == -1) {
-            int start_y = this->rect_board.y - dstrect.y;
+            int start_y = this->rect_board.y - dstrect.y + 1;
             dstrect.y = this->rect_board.y;
-            dstrect.h = this->options->getShellSize() - start_y;
+            dstrect.h = this->options->getShellSize() - start_y -1;
             srcrect.y = start_y;
             srcrect.h = dstrect.h;
         }
 
         SDL_RenderCopy(renderer, textures.getShellTexture(), &srcrect, &dstrect);
     }
+}
+
+void BoardManager::drawIntroduction(SDL_Renderer * renderer) {
+    // Draw the shells
+    float current_deduction = this->options->getShellSize() * this->board->getHeight() - animation;
+    if (this->current_action == Action::INTRODUCTION_END) {
+        current_deduction = 0.0f;
+    }
+    for (int x = 0; x < this->board->getWidth(); x++) {
+        for (int y = 0; y < this->board->getHeight(); y++) {
+            if (this->options->getShellSize() * (y + 1) < current_deduction) {
+                continue;
+            }
+
+            SDL_Rect srcrect;
+            srcrect.x = this->options->getShellSize() * (int) this->preview[x][y];
+            srcrect.y = 0;
+            srcrect.w = this->options->getShellSize();
+            srcrect.h = this->options->getShellSize();
+
+            SDL_Rect dstrect;
+            dstrect.x = this->options->getShellSize() * x + this->rect_board.x;
+            dstrect.y = this->options->getShellSize() * y + this->rect_board.y - current_deduction;
+            dstrect.w = this->options->getShellSize();
+            dstrect.h = this->options->getShellSize();
+
+            if (dstrect.y < this->rect_board.y) {
+                int start_y = this->rect_board.y - dstrect.y + 1;
+                dstrect.y = this->rect_board.y;
+                dstrect.h = this->options->getShellSize() - start_y - 1;
+                srcrect.y = start_y;
+                srcrect.h = dstrect.h;
+            }
+
+            SDL_RenderCopy(renderer, textures.getShellTexture(), &srcrect, &dstrect);
+        }
+    }
+    if (this->text_introduction == NULL) {
+        std::string introduction_string;
+        if (this->isRelaxedMode) {
+            introduction_string = "Relax there is no goal";
+        } else {
+            introduction_string = "Score " + std::to_string(required_matches) + " points in " + std::to_string(moves) + " moves";
+        }
+        this->text_introduction = fonts->getTexture(renderer, introduction_string, FontType::NORMAL, {255, 255, 255, 255});
+    }
+    // Render Introduction text
+    SDL_Rect rect_introduction = {rect_scoreboard.x + rect_scoreboard.w / 2 , rect_scoreboard.y, 0, 0};
+    SDL_QueryTexture(text_introduction, NULL, NULL, &rect_introduction.w, &rect_introduction.h);
+    rect_introduction.x -= rect_introduction.w / 2;
+    rect_introduction.y += this->options->getShellSize() / 2 - rect_introduction.h / 2;
+
+    if (this->current_action == Action::INTRODUCTION_END) {
+        rect_introduction.y += animation;
+    }
+
+    SDL_RenderCopy(renderer, text_introduction, NULL, &rect_introduction);
 }
 
 bool BoardManager::isDoubleMatch(Match match) {
@@ -571,7 +661,7 @@ void BoardManager::drawMatches(SDL_Renderer * renderer) {
     }
 }
 
-void BoardManager::drawInfo(SDL_Renderer * renderer) {
+void BoardManager::drawScoringBox(SDL_Renderer * renderer) {
     // Draw score board box
     SDL_SetRenderDrawColor(renderer, COLOR_BOARD.r, COLOR_BOARD.g, COLOR_BOARD.b, COLOR_BOARD.a);
     SDL_RenderFillRect(renderer, &rect_scoreboard);
@@ -583,7 +673,9 @@ void BoardManager::drawInfo(SDL_Renderer * renderer) {
         rect_scoreboard.x +rect_scoreboard.w,
         rect_scoreboard.y
     );
+}
 
+void BoardManager::drawInfo(SDL_Renderer * renderer) {
     // Generate texture with text
     if (this->level_updated) {
         std::string str_level = std::to_string(level);

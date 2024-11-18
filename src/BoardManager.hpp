@@ -63,6 +63,7 @@ private:
     SDL_Texture * text_moves = NULL;
     SDL_Texture * text_matches = NULL;
     SDL_Texture * text_level = NULL;
+    SDL_Texture * text_introduction = NULL;
 
     SDL_Texture * text_plus_one = NULL;
     SDL_Texture * text_plus_two = NULL;
@@ -92,10 +93,12 @@ private:
 
     void drawCursor(SDL_Renderer * renderer);
     void drawBoard(SDL_Renderer * renderer);
+    void drawScoringBox(SDL_Renderer * renderer);
     void drawInfo(SDL_Renderer * renderer);
     void drawShells(SDL_Renderer * renderer);
     void drawFallingShells(SDL_Renderer * renderer);
     void drawMatches(SDL_Renderer * renderer);
+    void drawIntroduction(SDL_Renderer * renderer);
     void storeLevel(int x, int y, Board * board, int moves, int required_matches, int level);
 public:
     BoardManager(SDL_Renderer *renderer, FontManager *fonts, SoundManager * sounds, OptionManager * options, int x, int y, int width, int height, int moves, int required_matches=0, int level=0, int seed=0);
