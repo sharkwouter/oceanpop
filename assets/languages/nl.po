@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-18 18:01+0100\n"
+"POT-Creation-Date: 2024-11-18 20:56+0100\n"
 "PO-Revision-Date: 2024-07-18 11:07+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -24,6 +24,14 @@ msgstr " acties"
 #: ../src/BoardManager.cpp:536
 msgid " points in "
 msgstr " punten in "
+
+#: ../src/states/CreditsState.cpp:188
+msgid "# could not open credits file"
+msgstr "# credits bestand kon niet geopend worden"
+
+#: ../src/states/CreditsState.cpp:15
+msgid "Credits"
+msgstr "Credits"
 
 #: ../src/states/WonState.cpp:7
 msgid "Game Mode Completed!"
@@ -54,7 +62,7 @@ msgstr "Level Afgerond!"
 msgid "Not Yet Implemented"
 msgstr "Nog Niet Geimplementeerd"
 
-#: ../src/states/OptionsState.cpp:274
+#: ../src/states/OptionsState.cpp:277
 msgid "Options"
 msgstr "opties"
 
@@ -66,33 +74,41 @@ msgstr "Relax, er zijn geen punten"
 msgid "Score "
 msgstr "Haal "
 
-#: ../src/states/MenuState.cpp:24
+#: ../src/states/ModeSelectState.cpp:25
 msgid "challenge mode"
 msgstr "uitdagingsmodus"
 
-#: ../src/states/OptionsState.cpp:174
+#: ../src/states/OptionsState.cpp:177
 msgid "change music upon level switch: "
 msgstr "wissel muziek bij level overgang: "
 
-#: ../src/states/MenuState.cpp:25
+#: ../src/states/MenuState.cpp:32
+msgid "credits"
+msgstr "credits"
+
+#: ../src/states/ModeSelectState.cpp:26
 msgid "ends only when lives run out"
 msgstr "eindigt alleen als je levens op zijn"
 
-#: ../src/states/MenuState.cpp:38
+#: ../src/states/MenuState.cpp:35
 msgid "exit"
 msgstr "stoppen"
 
-#: ../src/states/OptionsState.cpp:178
+#: ../src/states/OptionsState.cpp:181
 msgid "full screen: "
 msgstr "volledig scherm"
 
-#: ../src/states/MenuState.cpp:32
+#: ../src/states/MenuState.cpp:26
 msgid "high scores"
 msgstr "resultaten"
 
 #: ../src/states/HighscoreState.cpp:17
 msgid "highest level reached in challenge mode: "
 msgstr "hoogste level bereikt in uitdagingsmodus: "
+
+#: ../src/states/MenuState.cpp:23
+msgid "how to play"
+msgstr "hoe het werkt"
 
 #: ../src/BoardManager.cpp:682
 msgid "level "
@@ -102,7 +118,7 @@ msgstr "level "
 msgid "lives left"
 msgstr "levens "
 
-#: ../src/states/MenuState.cpp:29
+#: ../src/states/ModeSelectState.cpp:30
 msgid "match without consequences"
 msgstr "match zonder consequenties"
 
@@ -110,20 +126,24 @@ msgstr "match zonder consequenties"
 msgid "matches in relaxed mode: "
 msgstr "matches in relaxmodus: "
 
-#: ../src/states/OptionsState.cpp:164
+#: ../src/states/OptionsState.cpp:167
 msgid "music volume: "
 msgstr "muziekvolume: "
 
-#: ../src/states/HighscoreState.cpp:15 ../src/states/OptionsState.cpp:174
-#: ../src/states/OptionsState.cpp:178
+#: ../src/states/HighscoreState.cpp:15 ../src/states/OptionsState.cpp:177
+#: ../src/states/OptionsState.cpp:181
 msgid "no"
 msgstr "nee"
 
-#: ../src/states/MenuState.cpp:35
+#: ../src/states/MenuState.cpp:29
 msgid "options"
 msgstr "opties"
 
-#: ../src/states/MenuState.cpp:21
+#: ../src/states/MenuState.cpp:20
+msgid "play"
+msgstr "speel"
+
+#: ../src/states/ModeSelectState.cpp:22
 msgid "play pre-made levels"
 msgstr "speel voorgeprogrammeerde levels"
 
@@ -146,23 +166,23 @@ msgstr "druk op bevestigen om te sluiten"
 msgid "press the confirm button to restart"
 msgstr "druk op bevestigen om het opnieuw te proberen"
 
-#: ../src/states/MenuState.cpp:28
+#: ../src/states/ModeSelectState.cpp:29
 msgid "relaxed mode"
 msgstr "relaxmodus"
 
-#: ../src/states/OptionsState.cpp:182
+#: ../src/states/OptionsState.cpp:185
 msgid "resolution: "
 msgstr "resolutie: "
 
-#: ../src/states/OptionsState.cpp:298
+#: ../src/states/ModeSelectState.cpp:33 ../src/states/OptionsState.cpp:301
 msgid "return to menu"
 msgstr "terug naar menu"
 
-#: ../src/states/OptionsState.cpp:154
+#: ../src/states/OptionsState.cpp:157
 msgid "sound volume: "
 msgstr "volume geluiden: "
 
-#: ../src/states/MenuState.cpp:20
+#: ../src/states/ModeSelectState.cpp:21
 msgid "standard mode"
 msgstr "standardmodus"
 
@@ -170,7 +190,11 @@ msgstr "standardmodus"
 msgid "standard mode completed: "
 msgstr "standardmodus afgesloten: "
 
-#: ../src/states/HighscoreState.cpp:15 ../src/states/OptionsState.cpp:174
-#: ../src/states/OptionsState.cpp:178
+#: ../src/states/CreditsState.cpp:16
+msgid "use up, down, confirm and back to scroll and menu to go back"
+msgstr "gebruik naar boven, naar beneden, bevestigen en terug om te scrollen en menu om terug te gaan"
+
+#: ../src/states/HighscoreState.cpp:15 ../src/states/OptionsState.cpp:177
+#: ../src/states/OptionsState.cpp:181
 msgid "yes"
 msgstr "ja"

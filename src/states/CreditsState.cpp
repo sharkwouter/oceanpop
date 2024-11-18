@@ -13,7 +13,7 @@ CreditsState::CreditsState(SDL_Renderer * renderer, FontManager * fonts, SoundMa
     theme(renderer, options, Theme::MENU)
 {
     this->text_title = fonts->getTexture(renderer, _("Credits"), FontType::TITLE, {COLOR_MENU_TITLE.r, COLOR_MENU_TITLE.g, COLOR_MENU_TITLE.b, COLOR_MENU_TITLE.a});
-    this->text_bottom = fonts->getTexture(renderer, _("use up, down, confirm and back to scroll. menu to go back"), FontType::NORMAL, {255, 255, 255, 255});
+    this->text_bottom = fonts->getTexture(renderer, _("use up, down, confirm and back to scroll and menu to go back"), FontType::NORMAL, {255, 255, 255, 255});
 
     this->loadCredits();
     this->empty_line_height = this->options->getShellSize()/4;
