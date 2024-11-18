@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-07-18 15:25+0200\n"
+"POT-Creation-Date: 2024-11-18 18:01+0100\n"
 "PO-Revision-Date: 2024-07-18 11:07+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -17,9 +17,13 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 3.4.4\n"
 
-#: ../src/BoardManager.cpp:610
+#: ../src/BoardManager.cpp:536 ../src/BoardManager.cpp:702
 msgid " moves"
 msgstr " acties"
+
+#: ../src/BoardManager.cpp:536
+msgid " points in "
+msgstr " punten in "
 
 #: ../src/states/WonState.cpp:7
 msgid "Game Mode Completed!"
@@ -50,31 +54,39 @@ msgstr "Level Afgerond!"
 msgid "Not Yet Implemented"
 msgstr "Nog Niet Geimplementeerd"
 
-#: ../src/states/OptionsState.cpp:272
+#: ../src/states/OptionsState.cpp:274
 msgid "Options"
 msgstr "opties"
 
-#: ../src/states/MenuState.cpp:23
+#: ../src/BoardManager.cpp:534
+msgid "Relax there is no goal"
+msgstr "Relax, er zijn geen punten"
+
+#: ../src/BoardManager.cpp:536
+msgid "Score "
+msgstr "Haal "
+
+#: ../src/states/MenuState.cpp:24
 msgid "challenge mode"
 msgstr "uitdagingsmodus"
 
-#: ../src/states/OptionsState.cpp:172
+#: ../src/states/OptionsState.cpp:174
 msgid "change music upon level switch: "
 msgstr "wissel muziek bij level overgang: "
 
-#: ../src/states/MenuState.cpp:24
+#: ../src/states/MenuState.cpp:25
 msgid "ends only when lives run out"
 msgstr "eindigt alleen als je levens op zijn"
 
-#: ../src/states/MenuState.cpp:37
+#: ../src/states/MenuState.cpp:38
 msgid "exit"
 msgstr "stoppen"
 
-#: ../src/states/OptionsState.cpp:176
+#: ../src/states/OptionsState.cpp:178
 msgid "full screen: "
 msgstr "volledig scherm"
 
-#: ../src/states/MenuState.cpp:31
+#: ../src/states/MenuState.cpp:32
 msgid "high scores"
 msgstr "resultaten"
 
@@ -82,15 +94,15 @@ msgstr "resultaten"
 msgid "highest level reached in challenge mode: "
 msgstr "hoogste level bereikt in uitdagingsmodus: "
 
-#: ../src/BoardManager.cpp:590
+#: ../src/BoardManager.cpp:682
 msgid "level "
 msgstr "level "
 
-#: ../src/states/GameStateChallenge.cpp:112
+#: ../src/states/GameStateChallenge.cpp:114
 msgid "lives left"
 msgstr "levens "
 
-#: ../src/states/MenuState.cpp:28
+#: ../src/states/MenuState.cpp:29
 msgid "match without consequences"
 msgstr "match zonder consequenties"
 
@@ -98,20 +110,20 @@ msgstr "match zonder consequenties"
 msgid "matches in relaxed mode: "
 msgstr "matches in relaxmodus: "
 
-#: ../src/states/OptionsState.cpp:162
+#: ../src/states/OptionsState.cpp:164
 msgid "music volume: "
 msgstr "muziekvolume: "
 
-#: ../src/states/HighscoreState.cpp:15 ../src/states/OptionsState.cpp:172
-#: ../src/states/OptionsState.cpp:176
+#: ../src/states/HighscoreState.cpp:15 ../src/states/OptionsState.cpp:174
+#: ../src/states/OptionsState.cpp:178
 msgid "no"
 msgstr "nee"
 
-#: ../src/states/MenuState.cpp:34
+#: ../src/states/MenuState.cpp:35
 msgid "options"
 msgstr "opties"
 
-#: ../src/states/MenuState.cpp:20
+#: ../src/states/MenuState.cpp:21
 msgid "play pre-made levels"
 msgstr "speel voorgeprogrammeerde levels"
 
@@ -134,23 +146,23 @@ msgstr "druk op bevestigen om te sluiten"
 msgid "press the confirm button to restart"
 msgstr "druk op bevestigen om het opnieuw te proberen"
 
-#: ../src/states/MenuState.cpp:27
+#: ../src/states/MenuState.cpp:28
 msgid "relaxed mode"
 msgstr "relaxmodus"
 
-#: ../src/states/OptionsState.cpp:180
+#: ../src/states/OptionsState.cpp:182
 msgid "resolution: "
 msgstr "resolutie: "
 
-#: ../src/states/OptionsState.cpp:295
+#: ../src/states/OptionsState.cpp:298
 msgid "return to menu"
 msgstr "terug naar menu"
 
-#: ../src/states/OptionsState.cpp:152
+#: ../src/states/OptionsState.cpp:154
 msgid "sound volume: "
 msgstr "volume geluiden: "
 
-#: ../src/states/MenuState.cpp:19
+#: ../src/states/MenuState.cpp:20
 msgid "standard mode"
 msgstr "standardmodus"
 
@@ -158,7 +170,7 @@ msgstr "standardmodus"
 msgid "standard mode completed: "
 msgstr "standardmodus afgesloten: "
 
-#: ../src/states/HighscoreState.cpp:15 ../src/states/OptionsState.cpp:172
-#: ../src/states/OptionsState.cpp:176
+#: ../src/states/HighscoreState.cpp:15 ../src/states/OptionsState.cpp:174
+#: ../src/states/OptionsState.cpp:178
 msgid "yes"
 msgstr "ja"
