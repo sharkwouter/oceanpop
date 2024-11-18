@@ -97,7 +97,7 @@ void CreditsState::draw(SDL_Renderer * renderer) {
     SDL_RenderCopy(renderer, text_bottom, NULL, &rect_bottom);
 
     // Draw options
-    size_t current_y = this->options->getScreenHeight()/4;
+    int current_y = this->options->getScreenHeight()/4;
     for(int i = this->position; i < (int) this->credits.size(); i++) {
         if (this->credits[i].empty()) {
             current_y += empty_line_height;
@@ -118,7 +118,7 @@ void CreditsState::draw(SDL_Renderer * renderer) {
         rect.x -= rect.w/2;
 
         // Break loop if there is no space left to draw
-        current_y += (size_t) rect.h;
+        current_y += rect.h;
         if (current_y >= rect_bottom.y) {
             this->last_line_visible = i - 1;
             break;
@@ -201,8 +201,8 @@ void CreditsState::freeUnusedTexts() {
             this->texts[i] = NULL;
         }
     }
-    if (this->last_line_visible + cache_size < this->credits.size()) {
-        for (int i = this->last_line_visible + cache_size; i < this->credits.size(); i++) {
+    if (this->last_line_visible + cache_size < (int) this->credits.size()) {
+        for (int i = this->last_line_visible + cache_size; i < (int) this->credits.size(); i++) {
             SDL_DestroyTexture(this->texts[i]);
             this->texts[i] = NULL;
         }
