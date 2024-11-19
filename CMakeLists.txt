@@ -143,7 +143,7 @@ if (VITA)
         VERSION "01.00"
         NAME OceanPop
         FILE platform/vita/sce_sys sce_sys
-        FILE CREDITS.md CREDITS.md
+        FILE assets/CREDITS.md assets/CREDITS.md
         FILE "${ASSETS_BACKGROUNDS}" assets/backgrounds
         FILE "${ASSETS_FONTS}" assets/fonts
         FILE "${ASSETS_IMAGES}" assets/images
