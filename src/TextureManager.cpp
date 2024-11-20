@@ -11,18 +11,12 @@ TextureManager::~TextureManager() {
 }
 
 SDL_Texture * TextureManager::load(SDL_Renderer * renderer, const std::string &file) {
-    SDL_Surface *img = IMG_Load(getResourcePath(file).c_str());
+    SDL_Texture * texture = IMG_LoadTexture(renderer, getResourcePath(file).c_str());
 
-    if (img == nullptr) {
+    if (texture == nullptr) {
         panic("couldn't load image: " + std::string(IMG_GetError()));
     }
 
-    SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, img);
-    SDL_FreeSurface(img);
-
-    if (texture == nullptr) {
-        panic("couldn't create texture from surface: " + std::string(SDL_GetError()));
-    }
     return std::move(texture);
 }
 
