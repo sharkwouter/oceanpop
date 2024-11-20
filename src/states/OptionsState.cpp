@@ -9,6 +9,14 @@
 OptionsState::OptionsState(SDL_Renderer * renderer, FontManager * fonts, SoundManager * sounds, OptionManager * options, SDL_Window * window) : renderer(renderer), fonts(fonts), sounds(sounds), options(options), window(window),
     theme(renderer, options, Theme::MENU)
 {
+    this->change_music = this->options->getChangeMusicOnSwitch();
+    this->sound_volume = this->options->getSoundVolume();
+    this->music_volume = this->options->getMusicVolume();
+    this->fullscreen = this->options->getFullscreen();
+    this->screen_width = this->options->getScreenWidth();
+    this->screen_height = this->options->getScreenHeight();
+    this->screen_refresh_rate = this->options->getScreenRefreshRate();
+
     loadTexts();
 }
 
@@ -60,6 +68,10 @@ void OptionsState::handleEvents(std::vector<Event> events) {
                         changeResolution(1);
                         break;
 #endif
+                    case Option::APPLY:
+                        applyChanges();
+                        this->done = true;
+                        break;
                     case Option::GO_BACK:
                         this->done = true;
                         break;
@@ -84,6 +96,10 @@ void OptionsState::handleEvents(std::vector<Event> events) {
                         changeResolution(-1);
                         break;
 #endif
+                    case Option::APPLY:
+                        applyChanges();
+                        this->done = true;
+                        break;
                     case Option::GO_BACK:
                         this->done = true;
                         break;
@@ -155,7 +171,7 @@ void OptionsState::draw(SDL_Renderer * renderer) {
 
 std::string OptionsState::getSoundVolumeString() {
     std::string result = _("sound volume: ");
-    for (int i = 0; i < this->options->getSoundVolume(); i++)
+    for (int i = 0; i < this->sound_volume; i++)
     {
         result += "|";
     }
@@ -165,7 +181,7 @@ std::string OptionsState::getSoundVolumeString() {
 
 std::string OptionsState::getMusicVolumeString() {
         std::string result = _("music volume: ");
-    for (int i = 0; i < this->options->getMusicVolume(); i++)
+    for (int i = 0; i < this->music_volume; i++)
     {
         result += "|";
     }
@@ -174,23 +190,23 @@ std::string OptionsState::getMusicVolumeString() {
 }
 
 std::string OptionsState::getChangeMusicString() {
-    return _("change music upon level switch: ") + std::string(this->options->getChangeMusicOnSwitch() ? _("yes") : _("no"));
+    return _("change music upon level switch: ") + std::string(this->change_music ? _("yes") : _("no"));
 }
 
 std::string OptionsState::getFullscreenString() {
-    return _("full screen: ") + std::string(this->options->getFullscreen() ? _("yes") : _("no"));
+    return _("full screen: ") + std::string(this->fullscreen ? _("yes") : _("no"));
 }
 
 std::string OptionsState::getResolutionString() {
-    std::string result = _("resolution: ") + std::to_string(this->options->getScreenWidth()) + "x" + std::to_string(this->options->getScreenHeight());
-    if (this->options->getScreenRefreshRate() > 0) {
-         result += " (" + std::to_string(this->options->getScreenRefreshRate()) + " hz)";
+    std::string result = _("resolution: ") + std::to_string(this->screen_width) + "x" + std::to_string(this->screen_height);
+    if (this->screen_refresh_rate > 0) {
+         result += " (" + std::to_string(this->screen_refresh_rate) + " hz)";
     }
     return result;
 }
 
 void OptionsState::changeChangeMusic() {
-    this->options->setChangeMusicOnSwitch(!this->options->getChangeMusicOnSwitch());
+    this->change_music = !this->change_music;
 
     SDL_DestroyTexture(this->texts[this->selection]);
     this->texts[this->selection] = fonts->getTexture(renderer, getChangeMusicString(), FontType::NORMAL, {255, 255, 255, 255});
@@ -198,14 +214,14 @@ void OptionsState::changeChangeMusic() {
 
 void OptionsState::changeSoundVolume(int amount) {
     int max = 4;
-    int new_value = this->options->getSoundVolume() + amount;
+    int new_value = this->sound_volume + amount;
     if (new_value < 0) {
         new_value = max;
     }
     if (new_value > max) {
         new_value = 0;
     }
-    this->options->setSoundVolume(new_value);
+    this->sound_volume = new_value;
 
     SDL_DestroyTexture(this->texts[this->selection]);
     this->texts[this->selection] = fonts->getTexture(renderer, getSoundVolumeString(), FontType::NORMAL, {255, 255, 255, 255});
@@ -213,33 +229,21 @@ void OptionsState::changeSoundVolume(int amount) {
 
 void OptionsState::changeMusicVolume(int amount) {
     int max = 4;
-    int new_value = this->options->getMusicVolume() + amount;
+    int new_value = this->music_volume + amount;
     if (new_value < 0) {
         new_value = max;
     }
     if (new_value > max) {
         new_value = 0;
     }
-    this->options->setMusicVolume(new_value);
+    this->music_volume = new_value;
 
     SDL_DestroyTexture(this->texts[this->selection]);
     this->texts[this->selection] = fonts->getTexture(renderer, getMusicVolumeString(), FontType::NORMAL, {255, 255, 255, 255});
 }
 
 void OptionsState::changeFullscreen() {
-    this->options->setFullscreen(!this->options->getFullscreen());
-
-    // Set the refresh rate
-    if (options->getFullscreen()) {
-        for(SDL_DisplayMode mode : getDisplayModes()) {
-            if (mode.w == options->getScreenWidth() && mode.h == options->getScreenHeight() && mode.refresh_rate == options->getScreenRefreshRate()) {
-                SDL_SetWindowDisplayMode(window, &mode);
-                break;
-            }
-        }
-    }
-
-   SDL_SetWindowFullscreen(this->window, this->options->getFullscreen() ? SDL_WINDOW_FULLSCREEN : 0);
+    this->fullscreen = !this->fullscreen;
 
     SDL_DestroyTexture(this->texts[this->selection]);
     this->texts[this->selection] = fonts->getTexture(renderer, getFullscreenString(), FontType::NORMAL, {255, 255, 255, 255});
@@ -251,7 +255,7 @@ void OptionsState::changeResolution(int amount) {
         int new_res;
         int current_res = 0;
         for (size_t i = 0; i < modes.size(); i++) {
-            if (modes[i].w == this->options->getScreenWidth() && modes[i].h == this->options->getScreenHeight() && modes[i].refresh_rate == this->options->getScreenRefreshRate()) {
+            if (modes[i].w == this->screen_width && modes[i].h == this->screen_height && modes[i].refresh_rate == this->screen_refresh_rate) {
                 current_res = i;
             }
         }
@@ -263,13 +267,12 @@ void OptionsState::changeResolution(int amount) {
             new_res = 0;
         }
 
-        this->options->setScreenResolution(modes[new_res].w, modes[new_res].h, modes[new_res].refresh_rate);
-        SDL_SetWindowSize(window, modes[new_res].w, modes[new_res].h);
-        if (this->options->getFullscreen()) {
-            SDL_SetWindowDisplayMode(this->window, &modes[new_res]);
-        }
+        this->screen_width = modes[new_res].w;
+        this->screen_height = modes[new_res].h;
+        this->screen_refresh_rate = modes[new_res].refresh_rate;
 
-        updateTexts();
+        SDL_DestroyTexture(this->texts[this->selection]);
+        this->texts[this->selection] = fonts->getTexture(renderer, getResolutionString(), FontType::NORMAL, {255, 255, 255, 255});
     }
 }
 
@@ -297,6 +300,9 @@ void OptionsState::loadTexts() {
                 current_text = getResolutionString();
                 break;
 #endif
+            case Option::APPLY:
+                current_text = _("apply");
+                break;
             case Option::GO_BACK:
                 current_text = _("return to menu");
                 break;
@@ -305,6 +311,41 @@ void OptionsState::loadTexts() {
                 break;
         }
         texts.push_back(fonts->getTexture(renderer, current_text, FontType::NORMAL, {255, 255, 255, 255}));
+    }
+}
+
+void OptionsState::applyChanges() {
+    this->options->setChangeMusicOnSwitch(this->change_music);
+    this->options->setSoundVolume(this->sound_volume);
+    this->options->setMusicVolume(this->music_volume);
+
+    if (
+        this->screen_width != this->options->getScreenWidth() ||
+        this->screen_height != this->options->getScreenHeight() ||
+        this->screen_refresh_rate != this->options->getScreenRefreshRate() ||
+        this->fullscreen != this->options->getFullscreen()
+    ) {
+        this->applyResolution();
+    }
+}
+
+
+void OptionsState::applyResolution() {
+    std::vector<SDL_DisplayMode> modes = getDisplayModes();
+
+    int new_res = 0;
+    for (size_t i = 0; i < modes.size(); i++) {
+        if (modes[i].w == this->screen_width && modes[i].h == this->screen_height && modes[i].refresh_rate == this->screen_refresh_rate) {
+            new_res = i;
+            break;
+        }
+    }
+
+    this->options->setScreenResolution(modes[new_res].w, modes[new_res].h, modes[new_res].refresh_rate);
+    this->options->setFullscreen(this->fullscreen);
+    SDL_SetWindowSize(window, modes[new_res].w, modes[new_res].h);
+    if (this->fullscreen) {
+        SDL_SetWindowDisplayMode(this->window, &modes[new_res]);
     }
 }
 
