@@ -57,6 +57,7 @@ private:
     void changeResolution(int amount);
 
     void applyChanges();
+    void applyFullscreen();
     void applyResolution();
 
     bool change_music;

@@ -319,34 +319,43 @@ void OptionsState::applyChanges() {
     this->options->setSoundVolume(this->sound_volume);
     this->options->setMusicVolume(this->music_volume);
 
-    if (
-        this->screen_width != this->options->getScreenWidth() ||
+    if (this->fullscreen != this->options->getFullscreen()) {
+        this->applyFullscreen();
+    }
+
+    if (this->screen_width != this->options->getScreenWidth() ||
         this->screen_height != this->options->getScreenHeight() ||
-        this->screen_refresh_rate != this->options->getScreenRefreshRate() ||
-        this->fullscreen != this->options->getFullscreen()
-    ) {
+        this->screen_refresh_rate != this->options->getScreenRefreshRate())
+    {
         this->applyResolution();
     }
 }
 
 
 void OptionsState::applyResolution() {
-    std::vector<SDL_DisplayMode> modes = getDisplayModes();
+    this->options->setScreenResolution(this->screen_width, this->screen_height, this->screen_refresh_rate);
+    SDL_SetWindowSize(window, this->screen_width, this->screen_height);
 
-    int new_res = 0;
-    for (size_t i = 0; i < modes.size(); i++) {
-        if (modes[i].w == this->screen_width && modes[i].h == this->screen_height && modes[i].refresh_rate == this->screen_refresh_rate) {
-            new_res = i;
-            break;
-        }
-    }
-
-    this->options->setScreenResolution(modes[new_res].w, modes[new_res].h, modes[new_res].refresh_rate);
-    this->options->setFullscreen(this->fullscreen);
-    SDL_SetWindowSize(window, modes[new_res].w, modes[new_res].h);
     if (this->fullscreen) {
-        SDL_SetWindowDisplayMode(this->window, &modes[new_res]);
+        bool display_mode_found = false;
+        for (SDL_DisplayMode mode : getDisplayModes()) {
+            if (mode.w == this->screen_width && mode.h == this->screen_height && mode.refresh_rate == this->screen_refresh_rate) {
+                display_mode_found = true;
+                SDL_SetWindowDisplayMode(this->window, &mode);
+                break;
+            }
+        }
+        if (!display_mode_found) {
+            SDL_Log("Display mode was not found");
+        }
+    } else {
+        SDL_SetWindowPosition(this->window, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
     }
+}
+
+void OptionsState::applyFullscreen() {
+    this->options->setFullscreen(this->fullscreen);
+    SDL_SetWindowFullscreen(this->window, this->fullscreen ? SDL_WINDOW_FULLSCREEN : 0);
 }
 
 void OptionsState::updateTexts() {
