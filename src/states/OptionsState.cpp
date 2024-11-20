@@ -334,6 +334,7 @@ void OptionsState::applyChanges() {
 
 void OptionsState::applyResolution() {
     this->options->setScreenResolution(this->screen_width, this->screen_height, this->screen_refresh_rate);
+    SDL_SetWindowFullscreen(this->window, SDL_FALSE);
     SDL_SetWindowSize(window, this->screen_width, this->screen_height);
 
     if (this->fullscreen) {
@@ -342,6 +343,7 @@ void OptionsState::applyResolution() {
             if (mode.w == this->screen_width && mode.h == this->screen_height && mode.refresh_rate == this->screen_refresh_rate) {
                 display_mode_found = true;
                 SDL_SetWindowDisplayMode(this->window, &mode);
+                SDL_SetWindowFullscreen(this->window, SDL_TRUE);
                 break;
             }
         }
