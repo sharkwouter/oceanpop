@@ -87,7 +87,7 @@ jobs:
       - name: Build
         run: |
           mkdir oceanpop && cd oceanpop
-          psp-cmake -DCMAKE_BUILD_TYPE=Release -DTRANSLATION_SUPPORT=1 ..
+          psp-cmake -DCMAKE_BUILD_TYPE=Release ..
           cmake --build .
           cp ../LICENSE.txt ../README.md ./
       - name: Publish artifacts

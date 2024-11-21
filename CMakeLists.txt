@@ -171,10 +171,11 @@ if(TINYGETTEXT_FOUND OR BUILD_STATIC)
     if(NOT BUILD_STATIC)
         target_link_libraries(${PROJECT_NAME} PRIVATE  ${TINYGETTEXT_LIBRARIES})
     endif()
-
+    set(TRANSLATION_SUPPORT ON)
     add_compile_definitions(TRANSLATION_SUPPORT=1)
 else()
     message("-- tinygettext library not found, building without translation support")
+    set(TRANSLATION_SUPPORT OFF)
 endif()
 
 # Set asset paths
@@ -243,6 +244,7 @@ if (VITA)
         FILE "${ASSETS_LEVELS}" assets/levels
         FILE "${ASSETS_MUSIC}" assets/music
         FILE "${ASSETS_SOUNDS}" assets/sounds
+        FILE "${ASSETS_LANGUAGES}" assets/languages
     )
 elseif(PLATFORM_PSP)
     create_pbp_file(
