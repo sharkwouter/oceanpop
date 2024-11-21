@@ -157,6 +157,28 @@ jobs:
           path: |
             oceanpop/oceanpop*.zip
 
+  Xbox:
+    runs-on: ubuntu-latest
+    container: xboxdev/nxdk:latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      - name: Build
+        run: |
+          mkdir oceanpop && cd oceanpop
+          cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE="${NXDK_DIR}/share/toolchain-nxdk.cmake" ..
+          cmake --build .
+          cp ../LICENSE.txt ../README.md ./
+      - name: Publish artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: oceanpop-psp
+          path: |
+            oceanpop/*
+          
+
   Release:
     needs: [Linux, Windows, PSP, Vita, Wii]
     if: ${{ github.ref_type == 'tag' }}
