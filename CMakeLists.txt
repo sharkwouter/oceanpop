@@ -20,7 +20,7 @@ else()
 endif()
 
 set(BUILD_STATIC_DEFAULT OFF)
-if(WIN32 OR VITA OR PSP)
+if(WIN32 OR VITA OR PSP OR NXDK)
     set(BUILD_STATIC_DEFAULT ON)
 endif()
 option(BUILD_STATIC "Build a static binary" ${BUILD_STATIC_DEFAULT})
