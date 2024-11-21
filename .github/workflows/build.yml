@@ -163,7 +163,7 @@ jobs:
     steps:
       - name: Install dependencies
         run: |
-          apk add --no-cache git
+          apk add --no-cache git pkgconf
       - name: Checkout
         uses: actions/checkout@v4
         with:
