@@ -50,13 +50,12 @@ jobs:
             mingw-w64-x86_64-cmake
             mingw-w64-x86_64-pkgconf
             mingw-w64-x86_64-SDL2
-            mingw-w64-x86_64-SDL2_image
-            mingw-w64-x86_64-SDL2_mixer
-            mingw-w64-x86_64-SDL2_ttf
             mingw-w64-x86_64-jsoncpp
           update: true
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          submodules: recursive
       - name: Build
         run: |
           mkdir oceanpop && cd oceanpop
@@ -78,8 +77,13 @@ jobs:
     runs-on: ubuntu-latest
     container: pspdev/pspdev:latest
     steps:
+      - name: Install dependencies
+        run: |
+          apk add --no-cache git
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          submodules: recursive
       - name: Build
         run: |
           mkdir oceanpop && cd oceanpop
@@ -100,8 +104,13 @@ jobs:
     runs-on: ubuntu-latest
     container: vitasdk/vitasdk:latest
     steps:
+      - name: Install dependencies
+        run: |
+          apk add --no-cache git
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          submodules: recursive
       - name: Build
         run: |
           mkdir oceanpop && cd oceanpop
@@ -121,22 +130,18 @@ jobs:
     runs-on: ubuntu-latest
     container: devkitpro/devkitppc:latest
     steps:
-      - name: Checkout json-cpp
+      - name: Checkout
         uses: actions/checkout@v4
         with:
-          repository: open-source-parsers/jsoncpp
-          path: jsoncpp
-          ref: 1.9.5
+          submodules: recursive
       - name: Build json-cpp
         run: |
-          cd jsoncpp
+          cd vendor/jsoncpp
           /opt/devkitpro/portlibs/wii/bin/powerpc-eabi-cmake -S. -Bbuild \
             -DJSONCPP_WITH_TESTS=OFF
           cd build
           make
           sudo make install
-      - name: Checkout
-        uses: actions/checkout@v4
       - name: Build
         run: |
           mkdir oceanpop && cd oceanpop

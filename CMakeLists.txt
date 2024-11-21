@@ -28,31 +28,124 @@ option(BUILD_STATIC "Build a static binary" ${BUILD_STATIC_DEFAULT})
 # Find libraries
 include(FindPkgConfig)
 pkg_search_module(SDL2 REQUIRED sdl2)
-pkg_search_module(SDL2_IMAGE REQUIRED SDL2_image)
-pkg_search_module(SDL2_MIXER REQUIRED SDL2_mixer)
-pkg_search_module(SDL2_TTF REQUIRED SDL2_ttf)
-pkg_search_module(JSONCPP REQUIRED jsoncpp)
 pkg_search_module(TINYGETTEXT QUIET tinygettext)
-
-# Enable translation support by default if the tinygettext library is found
-set(TRANSLATION_SUPPORT_DEFAULT OFF)
-if(TINYGETTEXT_FOUND)
-    message("-- Found tinygettext library")
-    set(TRANSLATION_SUPPORT_DEFAULT ON)
-endif()
-option(TRANSLATION_SUPPORT "Add support for loading translations, requires tinygettext" ${TRANSLATION_SUPPORT_DEFAULT})
 
 # Link libraries
 if(BUILD_STATIC)
     set(CMAKE_CXX_FLAGS "-static ${CMAKE_CXX_FLAGS}")
     target_link_libraries(${PROJECT_NAME} PRIVATE
         ${SDL2_STATIC_LIBRARIES}
-        ${SDL2_IMAGE_STATIC_LIBRARIES}
-        ${SDL2_MIXER_STATIC_LIBRARIES}
-        ${SDL2_TTF_STATIC_LIBRARIES}
-        ${JSONCPP_STATIC_LIBRARIES}
     )
+
+    # Build libraries
+    set(BUILD_STATIC_LIBS ON)
+    set(BUILD_SHARED_LIBS OFF)
+    set(BUILD_OBJECT_LIBS OFF)
+
+    # jsoncpp
+    pkg_search_module(JSONCPP QUIET jsoncpp)
+    if (JSONCPP_FOUND)
+        target_link_libraries(${PROJECT_NAME} PRIVATE
+            ${JSONCPP_STATIC_LIBRARIES}
+        )
+        include_directories(
+            ${JSONCPP_INCLUDE_DIRS}
+        )
+    else()
+        set(JSONCPP_WITH_TESTS OFF)
+        set(JSONCPP_WITH_POST_BUILD_UNITTEST OFF)
+        set(JSONCPP_WITH_PKGCONFIG_SUPPORT OFF)
+        set(JSONCPP_WITH_CMAKE_PACKAGE OFF)
+
+        add_subdirectory(vendor/jsoncpp)
+        target_link_libraries(${PROJECT_NAME} PRIVATE
+            jsoncpp_static
+        )
+        include_directories(
+            vendor/jsoncpp/include/json
+        )
+    endif()
+
+    # SDL_image
+    set(SDL2IMAGE_SAMPLES OFF)
+    set(SDL2IMAGE_BACKEND_STB ON)
+    set(CMAKE_POSITION_INDEPENDENT_CODE OFF)
+
+    add_subdirectory(vendor/SDL_image)
+    target_link_libraries(${PROJECT_NAME} PRIVATE
+        SDL2_image
+    )
+    include_directories(
+        vendor/SDL_image/include/
+    )
+
+    #SDL_mixer
+    set(SDL2MIXER_DEPS_SHARED OFF)
+    set(SDL2MIXER_VENDORED OFF)
+    set(SDL2MIXER_SAMPLES OFF)
+    set(SDL2MIXER_CMD OFF)
+    set(SDL2MIXER_FLAC OFF)
+    set(SDL2MIXER_OPUS OFF)
+    set(SDL2MIXER_MOD OFF)
+    set(SDL2MIXER_WAVE ON)
+    set(SDL2MIXER_WAVPACK OFF)
+    set(SDL2MIXER_MIDI OFF)
+    set(SDL2MIXER_MP3 ON)
+    set(SDL2MIXER_MP3_MINIMP3 ON)
+
+    add_subdirectory(vendor/SDL_mixer)
+    target_link_libraries(${PROJECT_NAME} PRIVATE
+        SDL2_mixer
+    )
+    include_directories(
+        vendor/SDL_mixer/include/
+    )
+
+    # SDL_ttf
+    set(SDL2TTF_BUILD_SHARED_LIBS OFF)
+    set(SDL2TTF_VENDORED ON)
+    set(SDL2TTF_SAMPLES OFF)
+    set(SDL2TTF_FREETYPE ON)
+    set(SDL2TTF_FREETYPE_VENDORED ON)
+    set(SDL2TTF_HARFBUZZ OFF)
+    set(SDL2TTF_HARFBUZZ_VENDORED OFF)
+    set(SDL2TTF_SAMPLES OFF)
+    set(SDL2TTF_SAMPLES OFF)
+    set(SDL2TTF_SAMPLES OFF)
+    set(SDL2TTF_SAMPLES OFF)
+    set(SDL2TTF_SAMPLES OFF)
+
+    add_subdirectory(vendor/SDL_ttf)
+    target_link_libraries(${PROJECT_NAME} PRIVATE
+        SDL2_ttf
+    )
+    include_directories(
+        vendor/SDL_ttf/include/
+    )
+
+    # tinygettext
+    if (TINYGETTEXT_FOUND)
+        target_link_libraries(${PROJECT_NAME} PRIVATE
+            ${TINYGETTEXT_STATIC_LIBRARIES}
+        )
+    else()
+        set(BUILD_TESTS OFF)
+        set(TINYGETTEXT_WITH_SDL ON)
+
+        add_subdirectory(vendor/tinygettext)
+        target_link_libraries(${PROJECT_NAME} PRIVATE
+            tinygettext
+        )
+        include_directories(
+            vendor/tinygettext/include/
+        )
+    endif()
 else()
+    pkg_search_module(SDL2_IMAGE REQUIRED SDL2_image)
+    pkg_search_module(SDL2_MIXER REQUIRED SDL2_mixer)
+    pkg_search_module(SDL2_TTF REQUIRED SDL2_ttf)
+    pkg_search_module(JSONCPP REQUIRED jsoncpp)
+
     target_link_libraries(${PROJECT_NAME} PRIVATE
         ${SDL2_LIBRARIES}
         ${SDL2_IMAGE_LIBRARIES}
@@ -60,28 +153,28 @@ else()
         ${SDL2_TTF_LIBRARIES}
         ${JSONCPP_LIBRARIES}
     )
+    include_directories(
+        ${SDL2_IMAGE_INCLUDE_DIRS}
+        ${SDL2_MIXER_INCLUDE_DIRS}
+        ${SDL2_TTF_INCLUDE_DIRS}
+        ${JSONCPP_INCLUDE_DIRS}
+    )
 endif()
 
 include_directories(
     ${PROJECT_SOURCE_DIR}/include
     ${SDL2_INCLUDE_DIRS}
-    ${SDL2_IMAGE_INCLUDE_DIRS}
-    ${SDL2_MIXER_INCLUDE_DIRS}
-    ${SDL2_TTF_INCLUDE_DIRS}
-    ${JSONCPP_INCLUDE_DIRS}
 )
 
-if(TRANSLATION_SUPPORT)
-    message("-- Building with translation support")
-    if(BUILD_STATIC)
-        target_link_libraries(${PROJECT_NAME} PRIVATE ${TINYGETTEXT_STATIC_LIBRARIES})
-    else()
+if(TINYGETTEXT_FOUND OR BUILD_STATIC)
+    message("-- tinygettext library found, building with translation support")
+    if(NOT BUILD_STATIC)
         target_link_libraries(${PROJECT_NAME} PRIVATE  ${TINYGETTEXT_LIBRARIES})
     endif()
 
     add_compile_definitions(TRANSLATION_SUPPORT=1)
 else()
-    message("-- Building without translation support")
+    message("-- tinygettext library not found, building without translation support")
 endif()
 
 # Set asset paths
