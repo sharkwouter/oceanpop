@@ -16,8 +16,6 @@
 
 #ifdef __PSP__
     #include <psputility.h>
-#else
-    #include <locale.h>
 #endif
 
 
@@ -35,6 +33,7 @@ void TranslationManager::loadTranslations() {
 
     
     for(std::string system_language : getSystemLanguageList()) {
+        SDL_Log("Checking language %s", system_language.c_str());
         tinygettext::Language language = tinygettext::Language::from_name(system_language);
         if (language) {
             for (tinygettext::Language l: dictionary_manager.get_languages()) {
@@ -53,9 +52,9 @@ void TranslationManager::loadTranslations() {
 std::vector<std::string> TranslationManager::getSystemLanguageList() {
     std::vector<std::string> locales;
 
-    std::string locale = "C";
     #ifdef __PSP__
-        int current_locale_int;
+        std::string locale = "";
+        int current_locale_int = 0;
         sceUtilityGetSystemParamInt(PSP_SYSTEMPARAM_ID_INT_LANGUAGE, &current_locale_int);
         switch(current_locale_int) {
             case PSP_SYSTEMPARAM_LANGUAGE_JAPANESE:
@@ -95,24 +94,35 @@ std::vector<std::string> TranslationManager::getSystemLanguageList() {
                 locale = "zh_TW.UTF-8";
                 break;
         }
+        if (!locale.empty()) {
+            if (locale.find(".") != std::string::npos) {
+                locales.push_back(locale.substr(0, locale.find(".")));
+            }
+            if (locale.find("_") != std::string::npos) {
+                locales.push_back(locale.substr(0, locale.find("_")));
+            }
+        }
     #else
-        char * locale_c_str = setlocale(LC_ALL, "");
-        if (locale_c_str){
-            locale = std::string(locale_c_str);
-            if (strlen(locale_c_str) > 1) {
-                free(locale_c_str);
+        SDL_Locale * preferred_locales = SDL_GetPreferredLocales();
+        if(preferred_locales) {
+            for (SDL_Locale * l = preferred_locales; l->language; l++) {
+                std::string language = std::string(l->language);
+                std::string country = "";
+                if (l->country) {
+                    country = std::string(l->country);
+                }
+                std::string char_set = "UTF-8";
+                std::string current_locale;
+                if (country.empty()) {
+                    locales.push_back(language + "." + char_set);
+                } else {
+                    locales.push_back(language + "_" + country + "." + char_set);
+                    locales.push_back(language + "_" + country);
+                }
+                locales.push_back(language);
             }
         }
     #endif
-    
-    locales.push_back(locale);
-
-    if (locale.find(".") != std::string::npos) {
-        locales.push_back(locale.substr(0, locale.find(".")));
-    }
-    if (locale.find("_") != std::string::npos) {
-        locales.push_back(locale.substr(0, locale.find("_")));
-    }
 
     return locales;
 }
