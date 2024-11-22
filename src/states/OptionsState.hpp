@@ -18,7 +18,6 @@ enum class Option {
     MUSIC_VOLUME,
 #ifdef SHOW_RESOLUTION_OPTIONS
     FULLSCREEN,
-    RESOLUTION,
 #endif
     APPLY,
     GO_BACK
@@ -48,25 +47,19 @@ private:
     std::string getSoundVolumeString();
     std::string getMusicVolumeString();
     std::string getFullscreenString();
-    std::string getResolutionString();
 
     void changeChangeMusic();
     void changeSoundVolume(int amount);
     void changeMusicVolume(int amount);
     void changeFullscreen();
-    void changeResolution(int amount);
 
     void applyChanges();
     void applyFullscreen();
-    void applyResolution();
 
     bool change_music;
     int sound_volume;
     int music_volume;
     bool fullscreen;
-    int screen_width;
-    int screen_height;
-    int screen_refresh_rate;
 
     void updateTexts();
     void loadTexts();
