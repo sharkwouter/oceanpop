@@ -223,10 +223,31 @@ if(NOT VITA)
             COMMAND ${CMAKE_COMMAND} -E copy_directory
             ${ASSETS_LANGUAGES} ${CMAKE_CURRENT_BINARY_DIR}/assets/languages)
     endif()
-    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy
-        "${CMAKE_SOURCE_DIR}/assets/CREDITS.md" ${CMAKE_CURRENT_BINARY_DIR}/assets)
 endif()
+
+# Generate credits file
+set(CREDITS_FILE "${CMAKE_CURRENT_BINARY_DIR}/assets/CREDITS.md")
+
+file(READ "${CMAKE_SOURCE_DIR}/assets/CREDITS_header.md" CONTENTS)
+file(WRITE "${CREDITS_FILE}" "${CONTENTS}")
+
+if(BUILD_STATIC)
+    file(READ "${CMAKE_SOURCE_DIR}/assets/CREDITS_static.md" CONTENTS)
+    file(APPEND "${CREDITS_FILE}" "${CONTENTS}")
+endif()
+if(PSP)
+    file(READ "${CMAKE_SOURCE_DIR}/assets/CREDITS_PSP.md" CONTENTS)
+    file(APPEND "${CREDITS_FILE}" "${CONTENTS}")
+elseif(VITA)
+    file(READ "${CMAKE_SOURCE_DIR}/assets/CREDITS_Vita.md" CONTENTS)
+    file(APPEND "${CREDITS_FILE}" "${CONTENTS}")
+elseif(CMAKE_SYSTEM_NAME MATCHES "NintendoWii")
+    file(READ "${CMAKE_SOURCE_DIR}/assets/CREDITS_Wii.md" CONTENTS)
+    file(APPEND "${CREDITS_FILE}" "${CONTENTS}")
+endif()
+
+file(READ "${CMAKE_SOURCE_DIR}/assets/CREDITS_footer.md" CONTENTS)
+file(APPEND "${CREDITS_FILE}" "${CONTENTS}")
 
 # Platform specific install
 if (VITA)
@@ -237,7 +258,7 @@ if (VITA)
         VERSION "01.00"
         NAME OceanPop
         FILE platform/vita/sce_sys sce_sys
-        FILE assets/CREDITS.md assets/CREDITS.md
+        FILE "${CREDITS_FILE}" assets/CREDITS.md
         FILE "${ASSETS_BACKGROUNDS}" assets/backgrounds
         FILE "${ASSETS_FONTS}" assets/fonts
         FILE "${ASSETS_IMAGES}" assets/images
