@@ -49,6 +49,11 @@ std::vector<Event> EventManager::getEvents() {
             case SDL_CONTROLLERDEVICEREMOVED:
                 closeDisconnectedGameControllers();
                 break;
+            case SDL_WINDOWEVENT:
+                if (event.window.event == SDL_WINDOWEVENT_RESIZED) {
+                    input = Event::WINDOW_RESIZE;
+                }
+                break;
         }
         if (input != Event::NONE) {
             inputs.push_back(input);

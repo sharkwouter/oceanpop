@@ -39,17 +39,13 @@ private:
     int required_matches;
     int width;
     int height;
-    SDL_Point position;
 
     int attempts;
     bool attempts_changed;
 
     State next_state = State::MENU;
 
-    SDL_Point calculatePosition(int width, int height);
     void loadLevel();
-
-    void drawAttempts(SDL_Renderer *renderer);
 public:
     GameStateChallenge(SDL_Renderer *renderer, FontManager * fonts, SoundManager * sounds, OptionManager * options);
     ~GameStateChallenge();

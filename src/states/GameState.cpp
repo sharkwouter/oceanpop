@@ -179,8 +179,6 @@ void GameState::loadLevel(int level) {
         this->height = this->shells[0].size();
     }
 
-    this->position = calculatePosition(this->width, this->height);
-
     this->moves = json.get("moves", 10).asInt();
     this->required_matches = json.get("matches", 12).asInt();
     this->seed = json.get("seed", this->level).asInt();
@@ -194,8 +192,6 @@ void GameState::loadLevel(int level) {
             this->fonts,
             this->sounds,
             this->options,
-            this->position.x,
-            this->position.y,
             this->width,
             this->height,
             this->moves,
@@ -209,8 +205,6 @@ void GameState::loadLevel(int level) {
             this->fonts,
             this->sounds,
             this->options,
-            this->position.x,
-            this->position.y,
             this->shells,
             this->moves,
             this->required_matches,
@@ -248,10 +242,6 @@ std::vector<std::vector<ShellType>> GameState::loadShells(Json::Value array) {
     }
 
     return result;
-}
-
-SDL_Point GameState::calculatePosition(int width, int height) {
-    return {(this->options->getScreenWidth()-this->options->getShellSize()*width)/2, (this->options->getScreenHeight()-this->options->getShellSize()*(height+1))/2};
 }
 
 State GameState::getNextState() {

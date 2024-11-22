@@ -245,15 +245,19 @@ int OptionManager::getScreenRefreshRate() {
 }
 
 void OptionManager::setScreenResolution(int width, int height, int refresh_rate) {
+    int new_shell_size = DEFAULT_SHELL_SIZE;
+    while (width < (new_shell_size * DEFAULT_BOARD_WIDTH) || height < (new_shell_size * (DEFAULT_BOARD_HEIGHT +1))) {
+        new_shell_size = new_shell_size/2;
+    }
+    // Do not accept smaller shell size than 16
+    if (new_shell_size < 16) {
+        return;
+    }
+
+    this->options["shell_size"] = new_shell_size;
     this->options["screen_width"] = width;
     this->options["screen_height"] = height;
     this->options["screen_refresh_rate"] = refresh_rate;
-
-    // Set the shell size to match the screen size
-    this->options["shell_size"] = DEFAULT_SHELL_SIZE;
-    while (width < (getShellSize() * DEFAULT_BOARD_WIDTH) || height < (getShellSize() * (DEFAULT_BOARD_HEIGHT +1))) {
-        this->options["shell_size"] = getShellSize()/2;
-    }
 
     write();
 }

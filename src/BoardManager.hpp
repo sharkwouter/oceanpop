@@ -78,6 +78,8 @@ private:
     int animation = 0;
     unsigned int animation_start;
 
+    int previous_shell_size;
+
     void addMatches(int matches);
     void increaseLevel();
     void increaseMoves();
@@ -91,6 +93,8 @@ private:
     bool isFalling(SDL_Point point);
     bool isDoubleMatch(Match match);
 
+    void setSizing();
+
     void drawCursor(SDL_Renderer * renderer);
     void drawBoard(SDL_Renderer * renderer);
     void drawScoringBox(SDL_Renderer * renderer);
@@ -99,10 +103,10 @@ private:
     void drawFallingShells(SDL_Renderer * renderer);
     void drawMatches(SDL_Renderer * renderer);
     void drawIntroduction(SDL_Renderer * renderer);
-    void storeLevel(int x, int y, Board * board, int moves, int required_matches, int level);
+    void storeLevel(Board * board, int moves, int required_matches, int level);
 public:
-    BoardManager(SDL_Renderer *renderer, FontManager *fonts, SoundManager * sounds, OptionManager * options, int x, int y, int width, int height, int moves, int required_matches=0, int level=0, int seed=0);
-    BoardManager(SDL_Renderer *renderer, FontManager *fonts, SoundManager * sounds, OptionManager * options, int x, int y, std::vector<std::vector<ShellType>> shells, int moves, int required_matches=0, int level=0, int seed=0);
+    BoardManager(SDL_Renderer *renderer, FontManager *fonts, SoundManager * sounds, OptionManager * options, int width, int height, int moves, int required_matches=0, int level=0, int seed=0);
+    BoardManager(SDL_Renderer *renderer, FontManager *fonts, SoundManager * sounds, OptionManager * options, std::vector<std::vector<ShellType>> shells, int moves, int required_matches=0, int level=0, int seed=0);
     ~BoardManager();
 
     void handleEvents(std::vector<Event> events);
@@ -112,8 +116,8 @@ public:
     bool isCompleted() {return (this->current_action == Action::COMPLETED);};
     int hasMovesLeft() {return (moves > 0);};
     void reset();
-    void loadLevel(int x, int y, int width, int height, int moves, int required_matches=0, int level=0, int seed=0);
-    void loadLevel(int x, int y, std::vector<std::vector<ShellType>> shells, int moves, int required_matches=0, int level=0, int seed=0);
+    void loadLevel(int width, int height, int moves, int required_matches=0, int level=0, int seed=0);
+    void loadLevel(std::vector<std::vector<ShellType>> shells, int moves, int required_matches=0, int level=0, int seed=0);
 
     int getMatches() {return matches;};
     void setMatches(int matches) { this->matches = matches; this->matches_updated = true;};

@@ -28,11 +28,9 @@ private:
     int seed;
     int width;
     int height;
-    SDL_Point position;
 
     State next_state = State::MENU;
 
-    SDL_Point calculatePosition(int width, int height);
     void loadLevel();
 public:
     GameStateRelaxed(SDL_Renderer *renderer, FontManager * fonts, SoundManager * sounds, OptionManager * options);

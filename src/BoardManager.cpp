@@ -9,14 +9,16 @@
 #include "FontType.hpp"
 #include "utils.hpp"
 
-BoardManager::BoardManager(SDL_Renderer *renderer, FontManager *fonts, SoundManager * sounds, OptionManager * options, int x, int y, int width, int height, int moves, int required_matches, int level, int seed) : fonts(fonts), sounds(sounds), options(options),
+BoardManager::BoardManager(SDL_Renderer *renderer, FontManager *fonts, SoundManager * sounds, OptionManager * options, int width, int height, int moves, int required_matches, int level, int seed) : fonts(fonts), sounds(sounds), options(options),
     textures(renderer, options) {
-    loadLevel(x, y, width, height, moves, required_matches, level, seed);
+    this->previous_shell_size = this->options->getShellSize();
+    loadLevel(width, height, moves, required_matches, level, seed);
 }
 
-BoardManager::BoardManager(SDL_Renderer *renderer, FontManager *fonts, SoundManager * sounds, OptionManager * options, int x, int y, std::vector<std::vector<ShellType>> shells, int moves, int required_matches, int level, int seed) : fonts(fonts), sounds(sounds), options(options),
+BoardManager::BoardManager(SDL_Renderer *renderer, FontManager *fonts, SoundManager * sounds, OptionManager * options, std::vector<std::vector<ShellType>> shells, int moves, int required_matches, int level, int seed) : fonts(fonts), sounds(sounds), options(options),
     textures(renderer, options) {
-    loadLevel(x, y, shells, moves, required_matches, level, seed);
+    this->previous_shell_size = this->options->getShellSize();
+    loadLevel(shells, moves, required_matches, level, seed);
 }
 
 BoardManager::~BoardManager() {
@@ -32,44 +34,34 @@ BoardManager::~BoardManager() {
     SDL_DestroyTexture(text_minus_six);
 }
 
-void BoardManager::loadLevel(int x, int y, int width, int height, int moves, int required_matches, int level, int seed) {
+void BoardManager::loadLevel(int width, int height, int moves, int required_matches, int level, int seed) {
     this->seed = seed;
     if (required_matches == 0) {
         this->isRelaxedMode = true;
     }
-    storeLevel(x, y, new Board(width, height, seed, this->isRelaxedMode), moves, required_matches, level);
+    storeLevel(new Board(width, height, seed, this->isRelaxedMode), moves, required_matches, level);
     this->preview = this->board->getShells();
     this->current_action = Action::INTRODUCTION_START;
 }
 
-void BoardManager::loadLevel(int x, int y, std::vector<std::vector<ShellType>> shells, int moves, int required_matches, int level, int seed) {
+void BoardManager::loadLevel(std::vector<std::vector<ShellType>> shells, int moves, int required_matches, int level, int seed) {
     this->starting_shells = shells;
     this->seed = seed;
     if (required_matches == 0) {
         this->isRelaxedMode = true;
     }
-    storeLevel(x, y, new Board(shells, seed, this->isRelaxedMode), moves, required_matches, level);
+    storeLevel(new Board(shells, seed, this->isRelaxedMode), moves, required_matches, level);
     this->preview = this->board->getShells();
     this->current_action = Action::INTRODUCTION_START;
 }
 
-void BoardManager::storeLevel(int x, int y, Board * board, int moves, int required_matches, int level) {
+void BoardManager::storeLevel(Board * board, int moves, int required_matches, int level) {
     if (this->board != NULL) {
         delete(this->board);
     }
     this->board = std::move(board);
 
-    this->rect_board.x = x;
-    this->rect_board.y = y;
-
-    this->rect_board.w = this->options->getShellSize() * this->board->getWidth();
-    this->rect_board.h = this->options->getShellSize() * this->board->getHeight();
-
-    this->rect_scoreboard.x = 0;
-    this->rect_scoreboard.y = this->options->getScreenHeight() - this->options->getShellSize();
-
-    this->rect_scoreboard.w = this->options->getScreenWidth();
-    this->rect_scoreboard.h = this->options->getShellSize();
+    this->setSizing();
 
     this->selected.x = this->board->getWidth() / 2;
     this->selected.y = this->board->getHeight() / 2;
@@ -153,6 +145,9 @@ void BoardManager::handleEvents(std::vector<Event> events) {
                 break;
             case Event::MOUSEMOVE:
                 moveCursorMouse();
+                break;
+            case Event::WINDOW_RESIZE:
+                this->setSizing();
                 break;
             default:
                 break;
@@ -737,4 +732,64 @@ void BoardManager::drawInfo(SDL_Renderer * renderer) {
         rect_moves.y += this->options->getShellSize() / 2 - rect_moves.h / 2;
         SDL_RenderCopy(renderer, text_moves, NULL, &rect_moves);
     }
+}
+
+void BoardManager::setSizing() {
+    // Set the board location and size
+    this->rect_board.w = this->options->getShellSize() * this->board->getWidth();
+    this->rect_board.h = this->options->getShellSize() * this->board->getHeight();
+    this->rect_board.x = (this->options->getScreenWidth() - (this->options->getShellSize()*this->board->getWidth()))/2;
+    this->rect_board.y = (this->options->getScreenHeight() - this->options->getShellSize()*(this->board->getHeight()+1))/2;
+
+    // Set the scoreboard location and size
+    this->rect_scoreboard.x = 0;
+    this->rect_scoreboard.y = this->options->getScreenHeight() - this->options->getShellSize();
+    this->rect_scoreboard.w = this->options->getScreenWidth();
+    this->rect_scoreboard.h = this->options->getShellSize();
+
+    // Do not reload textures if the shell size did not change
+    if (this->previous_shell_size == this->options->getShellSize()) {
+        return;
+    }
+
+    // Reset texts
+    this->matches_updated = true;
+    this->level_updated = true;
+    this->moves_updated = true;
+
+    // Free textures if they are already set
+    if (this->text_introduction) {
+        SDL_DestroyTexture(this->text_introduction);
+        this->text_introduction = NULL;
+    }
+    if (this->text_plus_one) {
+        SDL_DestroyTexture(this->text_plus_one);
+        this->text_plus_one = NULL;
+    }
+    if (this->text_plus_two) {
+        SDL_DestroyTexture(this->text_plus_two);
+        this->text_plus_two = NULL;
+    }
+    if (this->text_minus_three) {
+        SDL_DestroyTexture(this->text_minus_three);
+        this->text_minus_three = NULL;
+    }
+    if (this->text_minus_six) {
+        SDL_DestroyTexture(this->text_minus_six);
+        this->text_minus_six = NULL;
+    }
+    if (this->text_plus_three) {
+        SDL_DestroyTexture(this->text_plus_three);
+        this->text_plus_three = NULL;
+    }
+    if (this->text_plus_six) {
+        SDL_DestroyTexture(this->text_plus_six);
+        this->text_plus_six = NULL;
+    }
+
+    // Load a new fitting shell texture
+    this->textures.reload();
+
+    // Update the shell size
+    previous_shell_size = this->options->getShellSize();
 }

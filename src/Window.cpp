@@ -4,7 +4,7 @@
 #include "Window.hpp"
 #include "utils.hpp"
 
-Window::Window(const std::string &title, OptionManager * options) {
+Window::Window(const std::string &title, OptionManager * options) : options(options) {
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_GAMECONTROLLER | SDL_INIT_TIMER) != 0) {
         panic("couldn't init SDL: " + std::string(SDL_GetError()));
     }
@@ -22,12 +22,12 @@ Window::Window(const std::string &title, OptionManager * options) {
     }
 
     // Set default screen resolution and refresh rate if they haven't been set yet
-    if (options->getScreenRefreshRate() == 0) {
+    if (this->options->getScreenRefreshRate() == 0) {
         SDL_DisplayMode mode = getStandardDisplayMode();
-        options->setScreenResolution(mode.w, mode.h, mode.refresh_rate);
+        this->options->setScreenResolution(mode.w, mode.h, mode.refresh_rate);
     }
 
-    Uint32 window_flags = SDL_WINDOW_SHOWN;
+    Uint32 window_flags = SDL_WINDOW_RESIZABLE;
     if (options->getFullscreen()) {
         window_flags |= SDL_WINDOW_FULLSCREEN;
     }
@@ -37,7 +37,7 @@ Window::Window(const std::string &title, OptionManager * options) {
     }
 
     // Set the refresh rate
-    if (options->getFullscreen()) {
+    if (this->options->getFullscreen()) {
         for(SDL_DisplayMode mode : getDisplayModes()) {
             if (mode.w == options->getScreenWidth() && mode.h == options->getScreenHeight() && mode.refresh_rate == options->getScreenRefreshRate()) {
                 SDL_SetWindowDisplayMode(window, &mode);
@@ -70,6 +70,12 @@ void Window::present() {
     }
     SDL_RenderPresent(this->renderer);
     this->start_frame = SDL_GetTicks();
+}
+
+void Window::updateSize() {
+    int width, height;
+    SDL_GetWindowSize(this->window, &width, &height);
+    this->options->setScreenResolution(width, height, this->options->getScreenRefreshRate());
 }
 
 Window::~Window() {

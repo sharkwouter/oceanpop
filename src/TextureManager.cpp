@@ -2,8 +2,8 @@
 #include "TextureManager.hpp"
 #include "utils.hpp"
 
-TextureManager::TextureManager(SDL_Renderer * renderer, OptionManager * options) : options(options) {
-    texture_shell = load(renderer, "assets/images/shells" + std::to_string(this->options->getShellSize()) + ".png");
+TextureManager::TextureManager(SDL_Renderer * renderer, OptionManager * options) : options(options), renderer(renderer) {
+    texture_shell = load(this->renderer, "assets/images/shells" + std::to_string(this->options->getShellSize()) + ".png");
 }
 
 TextureManager::~TextureManager() {
@@ -20,3 +20,7 @@ SDL_Texture * TextureManager::load(SDL_Renderer * renderer, const std::string &f
     return std::move(texture);
 }
 
+void TextureManager::reload() {
+    SDL_DestroyTexture(this->texture_shell);
+    this->texture_shell = load(this->renderer, "assets/images/shells" + std::to_string(this->options->getShellSize()) + ".png");
+}

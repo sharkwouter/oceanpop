@@ -10,6 +10,7 @@ class Window {
 public:
     SDL_Window *window;
     SDL_Renderer *renderer;
+    OptionManager * options;
 
     Window(const std::string &title, OptionManager * options);
     ~Window();
@@ -19,6 +20,7 @@ public:
 
     void clear();
     void present();
+    void updateSize();
 };
 
 #endif // WINDOW_HPP
