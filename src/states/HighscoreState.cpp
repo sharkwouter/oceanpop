@@ -9,15 +9,7 @@
 HighscoreState::HighscoreState(SDL_Renderer * renderer, FontManager * fonts, SoundManager * sounds, OptionManager * options) : renderer(renderer), fonts(fonts), sounds(sounds), options(options),
     theme(renderer, options, Theme::MENU)
 {
-    this->text_title = fonts->getTexture(renderer, _("High Scores"), FontType::TITLE, {COLOR_MENU_TITLE.r, COLOR_MENU_TITLE.g, COLOR_MENU_TITLE.b, COLOR_MENU_TITLE.a});
-    this->text_bottom = fonts->getTexture(renderer, _("press confirm to go back"), FontType::NORMAL, {255, 255, 255, 255});
-
-    std::string standard_mode_completed = options->getStandardModeCompleted() ? _("yes") : _("no");
-    texts.push_back(fonts->getTexture(renderer, _("standard mode completed: ") + standard_mode_completed, FontType::NORMAL, {255, 255, 255, 255}));
-    texts.push_back(fonts->getTexture(renderer, _("highest level reached in challenge mode: ") + std::to_string(options->getChallengeModeHighscore()), FontType::NORMAL, {255, 255, 255, 255}));
-    texts.push_back(fonts->getTexture(renderer, _("matches in relaxed mode: ") + std::to_string(options->getRelaxedModeScore()), FontType::NORMAL, {255, 255, 255, 255}));
-
-    this->text_start_y = getTextY(0);
+    this->loadTexts();
 }
 
 HighscoreState::~HighscoreState() {
@@ -41,6 +33,9 @@ void HighscoreState::handleEvents(std::vector<Event> events) {
             case Event::CONFIRM:
                 this->done = true;
                 break;
+            case Event::WINDOW_RESIZE:
+                this->updateSizing();
+                break;
             default:
                 break;
         }
@@ -54,6 +49,10 @@ void HighscoreState::update() {
 
 void HighscoreState::draw(SDL_Renderer * renderer) {
     this->theme.draw(renderer);
+
+    if (this->texts.empty()) {
+        loadTexts();
+    }
 
     // Draw title
     SDL_Rect rect_title = {this->options->getScreenWidth() / 2, this->options->getScreenHeight() / 8, 0, 0};
@@ -77,6 +76,34 @@ void HighscoreState::draw(SDL_Renderer * renderer) {
     SDL_QueryTexture(text_bottom, NULL, NULL, &rect_bottom.w, &rect_bottom.h);
     rect_bottom.x -= rect_bottom.w/2;
     SDL_RenderCopy(renderer, text_bottom, NULL, &rect_bottom);
+}
+
+void HighscoreState::loadTexts() {
+    this->text_title = fonts->getTexture(renderer, _("High Scores"), FontType::TITLE, {COLOR_MENU_TITLE.r, COLOR_MENU_TITLE.g, COLOR_MENU_TITLE.b, COLOR_MENU_TITLE.a});
+    this->text_bottom = fonts->getTexture(renderer, _("press confirm to go back"), FontType::NORMAL, {255, 255, 255, 255});
+
+    std::string standard_mode_completed = options->getStandardModeCompleted() ? _("yes") : _("no");
+    this->texts.push_back(fonts->getTexture(renderer, _("standard mode completed: ") + standard_mode_completed, FontType::NORMAL, {255, 255, 255, 255}));
+    this->texts.push_back(fonts->getTexture(renderer, _("highest level reached in challenge mode: ") + std::to_string(options->getChallengeModeHighscore()), FontType::NORMAL, {255, 255, 255, 255}));
+    this->texts.push_back(fonts->getTexture(renderer, _("matches in relaxed mode: ") + std::to_string(options->getRelaxedModeScore()), FontType::NORMAL, {255, 255, 255, 255}));
+
+    this->text_start_y = getTextY(0);
+}
+
+void HighscoreState::updateSizing() {
+    for (size_t i = 0; i < texts.size(); i++) {
+        SDL_DestroyTexture(texts[i]);
+        texts[i] = NULL;
+    }
+    if (this->text_title) {
+        SDL_DestroyTexture(this->text_title);
+        this->text_title = NULL;
+    }
+    if (this->text_bottom) {
+        SDL_DestroyTexture(this->text_bottom);
+        this->text_bottom = NULL;
+    }
+    this->texts.clear();
 }
 
 int HighscoreState::getTextY(int number) {

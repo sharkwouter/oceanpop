@@ -160,7 +160,7 @@ void MenuState::loadTexts() {
 }
 
 void MenuState::updateSizing() {
-    for (int i = 0; i < texts.size(); i++) {
+    for (size_t i = 0; i < texts.size(); i++) {
         SDL_DestroyTexture(texts[i]);
         texts[i] = NULL;
         if (this->sub_texts[i]) {

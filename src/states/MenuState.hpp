@@ -30,7 +30,6 @@ private:
 
     int getOptionY(int number);
     void loadTexts();
-
     void updateSizing();
 public:
     MenuState(SDL_Renderer * renderer, FontManager * fonts, SoundManager * sounds, OptionManager * options);
