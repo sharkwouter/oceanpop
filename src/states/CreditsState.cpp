@@ -39,6 +39,9 @@ void CreditsState::handleEvents(std::vector<Event> events) {
                 this->done = true;
                 break;
             case Event::CANCEL:
+                if (this->position == 0) {
+                    this->done = true;
+                }
                 this->position -= this->last_line_visible - this->position;
                 if (this->position <= 0) {
                     this->position = 0;
