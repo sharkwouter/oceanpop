@@ -13,9 +13,6 @@ OptionsState::OptionsState(SDL_Renderer * renderer, FontManager * fonts, SoundMa
     this->sound_volume = this->options->getSoundVolume();
     this->music_volume = this->options->getMusicVolume();
     this->fullscreen = this->options->getFullscreen();
-    this->screen_width = this->options->getScreenWidth();
-    this->screen_height = this->options->getScreenHeight();
-    this->screen_refresh_rate = this->options->getScreenRefreshRate();
 
     loadTexts();
 }
@@ -64,9 +61,6 @@ void OptionsState::handleEvents(std::vector<Event> events) {
                     case Option::FULLSCREEN:
                         changeFullscreen();
                         break;
-                    case Option::RESOLUTION:
-                        changeResolution(1);
-                        break;
 #endif
                     case Option::APPLY:
                         applyChanges();
@@ -91,9 +85,6 @@ void OptionsState::handleEvents(std::vector<Event> events) {
 #ifdef SHOW_RESOLUTION_OPTIONS
                     case Option::FULLSCREEN:
                         changeFullscreen();
-                        break;
-                    case Option::RESOLUTION:
-                        changeResolution(-1);
                         break;
 #endif
                     case Option::APPLY:
@@ -197,14 +188,6 @@ std::string OptionsState::getFullscreenString() {
     return _("full screen: ") + std::string(this->fullscreen ? _("yes") : _("no"));
 }
 
-std::string OptionsState::getResolutionString() {
-    std::string result = _("resolution: ") + std::to_string(this->screen_width) + "x" + std::to_string(this->screen_height);
-    if (this->screen_refresh_rate > 0) {
-         result += " (" + std::to_string(this->screen_refresh_rate) + " hz)";
-    }
-    return result;
-}
-
 void OptionsState::changeChangeMusic() {
     this->change_music = !this->change_music;
 
@@ -249,33 +232,6 @@ void OptionsState::changeFullscreen() {
     this->texts[this->selection] = fonts->getTexture(renderer, getFullscreenString(), FontType::NORMAL, {255, 255, 255, 255});
 }
 
-void OptionsState::changeResolution(int amount) {
-    std::vector<SDL_DisplayMode> modes = getDisplayModes();
-    if (modes.size() > 1) {
-        int new_res;
-        int current_res = 0;
-        for (size_t i = 0; i < modes.size(); i++) {
-            if (modes[i].w == this->screen_width && modes[i].h == this->screen_height && modes[i].refresh_rate == this->screen_refresh_rate) {
-                current_res = i;
-            }
-        }
-
-        new_res = current_res + amount;
-        if (new_res < 0) {
-            new_res = (((int) modes.size()) - 1);
-        } else if (new_res >= ((int) modes.size())) {
-            new_res = 0;
-        }
-
-        this->screen_width = modes[new_res].w;
-        this->screen_height = modes[new_res].h;
-        this->screen_refresh_rate = modes[new_res].refresh_rate;
-
-        SDL_DestroyTexture(this->texts[this->selection]);
-        this->texts[this->selection] = fonts->getTexture(renderer, getResolutionString(), FontType::NORMAL, {255, 255, 255, 255});
-    }
-}
-
 void OptionsState::loadTexts() {
     this->text_title = fonts->getTexture(this->renderer, _("Options"), FontType::TITLE, {COLOR_MENU_TITLE.r, COLOR_MENU_TITLE.g, COLOR_MENU_TITLE.b, COLOR_MENU_TITLE.a});
     this->text_start_y = this->options->getScreenHeight() / 4;
@@ -295,9 +251,6 @@ void OptionsState::loadTexts() {
 #ifdef SHOW_RESOLUTION_OPTIONS
             case Option::FULLSCREEN:
                 current_text = getFullscreenString();
-                break;
-            case Option::RESOLUTION:
-                current_text = getResolutionString();
                 break;
 #endif
             case Option::APPLY:
@@ -322,42 +275,24 @@ void OptionsState::applyChanges() {
     if (this->fullscreen != this->options->getFullscreen()) {
         this->applyFullscreen();
     }
-
-    if (this->screen_width != this->options->getScreenWidth() ||
-        this->screen_height != this->options->getScreenHeight() ||
-        this->screen_refresh_rate != this->options->getScreenRefreshRate())
-    {
-        this->applyResolution();
-    }
-}
-
-
-void OptionsState::applyResolution() {
-    this->options->setScreenResolution(this->screen_width, this->screen_height, this->screen_refresh_rate);
-    SDL_SetWindowFullscreen(this->window, SDL_FALSE);
-    SDL_SetWindowSize(window, this->screen_width, this->screen_height);
-
-    if (this->fullscreen) {
-        bool display_mode_found = false;
-        for (SDL_DisplayMode mode : getDisplayModes()) {
-            if (mode.w == this->screen_width && mode.h == this->screen_height && mode.refresh_rate == this->screen_refresh_rate) {
-                display_mode_found = true;
-                SDL_SetWindowDisplayMode(this->window, &mode);
-                SDL_SetWindowFullscreen(this->window, SDL_TRUE);
-                break;
-            }
-        }
-        if (!display_mode_found) {
-            SDL_Log("Display mode was not found");
-        }
-    } else {
-        SDL_SetWindowPosition(this->window, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
-    }
 }
 
 void OptionsState::applyFullscreen() {
+    SDL_DisplayMode standard_mode = getStandardDisplayMode();
     this->options->setFullscreen(this->fullscreen);
-    SDL_SetWindowFullscreen(this->window, this->fullscreen ? SDL_WINDOW_FULLSCREEN : 0);
+
+    if (this->fullscreen) {
+        this->options->setScreenResolution(standard_mode.w, standard_mode.h, standard_mode.refresh_rate);
+        SDL_SetWindowSize(window, this->options->getScreenWidth(), this->options->getScreenHeight());
+        SDL_SetWindowDisplayMode(this->window, &standard_mode);
+        SDL_SetWindowFullscreen(this->window, SDL_WINDOW_FULLSCREEN);
+    } else {
+        SDL_SetWindowFullscreen(this->window, 0);
+        this->options->setScreenResolution(standard_mode.w/2, standard_mode.h/2, standard_mode.refresh_rate);
+        SDL_RestoreWindow(this->window);
+        SDL_SetWindowSize(this->window, this->options->getScreenWidth(), this->options->getScreenHeight());
+        SDL_SetWindowPosition(this->window, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
+    }
 }
 
 void OptionsState::updateTexts() {
