@@ -9,6 +9,7 @@
 MenuState::MenuState(SDL_Renderer * renderer, FontManager * fonts, SoundManager * sounds, OptionManager * options) : renderer(renderer), fonts(fonts), sounds(sounds), options(options),
     theme(renderer, options, Theme::MENU)
 {
+    this->loadTexts();
 }
 
 MenuState::~MenuState() {
