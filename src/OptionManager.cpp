@@ -250,7 +250,7 @@ void OptionManager::setScreenResolution(int width, int height, int refresh_rate)
         new_shell_size = new_shell_size/2;
     }
     // Do not accept smaller shell size than 16
-    if (new_shell_size < 16) {
+    if (new_shell_size < MIN_SHELL_SIZE) {
         return;
     }
 
