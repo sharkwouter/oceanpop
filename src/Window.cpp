@@ -3,6 +3,7 @@
 #include <SDL_mixer.h>
 #include "Window.hpp"
 #include "utils.hpp"
+#include "constants.hpp"
 
 Window::Window(const std::string &title, OptionManager * options) : options(options) {
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_GAMECONTROLLER | SDL_INIT_TIMER) != 0) {
@@ -75,6 +76,12 @@ void Window::present() {
 void Window::updateSize() {
     int width, height;
     SDL_GetWindowSize(this->window, &width, &height);
+    if (width < MIN_SCREEN_WIDTH) {
+        width = MIN_SCREEN_WIDTH;
+    }
+    if (height < MIN_SCREEN_HEIGHT) {
+        height = MIN_SCREEN_HEIGHT;
+    }
     this->options->setScreenResolution(width, height, this->options->getScreenRefreshRate());
 }
 
