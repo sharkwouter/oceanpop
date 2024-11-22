@@ -114,6 +114,9 @@ void OptionsState::handleEvents(std::vector<Event> events) {
                     }
                 }
                 break;
+            case Event::WINDOW_RESIZE:
+                this->updateTexts();
+                break;
             default:
                 break;
         }
