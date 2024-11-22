@@ -35,6 +35,8 @@ private:
 
     void loadCredits();
     void freeUnusedTexts();
+    void loadTitles();
+    void updateSizing();
 public:
     CreditsState(SDL_Renderer * renderer, FontManager * fonts, SoundManager * sounds, OptionManager * options);
     ~CreditsState();

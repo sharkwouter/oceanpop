@@ -12,11 +12,8 @@
 CreditsState::CreditsState(SDL_Renderer * renderer, FontManager * fonts, SoundManager * sounds, OptionManager * options) : renderer(renderer), fonts(fonts), sounds(sounds), options(options),
     theme(renderer, options, Theme::MENU)
 {
-    this->text_title = fonts->getTexture(renderer, _("Credits"), FontType::TITLE, {COLOR_MENU_TITLE.r, COLOR_MENU_TITLE.g, COLOR_MENU_TITLE.b, COLOR_MENU_TITLE.a});
-    this->text_bottom = fonts->getTexture(renderer, _("scroll with confirm and cancel"), FontType::NORMAL, {255, 255, 255, 255});
-
+    this->loadTitles();
     this->loadCredits();
-    this->empty_line_height = this->options->getShellSize()/4;
 }
 
 CreditsState::~CreditsState() {
@@ -71,6 +68,9 @@ void CreditsState::handleEvents(std::vector<Event> events) {
                 }
                 this->freeUnusedTexts();
                 break;
+            case Event::WINDOW_RESIZE:
+                this->updateSizing();
+                break;
             default:
                 break;
         }
@@ -84,6 +84,10 @@ void CreditsState::update() {
 
 void CreditsState::draw(SDL_Renderer * renderer) {
     this->theme.draw(renderer);
+
+    if (!this->text_title || !this->text_bottom) {
+        this->loadTitles();
+    }
 
     // Draw title
     SDL_Rect rect_title = {this->options->getScreenWidth() / 2, this->options->getScreenHeight() / 8, 0, 0};
@@ -206,6 +210,31 @@ void CreditsState::freeUnusedTexts() {
     }
     if (this->last_line_visible + cache_size < (int) this->credits.size()) {
         for (int i = this->last_line_visible + cache_size; i < (int) this->credits.size(); i++) {
+            SDL_DestroyTexture(this->texts[i]);
+            this->texts[i] = NULL;
+        }
+    }
+}
+
+
+void CreditsState::loadTitles() {
+    this->text_title = fonts->getTexture(renderer, _("Credits"), FontType::TITLE, {COLOR_MENU_TITLE.r, COLOR_MENU_TITLE.g, COLOR_MENU_TITLE.b, COLOR_MENU_TITLE.a});
+    this->text_bottom = fonts->getTexture(renderer, _("scroll with confirm and cancel"), FontType::NORMAL, {255, 255, 255, 255});
+    this->empty_line_height = this->options->getShellSize()/4;
+
+}
+
+void CreditsState::updateSizing() {
+    if (this->text_title) {
+        SDL_DestroyTexture(this->text_title);
+        this->text_title = NULL;
+    }
+    if (this->text_bottom) {
+        SDL_DestroyTexture(this->text_bottom);
+        this->text_bottom = NULL;
+    }
+    for (size_t i = 0; i < this->texts.size(); i++) {
+        if (this->texts[i]) {
             SDL_DestroyTexture(this->texts[i]);
             this->texts[i] = NULL;
         }
