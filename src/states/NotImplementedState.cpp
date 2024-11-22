@@ -26,6 +26,8 @@ void NotImplementedState::handleEvents(std::vector<Event> events) {
             this->done = true;
         } else if (event == Event::CONFIRM || event == Event::CANCEL || event == Event::MENU) {
             this->done = true;
+        } else if (event == Event::WINDOW_RESIZE) {
+            this->screen_text.updateSizing();
         }
     }
 }
