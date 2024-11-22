@@ -25,10 +25,6 @@ private:
     PauseScreen win_screen;
     PauseScreen lose_screen;
 
-    SDL_Texture * text_attempts = NULL;
-    SDL_Texture * text_attempts_number = NULL;
-
-
     bool paused = false;
     bool completed = false;
     bool failed = false;
@@ -39,9 +35,6 @@ private:
     int required_matches;
     int width;
     int height;
-
-    int attempts;
-    bool attempts_changed;
 
     State next_state = State::MENU;
 

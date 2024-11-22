@@ -11,7 +11,7 @@ GameStateChallenge::GameStateChallenge(SDL_Renderer * renderer, FontManager * fo
     theme(renderer, options, Theme::NONE),
     pause_screen(renderer, fonts, options, _("Game Paused"), _("press the confirm button to exit")),
     win_screen(renderer, fonts, options, _("Level Finished!"), _("press the confirm button to continue")),
-    lose_screen(renderer, fonts, options, _("Level Failed"), _("press the confirm button to restart"))
+    lose_screen(renderer, fonts, options, _("Level Failed, continue?"), _("press the confirm button to try again"))
 {
     this->renderer = renderer;
     this->fonts = fonts;
@@ -22,26 +22,15 @@ GameStateChallenge::GameStateChallenge(SDL_Renderer * renderer, FontManager * fo
 }
 
 GameStateChallenge::~GameStateChallenge() {
-    SDL_DestroyTexture(text_attempts);
-    SDL_DestroyTexture(text_attempts_number);
     delete(this->board);
 }
 
 void GameStateChallenge::update() {
-    if (this->attempts == 0) {
-        if(this->options->getChallengeModeHighscore() < this->level) {
-            this->options->setChallengeModeHighscore(this->level);
-        }
-        this->options->resetChallengeMode();
-        this->next_state = State::GAMEOVER;
-        this->done = true;
-    } else if (this->board->isCompleted() && !this->completed) {
+    if (this->board->isCompleted() && !this->completed) {
         this->theme.pause();
         this->sounds->play(Sound::COMPLETED);
         this->completed = true;
     } else if (!this->board->hasMovesLeft() && !this->failed && !this->completed) {
-        this->attempts--;
-        this->attempts_changed = true;
         this->theme.pause();
         this->sounds->play(Sound::FAILED);
         this->failed = true;
@@ -63,7 +52,6 @@ void GameStateChallenge::handleEvents(std::vector<Event> events) {
     for(Event event: events) {
         if (event == Event::QUIT) {
             this->options->setChallengeModeLevel(this->level);
-            this->options->setChallengeModeLives(this->attempts);
             this->next_state = State::EXIT;
             this->done = true;
             return;
@@ -82,18 +70,23 @@ void GameStateChallenge::handleEvents(std::vector<Event> events) {
                 if (this->level % 5 == 0) {
                     this->required_matches += 1;
                 }
-                this->board->loadLevel(this->width, this->height, this->moves, ++this->required_matches, ++this->level, ++this->seed);
+                this->board->loadLevel(this->width, this->height, this->moves, this->required_matches, this->level, this->seed);
             }
         } else if (this->failed) {
             if (event == Event::CONFIRM) {
                 this->failed = false;
                 this->board->reset();
                 this->theme.unpause();
+            } else if (event == Event::CANCEL) {
+                if(this->options->getChallengeModeHighscore() < this->level) {
+                    this->options->setChallengeModeHighscore(this->level);
+                }
+                this->options->resetChallengeMode();
+                this->done = true;
             }
         } else if (this->paused) {
             if (event == Event::CONFIRM) {
                 this->options->setChallengeModeLevel(this->level);
-                this->options->setChallengeModeLives(this->attempts);
                 this->done = true;
             } else if (event == Event::CANCEL || event == Event::MENU) {
                 this->paused = false;
@@ -141,12 +134,6 @@ void GameStateChallenge::loadLevel() {
     );
 
     this->theme.switchTheme(this->level - 1);
-    if (this->level > 1) {
-        this->attempts = this->options->getChallengeModeLives();
-    } else {
-        this->attempts = 3;
-    }
-    this->attempts_changed = true;
 }
 
 State GameStateChallenge::getNextState() {
