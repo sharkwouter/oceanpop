@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-18 20:56+0100\n"
+"POT-Creation-Date: 2024-11-23 00:24+0100\n"
 "PO-Revision-Date: 2024-07-18 11:07+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -17,19 +17,19 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 3.4.4\n"
 
-#: ../src/BoardManager.cpp:536 ../src/BoardManager.cpp:702
+#: ../src/BoardManager.cpp:534 ../src/BoardManager.cpp:700
 msgid " moves"
 msgstr " acties"
 
-#: ../src/BoardManager.cpp:536
+#: ../src/BoardManager.cpp:534
 msgid " points in "
 msgstr " punten in "
 
-#: ../src/states/CreditsState.cpp:188
+#: ../src/states/CreditsState.cpp:195
 msgid "# could not open credits file"
 msgstr "# credits bestand kon niet geopend worden"
 
-#: ../src/states/CreditsState.cpp:15
+#: ../src/states/CreditsState.cpp:221
 msgid "Credits"
 msgstr "Credits"
 
@@ -46,7 +46,7 @@ msgstr "Game Over!"
 msgid "Game Paused"
 msgstr "Spel gepauseerd"
 
-#: ../src/states/HighscoreState.cpp:12
+#: ../src/states/HighscoreState.cpp:82
 msgid "High Scores"
 msgstr "Resultaten"
 
@@ -62,92 +62,92 @@ msgstr "Level Afgerond!"
 msgid "Not Yet Implemented"
 msgstr "Nog Niet Geimplementeerd"
 
-#: ../src/states/OptionsState.cpp:277
+#: ../src/states/OptionsState.cpp:239
 msgid "Options"
 msgstr "opties"
 
-#: ../src/BoardManager.cpp:534
+#: ../src/BoardManager.cpp:532
 msgid "Relax there is no goal"
 msgstr "Relax, er zijn geen punten"
 
-#: ../src/BoardManager.cpp:536
+#: ../src/BoardManager.cpp:534
 msgid "Score "
 msgstr "Haal "
 
-#: ../src/states/ModeSelectState.cpp:25
+#: ../src/states/OptionsState.cpp:260
+msgid "apply"
+msgstr "toepassen"
+
+#: ../src/states/ModeSelectState.cpp:140
 msgid "challenge mode"
 msgstr "uitdagingsmodus"
 
-#: ../src/states/OptionsState.cpp:177
+#: ../src/states/OptionsState.cpp:187
 msgid "change music upon level switch: "
 msgstr "wissel muziek bij level overgang: "
 
-#: ../src/states/MenuState.cpp:32
+#: ../src/states/MenuState.cpp:144
 msgid "credits"
 msgstr "credits"
 
-#: ../src/states/ModeSelectState.cpp:26
+#: ../src/states/ModeSelectState.cpp:141
 msgid "ends only when lives run out"
 msgstr "eindigt alleen als je levens op zijn"
 
-#: ../src/states/MenuState.cpp:35
+#: ../src/states/MenuState.cpp:147
 msgid "exit"
 msgstr "stoppen"
 
-#: ../src/states/OptionsState.cpp:181
+#: ../src/states/OptionsState.cpp:191
 msgid "full screen: "
 msgstr "volledig scherm"
 
-#: ../src/states/MenuState.cpp:26
+#: ../src/states/MenuState.cpp:138
 msgid "high scores"
 msgstr "resultaten"
 
-#: ../src/states/HighscoreState.cpp:17
+#: ../src/states/HighscoreState.cpp:87
 msgid "highest level reached in challenge mode: "
 msgstr "hoogste level bereikt in uitdagingsmodus: "
 
-#: ../src/states/MenuState.cpp:23
+#: ../src/states/MenuState.cpp:135
 msgid "how to play"
 msgstr "hoe het werkt"
 
-#: ../src/BoardManager.cpp:682
+#: ../src/BoardManager.cpp:680
 msgid "level "
 msgstr "level "
 
-#: ../src/states/GameStateChallenge.cpp:114
-msgid "lives left"
-msgstr "levens "
-
-#: ../src/states/ModeSelectState.cpp:30
+#: ../src/states/ModeSelectState.cpp:145
 msgid "match without consequences"
 msgstr "match zonder consequenties"
 
-#: ../src/states/HighscoreState.cpp:18
+#: ../src/states/HighscoreState.cpp:88
 msgid "matches in relaxed mode: "
 msgstr "matches in relaxmodus: "
 
-#: ../src/states/OptionsState.cpp:167
+#: ../src/states/OptionsState.cpp:177
 msgid "music volume: "
 msgstr "muziekvolume: "
 
-#: ../src/states/HighscoreState.cpp:15 ../src/states/OptionsState.cpp:177
-#: ../src/states/OptionsState.cpp:181
+#: ../src/states/HighscoreState.cpp:85 ../src/states/OptionsState.cpp:187
+#: ../src/states/OptionsState.cpp:191
 msgid "no"
 msgstr "nee"
 
-#: ../src/states/MenuState.cpp:29
+#: ../src/states/MenuState.cpp:141
 msgid "options"
 msgstr "opties"
 
-#: ../src/states/MenuState.cpp:20
+#: ../src/states/MenuState.cpp:132
 msgid "play"
 msgstr "speel"
 
-#: ../src/states/ModeSelectState.cpp:22
+#: ../src/states/ModeSelectState.cpp:137
 msgid "play pre-made levels"
 msgstr "speel voorgeprogrammeerde levels"
 
-#: ../src/states/HighscoreState.cpp:13
+#: ../src/states/HighscoreState.cpp:83
 msgid "press confirm to go back"
 msgstr "druk op bevestigen om terug te gaan"
 
@@ -166,35 +166,31 @@ msgstr "druk op bevestigen om te sluiten"
 msgid "press the confirm button to restart"
 msgstr "druk op bevestigen om het opnieuw te proberen"
 
-#: ../src/states/ModeSelectState.cpp:29
+#: ../src/states/ModeSelectState.cpp:144
 msgid "relaxed mode"
 msgstr "relaxmodus"
 
-#: ../src/states/OptionsState.cpp:185
-msgid "resolution: "
-msgstr "resolutie: "
-
-#: ../src/states/ModeSelectState.cpp:33 ../src/states/OptionsState.cpp:301
+#: ../src/states/ModeSelectState.cpp:148 ../src/states/OptionsState.cpp:263
 msgid "return to menu"
 msgstr "terug naar menu"
 
-#: ../src/states/OptionsState.cpp:157
+#: ../src/states/CreditsState.cpp:222
+msgid "scroll with confirm and cancel"
+msgstr "scroll met bevestigen en terug"
+
+#: ../src/states/OptionsState.cpp:167
 msgid "sound volume: "
 msgstr "volume geluiden: "
 
-#: ../src/states/ModeSelectState.cpp:21
+#: ../src/states/ModeSelectState.cpp:136
 msgid "standard mode"
 msgstr "standardmodus"
 
-#: ../src/states/HighscoreState.cpp:16
+#: ../src/states/HighscoreState.cpp:86
 msgid "standard mode completed: "
 msgstr "standardmodus afgesloten: "
 
-#: ../src/states/CreditsState.cpp:16
-msgid "use up, down, confirm and back to scroll and menu to go back"
-msgstr "gebruik naar boven, naar beneden, bevestigen en terug om te scrollen en menu om terug te gaan"
-
-#: ../src/states/HighscoreState.cpp:15 ../src/states/OptionsState.cpp:177
-#: ../src/states/OptionsState.cpp:181
+#: ../src/states/HighscoreState.cpp:85 ../src/states/OptionsState.cpp:187
+#: ../src/states/OptionsState.cpp:191
 msgid "yes"
 msgstr "ja"
