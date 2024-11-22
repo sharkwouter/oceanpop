@@ -33,7 +33,6 @@ public:
     int getStandardModeLevel();
     int getChallengeModeHighscore();
     int getChallengeModeLevel();
-    int getChallengeModeLives();
     int getRelaxedModeScore();
     unsigned int getRelaxedModeSeed();
     std::vector<std::vector<ShellType>> getRelaxedModeShells();
@@ -52,7 +51,6 @@ public:
     void setStandardModeLevel(int value);
     void setChallengeModeHighscore(int value);
     void setChallengeModeLevel(int value);
-    void setChallengeModeLives(int value);
     void setRelaxedModeScore(int value);
     void setRelaxedModeSeed(unsigned int value);
     void setRelaxedModeShells(std::vector<std::vector<ShellType>> value);

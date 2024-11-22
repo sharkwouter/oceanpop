@@ -97,6 +97,7 @@ void ModeSelectState::draw(SDL_Renderer * renderer) {
         rect.x -= rect.w/2;
 
         SDL_Rect sub_rect;
+        sub_rect.h = 0;
         if (sub_texts[i] != NULL) {
             sub_rect = {this->options->getScreenWidth()/2, rect.y+rect.h, 0, 0};
             SDL_QueryTexture(sub_texts[i], NULL, NULL, &sub_rect.w, &sub_rect.h);
@@ -106,7 +107,7 @@ void ModeSelectState::draw(SDL_Renderer * renderer) {
         // Set the texture color
         if(i == selection) {
             // Draw selection box
-            SDL_Rect rect_selection = {0, rect.y, this->options->getScreenWidth(), rect.h};
+            SDL_Rect rect_selection = {0, rect.y, this->options->getScreenWidth(), rect.h + sub_rect.h};
             SDL_SetRenderDrawColor(renderer, COLOR_BOARD.r, COLOR_BOARD.g, COLOR_BOARD.b, COLOR_BOARD.a);
             SDL_RenderFillRect(renderer, &rect_selection);
 
@@ -138,7 +139,7 @@ void ModeSelectState::loadTexts() {
                 break;
             case Mode::CHALLENGE:
                 option_text = _("challenge mode");
-                option_sub_text = _("ends only when lives run out");
+                option_sub_text = _("ends only when you can no longer continue");
                 break;
             case Mode::RELAXED:
                 option_text = _("relaxed mode");
