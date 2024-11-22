@@ -9,42 +9,6 @@
 MenuState::MenuState(SDL_Renderer * renderer, FontManager * fonts, SoundManager * sounds, OptionManager * options) : renderer(renderer), fonts(fonts), sounds(sounds), options(options),
     theme(renderer, options, Theme::MENU)
 {
-    this->text_title = fonts->getTexture(renderer, "OceanPop", FontType::TITLE, {COLOR_MENU_TITLE.r, COLOR_MENU_TITLE.g, COLOR_MENU_TITLE.b, COLOR_MENU_TITLE.a});
-    this->text_start_y = this->options->getScreenHeight() / 4;
-
-    for (int i = 1; i < ((int) State::EXIT + 1); i++) {
-        std::string option_text;
-        std::string option_sub_text;
-        switch ((State) i) {
-            case State::PLAY:
-                option_text = _("play");
-                break;
-            case State::HOWTO:
-                option_text = _("how to play");
-                break;
-            case State::HIGHSCORES:
-                option_text = _("high scores");
-                break;
-            case State::OPTIONS:
-                option_text = _("options");
-                break;
-            case State::CREDITS:
-                option_text = _("credits");
-                break;
-            case State::EXIT:
-                option_text = _("exit");
-                break;
-            default:
-                option_text = "?????????";
-                break;
-        }
-        texts.push_back(fonts->getTexture(renderer, option_text, FontType::NORMAL, {255, 255, 255, 255}));
-        if (!option_sub_text.empty()) {
-            sub_texts.push_back(fonts->getTexture(renderer, option_sub_text, FontType::SMALL, {255, 255, 255, 255}));
-        } else {
-            sub_texts.push_back(NULL);
-        }
-    }
 }
 
 MenuState::~MenuState() {
@@ -92,6 +56,9 @@ void MenuState::handleEvents(std::vector<Event> events) {
                     }
                 }
                 break;
+            case Event::WINDOW_RESIZE:
+                this->updateSizing();
+                break;
             default:
                 break;
         }
@@ -105,6 +72,10 @@ void MenuState::update() {
 
 void MenuState::draw(SDL_Renderer * renderer) {
     this->theme.draw(renderer);
+
+    if (this->texts.empty()) {
+        this->loadTexts();
+    }
 
     // Draw title
     SDL_Rect rect_title = {this->options->getScreenWidth() / 2, this->text_start_y / 2, 0, 0};
@@ -146,6 +117,62 @@ void MenuState::draw(SDL_Renderer * renderer) {
             SDL_RenderCopy(renderer, sub_texts[i], NULL, &sub_rect);
         }
     }
+}
+
+void MenuState::loadTexts() {
+    this->text_title = this->fonts->getTexture(this->renderer, "OceanPop", FontType::TITLE, {COLOR_MENU_TITLE.r, COLOR_MENU_TITLE.g, COLOR_MENU_TITLE.b, COLOR_MENU_TITLE.a});
+    this->text_start_y = this->options->getScreenHeight() / 4;
+
+    for (int i = 1; i < ((int) State::EXIT + 1); i++) {
+        std::string option_text;
+        std::string option_sub_text;
+        switch ((State) i) {
+            case State::PLAY:
+                option_text = _("play");
+                break;
+            case State::HOWTO:
+                option_text = _("how to play");
+                break;
+            case State::HIGHSCORES:
+                option_text = _("high scores");
+                break;
+            case State::OPTIONS:
+                option_text = _("options");
+                break;
+            case State::CREDITS:
+                option_text = _("credits");
+                break;
+            case State::EXIT:
+                option_text = _("exit");
+                break;
+            default:
+                option_text = "?????????";
+                break;
+        }
+        texts.push_back(fonts->getTexture(renderer, option_text, FontType::NORMAL, {255, 255, 255, 255}));
+        if (!option_sub_text.empty()) {
+            sub_texts.push_back(fonts->getTexture(renderer, option_sub_text, FontType::SMALL, {255, 255, 255, 255}));
+        } else {
+            sub_texts.push_back(NULL);
+        }
+    }
+}
+
+void MenuState::updateSizing() {
+    for (int i = 0; i < texts.size(); i++) {
+        SDL_DestroyTexture(texts[i]);
+        texts[i] = NULL;
+        if (this->sub_texts[i]) {
+            SDL_DestroyTexture(sub_texts[i]);
+            sub_texts[i] = NULL;
+        }
+    }
+    if (this->text_title) {
+        SDL_DestroyTexture(this->text_title);
+        this->text_title = NULL;
+    }
+    this->texts.clear();
+    this->sub_texts.clear();
 }
 
 int MenuState::getOptionY(int number) {
