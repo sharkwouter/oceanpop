@@ -8,6 +8,7 @@
 
 class TextureManager {
 private:
+    SDL_Renderer * renderer;
     OptionManager * options;
 
     SDL_Texture* texture_shell;
@@ -17,6 +18,7 @@ public:
 
     SDL_Texture * load(SDL_Renderer * renderer, const std::string &file);
     SDL_Texture * getShellTexture() { return texture_shell;};
+    void reload();
 };
 
 #endif // TEXTUREMANAGER_HPP

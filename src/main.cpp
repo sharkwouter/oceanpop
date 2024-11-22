@@ -31,7 +31,11 @@ void run() {
 
     while (!state_manager.isDone()) {
         std::vector<Event> events = input_manager.getEvents();
-
+        for(Event event : events) {
+            if (event == Event::WINDOW_RESIZE) {
+                window.updateSize();
+            }
+        }
         state_manager.handleEvents(events);
         state_manager.update();
 

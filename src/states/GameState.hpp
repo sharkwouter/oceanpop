@@ -49,11 +49,9 @@ private:
     int height;
     int current_theme;
     std::vector<std::vector<ShellType>> shells;
-    SDL_Point position;
 
     State next_state = State::MENU;
 
-    SDL_Point calculatePosition(int width, int height);
     int getTotalLevels();
     void loadLevel(int level);
     std::vector<std::vector<ShellType>> loadShells(Json::Value array);

@@ -72,8 +72,6 @@ void GameStateRelaxed::loadLevel() {
     this->width = DEFAULT_BOARD_WIDTH;
     this->height = DEFAULT_BOARD_HEIGHT;
 
-    this->position = calculatePosition(this->width, this->height);
-
     int moves = 0;
     int required_matches = 0;
     int level = 0;
@@ -85,8 +83,6 @@ void GameStateRelaxed::loadLevel() {
             this->fonts,
             this->sounds,
             this->options,
-            this->position.x,
-            this->position.y,
             this->width,
             this->height,
             moves,
@@ -100,8 +96,6 @@ void GameStateRelaxed::loadLevel() {
             this->fonts,
             this->sounds,
             this->options,
-            this->position.x,
-            this->position.y,
             this->options->getRelaxedModeShells(),
             moves,
             required_matches,
@@ -111,10 +105,6 @@ void GameStateRelaxed::loadLevel() {
     }
 
     this->board->setMatches(this->options->getRelaxedModeScore());
-}
-
-SDL_Point GameStateRelaxed::calculatePosition(int width, int height) {
-    return {(this->options->getScreenWidth()-this->options->getShellSize()*width)/2, (this->options->getScreenHeight()-this->options->getShellSize()*(height+1))/2};
 }
 
 State GameStateRelaxed::getNextState() {

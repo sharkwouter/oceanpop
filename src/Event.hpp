@@ -14,6 +14,7 @@ enum class Event {
     QUIT,
     NEXT,
     PREVIOUS,
+    WINDOW_RESIZE,
     OTHER
 };
 
