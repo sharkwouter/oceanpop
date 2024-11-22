@@ -13,7 +13,7 @@ CreditsState::CreditsState(SDL_Renderer * renderer, FontManager * fonts, SoundMa
     theme(renderer, options, Theme::MENU)
 {
     this->text_title = fonts->getTexture(renderer, _("Credits"), FontType::TITLE, {COLOR_MENU_TITLE.r, COLOR_MENU_TITLE.g, COLOR_MENU_TITLE.b, COLOR_MENU_TITLE.a});
-    this->text_bottom = fonts->getTexture(renderer, _("use up, down, confirm and back to scroll and menu to go back"), FontType::NORMAL, {255, 255, 255, 255});
+    this->text_bottom = fonts->getTexture(renderer, _("scroll with confirm and cancel"), FontType::NORMAL, {255, 255, 255, 255});
 
     this->loadCredits();
     this->empty_line_height = this->options->getShellSize()/4;
@@ -99,7 +99,47 @@ void CreditsState::draw(SDL_Renderer * renderer) {
     rect_bottom.y -= rect_bottom.h * 1.5;
     SDL_RenderCopy(renderer, text_bottom, NULL, &rect_bottom);
 
-    // Draw options
+    // Draw background
+    SDL_Rect rect_background;
+    rect_background.x = 0;
+    rect_background.y = this->options->getScreenHeight()/4;
+    rect_background.w = this->options->getScreenWidth();
+    rect_background.h = rect_bottom.y - rect_background.y;
+
+    SDL_SetRenderDrawColor(renderer, COLOR_BOARD.r, COLOR_BOARD.g, COLOR_BOARD.b, COLOR_BOARD.a);
+    SDL_RenderFillRect(renderer, &rect_background);
+
+    // Draw scroll bar pointer
+    SDL_Rect rect_pointer;
+    rect_pointer.w = this->options->getShellSize() / 4;
+    rect_pointer.x = this->options->getScreenWidth() - rect_pointer.w;
+    rect_pointer.y = rect_background.y + ((float) rect_background.h / (float) this->credits.size() * this->position);
+    rect_pointer.h = (float) rect_background.h / (float) this->credits.size() * (this->last_line_visible - this->position);
+
+    SDL_SetRenderDrawColor(renderer, 255, 255, 255, COLOR_BOARD.a);
+    SDL_RenderFillRect(renderer, &rect_pointer);
+
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+    SDL_RenderDrawLine(renderer,
+        rect_pointer.x,
+        rect_background.y,
+        rect_pointer.x,
+        rect_background.y + rect_background.h
+    );
+    SDL_RenderDrawLine(renderer,
+        0,
+        rect_background.y,
+        this->options->getScreenWidth(),
+        rect_background.y
+    );
+    SDL_RenderDrawLine(renderer,
+        0,
+        rect_background.y + rect_background.h,
+        this->options->getScreenWidth() + rect_background.w,
+        rect_background.y + rect_background.h
+    );
+
+    // Draw credits text
     int current_y = this->options->getScreenHeight()/4;
     for(int i = this->position; i < (int) this->credits.size(); i++) {
         if (this->credits[i].empty()) {
@@ -135,46 +175,6 @@ void CreditsState::draw(SDL_Renderer * renderer) {
             this->last_line_visible = i;
         }
     }
-
-    // Draw scroll bar
-    SDL_Rect rect_scrollbar;
-    rect_scrollbar.w = this->options->getShellSize() / 4;
-    rect_scrollbar.x = this->options->getScreenWidth() - rect_scrollbar.w;
-    rect_scrollbar.y = rect_title.y + rect_title.h;
-    rect_scrollbar.h = rect_bottom.y - rect_scrollbar.y;
-
-    SDL_SetRenderDrawColor(renderer, COLOR_BOARD.r, COLOR_BOARD.g, COLOR_BOARD.b, COLOR_BOARD.a);
-    SDL_RenderFillRect(renderer, &rect_scrollbar);
-
-    // Draw scroll bar
-    SDL_Rect rect_pointer;
-    rect_pointer.x = rect_scrollbar.x;
-    rect_pointer.w = rect_scrollbar.w;
-    rect_pointer.y = rect_scrollbar.y + ((float) rect_scrollbar.h / (float) this->credits.size() * this->position);
-    rect_pointer.h = (float) rect_scrollbar.h / (float) this->credits.size() * (this->last_line_visible - this->position);
-
-    SDL_SetRenderDrawColor(renderer, 255, 255, 255, COLOR_BOARD.a);
-    SDL_RenderFillRect(renderer, &rect_pointer);
-
-    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-    SDL_RenderDrawLine(renderer,
-        rect_scrollbar.x,
-        rect_scrollbar.y,
-        rect_scrollbar.x,
-        rect_scrollbar.y + rect_scrollbar.h
-    );
-    SDL_RenderDrawLine(renderer,
-        rect_scrollbar.x,
-        rect_scrollbar.y,
-        rect_scrollbar.x + rect_scrollbar.w,
-        rect_scrollbar.y
-    );
-    SDL_RenderDrawLine(renderer,
-        rect_scrollbar.x,
-        rect_scrollbar.y + rect_scrollbar.h,
-        rect_scrollbar.x + rect_scrollbar.w,
-        rect_scrollbar.y + rect_scrollbar.h
-    );
 }
 
 void CreditsState::loadCredits() {
