@@ -10,39 +10,7 @@
 ModeSelectState::ModeSelectState(SDL_Renderer * renderer, FontManager * fonts, SoundManager * sounds, OptionManager * options) : renderer(renderer), fonts(fonts), sounds(sounds), options(options),
     theme(renderer, options, Theme::MENU)
 {
-    this->text_title = fonts->getTexture(renderer, "Select a Mode", FontType::TITLE, {COLOR_MENU_TITLE.r, COLOR_MENU_TITLE.g, COLOR_MENU_TITLE.b, COLOR_MENU_TITLE.a});
-    this->text_start_y = this->options->getScreenHeight() / 4;
-
-    for (int i = 0; i < ((int) Mode::GO_BACK + 1); i++) {
-        std::string option_text;
-        std::string option_sub_text;
-        switch ((Mode) i) {
-            case Mode::STANDARD:
-                option_text = _("standard mode");
-                option_sub_text = _("play pre-made levels");
-                break;
-            case Mode::CHALLENGE:
-                option_text = _("challenge mode");
-                option_sub_text = _("ends only when lives run out");
-                break;
-            case Mode::RELAXED:
-                option_text = _("relaxed mode");
-                option_sub_text = _("match without consequences");
-                break;
-            case Mode::GO_BACK:
-                option_text = _("return to menu");
-                break;
-            default:
-                option_text = "?????????";
-                break;
-        }
-        texts.push_back(fonts->getTexture(renderer, option_text, FontType::NORMAL, {255, 255, 255, 255}));
-        if (!option_sub_text.empty()) {
-            sub_texts.push_back(fonts->getTexture(renderer, option_sub_text, FontType::SMALL, {255, 255, 255, 255}));
-        } else {
-            sub_texts.push_back(NULL);
-        }
-    }
+    this->loadTexts();
 }
 
 ModeSelectState::~ModeSelectState() {
@@ -94,6 +62,8 @@ void ModeSelectState::handleEvents(std::vector<Event> events) {
                     }
                 }
                 break;
+            case Event::WINDOW_RESIZE:
+                this->updateSizing();
             default:
                 break;
         }
@@ -107,6 +77,10 @@ void ModeSelectState::update() {
 
 void ModeSelectState::draw(SDL_Renderer * renderer) {
     this->theme.draw(renderer);
+
+    if (this->texts.empty()) {
+        this->loadTexts();
+    }
 
     // Draw title
     SDL_Rect rect_title = {this->options->getScreenWidth() / 2, this->text_start_y / 2, 0, 0};
@@ -148,6 +122,59 @@ void ModeSelectState::draw(SDL_Renderer * renderer) {
             SDL_RenderCopy(renderer, sub_texts[i], NULL, &sub_rect);
         }
     }
+}
+
+void ModeSelectState::loadTexts() {
+    this->text_title = fonts->getTexture(renderer, "Select a Mode", FontType::TITLE, {COLOR_MENU_TITLE.r, COLOR_MENU_TITLE.g, COLOR_MENU_TITLE.b, COLOR_MENU_TITLE.a});
+    this->text_start_y = this->options->getScreenHeight() / 4;
+
+    for (int i = 0; i < ((int) Mode::GO_BACK + 1); i++) {
+        std::string option_text;
+        std::string option_sub_text;
+        switch ((Mode) i) {
+            case Mode::STANDARD:
+                option_text = _("standard mode");
+                option_sub_text = _("play pre-made levels");
+                break;
+            case Mode::CHALLENGE:
+                option_text = _("challenge mode");
+                option_sub_text = _("ends only when lives run out");
+                break;
+            case Mode::RELAXED:
+                option_text = _("relaxed mode");
+                option_sub_text = _("match without consequences");
+                break;
+            case Mode::GO_BACK:
+                option_text = _("return to menu");
+                break;
+            default:
+                option_text = "?????????";
+                break;
+        }
+        texts.push_back(fonts->getTexture(renderer, option_text, FontType::NORMAL, {255, 255, 255, 255}));
+        if (!option_sub_text.empty()) {
+            sub_texts.push_back(fonts->getTexture(renderer, option_sub_text, FontType::SMALL, {255, 255, 255, 255}));
+        } else {
+            sub_texts.push_back(NULL);
+        }
+    }
+}
+
+void ModeSelectState::updateSizing() {
+    for (size_t i = 0; i < texts.size(); i++) {
+        SDL_DestroyTexture(texts[i]);
+        texts[i] = NULL;
+        if (this->sub_texts[i]) {
+            SDL_DestroyTexture(sub_texts[i]);
+            sub_texts[i] = NULL;
+        }
+    }
+    if (this->text_title) {
+        SDL_DestroyTexture(this->text_title);
+        this->text_title = NULL;
+    }
+    this->texts.clear();
+    this->sub_texts.clear();
 }
 
 int ModeSelectState::getOptionY(int number) {

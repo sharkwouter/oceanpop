@@ -29,6 +29,8 @@ private:
     int selection = 0;
 
     int getOptionY(int number);
+    void loadTexts();
+    void updateSizing();
 public:
     ModeSelectState(SDL_Renderer * renderer, FontManager * fonts, SoundManager * sounds, OptionManager * options);
     ~ModeSelectState();

@@ -30,6 +30,8 @@ private:
     State next_state = State::MENU;
 
     int getTextY(int number);
+    void loadTexts();
+    void updateSizing();
 public:
     HighscoreState(SDL_Renderer * renderer, FontManager * fonts, SoundManager * sounds, OptionManager * options);
     ~HighscoreState();
