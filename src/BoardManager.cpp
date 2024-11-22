@@ -61,7 +61,7 @@ void BoardManager::storeLevel(Board * board, int moves, int required_matches, in
     }
     this->board = std::move(board);
 
-    this->setSizing();
+    this->updateSizing();
 
     this->selected.x = this->board->getWidth() / 2;
     this->selected.y = this->board->getHeight() / 2;
@@ -145,9 +145,6 @@ void BoardManager::handleEvents(std::vector<Event> events) {
                 break;
             case Event::MOUSEMOVE:
                 moveCursorMouse();
-                break;
-            case Event::WINDOW_RESIZE:
-                this->setSizing();
                 break;
             default:
                 break;
@@ -734,7 +731,7 @@ void BoardManager::drawInfo(SDL_Renderer * renderer) {
     }
 }
 
-void BoardManager::setSizing() {
+void BoardManager::updateSizing() {
     // Set the board location and size
     this->rect_board.w = this->options->getShellSize() * this->board->getWidth();
     this->rect_board.h = this->options->getShellSize() * this->board->getHeight();

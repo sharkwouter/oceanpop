@@ -68,6 +68,11 @@ void GameState::handleEvents(std::vector<Event> events) {
             this->next_state = State::EXIT;
             this->done = true;
             return;
+        } else if (event == Event::WINDOW_RESIZE) {
+            this->pause_screen.updateSizing();
+            this->win_screen.updateSizing();
+            this->lose_screen.updateSizing();
+            this->board->updateSizing();
         }
          if (this->completed) {
             if (event == Event::CONFIRM) {

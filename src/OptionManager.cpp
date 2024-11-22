@@ -254,7 +254,11 @@ void OptionManager::setScreenResolution(int width, int height, int refresh_rate)
         return;
     }
 
-    this->options["shell_size"] = new_shell_size;
+    if (this->options["shell_size"] != new_shell_size) {
+        this->options["shell_size"] = new_shell_size;
+        this->shell_size_changed = true;
+    }
+
     this->options["screen_width"] = width;
     this->options["screen_height"] = height;
     this->options["screen_refresh_rate"] = refresh_rate;
@@ -264,4 +268,10 @@ void OptionManager::setScreenResolution(int width, int height, int refresh_rate)
 
 int OptionManager::getShellSize() {
     return this->options.get("shell_size", DEFAULT_SHELL_SIZE).asInt();
+}
+
+bool OptionManager::getShellSizeChanged() {
+    bool current_shell_size_changed = this->shell_size_changed;
+    this->shell_size_changed = false;
+    return current_shell_size_changed;
 }

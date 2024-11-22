@@ -29,6 +29,8 @@ void WonState::handleEvents(std::vector<Event> events) {
         } else if (event == Event::QUIT) {
             this->next_state = State::EXIT;
             this->done = true;
+        } else if (event == Event::WINDOW_RESIZE) {
+            this->screen_text.updateSizing();
         }
     }
 }

@@ -44,6 +44,9 @@ void GameStateRelaxed::handleEvents(std::vector<Event> events) {
             this->options->setRelaxedModeSeed(this->board->getCurrentSeed());
             this->next_state = State::EXIT;
             this->done = true;
+        } else if (event == Event::WINDOW_RESIZE) {
+            this->pause_screen.updateSizing();
+            this->board->updateSizing();
         }
 
         if (this->paused) {
