@@ -48,7 +48,7 @@ void CreditsState::handleEvents(std::vector<Event> events) {
                 }
                 break;
             case Event::CONFIRM:
-                if (this->last_line_visible >= (int) this->credits.size() - 2) {
+                if (this->last_line_visible >= (int) this->credits.size() - 1) {
                     this->done = true;
                     break;
                 }
