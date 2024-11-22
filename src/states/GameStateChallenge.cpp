@@ -82,6 +82,7 @@ void GameStateChallenge::handleEvents(std::vector<Event> events) {
                     this->options->setChallengeModeHighscore(this->level);
                 }
                 this->options->resetChallengeMode();
+                this->next_state = State::HIGHSCORES;
                 this->done = true;
             }
         } else if (this->paused) {
