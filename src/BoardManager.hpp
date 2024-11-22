@@ -93,8 +93,6 @@ private:
     bool isFalling(SDL_Point point);
     bool isDoubleMatch(Match match);
 
-    void setSizing();
-
     void drawCursor(SDL_Renderer * renderer);
     void drawBoard(SDL_Renderer * renderer);
     void drawScoringBox(SDL_Renderer * renderer);
@@ -124,6 +122,8 @@ public:
     int getRemainingMoves() {return moves;};
     unsigned int getCurrentSeed() {return board->getCurrentSeed();};
     std::vector<std::vector<ShellType>> getCurrentShells() {return board->getShells();};
+
+    void updateSizing();
 };
 
 #endif // BOARDMANAGER_HPP

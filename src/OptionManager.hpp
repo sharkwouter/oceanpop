@@ -17,6 +17,8 @@ private:
     std::string optionsFile;
 
     Json::Value options;
+    
+    bool shell_size_changed = false;
 
     std::vector<std::vector<ShellType>> loadShells(std::string field);
     void writeShells(std::string field, std::vector<std::vector<ShellType>> shells);
@@ -41,6 +43,7 @@ public:
     int getScreenRefreshRate();
 
     int getShellSize();
+    bool getShellSizeChanged();
 
     void setMusicVolume(int value);
     void setSoundVolume(int value);

@@ -18,10 +18,14 @@ private:
 
     SDL_Texture * title = NULL;
     SDL_Texture * subtitle = NULL;
+
+    std::string title_string;
+    std::string subtitle_string;
 public:
     PauseScreen(SDL_Renderer * renderer, FontManager * fonts, OptionManager * options, std::string title, std::string subtitle);
     ~PauseScreen();
 
+    void updateSizing();
     void draw(SDL_Renderer *renderer);
 };
 
