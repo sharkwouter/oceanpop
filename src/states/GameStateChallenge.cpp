@@ -125,7 +125,7 @@ void GameStateChallenge::loadLevel() {
         this->required_matches = CHALLENGE_MODE_MAX_REQUIRED_MATCHES;
     }
     if (this->level == 1) {
-        srand(time(0));
+        srand(SDL_GetTicks());
         this->options->setChallengeModeSeed(rand());
         this->seed = this->options->getChallengeModeSeed();
     } else {
