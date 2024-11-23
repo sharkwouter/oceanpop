@@ -118,6 +118,9 @@ Event EventManager::getEventFromMouseButton(Uint8 button) {
         case SDL_BUTTON_RIGHT:
             event = Event::CANCEL;
             break;
+        case SDL_BUTTON_MIDDLE:
+            event = Event::MENU;
+            break;
         default:
             event = Event::OTHER;
             break;

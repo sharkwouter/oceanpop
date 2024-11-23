@@ -11,6 +11,7 @@
 #include "states/MenuState.hpp"
 #include "states/NotImplementedState.hpp"
 #include "states/WonState.hpp"
+#include "states/HowToState.hpp"
 #include "states/State.hpp"
 
 StateManager::StateManager(SDL_Renderer * renderer, FontManager * fonts, SoundManager * sounds, OptionManager * options, SDL_Window * window) : renderer(renderer), fonts(fonts), sounds(sounds), options(options), window(window),
@@ -51,9 +52,9 @@ void StateManager::switchState() {
             case State::PLAY:
                 this->state = new ModeSelectState(renderer, fonts, sounds, options);
                 break;
-            // case State::HOWTO:
-            //     this->state = new ModeSelectState(renderer, fonts, sounds, options);
-            //     break;
+            case State::HOWTO:
+                this->state = new HowToState(renderer, fonts, sounds, options);
+                break;
             case State::HIGHSCORES:
                 this->state = new HighscoreState(renderer, fonts, sounds, options);
                 break;
