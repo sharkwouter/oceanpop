@@ -13,6 +13,8 @@ inline constexpr int MIN_SHELL_SIZE = 16;
 inline constexpr int MIN_SCREEN_WIDTH = MIN_SHELL_SIZE * 8;
 inline constexpr int MIN_SCREEN_HEIGHT = MIN_SHELL_SIZE * 8;
 
+inline constexpr int CHALLENGE_MODE_MAX_REQUIRED_MATCHES = 25;
+
 // Everything below this are defaults
 inline constexpr int DEFAULT_BOARD_WIDTH = 8;
 inline constexpr int DEFAULT_BOARD_HEIGHT = 7;

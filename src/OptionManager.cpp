@@ -180,6 +180,16 @@ void OptionManager::setChallengeModeLevel(int value) {
     write();
 }
 
+int OptionManager::getChallengeModeSeed() {
+    return this->options.get("challenge_mode_seed", 0).asInt();
+}
+
+
+void OptionManager::setChallengeModeSeed(int value) {
+    this->options["challenge_mode_seed"] = value;
+    write();
+}
+
 int OptionManager::getRelaxedModeScore() {
     return this->options.get("relaxed_mode_score", 0).asInt();
 

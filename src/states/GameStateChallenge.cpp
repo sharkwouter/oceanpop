@@ -3,9 +3,11 @@
 #include <SDL_ttf.h>
 #include <cmath>
 #include <string>
+#include <cstdlib>
 #include "../colors.hpp"
 #include "../FontType.hpp"
 #include "../utils.hpp"
+#include "../constants.hpp"
 
 GameStateChallenge::GameStateChallenge(SDL_Renderer * renderer, FontManager * fonts, SoundManager * sounds, OptionManager * options) :
     theme(renderer, options, Theme::NONE),
@@ -67,7 +69,7 @@ void GameStateChallenge::handleEvents(std::vector<Event> events) {
                 this->theme.next();
                 this->level += 1;
                 this->seed += 1;
-                if (this->level % 5 == 0) {
+                if (this->level % 5 == 0 && this->required_matches < CHALLENGE_MODE_MAX_REQUIRED_MATCHES) {
                     this->required_matches += 1;
                 }
                 this->board->loadLevel(this->width, this->height, this->moves, this->required_matches, this->level, this->seed);
@@ -119,7 +121,16 @@ void GameStateChallenge::loadLevel() {
     this->moves = 10;
     this->level = this->options->getChallengeModeLevel();
     this->required_matches = 11 + (this->level / 5);
-    this->seed = this->level;
+    if (this->required_matches > CHALLENGE_MODE_MAX_REQUIRED_MATCHES) {
+        this->required_matches = CHALLENGE_MODE_MAX_REQUIRED_MATCHES;
+    }
+    if (this->level == 1) {
+        srand(time(0));
+        this->options->setChallengeModeSeed(rand());
+        this->seed = this->options->getChallengeModeSeed();
+    } else {
+        this->seed = this->options->getChallengeModeSeed() + level;
+    }
 
     this->board = new BoardManager(
         renderer,

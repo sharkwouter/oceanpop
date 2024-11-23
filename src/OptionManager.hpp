@@ -33,6 +33,7 @@ public:
     int getStandardModeLevel();
     int getChallengeModeHighscore();
     int getChallengeModeLevel();
+    int getChallengeModeSeed();
     int getRelaxedModeScore();
     unsigned int getRelaxedModeSeed();
     std::vector<std::vector<ShellType>> getRelaxedModeShells();
@@ -56,6 +57,7 @@ public:
     void setRelaxedModeShells(std::vector<std::vector<ShellType>> value);
     void setFullscreen(bool value);
     void setScreenResolution(int width, int height, int refresh_rate);
+    void setChallengeModeSeed(int seed);
 
     void resetChallengeMode();
     void resetStandardMode();
