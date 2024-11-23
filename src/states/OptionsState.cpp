@@ -105,6 +105,9 @@ void OptionsState::handleEvents(std::vector<Event> events) {
                 this->done = true;
                 break;
             case Event::MOUSEMOVE:
+                if(texts.empty()) {
+                    break;
+                }
                 SDL_GetMouseState(&mouse.x, &mouse.y);
                 if (mouse.y >= this->text_start_y) {
                     int item_size = (int)(((this->options->getScreenHeight() - this->text_start_y) / ((int) texts.size())));
