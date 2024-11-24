@@ -17,10 +17,11 @@ HowToState::HowToState(SDL_Renderer * renderer, FontManager * fonts, SoundManage
 
 HowToState::~HowToState() {
     SDL_DestroyTexture(text_title);
-    for (int i = 0; i < (int) texts.size(); i++) {
-        SDL_DestroyTexture(texts[i]);
-        texts[i] = NULL;
-    }
+    SDL_DestroyTexture(text_bottom);
+    SDL_DestroyTexture(text_movement);
+    SDL_DestroyTexture(text_confirm);
+    SDL_DestroyTexture(text_cancel);
+    SDL_DestroyTexture(text_menu);
 }
 
 
@@ -53,93 +54,148 @@ void HowToState::update() {
 void HowToState::draw(SDL_Renderer * renderer) {
     this->theme.draw(renderer);
 
-    if (this->texts.empty()) {
-        loadTexts();
-    }
+    loadTexts();
 
     // Draw title
-    SDL_Rect rect_title = {this->options->getScreenWidth() / 2, this->options->getScreenHeight() / 8, 0, 0};
-    SDL_QueryTexture(text_title, NULL, NULL, &rect_title.w, &rect_title.h);
-    rect_title.x -= rect_title.w/2;
-    rect_title.y -= rect_title.h/2;
-    SDL_RenderCopy(renderer, text_title, NULL, &rect_title);
+    SDL_Rect rect_title_text = {this->options->getScreenWidth() / 2, this->options->getScreenHeight() / 8, 0, 0};
+    SDL_QueryTexture(this->text_title, NULL, NULL, &rect_title_text.w, &rect_title_text.h);
+    rect_title_text.x -= rect_title_text.w / 2;
+    rect_title_text.y -= rect_title_text.h / 2;
+    SDL_RenderCopy(renderer, this->text_title, NULL, &rect_title_text);
 
-    SDL_Rect rect_arrows = {0, 0, this->options->getShellSize(), this->options->getShellSize()};
-    SDL_RenderCopy(renderer, this->images[(int) ButtonImage::KEYBOARD_MOVEMENT], NULL, &rect_arrows);
+    // Draw bottom text
+    SDL_Rect rect_bottom_text = {this->options->getScreenWidth() / 2, this->options->getScreenHeight(), 0, 0};
+    SDL_QueryTexture(this->text_bottom, NULL, NULL, &rect_bottom_text.w, &rect_bottom_text.h);
+    rect_bottom_text.x -= rect_bottom_text.w / 2;
+    rect_bottom_text.y -= rect_bottom_text.h * 1.5;
+    SDL_RenderCopy(renderer, this->text_bottom, NULL, &rect_bottom_text);
 
-    // Draw options
-    for(int i = 0; i < (int) texts.size(); i++) {
-        // Draw the option title
-        SDL_Rect rect = {this->options->getScreenWidth()/2, getTextY(i), 0, 0};
-        SDL_QueryTexture(texts[i], NULL, NULL, &rect.w, &rect.h);
-        rect.x -= rect.w/2;
+    // Draw everything else
+    SDL_Rect rect_movement_text = {this->options->getScreenWidth() / 2, this->text_start_y, 0, 0};
+    SDL_QueryTexture(this->text_movement, NULL, NULL, &rect_movement_text.w, &rect_movement_text.h);
+    rect_movement_text.x -= rect_movement_text.w;
+    rect_movement_text.y = rect_movement_text.y - rect_movement_text.h / 2 + this->options->getShellSize() / 2;
+    SDL_RenderCopy(renderer, this->text_movement, NULL, &rect_movement_text);
 
-        // Render the option text
-        SDL_RenderCopy(renderer, texts[i], NULL, &rect);
-    }
+    SDL_Rect rect_movement = {this->options->getScreenWidth() / 2, this->text_start_y, this->options->getShellSize(), this->options->getShellSize()};
+    SDL_RenderCopy(renderer, this->button_images[(int) ButtonImage::KEYBOARD_MOVEMENT], NULL, &rect_movement);
+    rect_movement.x += this->options->getShellSize();
+    SDL_RenderCopy(renderer, this->button_images[(int) ButtonImage::MOUSE_MOVEMENT], NULL, &rect_movement);
+    rect_movement.x += this->options->getShellSize();
+    SDL_RenderCopy(renderer, this->button_images[(int) ButtonImage::GAMEPAD_MOVEMENT1], NULL, &rect_movement);
+    rect_movement.x += this->options->getShellSize();
+    SDL_RenderCopy(renderer, this->button_images[(int) ButtonImage::GAMEPAD_MOVEMENT2], NULL, &rect_movement);
 
-    SDL_Rect rect_bottom = {this->options->getScreenWidth()/2, getTextY(((int) texts.size()) + 1), 0, 0};
-    SDL_QueryTexture(text_bottom, NULL, NULL, &rect_bottom.w, &rect_bottom.h);
-    rect_bottom.x -= rect_bottom.w/2;
-    SDL_RenderCopy(renderer, text_bottom, NULL, &rect_bottom);
+    SDL_Rect rect_confirm_text = {this->options->getScreenWidth() / 2, rect_movement.y + rect_movement.h, 0, 0};
+    SDL_QueryTexture(this->text_confirm, NULL, NULL, &rect_confirm_text.w, &rect_confirm_text.h);
+    rect_confirm_text.x -= rect_confirm_text.w;
+    rect_confirm_text.y = rect_confirm_text.y - rect_confirm_text.h / 2 + this->options->getShellSize() / 2;
+    SDL_RenderCopy(renderer, this->text_confirm, NULL, &rect_confirm_text);
+
+    SDL_Rect rect_confirm = {this->options->getScreenWidth() / 2, rect_movement.y + rect_movement.h, this->options->getShellSize(), this->options->getShellSize()};
+    SDL_RenderCopy(renderer, this->button_images[(int) ButtonImage::KEYBOARD_CONFIRM], NULL, &rect_confirm);
+    rect_confirm.x += this->options->getShellSize();
+    SDL_RenderCopy(renderer, this->button_images[(int) ButtonImage::MOUSE_CONFIRM], NULL, &rect_confirm);
+    rect_confirm.x += this->options->getShellSize();
+    SDL_RenderCopy(renderer, this->button_images[(int) ButtonImage::GAMEPAD_CONFIRM], NULL, &rect_confirm);
+
+    SDL_Rect rect_cancel_text = {this->options->getScreenWidth() / 2, rect_confirm.y + rect_confirm.h, 0, 0};
+    SDL_QueryTexture(this->text_cancel, NULL, NULL, &rect_cancel_text.w, &rect_cancel_text.h);
+    rect_cancel_text.x -= rect_cancel_text.w;
+    rect_cancel_text.y = rect_cancel_text.y - rect_cancel_text.h / 2 + this->options->getShellSize() / 2;
+    SDL_RenderCopy(renderer, this->text_cancel, NULL, &rect_cancel_text);
+
+    SDL_Rect rect_cancel = {this->options->getScreenWidth() / 2, rect_confirm.y + rect_confirm.h, this->options->getShellSize(), this->options->getShellSize()};
+    SDL_RenderCopy(renderer, this->button_images[(int) ButtonImage::KEYBOARD_CANCEL], NULL, &rect_cancel);
+    rect_cancel.x += this->options->getShellSize();
+    SDL_RenderCopy(renderer, this->button_images[(int) ButtonImage::MOUSE_CANCEL], NULL, &rect_cancel);
+    rect_cancel.x += this->options->getShellSize();
+    SDL_RenderCopy(renderer, this->button_images[(int) ButtonImage::GAMEPAD_CANCEL], NULL, &rect_cancel);
+
+    SDL_Rect rect_menu_text = {this->options->getScreenWidth() / 2, rect_cancel.y + rect_cancel.h, 0, 0};
+    SDL_QueryTexture(this->text_menu, NULL, NULL, &rect_menu_text.w, &rect_menu_text.h);
+    rect_menu_text.x -= rect_menu_text.w;
+    rect_menu_text.y = rect_menu_text.y - rect_menu_text.h / 2 + this->options->getShellSize() / 2;
+    SDL_RenderCopy(renderer, this->text_menu, NULL, &rect_menu_text);
+
+    SDL_Rect rect_menu = {this->options->getScreenWidth() / 2,  rect_cancel.y + rect_cancel.h, this->options->getShellSize(), this->options->getShellSize()};
+    SDL_RenderCopy(renderer, this->button_images[(int) ButtonImage::KEYBOARD_MENU], NULL, &rect_menu);
+    rect_menu.x += this->options->getShellSize();
+    SDL_RenderCopy(renderer, this->button_images[(int) ButtonImage::MOUSE_MENU], NULL, &rect_menu);
+    rect_menu.x += this->options->getShellSize();
+    SDL_RenderCopy(renderer, this->button_images[(int) ButtonImage::GAMEPAD_MENU], NULL, &rect_menu);
 }
 
 void HowToState::loadTexts() {
-    this->text_title = fonts->getTexture(renderer, _("How to Play"), FontType::TITLE, {COLOR_MENU_TITLE.r, COLOR_MENU_TITLE.g, COLOR_MENU_TITLE.b, COLOR_MENU_TITLE.a});
-    this->text_bottom = fonts->getTexture(renderer, _("press confirm to continue"), FontType::NORMAL, {255, 255, 255, 255});
-    this->slash = fonts->getTexture(renderer, "/", FontType::NORMAL, {255, 255, 255, 255});
+    if (!this->text_title) {
+        this->text_title = fonts->getTexture(renderer, _("Controls"), FontType::TITLE, {COLOR_MENU_TITLE.r, COLOR_MENU_TITLE.g, COLOR_MENU_TITLE.b, COLOR_MENU_TITLE.a});
+    }
+    if (!this->text_bottom) {
+        this->text_bottom = fonts->getTexture(renderer, _("press confirm to continue"), FontType::NORMAL, {255, 255, 255, 255});
+    }
+    if (!this->text_movement) {
+        this->text_movement = fonts->getTexture(renderer, _("movement:"), FontType::NORMAL, {255, 255, 255, 255});
+    }
+    if (!this->text_confirm) {
+        this-> text_confirm = fonts->getTexture(renderer, _("confirm:"), FontType::NORMAL, {255, 255, 255, 255});
+    }
+    if (!this->text_cancel) {
+        this->text_cancel = fonts->getTexture(renderer, _("cancel:"), FontType::NORMAL, {255, 255, 255, 255});
+    }
+    if (!this->text_menu) {
+        this->text_menu = fonts->getTexture(renderer, _("menu:"), FontType::NORMAL, {255, 255, 255, 255});
+    }
 
-    this->texts.push_back(fonts->getTexture(renderer, _("standard mode completed: "), FontType::NORMAL, {255, 255, 255, 255}));
-    this->texts.push_back(fonts->getTexture(renderer, _("highest level reached in challenge mode: ") + std::to_string(options->getChallengeModeHighscore()), FontType::NORMAL, {255, 255, 255, 255}));
-    this->texts.push_back(fonts->getTexture(renderer, _("matches in relaxed mode: ") + std::to_string(options->getRelaxedModeScore()), FontType::NORMAL, {255, 255, 255, 255}));
-
-    this->text_start_y = getTextY(0);
+    this->text_start_y = this->options->getScreenHeight() / 2 - this->options->getShellSize() * 2;
 }
 
 void HowToState::loadImages() {
-    if (this->images.empty()) {
+    if (this->button_images.empty()) {
         for (int i = 0; i < (int) ButtonImage::AMOUNT; i++) {
-            this->images.push_back(NULL);
+            this->button_images.push_back(NULL);
         }
     }
     for (int i = 0; i < (int) ButtonImage::AMOUNT; i++) {
         switch ((ButtonImage) i)
         {
         case ButtonImage::KEYBOARD_MOVEMENT:
-            this->images[i] = TextureManager::load(this->renderer, "assets/images/keyboard_arrows.svg");
+            this->button_images[i] = TextureManager::load(this->renderer, "assets/images/keyboard_arrows.svg");
             break;
         case ButtonImage::KEYBOARD_CONFIRM:
-            this->images[i] = TextureManager::load(this->renderer, "assets/images/keyboard_space.svg");
+            this->button_images[i] = TextureManager::load(this->renderer, "assets/images/keyboard_space.svg");
             break;
         case ButtonImage::KEYBOARD_CANCEL:
-            this->images[i] = TextureManager::load(this->renderer, "assets/images/keyboard_backspace.svg");
+            this->button_images[i] = TextureManager::load(this->renderer, "assets/images/keyboard_backspace.svg");
             break;
         case ButtonImage::KEYBOARD_MENU:
-            this->images[i] = TextureManager::load(this->renderer, "assets/images/keyboard_escape.svg");
+            this->button_images[i] = TextureManager::load(this->renderer, "assets/images/keyboard_escape.svg");
             break;
         case ButtonImage::MOUSE_MOVEMENT:
-            this->images[i] = TextureManager::load(this->renderer, "assets/images/mouse.svg");
+            this->button_images[i] = TextureManager::load(this->renderer, "assets/images/mouse.svg");
             break;
         case ButtonImage::MOUSE_CONFIRM:
-            this->images[i] = TextureManager::load(this->renderer, "assets/images/mouse_left.svg");
+            this->button_images[i] = TextureManager::load(this->renderer, "assets/images/mouse_left.svg");
             break;
         case ButtonImage::MOUSE_CANCEL:
-            this->images[i] = TextureManager::load(this->renderer, "assets/images/mouse_right.svg");
+            this->button_images[i] = TextureManager::load(this->renderer, "assets/images/mouse_right.svg");
             break;
         case ButtonImage::MOUSE_MENU:
-            this->images[i] = TextureManager::load(this->renderer, "assets/images/mouse_scroll.svg");
+            this->button_images[i] = TextureManager::load(this->renderer, "assets/images/mouse_scroll.svg");
             break;
-        case ButtonImage::GAMEPAD_MOVEMENT:
-            this->images[i] = TextureManager::load(this->renderer, "assets/images/switch_dpad.svg");
+        case ButtonImage::GAMEPAD_MOVEMENT1:
+            this->button_images[i] = TextureManager::load(this->renderer, "assets/images/switch_stick_l.svg");
+            break;
+        case ButtonImage::GAMEPAD_MOVEMENT2:
+            this->button_images[i] = TextureManager::load(this->renderer, "assets/images/switch_dpad.svg");
             break;
         case ButtonImage::GAMEPAD_CONFIRM:
-            this->images[i] = TextureManager::load(this->renderer, "assets/images/switch_buttons_down.svg");
+            this->button_images[i] = TextureManager::load(this->renderer, "assets/images/switch_buttons_down.svg");
             break;
         case ButtonImage::GAMEPAD_CANCEL:
-            this->images[i] = TextureManager::load(this->renderer, "assets/images/switch_buttons_right.svg");
+            this->button_images[i] = TextureManager::load(this->renderer, "assets/images/switch_buttons_right.svg");
             break;
         case ButtonImage::GAMEPAD_MENU:
-            this->images[i] = TextureManager::load(this->renderer, "assets/images/steam_button_start_icon.svg");
+            this->button_images[i] = TextureManager::load(this->renderer, "assets/images/steam_button_start_icon.svg");
             break;
         default:
             break;
@@ -148,10 +204,6 @@ void HowToState::loadImages() {
 }
 
 void HowToState::updateSizing() {
-    for (size_t i = 0; i < texts.size(); i++) {
-        SDL_DestroyTexture(texts[i]);
-        texts[i] = NULL;
-    }
     if (this->text_title) {
         SDL_DestroyTexture(this->text_title);
         this->text_title = NULL;
@@ -160,11 +212,22 @@ void HowToState::updateSizing() {
         SDL_DestroyTexture(this->text_bottom);
         this->text_bottom = NULL;
     }
-    this->texts.clear();
-}
-
-int HowToState::getTextY(int number) {
-    return this->options->getScreenHeight()/(((int) texts.size())+this->text_offset*2)*(number+this->text_offset);
+    if (this->text_movement) {
+        SDL_DestroyTexture(this->text_movement);
+        this->text_movement = NULL;
+    }
+    if (this->text_confirm) {
+        SDL_DestroyTexture(this->text_confirm);
+        this->text_confirm = NULL;
+    }
+    if (this->text_cancel) {
+        SDL_DestroyTexture(this->text_cancel);
+        this->text_cancel = NULL;
+    }
+    if (this->text_menu) {
+        SDL_DestroyTexture(this->text_menu);
+        this->text_menu = NULL;
+    }
 }
 
 State HowToState::getNextState() {

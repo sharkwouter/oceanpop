@@ -20,19 +20,19 @@ private:
 
     ThemeManager theme;
 
-    SDL_Texture * text_title;
-    SDL_Texture * text_bottom;
-    std::vector<SDL_Texture*> texts;
-    std::vector<SDL_Texture*> images;
-    SDL_Texture * slash;
+    SDL_Texture * text_title = NULL;
+    SDL_Texture * text_bottom = NULL;
+    SDL_Texture * text_movement = NULL;
+    SDL_Texture * text_confirm = NULL;
+    SDL_Texture * text_cancel = NULL;
+    SDL_Texture * text_menu = NULL;
 
+    std::vector<SDL_Texture*> button_images;
 
-    int text_offset = 2;
     int text_start_y;
 
     State next_state = State::MENU;
 
-    int getTextY(int number);
     void loadTexts();
     void loadImages();
     void updateSizing();
