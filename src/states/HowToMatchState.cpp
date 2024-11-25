@@ -95,13 +95,6 @@ void HowToMatchState::draw(SDL_Renderer * renderer) {
         rect_background.y + rect_background.h
     );
 
-    // Draw conclusion
-    SDL_Rect rect_conclusion = {this->options->getScreenWidth() / 2, rect_bottom_text.y, 0, 0};
-    SDL_QueryTexture(this->text_conclusion, NULL, NULL, &rect_conclusion.w, &rect_conclusion.h);
-    rect_conclusion.x -= rect_conclusion.w / 2;
-    rect_conclusion.y -= rect_conclusion.h + this->options->getShellSize() / 4;
-    SDL_RenderCopy(renderer, this->text_conclusion, NULL, &rect_conclusion);
-
     // Draw everything else
     SDL_Rect rect_match = {this->options->getScreenWidth() / 2, this->text_start_y, 0, 0};
     SDL_QueryTexture(this->text_match, NULL, NULL, &rect_match.w, &rect_match.h);
@@ -268,6 +261,13 @@ void HowToMatchState::draw(SDL_Renderer * renderer) {
         rect_plus_one.x + rect_plus_one.w + this->options->getShellSize() / 4,
         rect_plus_one.y + rect_plus_one.h / 2
     );
+
+    // Draw conclusion
+    SDL_Rect rect_conclusion = {this->options->getScreenWidth() / 2, rect_bottom_text.y, 0, 0};
+    SDL_QueryTexture(this->text_conclusion, NULL, NULL, &rect_conclusion.w, &rect_conclusion.h);
+    rect_conclusion.x -= rect_conclusion.w / 2;
+    rect_conclusion.y -= rect_conclusion.h + this->options->getShellSize() / 4;
+    SDL_RenderCopy(renderer, this->text_conclusion, NULL, &rect_conclusion);
 }
 
 void HowToMatchState::loadTexts() {
@@ -278,7 +278,7 @@ void HowToMatchState::loadTexts() {
         this->text_bottom = fonts->getTexture(renderer, _("press confirm to continue"), FontType::NORMAL, {255, 255, 255, 255});
     }
     if (!this->text_match) {
-        this->text_match = fonts->getTexture(renderer, _("3 lined up shells gives a point"), FontType::NORMAL, {255, 255, 255, 255});
+        this->text_match = fonts->getTexture(renderer, _("3 lined up shells give a point"), FontType::NORMAL, {255, 255, 255, 255});
     }
     if (!this->text_plus_one) {
         this-> text_plus_one = fonts->getTexture(renderer, _("+1"), FontType::NORMAL, {255, 255, 255, 255});

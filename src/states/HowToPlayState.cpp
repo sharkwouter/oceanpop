@@ -142,13 +142,13 @@ void HowToPlayState::loadTexts() {
         this->text_goal = fonts->getTexture(renderer, _("reach the score with limited moves"), FontType::NORMAL, {255, 255, 255, 255});
     }
     if (!this->text_match_shells) {
-        this->text_match_shells = fonts->getTexture(renderer, _("match these to score points:"), FontType::NORMAL, {255, 255, 255, 255});
+        this->text_match_shells = fonts->getTexture(renderer, _("match these to score points"), FontType::NORMAL, {255, 255, 255, 255});
     }
     if (!this->text_match_bubbles) {
-        this-> text_match_bubbles = fonts->getTexture(renderer, _("match bubbles for extra moves:"), FontType::NORMAL, {255, 255, 255, 255});
+        this-> text_match_bubbles = fonts->getTexture(renderer, _("match bubbles for extra moves"), FontType::NORMAL, {255, 255, 255, 255});
     }
     if (!this->text_match_urchins) {
-        this->text_match_urchins = fonts->getTexture(renderer, _("never match urchins or lose points!"), FontType::NORMAL, {255, 255, 255, 255});
+        this->text_match_urchins = fonts->getTexture(renderer, _("never match urchins - they hurt!"), FontType::NORMAL, {255, 255, 255, 255});
     }
     this->text_start_y = this->options->getScreenHeight() / 4;
 }
