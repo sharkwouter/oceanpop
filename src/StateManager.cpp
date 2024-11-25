@@ -12,11 +12,12 @@
 #include "states/NotImplementedState.hpp"
 #include "states/WonState.hpp"
 #include "states/HowToControlsState.hpp"
+#include "states/HowToPlayState.hpp"
+#include "states/HowToMatchState.hpp"
 #include "states/State.hpp"
 
-StateManager::StateManager(SDL_Renderer * renderer, FontManager * fonts, SoundManager * sounds, OptionManager * options, SDL_Window * window) : renderer(renderer), fonts(fonts), sounds(sounds), options(options), window(window),
-    state(new MenuState(renderer, fonts, sounds, options)) {
-
+StateManager::StateManager(SDL_Renderer * renderer, FontManager * fonts, SoundManager * sounds, OptionManager * options, SDL_Window * window) : renderer(renderer), fonts(fonts), sounds(sounds), options(options), window(window) {
+    this->state = new HowToControlsState(renderer, fonts, sounds, options);
 }
 
 StateManager::~StateManager() {
@@ -54,6 +55,12 @@ void StateManager::switchState() {
                 break;
             case State::HOWTOCONTROLS:
                 this->state = new HowToControlsState(renderer, fonts, sounds, options);
+                break;
+            case State::HOWTOPLAY:
+                this->state = new HowToPlayState(renderer, fonts, sounds, options);
+                break;
+            case State::HOWTOMATCH:
+                this->state = new HowToMatchState(renderer, fonts, sounds, options);
                 break;
             case State::HIGHSCORES:
                 this->state = new HighscoreState(renderer, fonts, sounds, options);

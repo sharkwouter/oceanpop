@@ -1,5 +1,5 @@
-#ifndef HOWTOCONTROLSSTATE_HPP
-#define HOWTOCONTROLSSTATE_HPP
+#ifndef HOWTOMATCHSTATE_HPP
+#define HOWTOMATCHSTATE_HPP
 
 #include <string>
 #include <vector>
@@ -10,8 +10,9 @@
 #include "../SoundManager.hpp"
 #include "../OptionManager.hpp"
 #include "../PauseScreen.hpp"
+#include "../TextureManager.hpp"
 
-class HowToControlsState : public BaseState {
+class HowToMatchState : public BaseState {
 private:
     SDL_Renderer * renderer;
     FontManager * fonts;
@@ -19,26 +20,24 @@ private:
     OptionManager * options;
 
     ThemeManager theme;
+    TextureManager textures;
 
     SDL_Texture * text_title = NULL;
     SDL_Texture * text_bottom = NULL;
-    SDL_Texture * text_movement = NULL;
-    SDL_Texture * text_confirm = NULL;
-    SDL_Texture * text_cancel = NULL;
-    SDL_Texture * text_menu = NULL;
-
-    std::vector<SDL_Texture*> button_images;
+    SDL_Texture * text_match_shells = NULL;
+    SDL_Texture * text_plus_one = NULL;
+    SDL_Texture * text_conclusion = NULL;
+    SDL_Texture * text_match = NULL;
 
     int text_start_y;
 
-    State next_state = State::HOWTOPLAY;
+    State next_state = State::MENU;
 
     void loadTexts();
-    void loadImages();
     void updateSizing();
 public:
-    HowToControlsState(SDL_Renderer * renderer, FontManager * fonts, SoundManager * sounds, OptionManager * options);
-    ~HowToControlsState();
+    HowToMatchState(SDL_Renderer * renderer, FontManager * fonts, SoundManager * sounds, OptionManager * options);
+    ~HowToMatchState();
 
     void handleEvents(std::vector<Event> events);
     void update();
@@ -47,4 +46,4 @@ public:
     State getNextState();
 };
 
-#endif // HOWTOCONTROLSSTATE_HPP
+#endif // HOWTOMATCHSTATE_HPP

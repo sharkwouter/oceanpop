@@ -13,7 +13,9 @@ enum class State {
     CHALLENGE,
     RELAXED,
     GAMEOVER,
-    WON
+    WON,
+    HOWTOPLAY,
+    HOWTOMATCH
 };
 
 #endif // STATE_HPP
