@@ -31,8 +31,11 @@ void HowToMatchState::handleEvents(std::vector<Event> events) {
                 this->next_state = State::EXIT;
                 this->done = true;
                 break;
-            case Event::MENU:
             case Event::CANCEL:
+                this->next_state = State::HOWTOPLAY;
+                this->done = true;
+                break;
+            case Event::MENU:
             case Event::CONFIRM:
                 this->done = true;
                 break;
