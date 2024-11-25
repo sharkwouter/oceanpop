@@ -17,7 +17,7 @@
 #include "states/State.hpp"
 
 StateManager::StateManager(SDL_Renderer * renderer, FontManager * fonts, SoundManager * sounds, OptionManager * options, SDL_Window * window) : renderer(renderer), fonts(fonts), sounds(sounds), options(options), window(window) {
-    this->state = new HowToControlsState(renderer, fonts, sounds, options);
+    this->state = new MenuState(renderer, fonts, sounds, options);
 }
 
 StateManager::~StateManager() {
