@@ -97,13 +97,13 @@ void HowToControlsState::draw(SDL_Renderer * renderer) {
     );
 
     // Draw everything else
-    SDL_Rect rect_movement_text = {this->options->getScreenWidth() / 2, this->text_start_y, 0, 0};
+    SDL_Rect rect_movement_text = {this->options->getScreenWidth() / 2 - this->options->getShellSize() / 2, this->text_start_y, 0, 0};
     SDL_QueryTexture(this->text_movement, NULL, NULL, &rect_movement_text.w, &rect_movement_text.h);
     rect_movement_text.x -= rect_movement_text.w;
     rect_movement_text.y = rect_movement_text.y - rect_movement_text.h / 2 + this->options->getShellSize() / 2;
     SDL_RenderCopy(renderer, this->text_movement, NULL, &rect_movement_text);
 
-    SDL_Rect rect_movement = {this->options->getScreenWidth() / 2, this->text_start_y, this->options->getShellSize(), this->options->getShellSize()};
+    SDL_Rect rect_movement = {this->options->getScreenWidth() / 2 - this->options->getShellSize() / 2, this->text_start_y, this->options->getShellSize(), this->options->getShellSize()};
     SDL_RenderCopy(renderer, this->button_images[(int) ButtonImage::KEYBOARD_MOVEMENT], NULL, &rect_movement);
     rect_movement.x += this->options->getShellSize();
     SDL_RenderCopy(renderer, this->button_images[(int) ButtonImage::MOUSE_MOVEMENT], NULL, &rect_movement);
@@ -112,39 +112,39 @@ void HowToControlsState::draw(SDL_Renderer * renderer) {
     rect_movement.x += this->options->getShellSize();
     SDL_RenderCopy(renderer, this->button_images[(int) ButtonImage::GAMEPAD_MOVEMENT2], NULL, &rect_movement);
 
-    SDL_Rect rect_confirm_text = {this->options->getScreenWidth() / 2, rect_movement.y + rect_movement.h, 0, 0};
+    SDL_Rect rect_confirm_text = {this->options->getScreenWidth() / 2 - this->options->getShellSize() / 2, rect_movement.y + rect_movement.h, 0, 0};
     SDL_QueryTexture(this->text_confirm, NULL, NULL, &rect_confirm_text.w, &rect_confirm_text.h);
     rect_confirm_text.x -= rect_confirm_text.w;
     rect_confirm_text.y = rect_confirm_text.y - rect_confirm_text.h / 2 + this->options->getShellSize() / 2;
     SDL_RenderCopy(renderer, this->text_confirm, NULL, &rect_confirm_text);
 
-    SDL_Rect rect_confirm = {this->options->getScreenWidth() / 2, rect_movement.y + rect_movement.h, this->options->getShellSize(), this->options->getShellSize()};
+    SDL_Rect rect_confirm = {this->options->getScreenWidth() / 2 - this->options->getShellSize() / 2, rect_movement.y + rect_movement.h, this->options->getShellSize(), this->options->getShellSize()};
     SDL_RenderCopy(renderer, this->button_images[(int) ButtonImage::KEYBOARD_CONFIRM], NULL, &rect_confirm);
     rect_confirm.x += this->options->getShellSize();
     SDL_RenderCopy(renderer, this->button_images[(int) ButtonImage::MOUSE_CONFIRM], NULL, &rect_confirm);
     rect_confirm.x += this->options->getShellSize();
     SDL_RenderCopy(renderer, this->button_images[(int) ButtonImage::GAMEPAD_CONFIRM], NULL, &rect_confirm);
 
-    SDL_Rect rect_cancel_text = {this->options->getScreenWidth() / 2, rect_confirm.y + rect_confirm.h, 0, 0};
+    SDL_Rect rect_cancel_text = {this->options->getScreenWidth() / 2 - this->options->getShellSize() / 2, rect_confirm.y + rect_confirm.h, 0, 0};
     SDL_QueryTexture(this->text_cancel, NULL, NULL, &rect_cancel_text.w, &rect_cancel_text.h);
     rect_cancel_text.x -= rect_cancel_text.w;
     rect_cancel_text.y = rect_cancel_text.y - rect_cancel_text.h / 2 + this->options->getShellSize() / 2;
     SDL_RenderCopy(renderer, this->text_cancel, NULL, &rect_cancel_text);
 
-    SDL_Rect rect_cancel = {this->options->getScreenWidth() / 2, rect_confirm.y + rect_confirm.h, this->options->getShellSize(), this->options->getShellSize()};
+    SDL_Rect rect_cancel = {this->options->getScreenWidth() / 2 - this->options->getShellSize() / 2, rect_confirm.y + rect_confirm.h, this->options->getShellSize(), this->options->getShellSize()};
     SDL_RenderCopy(renderer, this->button_images[(int) ButtonImage::KEYBOARD_CANCEL], NULL, &rect_cancel);
     rect_cancel.x += this->options->getShellSize();
     SDL_RenderCopy(renderer, this->button_images[(int) ButtonImage::MOUSE_CANCEL], NULL, &rect_cancel);
     rect_cancel.x += this->options->getShellSize();
     SDL_RenderCopy(renderer, this->button_images[(int) ButtonImage::GAMEPAD_CANCEL], NULL, &rect_cancel);
 
-    SDL_Rect rect_menu_text = {this->options->getScreenWidth() / 2, rect_cancel.y + rect_cancel.h, 0, 0};
+    SDL_Rect rect_menu_text = {this->options->getScreenWidth() / 2 - this->options->getShellSize() / 2, rect_cancel.y + rect_cancel.h, 0, 0};
     SDL_QueryTexture(this->text_menu, NULL, NULL, &rect_menu_text.w, &rect_menu_text.h);
     rect_menu_text.x -= rect_menu_text.w;
     rect_menu_text.y = rect_menu_text.y - rect_menu_text.h / 2 + this->options->getShellSize() / 2;
     SDL_RenderCopy(renderer, this->text_menu, NULL, &rect_menu_text);
 
-    SDL_Rect rect_menu = {this->options->getScreenWidth() / 2,  rect_cancel.y + rect_cancel.h, this->options->getShellSize(), this->options->getShellSize()};
+    SDL_Rect rect_menu = {this->options->getScreenWidth() / 2 - this->options->getShellSize() / 2,  rect_cancel.y + rect_cancel.h, this->options->getShellSize(), this->options->getShellSize()};
     SDL_RenderCopy(renderer, this->button_images[(int) ButtonImage::KEYBOARD_MENU], NULL, &rect_menu);
     rect_menu.x += this->options->getShellSize();
     SDL_RenderCopy(renderer, this->button_images[(int) ButtonImage::MOUSE_MENU], NULL, &rect_menu);

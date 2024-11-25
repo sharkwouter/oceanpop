@@ -139,7 +139,7 @@ void HowToPlayState::loadTexts() {
         this->text_bottom = fonts->getTexture(renderer, _("press confirm to continue"), FontType::NORMAL, {255, 255, 255, 255});
     }
     if (!this->text_goal) {
-        this->text_goal = fonts->getTexture(renderer, _("reach the goal with limited moves"), FontType::NORMAL, {255, 255, 255, 255});
+        this->text_goal = fonts->getTexture(renderer, _("reach the score with limited moves"), FontType::NORMAL, {255, 255, 255, 255});
     }
     if (!this->text_match_shells) {
         this->text_match_shells = fonts->getTexture(renderer, _("match these to score points:"), FontType::NORMAL, {255, 255, 255, 255});
