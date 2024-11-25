@@ -4,7 +4,7 @@
 enum class State {
     MENU,
     PLAY,
-    HOWTO,
+    HOWTOCONTROLS,
     HIGHSCORES,
     OPTIONS,
     CREDITS,

@@ -134,7 +134,7 @@ void MenuState::loadTexts() {
             case State::PLAY:
                 option_text = _("play");
                 break;
-            case State::HOWTO:
+            case State::HOWTOCONTROLS:
                 option_text = _("how to play");
                 break;
             case State::HIGHSCORES:

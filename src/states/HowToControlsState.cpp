@@ -1,4 +1,4 @@
-#include "HowToState.hpp"
+#include "HowToControlsState.hpp"
 
 #include "../constants.hpp"
 #include "../colors.hpp"
@@ -8,14 +8,14 @@
 #include "../TextureManager.hpp"
 #include "GameState.hpp"
 
-HowToState::HowToState(SDL_Renderer * renderer, FontManager * fonts, SoundManager * sounds, OptionManager * options) : renderer(renderer), fonts(fonts), sounds(sounds), options(options),
+HowToControlsState::HowToControlsState(SDL_Renderer * renderer, FontManager * fonts, SoundManager * sounds, OptionManager * options) : renderer(renderer), fonts(fonts), sounds(sounds), options(options),
     theme(renderer, options, Theme::MENU)
 {
     this->loadTexts();
     this->loadImages();
 }
 
-HowToState::~HowToState() {
+HowToControlsState::~HowToControlsState() {
     SDL_DestroyTexture(text_title);
     SDL_DestroyTexture(text_bottom);
     SDL_DestroyTexture(text_movement);
@@ -25,7 +25,7 @@ HowToState::~HowToState() {
 }
 
 
-void HowToState::handleEvents(std::vector<Event> events) {
+void HowToControlsState::handleEvents(std::vector<Event> events) {
     for(Event event :events) {
         switch (event) {
             case Event::QUIT:
@@ -47,11 +47,11 @@ void HowToState::handleEvents(std::vector<Event> events) {
     
 }
 
-void HowToState::update() {
+void HowToControlsState::update() {
     this->theme.update();
 }
 
-void HowToState::draw(SDL_Renderer * renderer) {
+void HowToControlsState::draw(SDL_Renderer * renderer) {
     this->theme.draw(renderer);
 
     loadTexts();
@@ -69,6 +69,29 @@ void HowToState::draw(SDL_Renderer * renderer) {
     rect_bottom_text.x -= rect_bottom_text.w / 2;
     rect_bottom_text.y -= rect_bottom_text.h * 1.5;
     SDL_RenderCopy(renderer, this->text_bottom, NULL, &rect_bottom_text);
+
+    // Draw background
+    SDL_Rect rect_background;
+    rect_background.x = 0;
+    rect_background.y = this->options->getScreenHeight()/4;
+    rect_background.w = this->options->getScreenWidth();
+    rect_background.h = rect_bottom_text.y - rect_background.y;
+    SDL_SetRenderDrawColor(renderer, COLOR_BOARD.r, COLOR_BOARD.g, COLOR_BOARD.b, COLOR_BOARD.a);
+    SDL_RenderFillRect(renderer, &rect_background);
+
+    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
+    SDL_RenderDrawLine(renderer,
+        0,
+        rect_background.y,
+        this->options->getScreenWidth(),
+        rect_background.y
+    );
+    SDL_RenderDrawLine(renderer,
+        0,
+        rect_background.y + rect_background.h,
+        this->options->getScreenWidth(),
+        rect_background.y + rect_background.h
+    );
 
     // Draw everything else
     SDL_Rect rect_movement_text = {this->options->getScreenWidth() / 2, this->text_start_y, 0, 0};
@@ -126,7 +149,7 @@ void HowToState::draw(SDL_Renderer * renderer) {
     SDL_RenderCopy(renderer, this->button_images[(int) ButtonImage::GAMEPAD_MENU], NULL, &rect_menu);
 }
 
-void HowToState::loadTexts() {
+void HowToControlsState::loadTexts() {
     if (!this->text_title) {
         this->text_title = fonts->getTexture(renderer, _("Controls"), FontType::TITLE, {COLOR_MENU_TITLE.r, COLOR_MENU_TITLE.g, COLOR_MENU_TITLE.b, COLOR_MENU_TITLE.a});
     }
@@ -149,7 +172,7 @@ void HowToState::loadTexts() {
     this->text_start_y = this->options->getScreenHeight() / 2 - this->options->getShellSize() * 2;
 }
 
-void HowToState::loadImages() {
+void HowToControlsState::loadImages() {
     if (this->button_images.empty()) {
         for (int i = 0; i < (int) ButtonImage::AMOUNT; i++) {
             this->button_images.push_back(NULL);
@@ -203,7 +226,7 @@ void HowToState::loadImages() {
     }
 }
 
-void HowToState::updateSizing() {
+void HowToControlsState::updateSizing() {
     if (this->text_title) {
         SDL_DestroyTexture(this->text_title);
         this->text_title = NULL;
@@ -230,6 +253,6 @@ void HowToState::updateSizing() {
     }
 }
 
-State HowToState::getNextState() {
+State HowToControlsState::getNextState() {
     return this->next_state;
 }

@@ -1,5 +1,5 @@
-#ifndef HOWTOSTATE_HPP
-#define HOWTOSTATE_HPP
+#ifndef HOWTOCONTROLSSTATE_HPP
+#define HOWTOCONTROLSSTATE_HPP
 
 #include <string>
 #include <vector>
@@ -11,7 +11,7 @@
 #include "../OptionManager.hpp"
 #include "../PauseScreen.hpp"
 
-class HowToState : public BaseState {
+class HowToControlsState : public BaseState {
 private:
     SDL_Renderer * renderer;
     FontManager * fonts;
@@ -37,8 +37,8 @@ private:
     void loadImages();
     void updateSizing();
 public:
-    HowToState(SDL_Renderer * renderer, FontManager * fonts, SoundManager * sounds, OptionManager * options);
-    ~HowToState();
+    HowToControlsState(SDL_Renderer * renderer, FontManager * fonts, SoundManager * sounds, OptionManager * options);
+    ~HowToControlsState();
 
     void handleEvents(std::vector<Event> events);
     void update();
@@ -47,4 +47,4 @@ public:
     State getNextState();
 };
 
-#endif // HOWTOSTATE_HPP
+#endif // HOWTOCONTROLSSTATE_HPP
