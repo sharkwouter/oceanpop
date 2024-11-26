@@ -26,7 +26,7 @@ private:
 
     bool sound_played = false;
 
-    State next_state = State::EXIT;
+    State next_state = State::CREDITS;
 public:
     WonState(SDL_Renderer *renderer, FontManager * fonts, SoundManager * sounds, OptionManager * options);
     ~WonState();
