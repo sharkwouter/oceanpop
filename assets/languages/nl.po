@@ -31,7 +31,7 @@ msgstr "# credits bestand kon niet geopend worden"
 
 #: ../src/states/HowToScoreState.cpp:286
 msgid "3 lined up shells give a point"
-msgstr "3 schelpen naast elkaar geven punten"
+msgstr "3 schelpen naast elkaar geven een punt"
 
 #: ../src/states/HowToMatchState.cpp:174
 msgid "3 shells make a match"
@@ -136,7 +136,7 @@ msgstr "stoppen"
 
 #: ../src/states/OptionsState.cpp:194
 msgid "full screen: "
-msgstr "volledig scherm"
+msgstr "volledig scherm: "
 
 #: ../src/states/MenuState.cpp:146
 msgid "high scores"
