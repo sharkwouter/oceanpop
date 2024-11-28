@@ -30,14 +30,13 @@ void HowToMatchState::handleEvents(std::vector<Event> events) {
                 this->next_state = State::EXIT;
                 this->done = true;
                 break;
+            case Event::LEFT:
             case Event::CANCEL:
                 this->next_state = State::HOWTOPLAY;
                 this->done = true;
                 break;
             case Event::MENU:
-                this->next_state = State::MENU;
-                this->done = true;
-                break;
+            case Event::RIGHT:
             case Event::CONFIRM:
                 this->done = true;
                 break;
@@ -139,7 +138,7 @@ void HowToMatchState::draw(SDL_Renderer * renderer) {
     SDL_RenderDrawLine(renderer,
         grid.x + this->options->getShellSize() / 2,
         grid.y + this->options->getShellSize() / 2,
-        grid.x + this->options->getShellSize() / 2 + this->options->getShellSize() * 2,
+        grid.x + grid.w - this->options->getShellSize() / 2,
         grid.y + this->options->getShellSize() / 2
     );
     SDL_RenderDrawLine(renderer,

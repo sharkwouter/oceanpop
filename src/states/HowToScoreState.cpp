@@ -31,14 +31,12 @@ void HowToScoreState::handleEvents(std::vector<Event> events) {
                 this->next_state = State::EXIT;
                 this->done = true;
                 break;
+            case Event::LEFT:
             case Event::CANCEL:
                 this->next_state = State::HOWTOMATCH;
                 this->done = true;
                 break;
             case Event::MENU:
-                this->next_state = State::MENU;
-                this->done = true;
-                break;
             case Event::CONFIRM:
                 this->done = true;
                 break;
