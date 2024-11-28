@@ -18,7 +18,6 @@ HowToMatchState::~HowToMatchState() {
     SDL_DestroyTexture(text_title);
     SDL_DestroyTexture(text_bottom);
     SDL_DestroyTexture(text_match_shells);
-    SDL_DestroyTexture(text_plus_one);
     SDL_DestroyTexture(text_conclusion);
     SDL_DestroyTexture(text_match);
 }
@@ -36,6 +35,9 @@ void HowToMatchState::handleEvents(std::vector<Event> events) {
                 this->done = true;
                 break;
             case Event::MENU:
+                this->next_state = State::MENU;
+                this->done = true;
+                break;
             case Event::CONFIRM:
                 this->done = true;
                 break;
@@ -95,171 +97,63 @@ void HowToMatchState::draw(SDL_Renderer * renderer) {
         rect_background.y + rect_background.h
     );
 
-    // Draw everything else
+    // Draw match line
     SDL_Rect rect_match = {this->options->getScreenWidth() / 2, this->text_start_y, 0, 0};
     SDL_QueryTexture(this->text_match, NULL, NULL, &rect_match.w, &rect_match.h);
     rect_match.x -= rect_match.w / 2;
     SDL_RenderCopy(renderer, this->text_match, NULL, &rect_match);
 
-    // Draw first +1
-    SDL_Rect rect_plus_one = {this->options->getScreenWidth() / 2, this->options->getScreenHeight() / 2 - this->options->getShellSize() * 1.5, 0, 0};
-    SDL_QueryTexture(this->text_plus_one, NULL, NULL, &rect_plus_one.w, &rect_plus_one.h);
-    rect_plus_one.x = rect_plus_one.x - rect_plus_one.w / 2 + this->options->getShellSize() / 2;
-    SDL_RenderCopy(renderer, this->text_plus_one, NULL, &rect_plus_one);
+    //Draw grid
+    int grid_size = 3;
+    SDL_Point middle = {this->options->getScreenWidth() / 2, (rect_bottom_text.y + this->text_start_y) / 2};
+    SDL_Rect grid = {middle.x - (int)(this->options->getShellSize() * 1.5), middle.y - (int)(this->options->getShellSize() * 1.5), this->options->getShellSize() * grid_size, this->options->getShellSize() * grid_size};
 
-    // Draw match lines top
-    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-    SDL_RenderDrawLine(renderer,
-        rect_plus_one.x + rect_plus_one.w / 2 - this->options->getShellSize(),
-        rect_plus_one.y + rect_plus_one.h + this->options->getShellSize() / 4,
-        rect_plus_one.x + rect_plus_one.w / 2  + this->options->getShellSize(),
-        rect_plus_one.y + rect_plus_one.h + this->options->getShellSize() / 4
-    );
-    SDL_RenderDrawLine(renderer,
-        rect_plus_one.x + rect_plus_one.w / 2 - this->options->getShellSize(),
-        rect_plus_one.y + rect_plus_one.h + this->options->getShellSize() / 4,
-        rect_plus_one.x + rect_plus_one.w / 2 - this->options->getShellSize(),
-        rect_plus_one.y + rect_plus_one.h + this->options->getShellSize() / 2
-    );
-    SDL_RenderDrawLine(renderer,
-        rect_plus_one.x + rect_plus_one.w / 2  + this->options->getShellSize(),
-        rect_plus_one.y + rect_plus_one.h + this->options->getShellSize() / 4,
-        rect_plus_one.x + rect_plus_one.w / 2  + this->options->getShellSize(),
-        rect_plus_one.y + rect_plus_one.h + this->options->getShellSize() / 2
-    );
-
-    SDL_RenderDrawLine(renderer,
-        rect_plus_one.x + rect_plus_one.w / 2,
-        rect_plus_one.y + rect_plus_one.h,
-        rect_plus_one.x + rect_plus_one.w / 2,
-        rect_plus_one.y + rect_plus_one.h + this->options->getShellSize() / 4
-    );
-
-    // Draw horizontal shells
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-    SDL_Rect rect_shell_src = {0, 0, this->options->getShellSize(), this->options->getShellSize()};
-    SDL_Rect shells_h[4];
     for (int i = 0; i < 4; i++) {
-        shells_h[i] = {this->options->getScreenWidth() / 2 - this->options->getShellSize() + this->options->getShellSize() * i, rect_plus_one.y + rect_plus_one.h + this->options->getShellSize() / 2, rect_shell_src.w, rect_shell_src.h};
-        SDL_RenderCopy(renderer, textures.getShellTexture(), &rect_shell_src, &shells_h[i]);
         SDL_RenderDrawLine(renderer,
-            shells_h[i].x,
-            shells_h[i].y,
-            shells_h[i].x,
-            shells_h[i].y + shells_h[i].h
+            grid.x,
+            grid.y + this->options->getShellSize() * i,
+            grid.x + grid.w,
+            grid.y + this->options->getShellSize() * i
         );
-        if (i == 3) {
-            SDL_RenderDrawLine(renderer,
-                shells_h[i].x + shells_h[i].w,
-                shells_h[i].y,
-                shells_h[i].x + shells_h[i].w,
-                shells_h[i].y + shells_h[i].h
-            );
-        }
-    }
-    SDL_RenderDrawLine(renderer,
-        shells_h[0].x,
-        shells_h[0].y,
-        shells_h[3].x + shells_h[3].w,
-        shells_h[0].y
-    );
-    SDL_RenderDrawLine(renderer,
-        shells_h[0].x,
-        shells_h[0].y + shells_h[0].h,
-        shells_h[3].x + shells_h[3].w,
-        shells_h[0].y + shells_h[0].h
-    );
-
-    // Draw second +1
-    rect_plus_one.x += this->options->getShellSize();
-    rect_plus_one.y = shells_h[0].y + shells_h[0].h + this->options->getShellSize() / 2;
-    SDL_RenderCopy(renderer, this->text_plus_one, NULL, &rect_plus_one);
-
-    // Draw match lines bottom
-    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-    SDL_RenderDrawLine(renderer,
-        rect_plus_one.x + rect_plus_one.w / 2 - this->options->getShellSize(),
-        rect_plus_one.y - this->options->getShellSize() / 4,
-        rect_plus_one.x + rect_plus_one.w / 2  + this->options->getShellSize(),
-        rect_plus_one.y - this->options->getShellSize() / 4
-    );
-    SDL_RenderDrawLine(renderer,
-        rect_plus_one.x + rect_plus_one.w / 2 - this->options->getShellSize(),
-        rect_plus_one.y - this->options->getShellSize() / 4,
-        rect_plus_one.x + rect_plus_one.w / 2 - this->options->getShellSize(),
-        rect_plus_one.y - this->options->getShellSize() / 2 + 1
-    );
-    SDL_RenderDrawLine(renderer,
-        rect_plus_one.x + rect_plus_one.w / 2  + this->options->getShellSize(),
-        rect_plus_one.y - this->options->getShellSize() / 4,
-        rect_plus_one.x + rect_plus_one.w / 2  + this->options->getShellSize(),
-        rect_plus_one.y - this->options->getShellSize() / 2 + 1
-    );
-
-    SDL_RenderDrawLine(renderer,
-        rect_plus_one.x + rect_plus_one.w / 2,
-        rect_plus_one.y,
-        rect_plus_one.x + rect_plus_one.w / 2,
-        rect_plus_one.y - this->options->getShellSize() / 4
-    );
-
-    // Draw vertical shells
-    SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-    SDL_Rect shells_v[2];
-    for (int i = 0; i < 2; i++) {
-        shells_v[i] = {this->options->getScreenWidth() / 2 - this->options->getShellSize(), shells_h[0].y + shells_h[0].h + this->options->getShellSize() * i, rect_shell_src.w, rect_shell_src.h};
-        SDL_RenderCopy(renderer, textures.getShellTexture(), &rect_shell_src, &shells_v[i]);
         SDL_RenderDrawLine(renderer,
-            shells_v[i].x,
-            shells_v[i].y + shells_v[i].h,
-            shells_v[i].x + shells_v[i].w,
-            shells_v[i].y + shells_v[i].h
+            grid.x + this->options->getShellSize() * i,
+            grid.y,
+            grid.x + this->options->getShellSize() * i,
+            grid.y + grid.h
         );
     }
-    SDL_RenderDrawLine(renderer,
-        shells_v[0].x,
-        shells_v[0].y,
-        shells_v[0].x,
-        shells_v[1].y + shells_v[1].h
-    );
-    SDL_RenderDrawLine(renderer,
-        shells_v[0].x + shells_v[0].w,
-        shells_v[0].y,
-        shells_v[0].x + shells_v[0].w,
-        shells_v[1].y + shells_v[1].h
-    );
 
-    // Draw third +1
-    rect_plus_one.x = shells_v[0].x - rect_plus_one.w - this->options->getShellSize() / 2;
-    rect_plus_one.y = shells_v[0].y + this->options->getShellSize() / 2 - rect_plus_one.h / 2;
-    SDL_RenderCopy(renderer, this->text_plus_one, NULL, &rect_plus_one);
+    // Draw shells
+    SDL_Rect rect_shell_src = {0, 0, this->options->getShellSize(), this->options->getShellSize()};
+    SDL_Rect rect_shell_dest = {grid.x + this->options->getShellSize() * 2, grid.y, rect_shell_src.w, rect_shell_src.h};
+    SDL_RenderCopy(renderer, textures.getShellTexture(), &rect_shell_src, &rect_shell_dest);
+    rect_shell_dest.x -= this->options->getShellSize() * 2;
+    rect_shell_dest.y += this->options->getShellSize();
+    SDL_RenderCopy(renderer, textures.getShellTexture(), &rect_shell_src, &rect_shell_dest);
+    rect_shell_dest.y += this->options->getShellSize();
+    SDL_RenderCopy(renderer, textures.getShellTexture(), &rect_shell_src, &rect_shell_dest);
 
-    // Draw match lines bottom
+    //  Draw arrow
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
     SDL_RenderDrawLine(renderer,
-        rect_plus_one.x + rect_plus_one.w + this->options->getShellSize() / 4,
-        rect_plus_one.y + rect_plus_one.h / 2 - this->options->getShellSize(),
-        rect_plus_one.x + rect_plus_one.w +  this->options->getShellSize() / 4,
-        rect_plus_one.y + rect_plus_one.h / 2  + this->options->getShellSize()
+        grid.x + this->options->getShellSize() / 2,
+        grid.y + this->options->getShellSize() / 2,
+        grid.x + this->options->getShellSize() / 2 + this->options->getShellSize() * 2,
+        grid.y + this->options->getShellSize() / 2
     );
     SDL_RenderDrawLine(renderer,
-        rect_plus_one.x + rect_plus_one.w + this->options->getShellSize() / 4,
-        rect_plus_one.y + rect_plus_one.h / 2 - this->options->getShellSize(),
-        rect_plus_one.x + rect_plus_one.w + this->options->getShellSize() / 2 - 1,
-        rect_plus_one.y + rect_plus_one.h / 2 - this->options->getShellSize()
-    );
-    SDL_RenderDrawLine(renderer,
-        rect_plus_one.x + rect_plus_one.w + this->options->getShellSize() / 4,
-        rect_plus_one.y + rect_plus_one.h / 2 + this->options->getShellSize(),
-        rect_plus_one.x + rect_plus_one.w + this->options->getShellSize() / 2 - 1,
-        rect_plus_one.y + rect_plus_one.h / 2 + this->options->getShellSize()
+        grid.x + this->options->getShellSize() / 2,
+        grid.y + this->options->getShellSize() / 2,
+        grid.x + this->options->getShellSize() - this->options->getShellSize() / 4,
+        grid.y + this->options->getShellSize() - this->options->getShellSize() / 4
     );
 
     SDL_RenderDrawLine(renderer,
-        rect_plus_one.x + rect_plus_one.w,
-        rect_plus_one.y + rect_plus_one.h / 2,
-        rect_plus_one.x + rect_plus_one.w + this->options->getShellSize() / 4,
-        rect_plus_one.y + rect_plus_one.h / 2
+        grid.x + this->options->getShellSize() / 2,
+        grid.y + this->options->getShellSize() / 2,
+        grid.x + this->options->getShellSize() - this->options->getShellSize() / 4,
+        grid.y + this->options->getShellSize() / 4
     );
 
     // Draw conclusion
@@ -272,19 +166,16 @@ void HowToMatchState::draw(SDL_Renderer * renderer) {
 
 void HowToMatchState::loadTexts() {
     if (!this->text_title) {
-        this->text_title = fonts->getTexture(renderer, _("How Scoring Works"), FontType::TITLE, {COLOR_MENU_TITLE.r, COLOR_MENU_TITLE.g, COLOR_MENU_TITLE.b, COLOR_MENU_TITLE.a});
+        this->text_title = fonts->getTexture(renderer, _("How to Match"), FontType::TITLE, {COLOR_MENU_TITLE.r, COLOR_MENU_TITLE.g, COLOR_MENU_TITLE.b, COLOR_MENU_TITLE.a});
     }
     if (!this->text_bottom) {
         this->text_bottom = fonts->getTexture(renderer, _("press confirm to continue"), FontType::NORMAL, {255, 255, 255, 255});
     }
     if (!this->text_match) {
-        this->text_match = fonts->getTexture(renderer, _("3 lined up shells give a point"), FontType::NORMAL, {255, 255, 255, 255});
-    }
-    if (!this->text_plus_one) {
-        this-> text_plus_one = fonts->getTexture(renderer, _("+1"), FontType::NORMAL, {255, 255, 255, 255});
+        this->text_match = fonts->getTexture(renderer, _("3 shells make a match"), FontType::NORMAL, {255, 255, 255, 255});
     }
     if (!this->text_conclusion) {
-        this->text_conclusion = fonts->getTexture(renderer, _("this example gives +3 points"), FontType::NORMAL, {255, 255, 255, 255});
+        this->text_conclusion = fonts->getTexture(renderer, _("moves without a match fail"), FontType::NORMAL, {255, 255, 255, 255});
     }
     this->text_start_y = this->options->getScreenHeight() / 4;
 }
@@ -301,10 +192,6 @@ void HowToMatchState::updateSizing() {
     if (this->text_match_shells) {
         SDL_DestroyTexture(this->text_match_shells);
         this->text_match_shells = NULL;
-    }
-    if (this->text_plus_one) {
-        SDL_DestroyTexture(this->text_plus_one);
-        this->text_plus_one = NULL;
     }
     if (this->text_conclusion) {
         SDL_DestroyTexture(this->text_conclusion);

@@ -15,7 +15,8 @@ enum class State {
     GAMEOVER,
     WON,
     HOWTOPLAY,
-    HOWTOMATCH
+    HOWTOMATCH,
+    HOWTOSCORE
 };
 
 #endif // STATE_HPP

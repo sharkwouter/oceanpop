@@ -43,6 +43,7 @@ void MenuState::handleEvents(std::vector<Event> events) {
             case Event::CONFIRM:
                 this->done = true;
                 break;
+            case Event::MENU:
             case Event::QUIT:
                 this->selection = (int) State::EXIT  - 1;
                 this->done = true;

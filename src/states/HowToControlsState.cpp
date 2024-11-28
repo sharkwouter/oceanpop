@@ -37,6 +37,9 @@ void HowToControlsState::handleEvents(std::vector<Event> events) {
                 this->done = true;
                 break;
             case Event::MENU:
+                this->next_state = State::MENU;
+                this->done = true;
+                break;
             case Event::CONFIRM:
                 this->done = true;
                 break;

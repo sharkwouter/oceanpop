@@ -1,5 +1,5 @@
-#ifndef HOWTOMATCHSTATE_HPP
-#define HOWTOMATCHSTATE_HPP
+#ifndef HOWTOSCORESTATE_HPP
+#define HOWTOSCORESTATE_HPP
 
 #include <string>
 #include <vector>
@@ -12,7 +12,7 @@
 #include "../PauseScreen.hpp"
 #include "../TextureManager.hpp"
 
-class HowToMatchState : public BaseState {
+class HowToScoreState : public BaseState {
 private:
     SDL_Renderer * renderer;
     FontManager * fonts;
@@ -25,18 +25,19 @@ private:
     SDL_Texture * text_title = NULL;
     SDL_Texture * text_bottom = NULL;
     SDL_Texture * text_match_shells = NULL;
+    SDL_Texture * text_plus_one = NULL;
     SDL_Texture * text_conclusion = NULL;
     SDL_Texture * text_match = NULL;
 
     int text_start_y;
 
-    State next_state = State::HOWTOSCORE;
+    State next_state = State::MENU;
 
     void loadTexts();
     void updateSizing();
 public:
-    HowToMatchState(SDL_Renderer * renderer, FontManager * fonts, SoundManager * sounds, OptionManager * options);
-    ~HowToMatchState();
+    HowToScoreState(SDL_Renderer * renderer, FontManager * fonts, SoundManager * sounds, OptionManager * options);
+    ~HowToScoreState();
 
     void handleEvents(std::vector<Event> events);
     void update();
@@ -45,4 +46,4 @@ public:
     State getNextState();
 };
 
-#endif // HOWTOMATCHSTATE_HPP
+#endif // HOWTOSCORESTATE_HPP

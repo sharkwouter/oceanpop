@@ -36,6 +36,9 @@ void HowToPlayState::handleEvents(std::vector<Event> events) {
                 this->done = true;
                 break;
             case Event::MENU:
+                this->next_state = State::MENU;
+                this->done = true;
+                break;
             case Event::CONFIRM:
                 this->done = true;
                 break;
@@ -107,7 +110,7 @@ void HowToPlayState::draw(SDL_Renderer * renderer) {
     SDL_RenderCopy(renderer, this->text_match_shells, NULL, &rect_match_shells);
 
     SDL_Rect rect_shells_src = {0, 0, this->options->getShellSize() * 5, this->options->getShellSize()};
-    SDL_Rect rect_shells_dest = {this->options->getScreenWidth() /2 - this->options->getShellSize() * 2.5, rect_match_shells.y + rect_match_shells.h, rect_shells_src.w, rect_shells_src.h};
+    SDL_Rect rect_shells_dest = {(int)(this->options->getScreenWidth() / 2) - (int)(this->options->getShellSize() * 2.5), rect_match_shells.y + rect_match_shells.h, rect_shells_src.w, rect_shells_src.h};
     SDL_RenderCopy(renderer, textures.getShellTexture(), &rect_shells_src, &rect_shells_dest);
 
     SDL_Rect rect_match_bubbles = {this->options->getScreenWidth() / 2, rect_shells_dest.y + rect_shells_dest.h, 0, 0};
