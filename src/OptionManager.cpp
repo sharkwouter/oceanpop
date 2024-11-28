@@ -225,6 +225,15 @@ void OptionManager::setFullscreen(bool value) {
     write();
 }
 
+bool OptionManager::getHowToPlaySeen() {
+    return this->options.get("how_to_play_seen", false).asBool();
+}
+
+void OptionManager::setHowToPlaySeen(bool value) {
+    this->options["how_to_play_seen"] = value;
+    write();
+}
+
 int OptionManager::getScreenWidth() {
     int result = this->options.get("screen_width", 0).asInt();
     if (result == 0) {

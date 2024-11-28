@@ -38,6 +38,10 @@ void HowToScoreState::handleEvents(std::vector<Event> events) {
                 break;
             case Event::MENU:
             case Event::CONFIRM:
+                if (!this->options->getHowToPlaySeen()) {
+                    this->next_state = State::PLAY;
+                    this->options->setHowToPlaySeen(true);
+                }
                 this->done = true;
                 break;
             case Event::WINDOW_RESIZE:

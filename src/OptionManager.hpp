@@ -40,6 +40,7 @@ public:
     bool getFullscreen();
     int getScreenWidth();
     int getScreenHeight();
+    bool getHowToPlaySeen();
 
     int getShellSize();
 
@@ -56,6 +57,7 @@ public:
     void setRelaxedModeShells(std::vector<std::vector<ShellType>> value);
     void setFullscreen(bool value);
     void setScreenResolution(int width, int height);
+    void setHowToPlaySeen(bool value);
 
     void resetChallengeMode();
     void resetStandardMode();
