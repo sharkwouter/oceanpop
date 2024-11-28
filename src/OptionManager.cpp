@@ -241,11 +241,7 @@ int OptionManager::getScreenHeight() {
     return result;
 }
 
-int OptionManager::getScreenRefreshRate() {
-    return this->options.get("screen_refresh_rate", 0).asInt();
-}
-
-void OptionManager::setScreenResolution(int width, int height, int refresh_rate) {
+void OptionManager::setScreenResolution(int width, int height) {
     int new_shell_size = DEFAULT_SHELL_SIZE;
     while (width < (new_shell_size * DEFAULT_BOARD_WIDTH) || height < (new_shell_size * (DEFAULT_BOARD_HEIGHT +1))) {
         new_shell_size = new_shell_size/2;
@@ -262,7 +258,6 @@ void OptionManager::setScreenResolution(int width, int height, int refresh_rate)
 
     this->options["screen_width"] = width;
     this->options["screen_height"] = height;
-    this->options["screen_refresh_rate"] = refresh_rate;
 
     write();
 }

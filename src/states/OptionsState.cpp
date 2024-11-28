@@ -288,13 +288,13 @@ void OptionsState::applyFullscreen() {
     this->options->setFullscreen(this->fullscreen);
 
     if (this->fullscreen) {
-        this->options->setScreenResolution(standard_mode.w, standard_mode.h, standard_mode.refresh_rate);
+        this->options->setScreenResolution(standard_mode.w, standard_mode.h);
         SDL_SetWindowSize(window, this->options->getScreenWidth(), this->options->getScreenHeight());
         SDL_SetWindowDisplayMode(this->window, &standard_mode);
         SDL_SetWindowFullscreen(this->window, SDL_WINDOW_FULLSCREEN);
     } else {
         SDL_SetWindowFullscreen(this->window, 0);
-        this->options->setScreenResolution(standard_mode.w/2, standard_mode.h/2, standard_mode.refresh_rate);
+        this->options->setScreenResolution(standard_mode.w/2, standard_mode.h/2);
         SDL_RestoreWindow(this->window);
         SDL_SetWindowSize(this->window, this->options->getScreenWidth(), this->options->getScreenHeight());
         SDL_SetWindowPosition(this->window, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED);
