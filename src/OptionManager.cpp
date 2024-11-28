@@ -265,9 +265,3 @@ void OptionManager::setScreenResolution(int width, int height) {
 int OptionManager::getShellSize() {
     return this->options.get("shell_size", DEFAULT_SHELL_SIZE).asInt();
 }
-
-bool OptionManager::getShellSizeChanged() {
-    bool current_shell_size_changed = this->shell_size_changed;
-    this->shell_size_changed = false;
-    return current_shell_size_changed;
-}
