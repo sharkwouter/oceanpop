@@ -286,7 +286,7 @@ void HowToScoreState::loadTexts() {
         this->text_match = fonts->getTexture(renderer, _("3 lined up shells give a point"), FontType::NORMAL, {255, 255, 255, 255});
     }
     if (!this->text_plus_one) {
-        this-> text_plus_one = fonts->getTexture(renderer, _("+1"), FontType::NORMAL, {255, 255, 255, 255});
+        this-> text_plus_one = fonts->getTexture(renderer, "+1", FontType::NORMAL, {255, 255, 255, 255});
     }
     if (!this->text_conclusion) {
         this->text_conclusion = fonts->getTexture(renderer, _("this example gives +3 points"), FontType::NORMAL, {255, 255, 255, 255});

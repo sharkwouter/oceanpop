@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-11-23 00:24+0100\n"
+"POT-Creation-Date: 2024-11-28 13:56+0100\n"
 "PO-Revision-Date: 2024-07-18 11:07+0200\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -29,6 +29,18 @@ msgstr " punten in "
 msgid "# could not open credits file"
 msgstr "# credits bestand kon niet geopend worden"
 
+#: ../src/states/HowToScoreState.cpp:286
+msgid "3 lined up shells give a point"
+msgstr "3 schelpen naast elkaar geven punten"
+
+#: ../src/states/HowToMatchState.cpp:174
+msgid "3 shells make a match"
+msgstr "3 schelpen maken een match"
+
+#: ../src/states/HowToControlsState.cpp:158
+msgid "Controls"
+msgstr "Bediening"
+
 #: ../src/states/CreditsState.cpp:221
 msgid "Credits"
 msgstr "Credits"
@@ -41,7 +53,7 @@ msgstr "Modus Afgerond!"
 msgid "Game Over!"
 msgstr "Game Over!"
 
-#: ../src/states/GameStateChallenge.cpp:12 ../src/states/GameState.cpp:15
+#: ../src/states/GameStateChallenge.cpp:14 ../src/states/GameState.cpp:15
 #: ../src/states/GameStateRelaxed.cpp:7
 msgid "Game Paused"
 msgstr "Spel gepauseerd"
@@ -50,11 +62,27 @@ msgstr "Spel gepauseerd"
 msgid "High Scores"
 msgstr "Resultaten"
 
-#: ../src/states/GameStateChallenge.cpp:14 ../src/states/GameState.cpp:17
+#: ../src/states/HowToMatchState.cpp:168
+msgid "How to Match"
+msgstr "Hoe Maak Je Matches"
+
+#: ../src/states/HowToPlayState.cpp:138
+msgid "How to Play"
+msgstr "Hoe Het Werkt"
+
+#: ../src/states/HowToScoreState.cpp:280
+msgid "How to Score"
+msgstr "Hoe Scoor Je"
+
+#: ../src/states/GameState.cpp:17
 msgid "Level Failed"
 msgstr "Level Mislukt"
 
-#: ../src/states/GameStateChallenge.cpp:13 ../src/states/GameState.cpp:16
+#: ../src/states/GameStateChallenge.cpp:16
+msgid "Level Failed, continue?"
+msgstr "Level Mislukt, nog een keer?"
+
+#: ../src/states/GameStateChallenge.cpp:15 ../src/states/GameState.cpp:16
 msgid "Level Finished!"
 msgstr "Level Afgerond!"
 
@@ -62,7 +90,7 @@ msgstr "Level Afgerond!"
 msgid "Not Yet Implemented"
 msgstr "Nog Niet Geimplementeerd"
 
-#: ../src/states/OptionsState.cpp:239
+#: ../src/states/OptionsState.cpp:242
 msgid "Options"
 msgstr "opties"
 
@@ -74,35 +102,43 @@ msgstr "Relax, er zijn geen punten"
 msgid "Score "
 msgstr "Haal "
 
-#: ../src/states/OptionsState.cpp:260
+#: ../src/states/OptionsState.cpp:263
 msgid "apply"
 msgstr "toepassen"
 
-#: ../src/states/ModeSelectState.cpp:140
+#: ../src/states/HowToControlsState.cpp:170
+msgid "cancel:"
+msgstr "terug:"
+
+#: ../src/states/ModeSelectState.cpp:144
 msgid "challenge mode"
 msgstr "uitdagingsmodus"
 
-#: ../src/states/OptionsState.cpp:187
+#: ../src/states/OptionsState.cpp:190
 msgid "change music upon level switch: "
 msgstr "wissel muziek bij level overgang: "
 
-#: ../src/states/MenuState.cpp:144
+#: ../src/states/HowToControlsState.cpp:167
+msgid "confirm:"
+msgstr "bevestigen:"
+
+#: ../src/states/MenuState.cpp:152
 msgid "credits"
 msgstr "credits"
 
-#: ../src/states/ModeSelectState.cpp:141
-msgid "ends only when lives run out"
-msgstr "eindigt alleen als je levens op zijn"
+#: ../src/states/ModeSelectState.cpp:145
+msgid "ends only when you can no longer continue"
+msgstr "eindigt alleen als je niet meer verder kan"
 
-#: ../src/states/MenuState.cpp:147
+#: ../src/states/MenuState.cpp:155
 msgid "exit"
 msgstr "stoppen"
 
-#: ../src/states/OptionsState.cpp:191
+#: ../src/states/OptionsState.cpp:194
 msgid "full screen: "
 msgstr "volledig scherm"
 
-#: ../src/states/MenuState.cpp:138
+#: ../src/states/MenuState.cpp:146
 msgid "high scores"
 msgstr "resultaten"
 
@@ -110,7 +146,7 @@ msgstr "resultaten"
 msgid "highest level reached in challenge mode: "
 msgstr "hoogste level bereikt in uitdagingsmodus: "
 
-#: ../src/states/MenuState.cpp:135
+#: ../src/states/MenuState.cpp:143
 msgid "how to play"
 msgstr "hoe het werkt"
 
@@ -118,7 +154,15 @@ msgstr "hoe het werkt"
 msgid "level "
 msgstr "level "
 
-#: ../src/states/ModeSelectState.cpp:145
+#: ../src/states/HowToPlayState.cpp:150
+msgid "match bubbles for extra moves"
+msgstr "match bubbels voor extra moves"
+
+#: ../src/states/HowToPlayState.cpp:147
+msgid "match these to score points"
+msgstr "match deze om punten te scoren"
+
+#: ../src/states/ModeSelectState.cpp:149
 msgid "match without consequences"
 msgstr "match zonder consequenties"
 
@@ -126,51 +170,81 @@ msgstr "match zonder consequenties"
 msgid "matches in relaxed mode: "
 msgstr "matches in relaxmodus: "
 
-#: ../src/states/OptionsState.cpp:177
+#: ../src/states/HowToControlsState.cpp:173
+msgid "menu:"
+msgstr "menu:"
+
+#: ../src/states/HowToControlsState.cpp:164
+msgid "movement:"
+msgstr "bewegen:"
+
+#: ../src/states/HowToMatchState.cpp:177
+msgid "moves without a match fail"
+msgstr "moves zonder matches werken niet"
+
+#: ../src/states/OptionsState.cpp:180
 msgid "music volume: "
 msgstr "muziekvolume: "
 
-#: ../src/states/HighscoreState.cpp:85 ../src/states/OptionsState.cpp:187
-#: ../src/states/OptionsState.cpp:191
+#: ../src/states/HowToPlayState.cpp:153
+msgid "never match urchins - they hurt!"
+msgstr "match geen zeeëgels - die doen pijn!"
+
+#: ../src/states/HighscoreState.cpp:85 ../src/states/OptionsState.cpp:190
+#: ../src/states/OptionsState.cpp:194
 msgid "no"
 msgstr "nee"
 
-#: ../src/states/MenuState.cpp:141
+#: ../src/states/MenuState.cpp:149
 msgid "options"
 msgstr "opties"
 
-#: ../src/states/MenuState.cpp:132
+#: ../src/states/MenuState.cpp:140
 msgid "play"
 msgstr "speel"
 
-#: ../src/states/ModeSelectState.cpp:137
+#: ../src/states/ModeSelectState.cpp:141
 msgid "play pre-made levels"
 msgstr "speel voorgeprogrammeerde levels"
+
+#: ../src/states/HowToControlsState.cpp:161
+#: ../src/states/HowToMatchState.cpp:171 ../src/states/HowToPlayState.cpp:141
+#: ../src/states/HowToScoreState.cpp:283
+msgid "press confirm to continue"
+msgstr "druk op bevestigen om verder te gaan"
 
 #: ../src/states/HighscoreState.cpp:83
 msgid "press confirm to go back"
 msgstr "druk op bevestigen om terug te gaan"
 
-#: ../src/states/GameStateChallenge.cpp:13 ../src/states/GameState.cpp:16
+#: ../src/states/GameStateChallenge.cpp:15 ../src/states/GameState.cpp:16
 #: ../src/states/NotImplementedState.cpp:7
 msgid "press the confirm button to continue"
 msgstr "druk op bevestigen om verder te gaan"
 
-#: ../src/states/GameOverState.cpp:7 ../src/states/GameStateChallenge.cpp:12
+#: ../src/states/GameOverState.cpp:7 ../src/states/GameStateChallenge.cpp:14
 #: ../src/states/GameState.cpp:15 ../src/states/GameStateRelaxed.cpp:7
 #: ../src/states/WonState.cpp:7
 msgid "press the confirm button to exit"
 msgstr "druk op bevestigen om te sluiten"
 
-#: ../src/states/GameStateChallenge.cpp:14 ../src/states/GameState.cpp:17
+#: ../src/states/GameState.cpp:17
 msgid "press the confirm button to restart"
 msgstr "druk op bevestigen om het opnieuw te proberen"
 
-#: ../src/states/ModeSelectState.cpp:144
+#: ../src/states/GameStateChallenge.cpp:16
+msgid "press the confirm button to try again"
+msgstr "druk op bevestigen om het opnieuw te proberen"
+
+#: ../src/states/HowToPlayState.cpp:144
+msgid "reach the score with limited moves"
+msgstr "haal de score met beperkte moves"
+
+#: ../src/states/ModeSelectState.cpp:148
 msgid "relaxed mode"
 msgstr "relaxmodus"
 
-#: ../src/states/ModeSelectState.cpp:148 ../src/states/OptionsState.cpp:263
+#: ../src/states/ModeSelectState.cpp:152 ../src/states/OptionsState.cpp:266
 msgid "return to menu"
 msgstr "terug naar menu"
 
@@ -178,11 +252,11 @@ msgstr "terug naar menu"
 msgid "scroll with confirm and cancel"
 msgstr "scroll met bevestigen en terug"
 
-#: ../src/states/OptionsState.cpp:167
+#: ../src/states/OptionsState.cpp:170
 msgid "sound volume: "
 msgstr "volume geluiden: "
 
-#: ../src/states/ModeSelectState.cpp:136
+#: ../src/states/ModeSelectState.cpp:140
 msgid "standard mode"
 msgstr "standardmodus"
 
@@ -190,7 +264,11 @@ msgstr "standardmodus"
 msgid "standard mode completed: "
 msgstr "standardmodus afgesloten: "
 
-#: ../src/states/HighscoreState.cpp:85 ../src/states/OptionsState.cpp:187
-#: ../src/states/OptionsState.cpp:191
+#: ../src/states/HowToScoreState.cpp:292
+msgid "this example gives +3 points"
+msgstr "dit voorbeeld geeft +3 punten"
+
+#: ../src/states/HighscoreState.cpp:85 ../src/states/OptionsState.cpp:190
+#: ../src/states/OptionsState.cpp:194
 msgid "yes"
 msgstr "ja"
