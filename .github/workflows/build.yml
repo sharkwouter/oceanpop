@@ -39,8 +39,6 @@ jobs:
           name: oceanpop-linux
           path: |
             oceanpop/OceanPop*.AppImage
-            oceanpop/LICENSE.txt
-            oceanpop/README.md
 
   Windows:
     runs-on: windows-latest
@@ -79,8 +77,6 @@ jobs:
           path: |
             oceanpop/oceanpop.exe
             oceanpop/assets
-            oceanpop/LICENSE.txt
-            oceanpop/README.md
 
   PSP:
     runs-on: ubuntu-latest
@@ -106,8 +102,6 @@ jobs:
           path: |
             oceanpop/EBOOT.PBP
             oceanpop/assets
-            oceanpop/LICENSE.txt
-            oceanpop/README.md
 
   Vita:
     runs-on: ubuntu-latest
@@ -132,8 +126,6 @@ jobs:
           name: oceanpop-vita
           path: |
             oceanpop/oceanpop.vpk
-            oceanpop/LICENSE.txt
-            oceanpop/README.md
 
   Wii:
     runs-on: ubuntu-latest
