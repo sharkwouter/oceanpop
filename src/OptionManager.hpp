@@ -40,10 +40,9 @@ public:
     bool getFullscreen();
     int getScreenWidth();
     int getScreenHeight();
-    int getScreenRefreshRate();
+    bool getHowToPlaySeen();
 
     int getShellSize();
-    bool getShellSizeChanged();
 
     void setMusicVolume(int value);
     void setSoundVolume(int value);
@@ -52,12 +51,13 @@ public:
     void setStandardModeLevel(int value);
     void setChallengeModeHighscore(int value);
     void setChallengeModeLevel(int value);
+    void setChallengeModeSeed(int seed);
     void setRelaxedModeScore(int value);
     void setRelaxedModeSeed(unsigned int value);
     void setRelaxedModeShells(std::vector<std::vector<ShellType>> value);
     void setFullscreen(bool value);
-    void setScreenResolution(int width, int height, int refresh_rate);
-    void setChallengeModeSeed(int seed);
+    void setScreenResolution(int width, int height);
+    void setHowToPlaySeen(bool value);
 
     void resetChallengeMode();
     void resetStandardMode();

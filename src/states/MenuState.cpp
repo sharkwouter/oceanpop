@@ -41,6 +41,11 @@ void MenuState::handleEvents(std::vector<Event> events) {
                 }
                 break;
             case Event::CONFIRM:
+                if (this->getNextState() == State::PLAY && !this->options->getHowToPlaySeen()) {
+                    selection = (int) State::HOWTOCONTROLS - 1;
+                } else if (this->getNextState() == State::HOWTOCONTROLS) {
+                    this->options->setHowToPlaySeen(true);
+                }
                 this->done = true;
                 break;
             case Event::QUIT:
@@ -134,7 +139,7 @@ void MenuState::loadTexts() {
             case State::PLAY:
                 option_text = _("play");
                 break;
-            case State::HOWTO:
+            case State::HOWTOCONTROLS:
                 option_text = _("how to play");
                 break;
             case State::HIGHSCORES:

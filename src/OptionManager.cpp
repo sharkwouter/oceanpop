@@ -225,6 +225,15 @@ void OptionManager::setFullscreen(bool value) {
     write();
 }
 
+bool OptionManager::getHowToPlaySeen() {
+    return this->options.get("how_to_play_seen", false).asBool();
+}
+
+void OptionManager::setHowToPlaySeen(bool value) {
+    this->options["how_to_play_seen"] = value;
+    write();
+}
+
 int OptionManager::getScreenWidth() {
     int result = this->options.get("screen_width", 0).asInt();
     if (result == 0) {
@@ -241,11 +250,7 @@ int OptionManager::getScreenHeight() {
     return result;
 }
 
-int OptionManager::getScreenRefreshRate() {
-    return this->options.get("screen_refresh_rate", 0).asInt();
-}
-
-void OptionManager::setScreenResolution(int width, int height, int refresh_rate) {
+void OptionManager::setScreenResolution(int width, int height) {
     int new_shell_size = DEFAULT_SHELL_SIZE;
     while (width < (new_shell_size * DEFAULT_BOARD_WIDTH) || height < (new_shell_size * (DEFAULT_BOARD_HEIGHT +1))) {
         new_shell_size = new_shell_size/2;
@@ -262,17 +267,10 @@ void OptionManager::setScreenResolution(int width, int height, int refresh_rate)
 
     this->options["screen_width"] = width;
     this->options["screen_height"] = height;
-    this->options["screen_refresh_rate"] = refresh_rate;
 
     write();
 }
 
 int OptionManager::getShellSize() {
     return this->options.get("shell_size", DEFAULT_SHELL_SIZE).asInt();
-}
-
-bool OptionManager::getShellSizeChanged() {
-    bool current_shell_size_changed = this->shell_size_changed;
-    this->shell_size_changed = false;
-    return current_shell_size_changed;
 }

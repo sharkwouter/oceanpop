@@ -4,7 +4,7 @@
 enum class State {
     MENU,
     PLAY,
-    HOWTO,
+    HOWTOCONTROLS,
     HIGHSCORES,
     OPTIONS,
     CREDITS,
@@ -13,7 +13,10 @@ enum class State {
     CHALLENGE,
     RELAXED,
     GAMEOVER,
-    WON
+    WON,
+    HOWTOPLAY,
+    HOWTOMATCH,
+    HOWTOSCORE
 };
 
 #endif // STATE_HPP

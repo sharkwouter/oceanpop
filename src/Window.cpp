@@ -23,9 +23,9 @@ Window::Window(const std::string &title, OptionManager * options) : options(opti
     }
 
     // Set default screen resolution and refresh rate if they haven't been set yet
-    if (this->options->getScreenRefreshRate() == 0) {
+    if (this->options->getScreenWidth() == 0 || this->options->getScreenHeight() == 0 ) {
         SDL_DisplayMode mode = getStandardDisplayMode();
-        this->options->setScreenResolution(mode.w, mode.h, mode.refresh_rate);
+        this->options->setScreenResolution(mode.w, mode.h);
     }
 
     Uint32 window_flags = SDL_WINDOW_RESIZABLE;
@@ -40,7 +40,7 @@ Window::Window(const std::string &title, OptionManager * options) : options(opti
     // Set the refresh rate
     if (this->options->getFullscreen()) {
         for(SDL_DisplayMode mode : getDisplayModes()) {
-            if (mode.w == options->getScreenWidth() && mode.h == options->getScreenHeight() && mode.refresh_rate == options->getScreenRefreshRate()) {
+            if (mode.w == options->getScreenWidth() && mode.h == options->getScreenHeight()) {
                 SDL_SetWindowDisplayMode(window, &mode);
                 break;
             }
@@ -82,7 +82,7 @@ void Window::updateSize() {
     if (height < MIN_SCREEN_HEIGHT) {
         height = MIN_SCREEN_HEIGHT;
     }
-    this->options->setScreenResolution(width, height, this->options->getScreenRefreshRate());
+    this->options->setScreenResolution(width, height);
 }
 
 Window::~Window() {
