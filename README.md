@@ -33,6 +33,7 @@ OceanPop can be played with a keyboard, mouse or gamepad. Here each will be list
 #### Mouse
 
 - **Left click**: Pick or drop a shell or confirm in menus.
+- **Middle click**: Open the menu.
 - **Right click**: Cancel.
 
 #### Gamepad
