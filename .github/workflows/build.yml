@@ -166,12 +166,14 @@ jobs:
       matrix:
         build: [linux, windows, psp, vita, wii]
     steps:
-    - uses: actions/download-artifact@v3
+    - uses: actions/download-artifact@v4
+      with:
+        name: oceanpop-${{matrix.build}}
     - name: Zip artifacts
       run: |
         zip -r oceanpop-${{matrix.build}}.zip oceanpop-${{matrix.build}}
     - name: Release
-      uses: softprops/action-gh-release@v1
+      uses: softprops/action-gh-release@v2
       with:
         files: oceanpop-${{matrix.build}}.zip
         prerelease: true
