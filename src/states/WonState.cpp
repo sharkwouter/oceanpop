@@ -10,6 +10,7 @@ WonState::WonState(SDL_Renderer * renderer, FontManager * fonts, SoundManager * 
     this->fonts = fonts;
     this->sounds = sounds;
     this->options = options;
+    this->options->setStandardModeCompleted(true);
 }
 
 WonState::~WonState() {
