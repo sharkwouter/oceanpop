@@ -32,6 +32,29 @@
   </provides>
 
   <releases>
+    <release version="2.0" date="2024-12-19">
+      <description>
+        <p>Challenge mode levels are now random, making each playthrough different</p>
+        <p>Matches required in challenge mode now only increases every 5 levels</p>
+        <p>Matches required in challenge mode now maxes out at 25</p>
+        <p>Fix the high score screen not showing correctly if standard mode had been completed</p>
+        <p>Show how the game works on first run</p>
+        <p>Add support for the Wii thanks to mardy on GitHub</p>
+        <p>Add Dutch translation. Contributions to add additional languages are welcome</p>
+        <p>Always use maximum resolution in full screen mode</p>
+        <p>Make window resizable and scale dynamically in windowed mode</p>
+        <p>Allow opening the menu with middle click on the mouse</p>
+        <p>Add opening animation to levels</p>
+        <p>Improve matching animation</p>
+        <p>Add credits screen</p>
+        <p>Move game modes into own screen</p>
+        <p>Fix Playstation Portable version</p>
+        <p>Improve performance in Playstation Portable version</p>
+        <p>Improve text positioning on all menus</p>
+        <p>Decrease the size of binary on all platforms</p>
+        <p>Log exceptions thanks to mardy on GitHub</p>
+      </description>
+    </release>
     <release version="1.1" date="2022-11-10">
       <description>
         <p>Add a short explanation for each mode to the main menu</p>
