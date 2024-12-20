@@ -236,17 +236,11 @@ void OptionManager::setHowToPlaySeen(bool value) {
 
 int OptionManager::getScreenWidth() {
     int result = this->options.get("screen_width", 0).asInt();
-    if (result == 0) {
-        panic("Could not find a valid display mode!");
-    }
     return result;
 }
 
 int OptionManager::getScreenHeight() {
     int result = this->options.get("screen_height", 0).asInt();
-    if (result == 0) {
-        panic("Could not find a valid display mode!");
-    }
     return result;
 }
 
