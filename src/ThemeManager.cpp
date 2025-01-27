@@ -187,6 +187,7 @@ SDL_Texture * ThemeManager::createBackgroundTexture(std::string filename) {
     if (texture == nullptr) {
         panic("couldn't create texture from surface: " + std::string(SDL_GetError()));
     }
+    SDL_SetTextureScaleMode(texture, SDL_ScaleModeBest);
 
     return texture;
 }
