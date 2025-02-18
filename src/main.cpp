@@ -45,9 +45,9 @@ void run() {
     }
 }
 
-int main(int argv, char** args) {
+int main(int argc, char** argv) {
+    (void) argc;
     (void) argv;
-    (void) args;
 
     try {
         run();
