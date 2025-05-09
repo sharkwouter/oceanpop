@@ -550,8 +550,8 @@ void BoardManager::drawIntroduction(SDL_Renderer * renderer) {
 
 bool BoardManager::isDoubleMatch(Match match) {
     for(Match m : this->matches_made) {
-        if (m.direction != match.direction) {
-            if (m.direction == Direction::HORIZONTAL) {
+        if (m.match_type != match.match_type) {
+            if (m.match_type == MatchType::HORIZONTAL) {
                 if (m.x+1 == match.x && m.y == match.y+1) {
                     return true;
                 }
@@ -592,6 +592,10 @@ void BoardManager::drawMatches(SDL_Renderer * renderer) {
             current_shell_size = (this->options->getShellSize()*(MATCH_STEPS-animation))/MATCH_STEPS;
         }
         for(int i = 0; i < 3; i++) {
+            // Do not draw extra shells for bonus matches
+            if (match.match_type == MatchType::BONUS) {
+                break;
+            }
             SDL_Rect srcrect;
             srcrect.x = this->options->getShellSize() * (int) match.type;
             srcrect.y = 0;
@@ -604,9 +608,9 @@ void BoardManager::drawMatches(SDL_Renderer * renderer) {
             dstrect.w = current_shell_size;
             dstrect.h = current_shell_size;
 
-            if (match.direction == Direction::HORIZONTAL) {
+            if (match.match_type == MatchType::HORIZONTAL) {
                 dstrect.x += this->options->getShellSize()*i;
-            } else {
+            } else if (match.match_type == MatchType::VERTICAL) {
                 dstrect.y += this->options->getShellSize()*i;
             }
 
@@ -644,9 +648,9 @@ void BoardManager::drawMatches(SDL_Renderer * renderer) {
             SDL_QueryTexture(text, NULL, NULL, &rect_plus_one.w, &rect_plus_one.h);
             rect_plus_one.x += this->options->getShellSize()/2 - rect_plus_one.w/2;
             rect_plus_one.y += this->options->getShellSize()/2 - rect_plus_one.h/2;
-            if (match.direction == Direction::HORIZONTAL) {
+            if (match.match_type == MatchType::HORIZONTAL) {
                 rect_plus_one.x += this->options->getShellSize();
-            } else {
+            } else if (match.match_type == MatchType::VERTICAL) {
                 rect_plus_one.y += this->options->getShellSize();
             }
 
