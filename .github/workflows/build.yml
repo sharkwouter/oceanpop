@@ -104,9 +104,6 @@ jobs:
     runs-on: ubuntu-latest
     container: vitasdk/vitasdk:latest
     steps:
-      - name: Install dependencies
-        run: |
-          apk add --no-cache git
       - name: Checkout
         uses: actions/checkout@v4
         with:
