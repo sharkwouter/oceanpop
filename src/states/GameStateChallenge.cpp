@@ -72,6 +72,9 @@ void GameStateChallenge::handleEvents(std::vector<Event> events) {
                 if (this->level % 5 == 0 && this->required_matches < CHALLENGE_MODE_MAX_REQUIRED_MATCHES) {
                     this->required_matches += 1;
                 }
+                if (this->level > this->options->getChallengeModeHighscore()) {
+                    this->options->setChallengeModeHighscore(this->level);
+                }
                 this->board->loadLevel(this->width, this->height, this->moves, this->required_matches, this->level, this->seed);
             }
         } else if (this->failed) {
