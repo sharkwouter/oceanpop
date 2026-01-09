@@ -9,6 +9,7 @@ project(oceanpop)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -pedantic")
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS} -pg -g3")
 set(CMAKE_CXX_FLAGS_RELEASE "-O3")
 
 file(GLOB_RECURSE SRC src/*.cpp)
