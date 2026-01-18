@@ -192,6 +192,8 @@ endif()
 
 if(PSP)
     set(ASSETS_BACKGROUNDS "${CMAKE_CURRENT_SOURCE_DIR}/platform/psp/assets/backgrounds")
+elseif(PS2)
+    set(ASSETS_BACKGROUNDS "${CMAKE_CURRENT_SOURCE_DIR}/platform/ps2/assets/backgrounds")
 elseif(VITA)
     set(ASSETS_BACKGROUNDS "${CMAKE_SOURCE_DIR}/platform/vita/assets/backgrounds")
 elseif(CMAKE_SYSTEM_NAME MATCHES "NintendoWii")
@@ -268,6 +270,8 @@ if (VITA)
         FILE "${ASSETS_SOUNDS}" assets/sounds
         FILE "${ASSETS_LANGUAGES}" assets/languages
     )
+elseif(PS2)
+	set(CMAKE_EXECUTABLE_SUFFIX .elf)
 elseif(PLATFORM_PSP)
     create_pbp_file(
         TARGET ${CMAKE_PROJECT_NAME}
