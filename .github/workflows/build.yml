@@ -78,6 +78,42 @@ jobs:
             oceanpop/oceanpop.exe
             oceanpop/assets
 
+PS2:
+    name: PS2 build
+    runs-on: ubuntu-latest
+    container: ps2dev/ps2dev:latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          apk add cmake build-base git zip gawk python3 py3-pip bash
+
+      - name: Build and install SDL (PS2)
+        run: |
+          git clone https://github.com/libsdl-org/SDL.git
+          cd SDL
+          git checkout SDL2
+          git checkout 7b28fb2
+
+          cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=$PS2DEV/share/ps2dev.cmake -DCMAKE_INSTALL_PREFIX=$PS2SDK/ports
+          cmake --build build
+          cmake --install build
+
+      - name: Compile PS2
+        run: |
+          cmake -S . -B oceanpop \
+          -DCMAKE_TOOLCHAIN_FILE=$PS2DEV/share/ps2dev.cmake \
+          -DCMAKE_POLICY_VERSION_MINIMUM=3.5
+          cmake --build oceanpop
+
+      - name: oceanpop-ps2
+        uses: actions/upload-artifact@v5
+        with:
+          name: chocolate-quake-ps2
+          path: oceanpop/oceanpop.elf
+          
   PSP:
     runs-on: ubuntu-latest
     container: pspdev/pspdev:latest
@@ -153,13 +189,13 @@ jobs:
             oceanpop/oceanpop*.zip
 
   Release:
-    needs: [Linux, Windows, PSP, Vita, Wii]
+    needs: [Linux, Windows, PSP, Vita, Wii, PS2]
     if: ${{ github.ref_type == 'tag' }}
     runs-on: ubuntu-latest
     strategy:
       max-parallel: 1
       matrix:
-        build: [linux, windows, psp, vita, wii]
+        build: [linux, windows, psp, vita, wii, ps2]
     steps:
     - uses: actions/download-artifact@v4
     - name: Zip artifacts
