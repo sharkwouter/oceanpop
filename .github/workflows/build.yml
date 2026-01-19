@@ -78,7 +78,7 @@ jobs:
             oceanpop/oceanpop.exe
             oceanpop/assets
 
-PS2:
+  PS2:
     name: PS2 build
     runs-on: ubuntu-latest
     container: ps2dev/ps2dev:latest
@@ -89,18 +89,7 @@ PS2:
       - name: Install dependencies
         run: |
           apk add cmake build-base git zip gawk python3 py3-pip bash
-
-      - name: Build and install SDL (PS2)
-        run: |
-          git clone https://github.com/libsdl-org/SDL.git
-          cd SDL
-          git checkout SDL2
-          git checkout 7b28fb2
-
-          cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=$PS2DEV/share/ps2dev.cmake -DCMAKE_INSTALL_PREFIX=$PS2SDK/ports
-          cmake --build build
-          cmake --install build
-
+    
       - name: Compile PS2
         run: |
           cmake -S . -B oceanpop \
