@@ -37,11 +37,11 @@ std::vector<Match> Board::match() {
     std::vector<Match> matchesFound = getMatches(this->shells);
 
     for (Match m : matchesFound) {
-        if (m.direction == Direction::HORIZONTAL) {
+        if (m.match_type == MatchType::HORIZONTAL) {
             for(int x = 0; x < 3; x++) {
                 this->shells[m.x+x][m.y] = ShellType::NONE;
             }
-        } else {
+        } else if (m.match_type == MatchType::VERTICAL)  {
             for(int y = 0; y < 3; y++) {
                 this->shells[m.x][m.y+y] = ShellType::NONE;
             }
@@ -53,21 +53,48 @@ std::vector<Match> Board::match() {
 
 std::vector<Match> Board::getMatches(std::vector<std::vector<ShellType>> shells){
     std::vector<Match> matchesFound;
+    std::vector<Match> verticalMatches;
+    std::vector<Match> horizontalMatches;
+    std::vector<Match> bonusMatches;
 
     for (int x = 0; x < getWidth(); x++) {
         for (int y = 0; y < getHeight() - 2; y++) {
             if (shellsMatch(shells, {x,y},{x,y+1},{x,y+2})) {
-                matchesFound.push_back({shells[x][y], x, y, Direction::VERTICAL});
+                verticalMatches.push_back({shells[x][y], x, y, MatchType::VERTICAL});
             }
         }
     }
     for (int y = 0; y < getHeight(); y++) {
         for (int x = 0; x < getWidth() - 2; x++) {
             if (shellsMatch(shells, {x,y},{x+1,y},{x+2,y})) {
-                matchesFound.push_back({shells[x][y], x, y, Direction::HORIZONTAL});
+                horizontalMatches.push_back({shells[x][y], x, y, MatchType::HORIZONTAL});
             }
         }
     }
+
+    // Find bonus matches, aka shells that are in both a horizontal and vertical  match
+    for (Match horizontal : horizontalMatches) {
+        for (Match vertical : verticalMatches) {
+            for (int h = 0; h < 3; h++) {
+                for (int v = 0; v < 3; v++) {
+                    if (horizontal.x + h == vertical.x && horizontal.y == vertical.y + v) {
+                        if (horizontal.type == ShellType::BUBBLE) {
+                            continue;
+                        }
+                        if (horizontal.type == ShellType::URCHIN) {
+                            continue;
+                        }
+                        bonusMatches.push_back({horizontal.type, horizontal.x + h, vertical.y + v, MatchType::BONUS});
+                    }
+                }
+            }
+        }
+    }
+
+    matchesFound.reserve(verticalMatches.size() + horizontalMatches.size() + bonusMatches.size());
+    matchesFound.insert(matchesFound.end(), verticalMatches.begin(), verticalMatches.end());
+    matchesFound.insert(matchesFound.end(), horizontalMatches.begin(), horizontalMatches.end());
+    matchesFound.insert(matchesFound.end(), bonusMatches.begin(), bonusMatches.end());
 
     return matchesFound;
 }
@@ -178,15 +205,15 @@ std::vector<std::vector<ShellType>> Board::getShellsAfterSwap(std::vector<std::v
 
     ShellType type1 = shells[p1.x][p1.y];
     if (p1.y == p2.y) {
-        int direction = ((p2.x - p1.x) > 0) ? 1 : -1;
-        for (int i = p1.x + direction; i != p2.x + direction; i+=direction) {
-            shells[i-direction][p1.y] = shells[i][p1.y];
+        int match_type = ((p2.x - p1.x) > 0) ? 1 : -1;
+        for (int i = p1.x + match_type; i != p2.x + match_type; i+=match_type) {
+            shells[i-match_type][p1.y] = shells[i][p1.y];
             shells[i][p1.y] = type1;
         }
     } else if (p1.x == p2.x) {
-        int direction = ((p2.y - p1.y) > 0) ? 1 : -1;
-        for (int i = p1.y + direction; i != p2.y + direction; i+=direction) {
-            shells[p1.x][i-direction] = shells[p1.x][i];
+        int match_type = ((p2.y - p1.y) > 0) ? 1 : -1;
+        for (int i = p1.y + match_type; i != p2.y + match_type; i+=match_type) {
+            shells[p1.x][i-match_type] = shells[p1.x][i];
             shells[p2.x][i] = type1;
         }
     }
