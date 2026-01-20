@@ -79,29 +79,40 @@ jobs:
             oceanpop/assets
 
   PS2:
-    name: PS2 build
     runs-on: ubuntu-latest
-    container: ps2dev/ps2dev:latest
+    container:
+      image: ps2dev/ps2dev:latest
 
     steps:
-      - uses: actions/checkout@v4
-
-      - name: Install dependencies
-        run: |
-          apk add cmake build-base git zip gawk python3 py3-pip bash
-    
-      - name: Compile PS2
-        run: |
-          cmake -S . -B oceanpop \
+    - name: Install dependencies
+      run: |
+        apk update
+        apk add --no-cache git cmake build-base pkgconf zip gawk python3 py3-pip bash 
+      
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        submodules: recursive
+      
+    - name: Configure (CMake)
+      run: |
+        mkdir -p oceanpop
+        cd oceanpop
+        cmake .. \
+          -DCMAKE_BUILD_TYPE=Release \
           -DCMAKE_TOOLCHAIN_FILE=$PS2DEV/share/ps2dev.cmake \
           -DCMAKE_POLICY_VERSION_MINIMUM=3.5
-          cmake --build oceanpop
+          cmake --build  .
+          cp ../LICENSE.txt ../README.md ./
 
-      - name: oceanpop-ps2
-        uses: actions/upload-artifact@v5
-        with:
-          name: chocolate-quake-ps2
-          path: oceanpop/oceanpop.elf
+    - name: Publish artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: oceanpop-ps2
+        path: |
+          oceanpop/oceanpop.elf
+          oceanpop/assets
+
           
   PSP:
     runs-on: ubuntu-latest
