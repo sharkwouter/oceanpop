@@ -83,8 +83,7 @@ jobs:
     steps:
     - name: Install dependencies
       run: |
-        apk update
-        apk add --no-cache git cmake build-base pkgconf zip gawk python3 py3-pip bash 
+        apk add --no-cache gmp mpc1 mpfr4 make pkgconf cmake git 
       
     - name: Checkout
       uses: actions/checkout@v4
@@ -97,8 +96,7 @@ jobs:
         cd oceanpop
         cmake .. \
           -DCMAKE_BUILD_TYPE=Release \
-          -DCMAKE_TOOLCHAIN_FILE=$PS2DEV/share/ps2dev.cmake \
-          -DCMAKE_POLICY_VERSION_MINIMUM=3.5
+          -DCMAKE_TOOLCHAIN_FILE=$PS2DEV/share/ps2dev.cmake
           cmake --build  .
 
     - name: Publish artifacts
