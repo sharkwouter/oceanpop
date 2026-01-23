@@ -79,26 +79,20 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: ps2dev/ps2dev:latest
-
     steps:
     - name: Install dependencies
       run: |
-        apk add --no-cache gmp mpc1 mpfr4 make pkgconf cmake git 
-      
+        apk add --no-cache gmp mpc1 mpfr4 make pkgconf cmake git
     - name: Checkout
       uses: actions/checkout@v4
       with:
         submodules: recursive
-      
-    - name: Configure (CMake)
+    - name: Build
       run: |
-        mkdir -p oceanpop
-        cd oceanpop
-        cmake .. \
-          -DCMAKE_BUILD_TYPE=Release \
-          -DCMAKE_TOOLCHAIN_FILE=$PS2DEV/share/ps2dev.cmake
-          cmake --build  .
-
+        mkdir oceanpop && cd oceanpop
+        cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=$PS2DEV/share/ps2dev.cmake ..
+        cmake --build  .
+        mips64r5900el-ps2-elf-strip --strip-unneeded oceanpop oceanpop.elf
     - name: Publish artifacts
       uses: actions/upload-artifact@v4
       with:
