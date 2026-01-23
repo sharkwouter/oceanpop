@@ -21,7 +21,7 @@ else()
 endif()
 
 set(BUILD_STATIC_DEFAULT OFF)
-if(WIN32 OR VITA OR PSP)
+if(WIN32 OR VITA OR PSP OR PS2)
     set(BUILD_STATIC_DEFAULT ON)
 endif()
 option(BUILD_STATIC "Build a static binary" ${BUILD_STATIC_DEFAULT})
@@ -34,10 +34,15 @@ pkg_search_module(TINYGETTEXT QUIET tinygettext)
 # Link libraries
 if(BUILD_STATIC)
     set(CMAKE_CXX_FLAGS "-static ${CMAKE_CXX_FLAGS}")
+if(PS2)
+    target_link_libraries(${PROJECT_NAME} PRIVATE
+        ${SDL2_STATIC_LIBRARIES} SDL2main
+    )
+else()
     target_link_libraries(${PROJECT_NAME} PRIVATE
         ${SDL2_STATIC_LIBRARIES}
     )
-
+endif()
     # Build libraries
     set(BUILD_STATIC_LIBS ON)
     set(BUILD_SHARED_LIBS OFF)
@@ -73,9 +78,15 @@ if(BUILD_STATIC)
     set(CMAKE_POSITION_INDEPENDENT_CODE OFF)
 
     add_subdirectory(vendor/SDL_image)
+if(PS2)
+    target_link_libraries(${PROJECT_NAME} PRIVATE
+        SDL2_image png
+    )
+else()
     target_link_libraries(${PROJECT_NAME} PRIVATE
         SDL2_image
     )
+endif()
     include_directories(
         vendor/SDL_image/include/
     )
@@ -104,7 +115,9 @@ if(BUILD_STATIC)
 
     # SDL_ttf
     set(SDL2TTF_BUILD_SHARED_LIBS OFF)
+if(NOT PS2)
     set(SDL2TTF_VENDORED ON)
+endif()
     set(SDL2TTF_SAMPLES OFF)
     set(SDL2TTF_FREETYPE ON)
     set(SDL2TTF_FREETYPE_VENDORED ON)
@@ -117,9 +130,15 @@ if(BUILD_STATIC)
     set(SDL2TTF_SAMPLES OFF)
 
     add_subdirectory(vendor/SDL_ttf)
+if(PS2)
+    target_link_libraries(${PROJECT_NAME} PRIVATE
+        SDL2_ttf z
+    )
+else()
     target_link_libraries(${PROJECT_NAME} PRIVATE
         SDL2_ttf
     )
+endif()
     include_directories(
         vendor/SDL_ttf/include/
     )
@@ -192,6 +211,9 @@ endif()
 
 if(PSP)
     set(ASSETS_BACKGROUNDS "${CMAKE_CURRENT_SOURCE_DIR}/platform/psp/assets/backgrounds")
+elseif(PS2)
+    set(ASSETS_BACKGROUNDS "${CMAKE_CURRENT_SOURCE_DIR}/platform/ps2/assets/backgrounds")
+    set(ASSETS_MUSIC "${CMAKE_CURRENT_SOURCE_DIR}/platform/ps2/assets/music")    
 elseif(VITA)
     set(ASSETS_BACKGROUNDS "${CMAKE_SOURCE_DIR}/platform/vita/assets/backgrounds")
 elseif(CMAKE_SYSTEM_NAME MATCHES "NintendoWii")
@@ -242,6 +264,9 @@ if(PSP)
 elseif(VITA)
     file(READ "${CMAKE_SOURCE_DIR}/assets/CREDITS_Vita.md" CONTENTS)
     file(APPEND "${CREDITS_FILE}" "${CONTENTS}")
+elseif(PS2)
+    file(READ "${CMAKE_SOURCE_DIR}/assets/CREDITS_PS2.md" CONTENTS)
+    file(APPEND "${CREDITS_FILE}" "${CONTENTS}")
 elseif(CMAKE_SYSTEM_NAME MATCHES "NintendoWii")
     file(READ "${CMAKE_SOURCE_DIR}/assets/CREDITS_Wii.md" CONTENTS)
     file(APPEND "${CREDITS_FILE}" "${CONTENTS}")
@@ -268,6 +293,8 @@ if (VITA)
         FILE "${ASSETS_SOUNDS}" assets/sounds
         FILE "${ASSETS_LANGUAGES}" assets/languages
     )
+elseif(PS2)
+	set(CMAKE_EXECUTABLE_SUFFIX .elf)
 elseif(PLATFORM_PSP)
     create_pbp_file(
         TARGET ${CMAKE_PROJECT_NAME}

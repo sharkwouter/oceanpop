@@ -75,6 +75,33 @@ jobs:
             oceanpop/oceanpop.exe
             oceanpop/assets
 
+  PS2:
+    runs-on: ubuntu-latest
+    container:
+      image: ps2dev/ps2dev:latest
+    steps:
+    - name: Install dependencies
+      run: |
+        apk add --no-cache gmp mpc1 mpfr4 make pkgconf cmake git
+    - name: Checkout
+      uses: actions/checkout@v4
+      with:
+        submodules: recursive
+    - name: Build
+      run: |
+        mkdir oceanpop && cd oceanpop
+        cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=$PS2DEV/share/ps2dev.cmake ..
+        cmake --build  .
+        mips64r5900el-ps2-elf-strip --strip-unneeded oceanpop.elf
+    - name: Publish artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: oceanpop-ps2
+        path: |
+          oceanpop/oceanpop.elf
+          oceanpop/assets
+
+          
   PSP:
     runs-on: ubuntu-latest
     container: pspdev/pspdev:latest
@@ -148,13 +175,13 @@ jobs:
             oceanpop/oceanpop*.zip
 
   Release:
-    needs: [Linux, Windows, PSP, Vita, Wii]
+    needs: [Linux, Windows, PSP, Vita, Wii, PS2]
     if: ${{ github.ref_type == 'tag' }}
     runs-on: ubuntu-latest
     strategy:
       max-parallel: 1
       matrix:
-        build: [linux, windows, psp, vita, wii]
+        build: [linux, windows, psp, vita, wii, ps2]
     steps:
     - uses: actions/download-artifact@v4
     - name: Zip artifacts

@@ -46,7 +46,9 @@ Window::Window(const std::string &title, OptionManager * options) : options(opti
             }
         }
     }
-
+#ifdef __PS2__
+    SDL_SetHint(SDL_HINT_PS2_DYNAMIC_VSYNC, "1");    
+#endif
     this->renderer = SDL_CreateRenderer(this->window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
     if (this->renderer == nullptr) {
         panic("couldn't create renderer: " + std::string(SDL_GetError()));

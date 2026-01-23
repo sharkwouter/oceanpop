@@ -63,7 +63,11 @@ void ThemeManager::loadMusic(Theme theme) {
 
     this->music_theme = theme;
 
+#ifdef __PS2__
+    std::string music_file_type = "wav";
+#else
     std::string music_file_type = "mp3";
+#endif
 
     switch (this->music_theme) {
         case Theme::THEME1:
