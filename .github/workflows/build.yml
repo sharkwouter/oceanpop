@@ -92,7 +92,7 @@ jobs:
         mkdir oceanpop && cd oceanpop
         cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=$PS2DEV/share/ps2dev.cmake ..
         cmake --build  .
-        mips64r5900el-ps2-elf-strip --strip-unneeded oceanpop oceanpop.elf
+        mips64r5900el-ps2-elf-strip --strip-unneeded oceanpop.elf
     - name: Publish artifacts
       uses: actions/upload-artifact@v4
       with:
