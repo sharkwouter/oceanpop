@@ -13,3 +13,6 @@
 [submodule "vendor/tinygettext"]
 	path = vendor/tinygettext
 	url = https://github.com/tinygettext/tinygettext.git
+[submodule "vendor/SDL"]
+	path = vendor/SDL
+	url = https://github.com/libsdl-org/SDL.git
