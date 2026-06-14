@@ -26,58 +26,54 @@ if(WIN32 OR VITA OR PSP OR PS2)
 endif()
 option(BUILD_STATIC "Build a static binary" ${BUILD_STATIC_DEFAULT})
 
-# Find libraries
-include(FindPkgConfig)
-pkg_search_module(SDL2 REQUIRED sdl2)
-pkg_search_module(TINYGETTEXT QUIET tinygettext)
 
 # Link libraries
 if(BUILD_STATIC)
     set(CMAKE_CXX_FLAGS "-static ${CMAKE_CXX_FLAGS}")
+endif()
+
+set(SDL_SHARED OFF CACHE INTERNAL "" FORCE)
+set(SDL_STATIC ON CACHE INTERNAL "" FORCE)
+set(SDL_DISABLE_INSTALL ON CACHE INTERNAL "" FORCE)
+set(SDL_DISABLE_INSTALL_DOCS ON CACHE INTERNAL "" FORCE)
+set(SDL_TEST_LIBRARY OFF CACHE INTERNAL "" FORCE)
+set(SDL_TESTS OFF CACHE INTERNAL "" FORCE)
+set(SDL_EXAMPLES OFF CACHE INTERNAL "" FORCE)
+add_subdirectory(vendor/SDL)
 if(PS2)
     target_link_libraries(${PROJECT_NAME} PRIVATE
-        ${SDL2_STATIC_LIBRARIES} SDL2main
+        SDL2::SDL2-static SDL2::SDL2main
     )
 else()
     target_link_libraries(${PROJECT_NAME} PRIVATE
-        ${SDL2_STATIC_LIBRARIES}
+        SDL2::SDL2-static
     )
 endif()
-    # Build libraries
-    set(BUILD_STATIC_LIBS ON)
-    set(BUILD_SHARED_LIBS OFF)
-    set(BUILD_OBJECT_LIBS OFF)
+# Build libraries
+set(BUILD_STATIC_LIBS ON)
+set(BUILD_SHARED_LIBS OFF)
+set(BUILD_OBJECT_LIBS OFF)
 
-    # jsoncpp
-    pkg_search_module(JSONCPP QUIET jsoncpp)
-    if (JSONCPP_FOUND)
-        target_link_libraries(${PROJECT_NAME} PRIVATE
-            ${JSONCPP_STATIC_LIBRARIES}
-        )
-        include_directories(
-            ${JSONCPP_INCLUDE_DIRS}
-        )
-    else()
-        set(JSONCPP_WITH_TESTS OFF)
-        set(JSONCPP_WITH_POST_BUILD_UNITTEST OFF)
-        set(JSONCPP_WITH_PKGCONFIG_SUPPORT OFF)
-        set(JSONCPP_WITH_CMAKE_PACKAGE OFF)
+# jsoncpp
+set(JSONCPP_WITH_TESTS OFF)
+set(JSONCPP_WITH_POST_BUILD_UNITTEST OFF)
+set(JSONCPP_WITH_PKGCONFIG_SUPPORT OFF)
+set(JSONCPP_WITH_CMAKE_PACKAGE OFF)
 
-        add_subdirectory(vendor/jsoncpp)
-        target_link_libraries(${PROJECT_NAME} PRIVATE
-            jsoncpp_static
-        )
-        include_directories(
-            vendor/jsoncpp/include/json
-        )
-    endif()
+add_subdirectory(vendor/jsoncpp)
+target_link_libraries(${PROJECT_NAME} PRIVATE
+    jsoncpp_static
+)
+include_directories(
+    vendor/jsoncpp/include/json
+)
 
-    # SDL_image
-    set(SDL2IMAGE_SAMPLES OFF)
-    set(SDL2IMAGE_BACKEND_STB ON)
-    set(CMAKE_POSITION_INDEPENDENT_CODE OFF)
+# SDL_image
+set(SDL2IMAGE_SAMPLES OFF)
+set(SDL2IMAGE_BACKEND_STB ON)
+set(CMAKE_POSITION_INDEPENDENT_CODE OFF)
 
-    add_subdirectory(vendor/SDL_image)
+add_subdirectory(vendor/SDL_image)
 if(PS2)
     target_link_libraries(${PROJECT_NAME} PRIVATE
         SDL2_image png
@@ -87,49 +83,51 @@ else()
         SDL2_image
     )
 endif()
-    include_directories(
-        vendor/SDL_image/include/
-    )
+include_directories(
+    vendor/SDL_image/include/
+)
 
-    #SDL_mixer
-    set(SDL2MIXER_DEPS_SHARED OFF)
-    set(SDL2MIXER_VENDORED OFF)
-    set(SDL2MIXER_SAMPLES OFF)
-    set(SDL2MIXER_CMD OFF)
-    set(SDL2MIXER_FLAC OFF)
-    set(SDL2MIXER_OPUS OFF)
-    set(SDL2MIXER_MOD OFF)
-    set(SDL2MIXER_WAVE ON)
-    set(SDL2MIXER_WAVPACK OFF)
-    set(SDL2MIXER_MIDI OFF)
-    set(SDL2MIXER_MP3 ON)
-    set(SDL2MIXER_MP3_MINIMP3 ON)
+#SDL_mixer
+set(SDL2MIXER_DEPS_SHARED OFF)
+set(SDL2MIXER_VENDORED OFF)
+set(SDL2MIXER_SAMPLES OFF)
+set(SDL2MIXER_CMD OFF)
+set(SDL2MIXER_FLAC OFF)
+set(SDL2MIXER_OPUS OFF)
+set(SDL2MIXER_MOD OFF)
+set(SDL2MIXER_WAVE ON)
+set(SDL2MIXER_WAVPACK OFF)
+set(SDL2MIXER_MIDI OFF)
+set(SDL2MIXER_MP3 ON)
+set(SDL2MIXER_MP3_MINIMP3 ON)
 
-    add_subdirectory(vendor/SDL_mixer)
-    target_link_libraries(${PROJECT_NAME} PRIVATE
-        SDL2_mixer
-    )
-    include_directories(
-        vendor/SDL_mixer/include/
-    )
+add_subdirectory(vendor/SDL_mixer)
+target_link_libraries(${PROJECT_NAME} PRIVATE
+    SDL2_mixer
+)
+include_directories(
+    vendor/SDL_mixer/include/
+)
 
-    # SDL_ttf
-    set(SDL2TTF_BUILD_SHARED_LIBS OFF)
+# SDL_ttf
+set(SDL2TTF_BUILD_SHARED_LIBS OFF)
 if(NOT PS2)
     set(SDL2TTF_VENDORED ON)
+else()
+    set(SDL2TTF_VENDORED OFF)
 endif()
-    set(SDL2TTF_SAMPLES OFF)
-    set(SDL2TTF_FREETYPE ON)
-    set(SDL2TTF_FREETYPE_VENDORED ON)
-    set(SDL2TTF_HARFBUZZ OFF)
-    set(SDL2TTF_HARFBUZZ_VENDORED OFF)
-    set(SDL2TTF_SAMPLES OFF)
-    set(SDL2TTF_SAMPLES OFF)
-    set(SDL2TTF_SAMPLES OFF)
-    set(SDL2TTF_SAMPLES OFF)
-    set(SDL2TTF_SAMPLES OFF)
+set(SDL2TTF_SAMPLES OFF)
+set(SDL2TTF_FREETYPE ON)
+set(SDL2TTF_FREETYPE_VENDORED ON)
+set(SDL2TTF_HARFBUZZ OFF)
+set(SDL2TTF_HARFBUZZ_VENDORED OFF)
+set(SDL2TTF_SAMPLES OFF)
+set(SDL2TTF_SAMPLES OFF)
+set(SDL2TTF_SAMPLES OFF)
+set(SDL2TTF_SAMPLES OFF)
+set(SDL2TTF_SAMPLES OFF)
 
-    add_subdirectory(vendor/SDL_ttf)
+add_subdirectory(vendor/SDL_ttf)
 if(PS2)
     target_link_libraries(${PROJECT_NAME} PRIVATE
         SDL2_ttf z
@@ -139,64 +137,29 @@ else()
         SDL2_ttf
     )
 endif()
-    include_directories(
-        vendor/SDL_ttf/include/
-    )
+include_directories(
+    vendor/SDL_ttf/include/
+)
 
-    # tinygettext
-    if (TINYGETTEXT_FOUND)
-        target_link_libraries(${PROJECT_NAME} PRIVATE
-            ${TINYGETTEXT_STATIC_LIBRARIES}
-        )
-    else()
-        set(BUILD_TESTS OFF)
-        set(TINYGETTEXT_WITH_SDL ON)
+# tinygettext
+set(BUILD_TESTS OFF)
+set(TINYGETTEXT_WITH_SDL ON)
 
-        add_subdirectory(vendor/tinygettext)
-        target_link_libraries(${PROJECT_NAME} PRIVATE
-            tinygettext
-        )
-        include_directories(
-            vendor/tinygettext/include/
-        )
-    endif()
-else()
-    pkg_search_module(SDL2_IMAGE REQUIRED SDL2_image)
-    pkg_search_module(SDL2_MIXER REQUIRED SDL2_mixer)
-    pkg_search_module(SDL2_TTF REQUIRED SDL2_ttf)
-    pkg_search_module(JSONCPP REQUIRED jsoncpp)
-
-    target_link_libraries(${PROJECT_NAME} PRIVATE
-        ${SDL2_LIBRARIES}
-        ${SDL2_IMAGE_LIBRARIES}
-        ${SDL2_MIXER_LIBRARIES}
-        ${SDL2_TTF_LIBRARIES}
-        ${JSONCPP_LIBRARIES}
-    )
-    include_directories(
-        ${SDL2_IMAGE_INCLUDE_DIRS}
-        ${SDL2_MIXER_INCLUDE_DIRS}
-        ${SDL2_TTF_INCLUDE_DIRS}
-        ${JSONCPP_INCLUDE_DIRS}
-    )
-endif()
+add_subdirectory(vendor/tinygettext)
+target_link_libraries(${PROJECT_NAME} PRIVATE
+    tinygettext
+)
+include_directories(
+    vendor/tinygettext/include/
+)
 
 include_directories(
     ${PROJECT_SOURCE_DIR}/include
     ${SDL2_INCLUDE_DIRS}
 )
 
-if(TINYGETTEXT_FOUND OR BUILD_STATIC)
-    message("-- tinygettext library found, building with translation support")
-    if(NOT BUILD_STATIC)
-        target_link_libraries(${PROJECT_NAME} PRIVATE  ${TINYGETTEXT_LIBRARIES})
-    endif()
-    set(TRANSLATION_SUPPORT ON)
-    add_compile_definitions(TRANSLATION_SUPPORT=1)
-else()
-    message("-- tinygettext library not found, building without translation support")
-    set(TRANSLATION_SUPPORT OFF)
-endif()
+set(TRANSLATION_SUPPORT ON)
+add_compile_definitions(TRANSLATION_SUPPORT=1)
 
 # Set asset paths
 set(ASSETS_FONTS "${CMAKE_SOURCE_DIR}/assets/fonts")
