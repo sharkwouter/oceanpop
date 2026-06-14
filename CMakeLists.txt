@@ -32,27 +32,38 @@ if(BUILD_STATIC)
     set(CMAKE_CXX_FLAGS "-static ${CMAKE_CXX_FLAGS}")
 endif()
 
-set(SDL_SHARED OFF CACHE INTERNAL "" FORCE)
-set(SDL_STATIC ON CACHE INTERNAL "" FORCE)
-set(SDL_DISABLE_INSTALL ON CACHE INTERNAL "" FORCE)
-set(SDL_DISABLE_INSTALL_DOCS ON CACHE INTERNAL "" FORCE)
-set(SDL_TEST_LIBRARY OFF CACHE INTERNAL "" FORCE)
-set(SDL_TESTS OFF CACHE INTERNAL "" FORCE)
-set(SDL_EXAMPLES OFF CACHE INTERNAL "" FORCE)
-add_subdirectory(vendor/SDL)
-if(PS2)
-    target_link_libraries(${PROJECT_NAME} PRIVATE
-        SDL2::SDL2-static SDL2::SDL2main
-    )
-else()
-    target_link_libraries(${PROJECT_NAME} PRIVATE
-        SDL2::SDL2-static
-    )
-endif()
 # Build libraries
 set(BUILD_STATIC_LIBS ON)
 set(BUILD_SHARED_LIBS OFF)
 set(BUILD_OBJECT_LIBS OFF)
+
+# SDL
+if(CMAKE_SYSTEM_NAME MATCHES "NintendoWii")
+    include(FindPkgConfig)
+    pkg_search_module(SDL2 REQUIRED sdl2)
+    target_link_libraries(${PROJECT_NAME} PRIVATE
+        ${SDL2_STATIC_LIBRARIES}
+    )
+else()
+    set(SDL_SHARED OFF CACHE INTERNAL "" FORCE)
+    set(SDL_STATIC ON CACHE INTERNAL "" FORCE)
+    set(SDL_DISABLE_INSTALL ON CACHE INTERNAL "" FORCE)
+    set(SDL_DISABLE_INSTALL_DOCS ON CACHE INTERNAL "" FORCE)
+    set(SDL_TEST_LIBRARY OFF CACHE INTERNAL "" FORCE)
+    set(SDL_TESTS OFF CACHE INTERNAL "" FORCE)
+    set(SDL_EXAMPLES OFF CACHE INTERNAL "" FORCE)
+    add_subdirectory(vendor/SDL)
+    if(PS2)
+        target_link_libraries(${PROJECT_NAME} PRIVATE
+            SDL2::SDL2-static SDL2::SDL2main
+        )
+    else()
+        target_link_libraries(${PROJECT_NAME} PRIVATE
+            SDL2::SDL2-static
+        )
+    endif()
+endif()
+
 
 # jsoncpp
 set(JSONCPP_WITH_TESTS OFF)
