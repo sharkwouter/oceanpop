@@ -8,7 +8,7 @@
 #include "State.hpp"
 
 ModeSelectState::ModeSelectState(SDL_Renderer * renderer, FontManager * fonts, SoundManager * sounds, OptionManager * options) : renderer(renderer), fonts(fonts), sounds(sounds), options(options),
-    theme(renderer, options, Theme::MENU)
+    theme(renderer, sounds->getMixer(), options, Theme::MENU)
 {
     this->loadTexts();
 }
@@ -23,7 +23,7 @@ ModeSelectState::~ModeSelectState() {
 
 
 void ModeSelectState::handleEvents(std::vector<Event> events) {
-    SDL_Point mouse;
+    SDL_FPoint mouse;
 
     for(Event event :events) {
         switch (event) {
@@ -86,44 +86,44 @@ void ModeSelectState::draw(SDL_Renderer * renderer) {
     }
 
     // Draw title
-    SDL_Rect rect_title = {this->options->getScreenWidth() / 2, this->text_start_y / 2, 0, 0};
-    SDL_QueryTexture(text_title, NULL, NULL, &rect_title.w, &rect_title.h);
+    SDL_FRect rect_title = {this->options->getScreenWidth() / 2, this->text_start_y / 2, 0, 0};
+    SDL_GetTextureSize(text_title, &rect_title.w, &rect_title.h);
     rect_title.x -= rect_title.w/2;
     rect_title.y -= rect_title.h/2;
-    SDL_RenderCopy(renderer, text_title, NULL, &rect_title);
+    SDL_RenderTexture(renderer, text_title, NULL, &rect_title);
 
     // Draw options
     for(int i = 0; i < (int) texts.size(); i++) {
         // Draw the option title
-        SDL_Rect rect = {this->options->getScreenWidth()/2, getOptionY(i), 0, 0};
-        SDL_QueryTexture(texts[i], NULL, NULL, &rect.w, &rect.h);
+        SDL_FRect rect = {this->options->getScreenWidth()/2, getOptionY(i), 0, 0};
+        SDL_GetTextureSize(texts[i], &rect.w, &rect.h);
         rect.x -= rect.w/2;
 
-        SDL_Rect sub_rect;
+        SDL_FRect sub_rect;
         sub_rect.h = 0;
         if (sub_texts[i] != NULL) {
-            sub_rect = {this->options->getScreenWidth()/2, rect.y+rect.h, 0, 0};
-            SDL_QueryTexture(sub_texts[i], NULL, NULL, &sub_rect.w, &sub_rect.h);
+            sub_rect = {(float) this->options->getScreenWidth()/2, rect.y+rect.h, 0, 0};
+            SDL_GetTextureSize(sub_texts[i], &sub_rect.w, &sub_rect.h);
             sub_rect.x -= sub_rect.w/2;
         }
 
         // Set the texture color
         if(i == selection) {
             // Draw selection box
-            SDL_Rect rect_selection = {0, rect.y, this->options->getScreenWidth(), rect.h + sub_rect.h};
+            SDL_FRect rect_selection = {0, rect.y, this->options->getScreenWidth(), rect.h + sub_rect.h};
             SDL_SetRenderDrawColor(renderer, COLOR_BOARD.r, COLOR_BOARD.g, COLOR_BOARD.b, COLOR_BOARD.a);
             SDL_RenderFillRect(renderer, &rect_selection);
 
             // Draw lines around selection box
             SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-            SDL_RenderDrawLine(renderer, rect_selection.x, rect_selection.y, rect_selection.x + rect_selection.w, rect_selection.y);
-            SDL_RenderDrawLine(renderer, rect_selection.x, rect_selection.y + rect_selection.h, rect_selection.x + rect_selection.w, rect_selection.y + rect_selection.h);
+            SDL_RenderLine(renderer, rect_selection.x, rect_selection.y, rect_selection.x + rect_selection.w, rect_selection.y);
+            SDL_RenderLine(renderer, rect_selection.x, rect_selection.y + rect_selection.h, rect_selection.x + rect_selection.w, rect_selection.y + rect_selection.h);
         }
 
         // Render the option text
-        SDL_RenderCopy(renderer, texts[i], NULL, &rect);
+        SDL_RenderTexture(renderer, texts[i], NULL, &rect);
         if (sub_texts[i] != NULL && selection == i) {
-            SDL_RenderCopy(renderer, sub_texts[i], NULL, &sub_rect);
+            SDL_RenderTexture(renderer, sub_texts[i], NULL, &sub_rect);
         }
     }
 }

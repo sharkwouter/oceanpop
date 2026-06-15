@@ -3,7 +3,7 @@
 #include "../utils.hpp"
 
 GameStateRelaxed::GameStateRelaxed(SDL_Renderer * renderer, FontManager * fonts, SoundManager * sounds, OptionManager * options) :
-    theme(renderer, options, Theme::NONE),
+    theme(renderer, sounds->getMixer(), options, Theme::NONE),
     pause_screen(renderer, fonts, options, _("Game Paused"), _("press the confirm button to exit"))
 {
     this->renderer = renderer;

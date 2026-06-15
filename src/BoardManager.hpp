@@ -2,8 +2,8 @@
 #define BOARDMANAGER_HPP
 
 #include <vector>
-#include <SDL.h>
-#include <SDL_mixer.h>
+#include <SDL3/SDL.h>
+#include <SDL3_mixer/SDL_mixer.h>
 #include "Board.hpp"
 #include "constants.hpp"
 #include "Shell.hpp"
@@ -25,8 +25,8 @@ private:
 
     TextureManager textures;
 
-    SDL_Rect rect_board;
-    SDL_Rect rect_scoreboard;
+    SDL_FRect rect_board;
+    SDL_FRect rect_scoreboard;
     SDL_Point selected;
     SDL_Point picked;
 
@@ -72,8 +72,8 @@ private:
     SDL_Texture * text_plus_three = NULL;
     SDL_Texture * text_plus_six = NULL;
 
-    SDL_Rect rect_matches;
-    SDL_Rect rect_moves;
+    SDL_FRect rect_matches;
+    SDL_FRect rect_moves;
 
     int animation = 0;
     unsigned int animation_start;

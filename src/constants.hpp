@@ -20,7 +20,7 @@ inline constexpr int DEFAULT_BOARD_WIDTH = 8;
 inline constexpr int DEFAULT_BOARD_HEIGHT = 7;
 inline constexpr int DEFAULT_SHELL_SIZE = 256; // The default should be the largest
 
-#if !defined(__PSP__) && !defined(__vita__) && !defined(__PS2__)
+#if !defined(SDL_PLATFORM_PSP) && !defined(__vita__) && !defined(SDL_PLATFORM_PS2)
 #   define SHOW_RESOLUTION_OPTIONS 1
 #endif
 

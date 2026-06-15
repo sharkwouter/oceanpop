@@ -1,6 +1,6 @@
 #include "GameState.hpp"
 
-#include <SDL_ttf.h>
+#include <SDL3_ttf/SDL_ttf.h>
 
 #include <cmath>
 #include <filesystem>
@@ -11,7 +11,7 @@
 #include "../utils.hpp"
 
 GameState::GameState(SDL_Renderer * renderer, FontManager * fonts, SoundManager * sounds, OptionManager * options) :
-    theme(renderer, options, Theme::NONE),
+    theme(renderer, sounds->getMixer(), options, Theme::NONE),
     pause_screen(renderer, fonts, options, _("Game Paused"), _("press the confirm button to exit")),
     win_screen(renderer, fonts, options, _("Level Finished!"), _("press the confirm button to continue")),
     lose_screen(renderer, fonts, options, _("Level Failed"), _("press the confirm button to restart"))

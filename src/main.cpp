@@ -2,7 +2,7 @@
 #include <stdexcept>
 #include <vector>
 
-#include <SDL.h>
+#include <SDL3/SDL.h>
 #include <json/json.h>
 
 #include "Window.hpp"

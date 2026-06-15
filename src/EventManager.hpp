@@ -1,5 +1,5 @@
 #include <vector>
-#include <SDL2/SDL.h>
+#include <SDL3/SDL.h>
 
 #include "Window.hpp"
 #include "Event.hpp"
@@ -20,7 +20,7 @@ private:
     void closeDisconnectedGameControllers();
     void closeAllGameControllers();
 
-    std::vector<SDL_GameController*> gameControllers;
+    std::vector<SDL_Gamepad*> gameControllers;
 
 public:
     ~EventManager();

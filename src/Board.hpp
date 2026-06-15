@@ -2,7 +2,7 @@
 #define BOARD_HPP
 
 #include <vector>
-#include <SDL.h>
+#include <SDL3/SDL.h>
 #include "Shell.hpp"
 
 class Board {

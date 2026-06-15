@@ -8,73 +8,84 @@ SoundManager::SoundManager(OptionManager * options) : options(options) {
 }
 
 SoundManager::~SoundManager() {
-    Mix_FreeChunk(sound_pick);
-    Mix_FreeChunk(sound_drop);
-    Mix_FreeChunk(sound_match1);
-    Mix_FreeChunk(sound_match2);
-    Mix_FreeChunk(sound_pain);
-    Mix_FreeChunk(sound_completed);
-    Mix_FreeChunk(sound_failed);
+    MIX_DestroyAudio(sound_pick);
+    MIX_DestroyAudio(sound_drop);
+    MIX_DestroyAudio(sound_match1);
+    MIX_DestroyAudio(sound_match2);
+    MIX_DestroyAudio(sound_pain);
+    MIX_DestroyAudio(sound_completed);
+    MIX_DestroyAudio(sound_failed);
+    MIX_DestroyMixer(this->mixer);
 }
 
 void SoundManager::load() {
-    sound_pick = Mix_LoadWAV(getResourcePath("assets/sounds/pick.wav").c_str());
-    sound_drop = Mix_LoadWAV(getResourcePath("assets/sounds/drop.wav").c_str());
-    sound_match1 = Mix_LoadWAV(getResourcePath("assets/sounds/match1.wav").c_str());
-    sound_match2 = Mix_LoadWAV(getResourcePath("assets/sounds/match2.wav").c_str());
-    sound_pain = Mix_LoadWAV(getResourcePath("assets/sounds/pain.wav").c_str());
-    sound_completed = Mix_LoadWAV(getResourcePath("assets/sounds/completed.wav").c_str());
-    sound_failed = Mix_LoadWAV(getResourcePath("assets/sounds/failed.wav").c_str());
+    this->mixer = MIX_CreateMixerDevice(SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK, NULL);
+    if (!this->mixer) {
+      panic("Couldn't create mixer on default device: " + std::string(SDL_GetError()));
+    }
 
-    if (sound_drop == NULL ||
-        sound_drop == NULL ||
-        sound_match1 == NULL ||
-        sound_match2 == NULL ||
-        sound_pain == NULL ||
-        sound_completed == NULL ||
-        sound_failed == NULL) {
-            SDL_Log("Couldn't load all sounds: %s", Mix_GetError());
+    this->sounds_track = MIX_CreateTrack(this->mixer);
+    this->sound_pick = MIX_LoadAudio(this->mixer, getResourcePath("assets/sounds/pick.wav").c_str(), false);
+    this->sound_drop = MIX_LoadAudio(this->mixer, getResourcePath("assets/sounds/drop.wav").c_str(), false);
+    this->sound_match1 = MIX_LoadAudio(this->mixer, getResourcePath("assets/sounds/match1.wav").c_str(), false);
+    this->sound_match2 = MIX_LoadAudio(this->mixer, getResourcePath("assets/sounds/match2.wav").c_str(), false);
+    this->sound_pain = MIX_LoadAudio(this->mixer, getResourcePath("assets/sounds/pain.wav").c_str(), false);
+    this->sound_completed = MIX_LoadAudio(this->mixer, getResourcePath("assets/sounds/completed.wav").c_str(), false);
+    this->sound_failed = MIX_LoadAudio(this->mixer, getResourcePath("assets/sounds/failed.wav").c_str(), false);
+
+    if (this->sound_drop == NULL ||
+        this->sound_drop == NULL ||
+        this->sound_match1 == NULL ||
+        this->sound_match2 == NULL ||
+        this->sound_pain == NULL ||
+        this->sound_completed == NULL ||
+        this->sound_failed == NULL) {
+            SDL_Log("Couldn't load all sounds: %s", SDL_GetError());
     }
 }
 
 void SoundManager::play(Sound sound) {
-    int volume = MIX_MAX_VOLUME/4*this->options->getSoundVolume();
+    float volume = 0.25f * (float) this->options->getSoundVolume();
     switch (sound) {
         case Sound::PICK:
-            Mix_VolumeChunk(sound_pick, volume);
-            Mix_PlayChannel(channel_pick, sound_pick, SDL_FALSE);
+            MIX_SetTrackGain(this->sounds_track, volume);
+            MIX_SetTrackAudio(this->sounds_track, sound_pick);
+            MIX_PlayTrack(this->sounds_track, 0);
             break;
         case Sound::DROP:
-            Mix_VolumeChunk(sound_drop, volume);
-            Mix_PlayChannel(channel_pick, sound_drop, SDL_FALSE);
+            MIX_SetTrackGain(this->sounds_track, volume);
+            MIX_SetTrackAudio(this->sounds_track, sound_drop);
+            MIX_PlayTrack(this->sounds_track, 0);
             break;
         case Sound::MATCH:
             if (uneven_match) {
-                Mix_VolumeChunk(sound_match2, volume);
-                Mix_PlayChannel(channel_match2, sound_match2, SDL_FALSE);
+                MIX_SetTrackGain(this->sounds_track, volume);
+                MIX_SetTrackAudio(this->sounds_track, sound_match2);
+                MIX_PlayTrack(this->sounds_track, 0);
             } else {
-                Mix_VolumeChunk(sound_match1, volume);
-                Mix_PlayChannel(channel_match1, sound_match1, SDL_FALSE);
+                MIX_SetTrackGain(this->sounds_track, volume);
+                MIX_SetTrackAudio(this->sounds_track, sound_match1);
+                MIX_PlayTrack(this->sounds_track, 0);
             }
             uneven_match = !(uneven_match);
             break;
         case Sound::PAIN:
-            Mix_VolumeChunk(sound_pain, volume);
-            Mix_HaltChannel(channel_match1);
-            Mix_HaltChannel(channel_match2);
-            Mix_PlayChannel(channel_notify, sound_pain, SDL_FALSE);
+            MIX_SetTrackGain(this->sounds_track, volume);
+            MIX_StopTrack(this->sounds_track, 0);
+            MIX_SetTrackAudio(this->sounds_track, sound_pain);
+            MIX_PlayTrack(this->sounds_track, 0);
             break;
         case Sound::COMPLETED:
-            Mix_VolumeChunk(sound_completed, volume);
-            Mix_HaltChannel(channel_match1);
-            Mix_HaltChannel(channel_match2);
-            Mix_PlayChannel(channel_notify, sound_completed, SDL_FALSE);
+            MIX_SetTrackGain(this->sounds_track, volume);
+            MIX_StopTrack(this->sounds_track, 0);
+            MIX_SetTrackAudio(this->sounds_track, sound_completed);
+            MIX_PlayTrack(this->sounds_track, 0);
             break;
         case Sound::FAILED:
-            Mix_VolumeChunk(sound_failed, volume);
-            Mix_HaltChannel(channel_match1);
-            Mix_HaltChannel(channel_match2);
-            Mix_PlayChannel(channel_notify, sound_failed, SDL_FALSE);
+            MIX_SetTrackGain(this->sounds_track, volume);
+            MIX_StopTrack(this->sounds_track, 0);
+            MIX_SetTrackAudio(this->sounds_track, sound_failed);
+            MIX_PlayTrack(this->sounds_track, 0);
             break;
     }
 }

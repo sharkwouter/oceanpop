@@ -1,4 +1,4 @@
-#include <SDL_image.h>
+#include <SDL3_image/SDL_image.h>
 #include "TextureManager.hpp"
 #include "utils.hpp"
 
@@ -14,7 +14,7 @@ SDL_Texture * TextureManager::load(SDL_Renderer * renderer, const std::string &f
     SDL_Texture * texture = IMG_LoadTexture(renderer, getResourcePath(file).c_str());
 
     if (texture == nullptr) {
-        panic("couldn't load image: " + std::string(IMG_GetError()));
+        panic("couldn't load image: " + std::string(SDL_GetError()));
     }
 
     return std::move(texture);

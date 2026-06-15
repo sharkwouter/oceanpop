@@ -1,7 +1,7 @@
 #ifndef GAMESTATE_HPP
 #define GAMESTATE_HPP
 
-#include <SDL.h>
+#include <SDL3/SDL.h>
 
 #include <vector>
 #include <filesystem>

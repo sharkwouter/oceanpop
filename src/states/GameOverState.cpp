@@ -3,7 +3,7 @@
 #include "../utils.hpp"
 
 GameOverState::GameOverState(SDL_Renderer * renderer, FontManager * fonts, SoundManager * sounds, OptionManager * options) :
-    theme(renderer, options, Theme::MENU),
+    theme(renderer, sounds->getMixer(), options, Theme::MENU),
     screen_text(renderer, fonts, options, _("Game Over!"), _("press the confirm button to exit"))
 {
     this->renderer = renderer;

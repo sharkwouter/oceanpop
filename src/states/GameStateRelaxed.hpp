@@ -1,7 +1,7 @@
 #ifndef GAMESTATERELAXED_HPP
 #define GAMESTATERELAXED_HPP
 
-#include <SDL.h>
+#include <SDL3/SDL.h>
 #include <vector>
 #include "BaseState.hpp"
 #include "../BoardManager.hpp"

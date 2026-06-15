@@ -19,7 +19,7 @@ void FontManager::load() {
     font = TTF_OpenFont(getResourcePath("assets/fonts/2K4sRegular.ttf").c_str(), this->shellSize/2);
     font_title = TTF_OpenFont(getResourcePath("assets/fonts/2K4sRegular.ttf").c_str(), this->shellSize);
     if (font_small == NULL || font == NULL || font_title == NULL) {
-        panic("Couldn't load font: " + std::string(TTF_GetError()));
+        panic("Couldn't load font: " + std::string(SDL_GetError()));
     }
 }
 
@@ -50,14 +50,14 @@ SDL_Texture * FontManager::getTexture(SDL_Renderer *renderer, std::string text, 
         break;
     }
     
-    SDL_Surface * surface = TTF_RenderUTF8_Blended(current_font, text.c_str(), color);
+    SDL_Surface * surface = TTF_RenderText_Blended(current_font, text.c_str(), text.length(), color);
     if (surface == NULL) {
-        SDL_Log("Couldn't create surface for text %s: %s", text.c_str(), TTF_GetError());
+        SDL_Log("Couldn't create surface for text %s: %s", text.c_str(), SDL_GetError());
         return NULL;
     }
 
     SDL_Texture * texture = SDL_CreateTextureFromSurface(renderer, surface);
-    SDL_FreeSurface(surface);
+    SDL_DestroySurface(surface);
 
     return texture;
 }

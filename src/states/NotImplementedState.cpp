@@ -3,7 +3,7 @@
 #include "../utils.hpp"
 
 NotImplementedState::NotImplementedState(SDL_Renderer * renderer, FontManager * fonts, SoundManager * sounds, OptionManager * options) :
-    theme(renderer, options, Theme::MENU),
+    theme(renderer, sounds->getMixer(), options, Theme::MENU),
     screen_text(renderer, fonts, options, _("Not Yet Implemented"), _("press the confirm button to continue"))
 {
     this->renderer = renderer;
