@@ -19,16 +19,17 @@ struct Shell {
     int y;
 };
 
-enum class Direction {
+enum class MatchType {
     HORIZONTAL,
-    VERTICAL
+    VERTICAL,
+    BONUS // Having a shell in both a vertical and horizontal match results in a bonus point
 };
 
 struct Match {
     ShellType type;
     int x;
     int y;
-    Direction direction;
+    MatchType match_type;
 };
 
 #endif // SHELL_HPP
