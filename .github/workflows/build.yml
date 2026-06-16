@@ -9,7 +9,7 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y wget cmake libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-ttf-dev libjsoncpp-dev libfuse2
+          sudo apt-get install --no-install-recommends git ca-certificates g++ make cmake zlib1g-dev libasound-dev libxkbcommon-dev libdrm-dev libgl1-mesa-dev libgbm-dev libwayland-dev libdecor-0-dev
       - name: Checkout
         uses: actions/checkout@v4
         with:
@@ -17,7 +17,7 @@ jobs:
       - name: Build tinygettext
         run: |
           cd vendor/tinygettext
-          cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTS=OFF -DTINYGETTEXT_WITH_SDL=ON
+          cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release  -DSDL_X11=OFF
           cd build
           make
           sudo make install
