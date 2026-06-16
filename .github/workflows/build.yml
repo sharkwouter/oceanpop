@@ -181,13 +181,13 @@ jobs:
             oceanpop/oceanpop*.zip
 
   Release:
-    needs: [Linux, Windows, PSP, Vita, Wii, PS2]
+    needs: [Linux, Windows, MacOS, PSP, Vita, Wii, PS2]
     if: ${{ github.ref_type == 'tag' }}
     runs-on: ubuntu-latest
     strategy:
       max-parallel: 1
       matrix:
-        build: [linux, windows, psp, vita, wii, ps2]
+        build: [linux, windows, macos, psp, vita, wii, ps2]
     steps:
     - uses: actions/download-artifact@v4
     - name: Zip artifacts
