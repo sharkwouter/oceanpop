@@ -47,8 +47,6 @@ private:
 
     std::vector<std::vector<ShellType>> starting_shells;
 
-    bool mouse_active = false;
-
     bool bubbles_matched = false;
 
     Action current_action;
@@ -56,7 +54,6 @@ private:
     std::vector<std::vector<ShellType>> preview;
 
     std::vector<Shell> shells_to_drop;
-    bool done_falling = true;
 
     std::vector<Match> matches_made;
 

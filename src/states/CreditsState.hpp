@@ -26,7 +26,7 @@ private:
 
     int position = 0;
     int cache_size = 10;
-    int empty_line_height;
+    float empty_line_height;
     int last_line_visible;
 
     std::vector<std::string> credits;

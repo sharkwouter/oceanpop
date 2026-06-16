@@ -135,23 +135,23 @@ void OptionsState::draw(SDL_Renderer * renderer) {
     this->theme.draw(renderer);
 
     // Draw title
-    SDL_FRect rect_title = {this->options->getScreenWidth() / 2, this->text_start_y / 2, 0, 0};
+    SDL_FRect rect_title = {(float) this->options->getScreenWidth() / 2.0f, (float) this->text_start_y / 2.0f, 0.0f, 0.0f};
     SDL_GetTextureSize(text_title, &rect_title.w, &rect_title.h);
-    rect_title.x -= rect_title.w/2;
-    rect_title.y -= rect_title.h/2;
+    rect_title.x -= rect_title.w / 2.0f;
+    rect_title.y -= rect_title.h / 2.0f;
     SDL_RenderTexture(renderer, text_title, NULL, &rect_title);
 
     // Draw options
     for(int i = 0; i < (int) texts.size(); i++) {
         // Draw the option title
-        SDL_FRect rect = {this->options->getScreenWidth()/2, getTextY(i), 0, 0};
+        SDL_FRect rect = {(float) this->options->getScreenWidth() / 2.0f, (float) getTextY(i), 0.0f, 0.0f};
         SDL_GetTextureSize(texts[i], &rect.w, &rect.h);
-        rect.x -= rect.w/2;
+        rect.x -= rect.w / 2.0f;
 
         // Set the texture color
         if(i == selection) {
             // Draw selection box
-            SDL_FRect rect_selection = {0, rect.y, this->options->getScreenWidth(), rect.h};
+            SDL_FRect rect_selection = {0.0f, rect.y, (float) this->options->getScreenWidth(), rect.h};
             SDL_SetRenderDrawColor(renderer, COLOR_BOARD.r, COLOR_BOARD.g, COLOR_BOARD.b, COLOR_BOARD.a);
             SDL_RenderFillRect(renderer, &rect_selection);
 

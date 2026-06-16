@@ -181,7 +181,7 @@ void BoardManager::moveCursorMouse() {
     SDL_GetMouseState(&mouse.x, &mouse.y);
     // Make sure the mouse cursor is on the board
     if (mouse.x > rect_board.x && mouse.x < (rect_board.x + rect_board.w) && mouse.y > rect_board.y && mouse.y < (rect_board.y + rect_board.h)) {
-        SDL_Point newSelected = {(mouse.x - rect_board.x)/this->options->getShellSize(), (mouse.y - rect_board.y)/this->options->getShellSize()};
+        SDL_Point newSelected = {(int) ((mouse.x - rect_board.x) / this->options->getShellSize()), (int) ((mouse.y - rect_board.y) / this->options->getShellSize())};
         if (this->current_action == Action::MOVING) {
             if (newSelected.x != this->picked.x && newSelected.y != this->picked.y) {
                 // Snap to the nearest allowed position

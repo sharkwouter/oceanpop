@@ -64,24 +64,24 @@ void HowToScoreState::draw(SDL_Renderer * renderer) {
     loadTexts();
 
     // Draw title
-    SDL_FRect rect_title_text = {this->options->getScreenWidth() / 2, this->options->getScreenHeight() / 8, 0, 0};
+    SDL_FRect rect_title_text = {(float) this->options->getScreenWidth() / 2.0f, (float) this->options->getScreenHeight() / 8.0f, 0.0f, 0.0f};
     SDL_GetTextureSize(this->text_title, &rect_title_text.w, &rect_title_text.h);
-    rect_title_text.x -= rect_title_text.w / 2;
-    rect_title_text.y -= rect_title_text.h / 2;
+    rect_title_text.x -= rect_title_text.w / 2.0f;
+    rect_title_text.y -= rect_title_text.h / 2.0f;
     SDL_RenderTexture(renderer, this->text_title, NULL, &rect_title_text);
 
     // Draw bottom text
-    SDL_FRect rect_bottom_text = {this->options->getScreenWidth() / 2, this->options->getScreenHeight(), 0, 0};
+    SDL_FRect rect_bottom_text = {(float) this->options->getScreenWidth() / 2.0f, (float) this->options->getScreenHeight(), 0.0f, 0.0f};
     SDL_GetTextureSize(this->text_bottom, &rect_bottom_text.w, &rect_bottom_text.h);
-    rect_bottom_text.x -= rect_bottom_text.w / 2;
-    rect_bottom_text.y -= rect_bottom_text.h * 1.5;
+    rect_bottom_text.x -= rect_bottom_text.w / 2.0f;
+    rect_bottom_text.y -= rect_bottom_text.h * 1.5f;
     SDL_RenderTexture(renderer, this->text_bottom, NULL, &rect_bottom_text);
 
     // Draw background
     SDL_FRect rect_background;
-    rect_background.x = 0;
-    rect_background.y = this->options->getScreenHeight()/4;
-    rect_background.w = this->options->getScreenWidth();
+    rect_background.x = 0.0f;
+    rect_background.y = (float) this->options->getScreenHeight() / 4.0f;
+    rect_background.w = (float) this->options->getScreenWidth();
     rect_background.h = rect_bottom_text.y - rect_background.y;
     SDL_SetRenderDrawColor(renderer, COLOR_BOARD.r, COLOR_BOARD.g, COLOR_BOARD.b, COLOR_BOARD.a);
     SDL_RenderFillRect(renderer, &rect_background);
@@ -101,15 +101,15 @@ void HowToScoreState::draw(SDL_Renderer * renderer) {
     );
 
     // Draw everything else
-    SDL_FRect rect_match = {this->options->getScreenWidth() / 2, this->text_start_y, 0, 0};
+    SDL_FRect rect_match = {(float) this->options->getScreenWidth() / 2.0f, (float) this->text_start_y, 0.0f, 0.0f};
     SDL_GetTextureSize(this->text_match, &rect_match.w, &rect_match.h);
-    rect_match.x -= rect_match.w / 2;
+    rect_match.x -= rect_match.w / 2.0f;
     SDL_RenderTexture(renderer, this->text_match, NULL, &rect_match);
 
     // Draw first +1
-    SDL_FRect rect_plus_one = {this->options->getScreenWidth() / 2, (int)(this->options->getScreenHeight() / 2) - (int)(this->options->getShellSize() * 1.5), 0, 0};
+    SDL_FRect rect_plus_one = {(float) this->options->getScreenWidth() / 2.0f, (float) this->options->getScreenHeight() / 2.0f - (float) this->options->getShellSize() * 1.5f, 0.0f, 0.0f};
     SDL_GetTextureSize(this->text_plus_one, &rect_plus_one.w, &rect_plus_one.h);
-    rect_plus_one.x = rect_plus_one.x - rect_plus_one.w / 2 + this->options->getShellSize() / 2;
+    rect_plus_one.x = rect_plus_one.x - rect_plus_one.w / 2.0f + (float) this->options->getShellSize() / 2.0f;
     SDL_RenderTexture(renderer, this->text_plus_one, NULL, &rect_plus_one);
 
     // Draw match lines top
@@ -142,10 +142,10 @@ void HowToScoreState::draw(SDL_Renderer * renderer) {
 
     // Draw horizontal shells
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-    SDL_FRect rect_shell_src = {0, 0, this->options->getShellSize(), this->options->getShellSize()};
+    SDL_FRect rect_shell_src = {0.0f, 0.0f, (float) this->options->getShellSize(), (float) this->options->getShellSize()};
     SDL_FRect shells_h[4];
     for (int i = 0; i < 4; i++) {
-        shells_h[i] = {(float) this->options->getScreenWidth() / 2 - this->options->getShellSize() + this->options->getShellSize() * i, rect_plus_one.y + rect_plus_one.h + this->options->getShellSize() / 2, rect_shell_src.w, rect_shell_src.h};
+        shells_h[i] = {(float) this->options->getScreenWidth() / 2.0f - (float) this->options->getShellSize() + (float) this->options->getShellSize() * (float) i, rect_plus_one.y + rect_plus_one.h + (float) this->options->getShellSize() / 2.0f, rect_shell_src.w, rect_shell_src.h};
         SDL_RenderTexture(renderer, textures.getShellTexture(), &rect_shell_src, &shells_h[i]);
         SDL_RenderLine(renderer,
             shells_h[i].x,
@@ -268,10 +268,10 @@ void HowToScoreState::draw(SDL_Renderer * renderer) {
     );
 
     // Draw conclusion
-    SDL_FRect rect_conclusion = {this->options->getScreenWidth() / 2, rect_bottom_text.y, 0, 0};
+    SDL_FRect rect_conclusion = {(float) this->options->getScreenWidth() / 2.0f, (float) rect_bottom_text.y, 0, 0};
     SDL_GetTextureSize(this->text_conclusion, &rect_conclusion.w, &rect_conclusion.h);
-    rect_conclusion.x -= rect_conclusion.w / 2;
-    rect_conclusion.y -= rect_conclusion.h + this->options->getShellSize() / 4;
+    rect_conclusion.x -= rect_conclusion.w / 2.0f;
+    rect_conclusion.y -= rect_conclusion.h + (float) this->options->getShellSize() / 4.0f;
     SDL_RenderTexture(renderer, this->text_conclusion, NULL, &rect_conclusion);
 }
 

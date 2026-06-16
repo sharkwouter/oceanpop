@@ -55,7 +55,7 @@ void HighscoreState::draw(SDL_Renderer * renderer) {
     }
 
     // Draw title
-    SDL_FRect rect_title = {this->options->getScreenWidth() / 2, this->options->getScreenHeight() / 8, 0, 0};
+    SDL_FRect rect_title = {(float) this->options->getScreenWidth() / 2.0f, (float) this->options->getScreenHeight() / 8.0f, 0.0f, 0.0f};
     SDL_GetTextureSize(text_title, &rect_title.w, &rect_title.h);
     rect_title.x -= rect_title.w/2;
     rect_title.y -= rect_title.h/2;
@@ -64,7 +64,7 @@ void HighscoreState::draw(SDL_Renderer * renderer) {
     // Draw options
     for(int i = 0; i < (int) texts.size(); i++) {
         // Draw the option title
-        SDL_FRect rect = {this->options->getScreenWidth()/2, getTextY(i), 0, 0};
+        SDL_FRect rect = {(float) this->options->getScreenWidth() / 2.0f, (float) getTextY(i), 0.0f, 0.0f};
         SDL_GetTextureSize(texts[i], &rect.w, &rect.h);
         rect.x -= rect.w/2;
 
@@ -72,7 +72,7 @@ void HighscoreState::draw(SDL_Renderer * renderer) {
         SDL_RenderTexture(renderer, texts[i], NULL, &rect);
     }
 
-    SDL_FRect rect_bottom = {this->options->getScreenWidth()/2, getTextY(((int) texts.size()) + 1), 0, 0};
+    SDL_FRect rect_bottom = {(float) this->options->getScreenWidth() / 2.0f, (float) getTextY(((int) texts.size()) + 1), 0.0f, 0.0f};
     SDL_GetTextureSize(text_bottom, &rect_bottom.w, &rect_bottom.h);
     rect_bottom.x -= rect_bottom.w/2;
     SDL_RenderTexture(renderer, text_bottom, NULL, &rect_bottom);

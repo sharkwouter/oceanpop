@@ -60,24 +60,24 @@ void HowToMatchState::draw(SDL_Renderer * renderer) {
     loadTexts();
 
     // Draw title
-    SDL_FRect rect_title_text = {this->options->getScreenWidth() / 2, this->options->getScreenHeight() / 8, 0, 0};
+    SDL_FRect rect_title_text = {(float) this->options->getScreenWidth() / 2.0f, (float) this->options->getScreenHeight() / 8.0f, 0.0f, 0.0f};
     SDL_GetTextureSize(this->text_title, &rect_title_text.w, &rect_title_text.h);
-    rect_title_text.x -= rect_title_text.w / 2;
-    rect_title_text.y -= rect_title_text.h / 2;
+    rect_title_text.x -= rect_title_text.w / 2.0f;
+    rect_title_text.y -= rect_title_text.h / 2.0f;
     SDL_RenderTexture(renderer, this->text_title, NULL, &rect_title_text);
 
     // Draw bottom text
-    SDL_FRect rect_bottom_text = {this->options->getScreenWidth() / 2, this->options->getScreenHeight(), 0, 0};
+    SDL_FRect rect_bottom_text = {(float) this->options->getScreenWidth() / 2.0f, (float) this->options->getScreenHeight(), 0.0f, 0.0f};
     SDL_GetTextureSize(this->text_bottom, &rect_bottom_text.w, &rect_bottom_text.h);
-    rect_bottom_text.x -= rect_bottom_text.w / 2;
-    rect_bottom_text.y -= rect_bottom_text.h * 1.5;
+    rect_bottom_text.x -= rect_bottom_text.w / 2.0f;
+    rect_bottom_text.y -= rect_bottom_text.h * 1.5f;
     SDL_RenderTexture(renderer, this->text_bottom, NULL, &rect_bottom_text);
 
     // Draw background
     SDL_FRect rect_background;
-    rect_background.x = 0;
-    rect_background.y = this->options->getScreenHeight()/4;
-    rect_background.w = this->options->getScreenWidth();
+    rect_background.x = 0.0f;
+    rect_background.y = (float) this->options->getScreenHeight() / 4.0f;
+    rect_background.w = (float) this->options->getScreenWidth();
     rect_background.h = rect_bottom_text.y - rect_background.y;
     SDL_SetRenderDrawColor(renderer, COLOR_BOARD.r, COLOR_BOARD.g, COLOR_BOARD.b, COLOR_BOARD.a);
     SDL_RenderFillRect(renderer, &rect_background);
@@ -97,15 +97,15 @@ void HowToMatchState::draw(SDL_Renderer * renderer) {
     );
 
     // Draw match line
-    SDL_FRect rect_match = {this->options->getScreenWidth() / 2, this->text_start_y, 0, 0};
+    SDL_FRect rect_match = {(float) this->options->getScreenWidth() / 2.0f, (float) this->text_start_y, 0.0f, 0.0f};
     SDL_GetTextureSize(this->text_match, &rect_match.w, &rect_match.h);
-    rect_match.x -= rect_match.w / 2;
+    rect_match.x -= rect_match.w / 2.0f;
     SDL_RenderTexture(renderer, this->text_match, NULL, &rect_match);
 
     //Draw grid
     int grid_size = 3;
-    SDL_FPoint middle = {this->options->getScreenWidth() / 2, (rect_bottom_text.y + this->text_start_y) / 2};
-    SDL_FRect grid = {middle.x - (int)(this->options->getShellSize() * 1.5), middle.y - (int)(this->options->getShellSize() * 1.5), this->options->getShellSize() * grid_size, this->options->getShellSize() * grid_size};
+    SDL_FPoint middle = {(float) this->options->getScreenWidth() / 2.0f, ((float) rect_bottom_text.y + (float) this->text_start_y) / 2.0f};
+    SDL_FRect grid = {middle.x - (float)(this->options->getShellSize() * 1.5), middle.y - (float)(this->options->getShellSize() * 1.5), (float)this->options->getShellSize() * (float) grid_size, (float)(this->options->getShellSize() * (float) grid_size)};
 
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     for (int i = 0; i < 4; i++) {
@@ -124,13 +124,13 @@ void HowToMatchState::draw(SDL_Renderer * renderer) {
     }
 
     // Draw shells
-    SDL_FRect rect_shell_src = {0, 0, this->options->getShellSize(), this->options->getShellSize()};
-    SDL_FRect rect_shell_dest = {grid.x + this->options->getShellSize() * 2, grid.y, rect_shell_src.w, rect_shell_src.h};
+    SDL_FRect rect_shell_src = {0.0f, 0.0f, (float) this->options->getShellSize(), (float) this->options->getShellSize()};
+    SDL_FRect rect_shell_dest = {grid.x + (float) this->options->getShellSize() * 2.0f, grid.y, rect_shell_src.w, rect_shell_src.h};
     SDL_RenderTexture(renderer, textures.getShellTexture(), &rect_shell_src, &rect_shell_dest);
-    rect_shell_dest.x -= this->options->getShellSize() * 2;
-    rect_shell_dest.y += this->options->getShellSize();
+    rect_shell_dest.x -= (float) this->options->getShellSize() * 2.0f;
+    rect_shell_dest.y += (float) this->options->getShellSize();
     SDL_RenderTexture(renderer, textures.getShellTexture(), &rect_shell_src, &rect_shell_dest);
-    rect_shell_dest.y += this->options->getShellSize();
+    rect_shell_dest.y += (float) this->options->getShellSize();
     SDL_RenderTexture(renderer, textures.getShellTexture(), &rect_shell_src, &rect_shell_dest);
 
     //  Draw arrow
@@ -156,10 +156,10 @@ void HowToMatchState::draw(SDL_Renderer * renderer) {
     );
 
     // Draw conclusion
-    SDL_FRect rect_conclusion = {this->options->getScreenWidth() / 2, rect_bottom_text.y, 0, 0};
+    SDL_FRect rect_conclusion = {(float) this->options->getScreenWidth() / 2.0f, (float) rect_bottom_text.y, 0.0f, 0.0f};
     SDL_GetTextureSize(this->text_conclusion, &rect_conclusion.w, &rect_conclusion.h);
-    rect_conclusion.x -= rect_conclusion.w / 2;
-    rect_conclusion.y -= rect_conclusion.h + this->options->getShellSize() / 4;
+    rect_conclusion.x -= rect_conclusion.w / 2.0f;
+    rect_conclusion.y -= rect_conclusion.h + (float) this->options->getShellSize() / 4.0f;
     SDL_RenderTexture(renderer, this->text_conclusion, NULL, &rect_conclusion);
 }
 

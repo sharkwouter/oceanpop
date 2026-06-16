@@ -90,14 +90,14 @@ void CreditsState::draw(SDL_Renderer * renderer) {
     }
 
     // Draw title
-    SDL_FRect rect_title = {this->options->getScreenWidth() / 2, this->options->getScreenHeight() / 8, 0, 0};
+    SDL_FRect rect_title = {(float) this->options->getScreenWidth() / 2.0f, (float) this->options->getScreenHeight() / 8.0f, 0, 0};
     SDL_GetTextureSize(text_title, &rect_title.w, &rect_title.h);
     rect_title.x -= rect_title.w/2;
     rect_title.y -= rect_title.h/2;
     SDL_RenderTexture(renderer, text_title, NULL, &rect_title);
 
     // Draw bottom text
-    SDL_FRect rect_bottom = {this->options->getScreenWidth()/2, this->options->getScreenHeight(), 0, 0};
+    SDL_FRect rect_bottom = {(float) this->options->getScreenWidth() / 2.0f, (float) this->options->getScreenHeight(), 0, 0};
     SDL_GetTextureSize(text_bottom, &rect_bottom.w, &rect_bottom.h);
     rect_bottom.x -= rect_bottom.w/2;
     rect_bottom.y -= rect_bottom.h * 1.5;
@@ -144,7 +144,7 @@ void CreditsState::draw(SDL_Renderer * renderer) {
     );
 
     // Draw credits text
-    int current_y = this->options->getScreenHeight()/4;
+    float current_y = (float) this->options->getScreenHeight() / 4.0f;
     for(int i = this->position; i < (int) this->credits.size(); i++) {
         if (this->credits[i].empty()) {
             current_y += empty_line_height;
@@ -160,9 +160,9 @@ void CreditsState::draw(SDL_Renderer * renderer) {
             }
         }
 
-        SDL_FRect rect = {this->options->getScreenWidth()/2, current_y, 0, 0};
+        SDL_FRect rect = {(float) this->options->getScreenWidth() / 2.0f, (float) current_y, 0, 0};
         SDL_GetTextureSize(this->texts[i], &rect.w, &rect.h);
-        rect.x -= rect.w/2;
+        rect.x -= rect.w / 2.0f;
 
         // Break loop if there is no space left to draw
         current_y += rect.h;
