@@ -167,7 +167,7 @@ include_directories(
 
 # tinygettext
 set(BUILD_TESTS OFF)
-set(TINYGETTEXT_WITH_SDL ON)
+set(TINYGETTEXT_WITH_SDL OFF)
 
 add_subdirectory(vendor/tinygettext)
 target_link_libraries(${PROJECT_NAME} PRIVATE
@@ -183,7 +183,7 @@ include_directories(
 )
 
 set(TRANSLATION_SUPPORT ON)
-# add_compile_definitions(TRANSLATION_SUPPORT=0)
+add_compile_definitions(TRANSLATION_SUPPORT=1)
 
 # Set asset paths
 set(ASSETS_FONTS "${CMAKE_SOURCE_DIR}/assets/fonts")
