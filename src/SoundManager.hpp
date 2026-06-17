@@ -20,15 +20,14 @@ private:
     MIX_Audio * sound_completed;
     MIX_Audio * sound_failed;
 
-    bool uneven_match;
-
-    int channel_pick = 1;
-    int channel_match1 = 2;
-    int channel_match2 = 3;
-    int channel_notify = 3;
-
     MIX_Mixer * mixer = nullptr;
-    MIX_Track * sounds_track = nullptr;
+
+    MIX_Track * channel_pick = nullptr;
+    MIX_Track * channel_match1 = nullptr;
+    MIX_Track * channel_match2 = nullptr;
+    MIX_Track * channel_notify = nullptr;
+
+    bool uneven_match;
 
     void load();
 public:

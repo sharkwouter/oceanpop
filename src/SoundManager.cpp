@@ -24,14 +24,18 @@ void SoundManager::load() {
       panic("Couldn't create mixer on default device: " + std::string(SDL_GetError()));
     }
 
-    this->sounds_track = MIX_CreateTrack(this->mixer);
-    this->sound_pick = MIX_LoadAudio(this->mixer, getResourcePath("assets/sounds/pick.wav").c_str(), false);
-    this->sound_drop = MIX_LoadAudio(this->mixer, getResourcePath("assets/sounds/drop.wav").c_str(), false);
-    this->sound_match1 = MIX_LoadAudio(this->mixer, getResourcePath("assets/sounds/match1.wav").c_str(), false);
-    this->sound_match2 = MIX_LoadAudio(this->mixer, getResourcePath("assets/sounds/match2.wav").c_str(), false);
-    this->sound_pain = MIX_LoadAudio(this->mixer, getResourcePath("assets/sounds/pain.wav").c_str(), false);
-    this->sound_completed = MIX_LoadAudio(this->mixer, getResourcePath("assets/sounds/completed.wav").c_str(), false);
-    this->sound_failed = MIX_LoadAudio(this->mixer, getResourcePath("assets/sounds/failed.wav").c_str(), false);
+    this->channel_pick = MIX_CreateTrack(this->mixer);;
+    this->channel_match1 = MIX_CreateTrack(this->mixer);
+    this->channel_match2 = MIX_CreateTrack(this->mixer);
+    this->channel_notify = MIX_CreateTrack(this->mixer);
+
+    this->sound_pick = MIX_LoadAudio(this->mixer, getResourcePath("assets/sounds/pick.wav").c_str(), true);
+    this->sound_drop = MIX_LoadAudio(this->mixer, getResourcePath("assets/sounds/drop.wav").c_str(), true);
+    this->sound_match1 = MIX_LoadAudio(this->mixer, getResourcePath("assets/sounds/match1.wav").c_str(), true);
+    this->sound_match2 = MIX_LoadAudio(this->mixer, getResourcePath("assets/sounds/match2.wav").c_str(), true);
+    this->sound_pain = MIX_LoadAudio(this->mixer, getResourcePath("assets/sounds/pain.wav").c_str(), true);
+    this->sound_completed = MIX_LoadAudio(this->mixer, getResourcePath("assets/sounds/completed.wav").c_str(), true);
+    this->sound_failed = MIX_LoadAudio(this->mixer, getResourcePath("assets/sounds/failed.wav").c_str(), true);
 
     if (this->sound_drop == NULL ||
         this->sound_drop == NULL ||
@@ -48,44 +52,54 @@ void SoundManager::play(Sound sound) {
     float volume = 0.25f * (float) this->options->getSoundVolume();
     switch (sound) {
         case Sound::PICK:
-            MIX_SetTrackGain(this->sounds_track, volume);
-            MIX_SetTrackAudio(this->sounds_track, sound_pick);
-            MIX_PlayTrack(this->sounds_track, 0);
+            MIX_StopTrack(this->channel_pick, 0);
+            MIX_SetTrackGain(this->channel_pick, volume);
+            MIX_SetTrackAudio(this->channel_pick, sound_pick);
+            MIX_PlayTrack(this->channel_pick, 0);
             break;
         case Sound::DROP:
-            MIX_SetTrackGain(this->sounds_track, volume);
-            MIX_SetTrackAudio(this->sounds_track, sound_drop);
-            MIX_PlayTrack(this->sounds_track, 0);
+            MIX_StopTrack(this->channel_pick, 0);
+            MIX_SetTrackGain(this->channel_pick, volume);
+            MIX_SetTrackAudio(this->channel_pick, sound_drop);
+            MIX_PlayTrack(this->channel_pick, 0);
             break;
         case Sound::MATCH:
             if (uneven_match) {
-                MIX_SetTrackGain(this->sounds_track, volume);
-                MIX_SetTrackAudio(this->sounds_track, sound_match2);
-                MIX_PlayTrack(this->sounds_track, 0);
+                MIX_StopTrack(this->channel_match1, 0);
+                MIX_SetTrackGain(this->channel_match1, volume);
+                MIX_SetTrackAudio(this->channel_match1, sound_match2);
+                MIX_PlayTrack(this->channel_match1, 0);
             } else {
-                MIX_SetTrackGain(this->sounds_track, volume);
-                MIX_SetTrackAudio(this->sounds_track, sound_match1);
-                MIX_PlayTrack(this->sounds_track, 0);
+                MIX_StopTrack(this->channel_match2, 0);
+                MIX_SetTrackGain(this->channel_match2, volume);
+                MIX_SetTrackAudio(this->channel_match2, sound_match1);
+                MIX_PlayTrack(this->channel_match2, 0);
             }
             uneven_match = !(uneven_match);
             break;
         case Sound::PAIN:
-            MIX_SetTrackGain(this->sounds_track, volume);
-            MIX_StopTrack(this->sounds_track, 0);
-            MIX_SetTrackAudio(this->sounds_track, sound_pain);
-            MIX_PlayTrack(this->sounds_track, 0);
+            MIX_SetTrackGain(this->channel_notify, volume);
+            MIX_StopTrack(this->channel_match1, 0);
+            MIX_StopTrack(this->channel_match2, 0);
+            MIX_StopTrack(this->channel_notify, 0);
+            MIX_SetTrackAudio(this->channel_notify, sound_pain);
+            MIX_PlayTrack(this->channel_notify, 0);
             break;
         case Sound::COMPLETED:
-            MIX_SetTrackGain(this->sounds_track, volume);
-            MIX_StopTrack(this->sounds_track, 0);
-            MIX_SetTrackAudio(this->sounds_track, sound_completed);
-            MIX_PlayTrack(this->sounds_track, 0);
+            MIX_SetTrackGain(this->channel_notify, volume);
+            MIX_StopTrack(this->channel_match1, 0);
+            MIX_StopTrack(this->channel_match2, 0);
+            MIX_StopTrack(this->channel_notify, 0);
+            MIX_SetTrackAudio(this->channel_notify, sound_completed);
+            MIX_PlayTrack(this->channel_notify, 0);
             break;
         case Sound::FAILED:
-            MIX_SetTrackGain(this->sounds_track, volume);
-            MIX_StopTrack(this->sounds_track, 0);
-            MIX_SetTrackAudio(this->sounds_track, sound_failed);
-            MIX_PlayTrack(this->sounds_track, 0);
+            MIX_SetTrackGain(this->channel_notify, volume);
+            MIX_StopTrack(this->channel_match1, 0);
+            MIX_StopTrack(this->channel_match2, 0);
+            MIX_StopTrack(this->channel_notify, 0);
+            MIX_SetTrackAudio(this->channel_notify, sound_failed);
+            MIX_PlayTrack(this->channel_notify, 0);
             break;
     }
 }
