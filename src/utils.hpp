@@ -26,11 +26,7 @@ std::string getResourcePath(std::string file);
 SDL_DisplayMode * getStandardDisplayMode();
 std::vector<SDL_DisplayMode*> getDisplayModes();
 
-#ifdef TRANSLATION_SUPPORT
-    extern TranslationManager translation_manager;
-    #define _(x) translation_manager.translate(x)
-#else
-    #define _(x) x
-#endif
+extern TranslationManager translation_manager;
+#define _(x) translation_manager.translate(x)
 
 #endif // UTILS_HPP

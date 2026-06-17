@@ -23,7 +23,7 @@ When submitting a bug report, please make sure to include this information:
 
 ## Adding a new translation
 
-By running cmake with the `-DTRANSLATION_SUPPORT=1` option, translation support can be enabled. To add a new language, for example German, you would run the following command:
+To add a new language, for example German, you would run the following command:
 
 ```
 platform/add-translation.sh de
