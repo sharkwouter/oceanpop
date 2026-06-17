@@ -11,7 +11,7 @@ jobs:
           sudo apt-get update
           sudo apt-get install --no-install-recommends git ca-certificates g++ make cmake zlib1g-dev libasound-dev libxkbcommon-dev libdrm-dev libgl1-mesa-dev libgbm-dev libwayland-dev libdecor-0-dev
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           submodules: recursive
       - name: Build
@@ -25,7 +25,7 @@ jobs:
           chmod +x linuxdeploy*.AppImage
           ./linuxdeploy-x86_64.AppImage --appdir AppDir --output appimage
       - name: Publish artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: oceanpop-linux
           path: |
@@ -51,7 +51,7 @@ jobs:
             mingw-w64-x86_64-jsoncpp
           update: true
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           submodules: recursive
       - name: Build
@@ -61,7 +61,7 @@ jobs:
           cmake --build .
           strip --strip-unneeded oceanpop.exe
       - name: Publish artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: oceanpop-windows
           path: |
@@ -72,7 +72,7 @@ jobs:
     runs-on: macos-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           submodules: recursive
       - name: Build
@@ -82,7 +82,7 @@ jobs:
           cmake --build .
           strip -u -r -x oceanpop
       - name: Publish artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: oceanpop-macos
           path: |
@@ -98,7 +98,7 @@ jobs:
       run: |
         apk add --no-cache gmp mpc1 mpfr4 make pkgconf cmake git
     - name: Checkout
-      uses: actions/checkout@v4
+      uses: actions/checkout@v6
       with:
         submodules: recursive
     - name: Build
@@ -108,7 +108,7 @@ jobs:
         cmake --build  .
         mips64r5900el-ps2-elf-strip --strip-unneeded oceanpop.elf
     - name: Publish artifacts
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       with:
         name: oceanpop-ps2
         path: |
@@ -121,7 +121,7 @@ jobs:
     container: pspdev/pspdev:latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           submodules: recursive
       - name: Build
@@ -130,7 +130,7 @@ jobs:
           psp-cmake -DCMAKE_BUILD_TYPE=Release ..
           cmake --build .
       - name: Publish artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: oceanpop-psp
           path: |
@@ -142,7 +142,7 @@ jobs:
     container: vitasdk/vitasdk:latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           submodules: recursive
       - name: Build
@@ -151,7 +151,7 @@ jobs:
           cmake -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE="${VITASDK}/share/vita.toolchain.cmake" ..
           cmake --build .
       - name: Publish artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: oceanpop-vita
           path: |
@@ -163,7 +163,7 @@ jobs:
     if: false
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           submodules: recursive
       - name: Build
@@ -175,7 +175,7 @@ jobs:
         run: |
           ./platform/wii/make_release.sh oceanpop ${{ github.ref_name }}
       - name: Publish artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: oceanpop-wii
           path: |
@@ -190,12 +190,12 @@ jobs:
       matrix:
         build: [linux, windows, macos, psp, vita, ps2]
     steps:
-    - uses: actions/download-artifact@v4
+    - uses: actions/download-artifact@v8
     - name: Zip artifacts
       run: |
         zip -r oceanpop-${{matrix.build}}.zip oceanpop-${{matrix.build}}
     - name: Release
-      uses: softprops/action-gh-release@v2
+      uses: softprops/action-gh-release@v3
       with:
         files: oceanpop-${{matrix.build}}.zip
         prerelease: true
