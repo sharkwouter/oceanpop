@@ -40,9 +40,9 @@ set(BUILD_OBJECT_LIBS OFF)
 # SDL
 if(CMAKE_SYSTEM_NAME MATCHES "NintendoWii")
     include(FindPkgConfig)
-    pkg_search_module(SDL2 REQUIRED sdl2)
+    pkg_search_module(SDL3 REQUIRED sdl3)
     target_link_libraries(${PROJECT_NAME} PRIVATE
-        ${SDL2_STATIC_LIBRARIES}
+        ${SDL3_STATIC_LIBRARIES}
     )
 else()
     set(SDL_SHARED OFF CACHE INTERNAL "" FORCE)
