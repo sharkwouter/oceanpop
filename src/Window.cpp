@@ -41,7 +41,6 @@ Window::Window(const std::string &title, OptionManager * options) : options(opti
     }
     SDL_DestroyProperties(props);
 
-
     // Set the refresh rate
     if (this->options->getFullscreen()) {
         for(SDL_DisplayMode * mode : getDisplayModes()) {
@@ -51,9 +50,7 @@ Window::Window(const std::string &title, OptionManager * options) : options(opti
             }
         }
     }
-#ifdef SDL_PLATFORM_PS2
-    SDL_SetHint(SDL_HINT_PS2_DYNAMIC_VSYNC, "1");    
-#endif
+
     this->renderer = SDL_CreateRenderer(this->window, nullptr);
     if (this->renderer == nullptr) {
         panic("couldn't create renderer: " + std::string(SDL_GetError()));
