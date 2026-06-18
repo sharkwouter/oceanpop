@@ -2,8 +2,8 @@
 #define SOUNDMANAGER_HPP
 
 #include <string>
-#include <SDL.h>
-#include <SDL_mixer.h>
+#include <SDL3/SDL.h>
+#include <SDL3_mixer/SDL_mixer.h>
 
 #include "OptionManager.hpp"
 #include "Sound.hpp"
@@ -12,20 +12,22 @@ class SoundManager {
 private:
     OptionManager * options;
 
-    Mix_Chunk * sound_pick;
-    Mix_Chunk * sound_drop;
-    Mix_Chunk * sound_match1;
-    Mix_Chunk * sound_match2;
-    Mix_Chunk * sound_pain;
-    Mix_Chunk * sound_completed;
-    Mix_Chunk * sound_failed;
+    MIX_Audio * sound_pick;
+    MIX_Audio * sound_drop;
+    MIX_Audio * sound_match1;
+    MIX_Audio * sound_match2;
+    MIX_Audio * sound_pain;
+    MIX_Audio * sound_completed;
+    MIX_Audio * sound_failed;
+
+    MIX_Mixer * mixer = nullptr;
+
+    MIX_Track * channel_pick = nullptr;
+    MIX_Track * channel_match1 = nullptr;
+    MIX_Track * channel_match2 = nullptr;
+    MIX_Track * channel_notify = nullptr;
 
     bool uneven_match;
-
-    int channel_pick = 1;
-    int channel_match1 = 2;
-    int channel_match2 = 3;
-    int channel_notify = 3;
 
     void load();
 public:
@@ -33,6 +35,8 @@ public:
     ~SoundManager();
 
     void play(Sound sound);
+
+    MIX_Mixer * getMixer() {return this->mixer;};
 };
 
 #endif // SOUNDMANAGER_HPP

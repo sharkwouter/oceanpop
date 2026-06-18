@@ -1,7 +1,6 @@
 #ifndef TRANSLATIONMANAGER_H
 #define TRANSLATIONMANAGER_H
 
-#ifdef TRANSLATION_SUPPORT
 #include <vector>
 
 #include <tinygettext/tinygettext.hpp>
@@ -20,6 +19,5 @@ public:
 
     std::string translate(std::string input); 
 };
-#endif
 
 #endif // TRANSLATIONMANAGER_H

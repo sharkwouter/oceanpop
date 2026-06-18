@@ -3,7 +3,7 @@
 
 #include <string>
 #include <vector>
-#include <SDL.h>
+#include <SDL3/SDL.h>
 #include "BaseState.hpp"
 #include "../ThemeManager.hpp"
 #include "../FontManager.hpp"
@@ -26,7 +26,7 @@ private:
 
     int position = 0;
     int cache_size = 10;
-    int empty_line_height;
+    float empty_line_height;
     int last_line_visible;
 
     std::vector<std::string> credits;

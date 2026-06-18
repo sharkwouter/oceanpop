@@ -17,42 +17,40 @@ std::vector<Event> EventManager::getEvents() {
         Event input = Event::NONE;
 
         switch (event.type) {
-            case SDL_QUIT:
+            case SDL_EVENT_QUIT:
                 input = Event::QUIT;
                 break;
-            case SDL_KEYDOWN:
-                SDL_ShowCursor(0);
-                input = getEventFromKeyboard(event.key.keysym.sym);
+            case SDL_EVENT_KEY_DOWN:
+                SDL_HideCursor();
+                input = getEventFromKeyboard(event.key.key);
                 break;
-            case SDL_CONTROLLERBUTTONDOWN:
-                SDL_ShowCursor(0);
-                input = getEventFromControllerButton(event.cbutton.button);
+            case SDL_EVENT_GAMEPAD_BUTTON_DOWN:
+                SDL_HideCursor();
+                input = getEventFromControllerButton(event.gbutton.button);
                 break;
-            case SDL_MOUSEBUTTONDOWN:
-                SDL_ShowCursor(1);
+            case SDL_EVENT_MOUSE_BUTTON_DOWN:
+                SDL_ShowCursor();
                 input = getEventFromMouseButton(event.button.button);
                 break;
-            case SDL_MOUSEBUTTONUP:
+            case SDL_EVENT_MOUSE_BUTTON_UP:
                 input = getEventFromMouseButtonUp(event.button.button);
                 break;
-            case SDL_MOUSEMOTION:
-                SDL_ShowCursor(1);
+            case SDL_EVENT_MOUSE_MOTION:
+                SDL_ShowCursor();
                 input = Event::MOUSEMOVE;
                 break;
-            case SDL_CONTROLLERAXISMOTION:
-                SDL_ShowCursor(0);
-                input = getEventFromControllerAxis(event.caxis.axis, event.caxis.value);
+            case SDL_EVENT_GAMEPAD_AXIS_MOTION:
+                SDL_ShowCursor();
+                input = getEventFromControllerAxis(event.gaxis.axis, event.gaxis.value);
                 break;
-            case SDL_CONTROLLERDEVICEADDED:
+            case SDL_EVENT_GAMEPAD_ADDED:
                 openGameController(event.cdevice.which);
                 break;
-            case SDL_CONTROLLERDEVICEREMOVED:
+            case SDL_EVENT_GAMEPAD_REMOVED:
                 closeDisconnectedGameControllers();
                 break;
-            case SDL_WINDOWEVENT:
-                if (event.window.event == SDL_WINDOWEVENT_RESIZED) {
-                    input = Event::WINDOW_RESIZE;
-                }
+            case SDL_EVENT_WINDOW_RESIZED:
+                input = Event::WINDOW_RESIZE;
                 break;
         }
         if (input != Event::NONE) {
@@ -66,28 +64,28 @@ Event EventManager::getEventFromKeyboard(SDL_Keycode key) {
     Event event;
 
     switch (key) {
-        case SDLK_w:
+        case SDLK_W:
         case SDLK_UP:
             event = Event::UP;
             break;
-        case SDLK_s:
+        case SDLK_S:
         case SDLK_DOWN:
             event = Event::DOWN;
             break;
-        case SDLK_a:
+        case SDLK_A:
         case SDLK_LEFT:
             event = Event::LEFT;
             break;
-        case SDLK_d:
+        case SDLK_D:
         case SDLK_RIGHT:
             event = Event::RIGHT;
             break;
-        case SDLK_e:
+        case SDLK_E:
         case SDLK_RETURN:
         case SDLK_SPACE:
             event = Event::CONFIRM;
             break;
-        case SDLK_q:
+        case SDLK_Q:
         case SDLK_BACKSPACE:
             event = Event::CANCEL;
             break;
@@ -146,25 +144,25 @@ Event EventManager::getEventFromControllerButton(Uint32 button) {
     Event event;
 
     switch (button) {
-        case SDL_CONTROLLER_BUTTON_DPAD_UP:
+        case SDL_GAMEPAD_BUTTON_DPAD_UP:
             event = Event::UP;
             break;
-        case SDL_CONTROLLER_BUTTON_DPAD_DOWN:
+        case SDL_GAMEPAD_BUTTON_DPAD_DOWN:
             event = Event::DOWN;
             break;
-        case SDL_CONTROLLER_BUTTON_DPAD_LEFT:
+        case SDL_GAMEPAD_BUTTON_DPAD_LEFT:
             event = Event::LEFT;
             break;
-        case SDL_CONTROLLER_BUTTON_DPAD_RIGHT:
+        case SDL_GAMEPAD_BUTTON_DPAD_RIGHT:
             event = Event::RIGHT;
             break;
-        case SDL_CONTROLLER_BUTTON_A:
+        case SDL_GAMEPAD_BUTTON_SOUTH:
             event = Event::CONFIRM;
             break;
-        case SDL_CONTROLLER_BUTTON_B:
+        case SDL_GAMEPAD_BUTTON_EAST:
             event = Event::CANCEL;
             break;
-        case SDL_CONTROLLER_BUTTON_START:
+        case SDL_GAMEPAD_BUTTON_START:
             event = Event::MENU;
             break;
         default:
@@ -179,7 +177,7 @@ Event EventManager::getEventFromControllerAxis(Uint32 axis, Sint16 value) {
     Event event = Event::NONE;
 
     switch (axis) {
-        case SDL_CONTROLLER_AXIS_LEFTX:
+        case SDL_GAMEPAD_AXIS_LEFTX:
             if (value > (AXIS_MAX*ANALOG_DEADZONE_MULTIPLIER)) {
                 if (this->returned_to_horizontal_center) {
                     event = Event::RIGHT;
@@ -194,7 +192,7 @@ Event EventManager::getEventFromControllerAxis(Uint32 axis, Sint16 value) {
                 this->returned_to_horizontal_center = true;
             }
             break;
-        case SDL_CONTROLLER_AXIS_LEFTY:
+        case SDL_GAMEPAD_AXIS_LEFTY:
             if (value > (AXIS_MAX*ANALOG_DEADZONE_MULTIPLIER)) {
                 if(this->returned_to_vertical_center) {
                     event = Event::DOWN;
@@ -217,19 +215,19 @@ Event EventManager::getEventFromControllerAxis(Uint32 axis, Sint16 value) {
 }
 
 void EventManager::openGameController(Sint32 index) {
-     if (SDL_IsGameController(index)) {
-        SDL_GameController * controller = SDL_GameControllerOpen(index);
-        SDL_Log("Adding controller: %s", SDL_GameControllerName(controller));
+     if (SDL_IsGamepad(index)) {
+        SDL_Gamepad * controller = SDL_OpenGamepad(index);
+        SDL_Log("Adding controller: %s", SDL_GetGamepadName(controller));
         gameControllers.push_back(controller);
     }
 }
 
 void EventManager::closeDisconnectedGameControllers() {
-    std::vector<SDL_GameController*> currentControllers;
-    for(SDL_GameController * controller : gameControllers) {
-        if (!SDL_GameControllerGetAttached(controller)) {
-            SDL_Log("Removing controller: %s", SDL_GameControllerName(controller));
-            SDL_GameControllerClose(controller);
+    std::vector<SDL_Gamepad*> currentControllers;
+    for(SDL_Gamepad * controller : gameControllers) {
+        if (!SDL_GamepadConnected(controller)) {
+            SDL_Log("Removing controller: %s", SDL_GetGamepadName(controller));
+            SDL_CloseGamepad(controller);
             controller = NULL;
         } else {
             currentControllers.push_back(controller);
@@ -241,8 +239,8 @@ void EventManager::closeDisconnectedGameControllers() {
 
 void EventManager::closeAllGameControllers() {
     for (int i = 0; i < int(gameControllers.size()); i++) {
-        SDL_Log("Removing controller: %s", SDL_GameControllerName(gameControllers[i]));
-        SDL_GameControllerClose(gameControllers[i]);
+        SDL_Log("Removing controller: %s", SDL_GetGamepadName(gameControllers[i]));
+        SDL_CloseGamepad(gameControllers[i]);
         gameControllers[i] = NULL;
     }
 }

@@ -177,11 +177,11 @@ void BoardManager::moveCursor(int x, int y) {
 }
 
 void BoardManager::moveCursorMouse() {
-    SDL_Point mouse;
+    SDL_FPoint mouse;
     SDL_GetMouseState(&mouse.x, &mouse.y);
     // Make sure the mouse cursor is on the board
     if (mouse.x > rect_board.x && mouse.x < (rect_board.x + rect_board.w) && mouse.y > rect_board.y && mouse.y < (rect_board.y + rect_board.h)) {
-        SDL_Point newSelected = {(mouse.x - rect_board.x)/this->options->getShellSize(), (mouse.y - rect_board.y)/this->options->getShellSize()};
+        SDL_Point newSelected = {(int) ((mouse.x - rect_board.x) / this->options->getShellSize()), (int) ((mouse.y - rect_board.y) / this->options->getShellSize())};
         if (this->current_action == Action::MOVING) {
             if (newSelected.x != this->picked.x && newSelected.y != this->picked.y) {
                 // Snap to the nearest allowed position
@@ -378,13 +378,13 @@ void BoardManager::draw(SDL_Renderer *renderer) {
 void BoardManager::drawCursor(SDL_Renderer * renderer) {
     // Draw picked cross
     if (this->current_action == Action::MOVING) {
-        SDL_Rect pickrect_hor;
+        SDL_FRect pickrect_hor;
         pickrect_hor.x = this->rect_board.x + 1;
         pickrect_hor.y = this->options->getShellSize() * this->picked.y + this->rect_board.y + 1;
         pickrect_hor.w = this->options->getShellSize() * this->board->getWidth() - 1;
         pickrect_hor.h = this->options->getShellSize() - 1;
 
-        SDL_Rect pickrect_ver;
+        SDL_FRect pickrect_ver;
         pickrect_ver.x = this->options->getShellSize() * this->picked.x + this->rect_board.x + 1;
         pickrect_ver.y = this->rect_board.y + 1;
         pickrect_ver.w = this->options->getShellSize() - 1;
@@ -396,7 +396,7 @@ void BoardManager::drawCursor(SDL_Renderer * renderer) {
     }
 
     // Draw selection rectangle
-    SDL_Rect selrect;
+    SDL_FRect selrect;
     selrect.x = this->options->getShellSize() * selected.x + this->rect_board.x + 1;
     selrect.y = this->options->getShellSize() * selected.y + this->rect_board.y + 1;
     selrect.w = this->options->getShellSize() - 1;
@@ -415,7 +415,7 @@ void BoardManager::drawBoard(SDL_Renderer * renderer) {
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     for (int x = 0; x <= this->board->getWidth(); x++) {
         int current_x = this->rect_board.x + x * this->options->getShellSize();
-        SDL_RenderDrawLine(
+        SDL_RenderLine(
                 renderer,
                 current_x,
                 this->rect_board.y,
@@ -425,7 +425,7 @@ void BoardManager::drawBoard(SDL_Renderer * renderer) {
     }
     for (int y = 0; y <= this->board->getHeight(); y++) {
         int current_y = this->rect_board.y + y * this->options->getShellSize();
-        SDL_RenderDrawLine(
+        SDL_RenderLine(
                 renderer,
                 this->rect_board.x,
                 current_y,
@@ -443,19 +443,19 @@ void BoardManager::drawShells(SDL_Renderer * renderer) {
                 continue;
             }
 
-            SDL_Rect srcrect;
+            SDL_FRect srcrect;
             srcrect.x = this->options->getShellSize() * (int) this->preview[x][y];
             srcrect.y = 0;
             srcrect.w = this->options->getShellSize();
             srcrect.h = this->options->getShellSize();
 
-            SDL_Rect dstrect;
+            SDL_FRect dstrect;
             dstrect.x = this->options->getShellSize() * x + this->rect_board.x;
             dstrect.y = this->options->getShellSize() * y + this->rect_board.y;
             dstrect.w = this->options->getShellSize();
             dstrect.h = this->options->getShellSize();
 
-            SDL_RenderCopy(renderer, textures.getShellTexture(), &srcrect, &dstrect);
+            SDL_RenderTexture(renderer, textures.getShellTexture(), &srcrect, &dstrect);
         }
     }
 }
@@ -463,13 +463,13 @@ void BoardManager::drawShells(SDL_Renderer * renderer) {
 void BoardManager::drawFallingShells(SDL_Renderer * renderer) {   
     // Draw the shells
     for(Shell shell : this->shells_to_drop) {
-        SDL_Rect srcrect;
+        SDL_FRect srcrect;
         srcrect.x = this->options->getShellSize() * (int) shell.type;
         srcrect.y = 0;
         srcrect.w = this->options->getShellSize();
         srcrect.h = this->options->getShellSize();
 
-        SDL_Rect dstrect;
+        SDL_FRect dstrect;
         dstrect.x = this->options->getShellSize() * shell.x + this->rect_board.x;
         dstrect.y = this->options->getShellSize() * shell.y + this->rect_board.y + animation;
         dstrect.w = this->options->getShellSize();
@@ -483,7 +483,7 @@ void BoardManager::drawFallingShells(SDL_Renderer * renderer) {
             srcrect.h = dstrect.h;
         }
 
-        SDL_RenderCopy(renderer, textures.getShellTexture(), &srcrect, &dstrect);
+        SDL_RenderTexture(renderer, textures.getShellTexture(), &srcrect, &dstrect);
     }
 }
 
@@ -499,13 +499,13 @@ void BoardManager::drawIntroduction(SDL_Renderer * renderer) {
                 continue;
             }
 
-            SDL_Rect srcrect;
+            SDL_FRect srcrect;
             srcrect.x = this->options->getShellSize() * (int) this->preview[x][y];
             srcrect.y = 0;
             srcrect.w = this->options->getShellSize();
             srcrect.h = this->options->getShellSize();
 
-            SDL_Rect dstrect;
+            SDL_FRect dstrect;
             dstrect.x = this->options->getShellSize() * x + this->rect_board.x;
             dstrect.y = this->options->getShellSize() * y + this->rect_board.y - current_deduction;
             dstrect.w = this->options->getShellSize();
@@ -519,7 +519,7 @@ void BoardManager::drawIntroduction(SDL_Renderer * renderer) {
                 srcrect.h = dstrect.h;
             }
 
-            SDL_RenderCopy(renderer, textures.getShellTexture(), &srcrect, &dstrect);
+            SDL_RenderTexture(renderer, textures.getShellTexture(), &srcrect, &dstrect);
         }
     }
     if (this->level_updated) {
@@ -536,8 +536,8 @@ void BoardManager::drawIntroduction(SDL_Renderer * renderer) {
         this->text_introduction = fonts->getTexture(renderer, introduction_string, FontType::NORMAL, {255, 255, 255, 255});
     }
     // Render Introduction text
-    SDL_Rect rect_introduction = {rect_scoreboard.x + rect_scoreboard.w / 2 , rect_scoreboard.y, 0, 0};
-    SDL_QueryTexture(text_introduction, NULL, NULL, &rect_introduction.w, &rect_introduction.h);
+    SDL_FRect rect_introduction = {rect_scoreboard.x + rect_scoreboard.w / 2 , rect_scoreboard.y, 0, 0};
+    SDL_GetTextureSize(text_introduction, &rect_introduction.w, &rect_introduction.h);
     rect_introduction.x -= rect_introduction.w / 2;
     rect_introduction.y += this->options->getShellSize() / 2 - rect_introduction.h / 2;
 
@@ -545,7 +545,7 @@ void BoardManager::drawIntroduction(SDL_Renderer * renderer) {
         rect_introduction.y += animation;
     }
 
-    SDL_RenderCopy(renderer, text_introduction, NULL, &rect_introduction);
+    SDL_RenderTexture(renderer, text_introduction, NULL, &rect_introduction);
 }
 
 bool BoardManager::isDoubleMatch(Match match) {
@@ -592,13 +592,13 @@ void BoardManager::drawMatches(SDL_Renderer * renderer) {
             current_shell_size = (this->options->getShellSize()*(MATCH_STEPS-animation))/MATCH_STEPS;
         }
         for(int i = 0; i < 3; i++) {
-            SDL_Rect srcrect;
+            SDL_FRect srcrect;
             srcrect.x = this->options->getShellSize() * (int) match.type;
             srcrect.y = 0;
             srcrect.w = this->options->getShellSize();
             srcrect.h = this->options->getShellSize();
 
-            SDL_Rect dstrect;
+            SDL_FRect dstrect;
             dstrect.x = this->options->getShellSize() * match.x + this->rect_board.x + (this->options->getShellSize() - current_shell_size) / 2;
             dstrect.y = this->options->getShellSize() * match.y + this->rect_board.y + (this->options->getShellSize() - current_shell_size) / 2;
             dstrect.w = current_shell_size;
@@ -616,7 +616,7 @@ void BoardManager::drawMatches(SDL_Renderer * renderer) {
                 dstrect.y += (rect_moves.y-dstrect.y)/MATCH_STEPS*animation;
             }
 
-            SDL_RenderCopy(renderer, textures.getShellTexture(), &srcrect, &dstrect);
+            SDL_RenderTexture(renderer, textures.getShellTexture(), &srcrect, &dstrect);
         }
 
         if (this->isRelaxedMode || match.type != ShellType::BUBBLE) {
@@ -640,8 +640,8 @@ void BoardManager::drawMatches(SDL_Renderer * renderer) {
                 }
             }
 
-            SDL_Rect rect_plus_one = {this->options->getShellSize() * match.x + this->rect_board.x, this->options->getShellSize() * match.y + this->rect_board.y, 0, 0};
-            SDL_QueryTexture(text, NULL, NULL, &rect_plus_one.w, &rect_plus_one.h);
+            SDL_FRect rect_plus_one = {this->options->getShellSize() * match.x + this->rect_board.x, this->options->getShellSize() * match.y + this->rect_board.y, 0, 0};
+            SDL_GetTextureSize(text, &rect_plus_one.w, &rect_plus_one.h);
             rect_plus_one.x += this->options->getShellSize()/2 - rect_plus_one.w/2;
             rect_plus_one.y += this->options->getShellSize()/2 - rect_plus_one.h/2;
             if (match.direction == Direction::HORIZONTAL) {
@@ -654,7 +654,7 @@ void BoardManager::drawMatches(SDL_Renderer * renderer) {
             rect_plus_one.x += (rect_matches.x-rect_plus_one.x)/MATCH_STEPS*animation;
             rect_plus_one.y += (rect_matches.y-rect_plus_one.y)/MATCH_STEPS*animation;
 
-            SDL_RenderCopy(renderer, text, NULL, &rect_plus_one);
+            SDL_RenderTexture(renderer, text, NULL, &rect_plus_one);
         }
     }
 }
@@ -665,7 +665,7 @@ void BoardManager::drawScoringBox(SDL_Renderer * renderer) {
     SDL_RenderFillRect(renderer, &rect_scoreboard);
 
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-    SDL_RenderDrawLine(renderer,
+    SDL_RenderLine(renderer,
         rect_scoreboard.x,
         rect_scoreboard.y,
         rect_scoreboard.x +rect_scoreboard.w,
@@ -707,27 +707,27 @@ void BoardManager::drawInfo(SDL_Renderer * renderer) {
 
     // Render level
     if (!this->isRelaxedMode) {
-        SDL_Rect rect_level = {rect_scoreboard.x, rect_scoreboard.y, 0, 0};
-        SDL_QueryTexture(text_level, NULL, NULL, &rect_level.w, &rect_level.h);
+        SDL_FRect rect_level = {rect_scoreboard.x, rect_scoreboard.y, 0, 0};
+        SDL_GetTextureSize(text_level, &rect_level.w, &rect_level.h);
         rect_level.x += this->options->getShellSize() / 2;
         rect_level.y += this->options->getShellSize() / 2 - rect_level.h / 2;
-        SDL_RenderCopy(renderer, text_level, NULL, &rect_level);
+        SDL_RenderTexture(renderer, text_level, NULL, &rect_level);
     }
 
     // Render matches
     this->rect_matches = {rect_scoreboard.x + rect_scoreboard.w / 2 , rect_scoreboard.y, 0, 0};
-    SDL_QueryTexture(text_matches, NULL, NULL, &rect_matches.w, &rect_matches.h);
+    SDL_GetTextureSize(text_matches, &rect_matches.w, &rect_matches.h);
     rect_matches.x -= rect_matches.w / 2;
     rect_matches.y += this->options->getShellSize() / 2 - rect_matches.h / 2;
-    SDL_RenderCopy(renderer, text_matches, NULL, &rect_matches);
+    SDL_RenderTexture(renderer, text_matches, NULL, &rect_matches);
 
     // Render moves
     if (!this->isRelaxedMode) {
         this->rect_moves = {rect_scoreboard.x + rect_scoreboard.w, rect_scoreboard.y, 0, 0};
-        SDL_QueryTexture(text_moves, NULL, NULL, &rect_moves.w, &rect_moves.h);
+        SDL_GetTextureSize(text_moves, &rect_moves.w, &rect_moves.h);
         rect_moves.x -= this->options->getShellSize() / 2 + rect_moves.w;
         rect_moves.y += this->options->getShellSize() / 2 - rect_moves.h / 2;
-        SDL_RenderCopy(renderer, text_moves, NULL, &rect_moves);
+        SDL_RenderTexture(renderer, text_moves, NULL, &rect_moves);
     }
 }
 

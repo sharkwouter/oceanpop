@@ -1,5 +1,3 @@
-#ifdef TRANSLATION_SUPPORT
-
 #include "TranslationManager.hpp"
 
 #include <iostream>
@@ -48,24 +46,23 @@ void TranslationManager::loadTranslations() {
 std::vector<std::string> TranslationManager::getSystemLanguageList() {
     std::vector<std::string> locales;
 
-    SDL_Locale * preferred_locales = SDL_GetPreferredLocales();
-    if(preferred_locales) {
-        for (SDL_Locale * l = preferred_locales; l->language; l++) {
-            std::string language = std::string(l->language);
-            std::string country = "";
-            if (l->country) {
-                country = std::string(l->country);
-            }
-            std::string char_set = "UTF-8";
-            std::string current_locale;
-            if (country.empty()) {
-                locales.push_back(language + "." + char_set);
-            } else {
-                locales.push_back(language + "_" + country + "." + char_set);
-                locales.push_back(language + "_" + country);
-            }
-            locales.push_back(language);
+    int locale_count = 0;
+    SDL_Locale ** preferred_locales = SDL_GetPreferredLocales(&locale_count);
+    for (int i = 0; i < locale_count ;i++) {
+        std::string language = preferred_locales[i]->language;
+        std::string country = "";
+        if (preferred_locales[i]->country) {
+            country = std::string(preferred_locales[i]->country);
         }
+        std::string char_set = "UTF-8";
+        std::string current_locale;
+        if (country.empty()) {
+            locales.push_back(language + "." + char_set);
+        } else {
+            locales.push_back(language + "_" + country + "." + char_set);
+            locales.push_back(language + "_" + country);
+        }
+        locales.push_back(language);
     }
 
     return locales;
@@ -78,5 +75,3 @@ std::string TranslationManager::translate(std::string input) {
         return input;
     }
 }
-
-#endif // TRANSLATION_SUPPORT

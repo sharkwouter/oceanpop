@@ -16,19 +16,19 @@ void PauseScreen::draw(SDL_Renderer * renderer) {
     if (!this->title) {
         this->title = fonts->getTexture(renderer, this->title_string, FontType::TITLE, {255, 255, 255, 255});
     }
-    SDL_Rect rect_completed = {this->options->getScreenWidth()/2, this->options->getScreenHeight()/3, 0, 0};
-    SDL_QueryTexture(title, NULL, NULL, &rect_completed.w, &rect_completed.h);
-    rect_completed.x -=  rect_completed.w/2;
-    rect_completed.y -= rect_completed.h/2;
+    SDL_FRect rect_completed = {(float) this->options->getScreenWidth() / 2.0f, (float) this->options->getScreenHeight() / 3.0f, 0.0f, 0.0f};
+    SDL_GetTextureSize(title, &rect_completed.w, &rect_completed.h);
+    rect_completed.x -=  rect_completed.w / 2.0f;
+    rect_completed.y -= rect_completed.h / 2.0f;
 
     if (!this->subtitle) {
         this->subtitle = fonts->getTexture(renderer, this->subtitle_string, FontType::NORMAL, {255, 255, 255, 255});
     }
-    SDL_Rect rect_completed_subtitle = {this->options->getScreenWidth()/2, rect_completed.y + rect_completed.h, 0, 0};
-    SDL_QueryTexture(subtitle, NULL, NULL, &rect_completed_subtitle.w, &rect_completed_subtitle.h);
-    rect_completed_subtitle.x -=  rect_completed_subtitle.w/2;
+    SDL_FRect rect_completed_subtitle = {(float) this->options->getScreenWidth() / 2.0f, rect_completed.y + rect_completed.h, 0.0f, 0.0f};
+    SDL_GetTextureSize(subtitle, &rect_completed_subtitle.w, &rect_completed_subtitle.h);
+    rect_completed_subtitle.x -=  rect_completed_subtitle.w / 2.0f;
 
-    SDL_Rect rect_background;
+    SDL_FRect rect_background;
     rect_background.x = std::min(rect_completed.x, rect_completed_subtitle.x) - this->options->getShellSize()/2;
     rect_background.y = std::min(rect_completed.y, rect_completed_subtitle.y) - this->options->getShellSize()/2;
     rect_background.w = std::max(rect_completed.w, rect_completed_subtitle.w) + this->options->getShellSize();
@@ -38,10 +38,10 @@ void PauseScreen::draw(SDL_Renderer * renderer) {
     SDL_RenderFillRect(renderer, &rect_background);
 
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-    SDL_RenderDrawRect(renderer, &rect_background);
+    SDL_RenderRect(renderer, &rect_background);
 
-    SDL_RenderCopy(renderer, title, NULL, &rect_completed);
-    SDL_RenderCopy(renderer, subtitle, NULL, &rect_completed_subtitle);
+    SDL_RenderTexture(renderer, title, NULL, &rect_completed);
+    SDL_RenderTexture(renderer, subtitle, NULL, &rect_completed_subtitle);
 }
 
 void PauseScreen::updateSizing() {

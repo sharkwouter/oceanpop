@@ -1,9 +1,9 @@
 #ifndef THEMEMANAGER_H
 #define THEMEMANAGER_H
 
-#include <SDL.h>
-#include <SDL_image.h>
-#include <SDL_mixer.h>
+#include <SDL3/SDL.h>
+#include <SDL3_image/SDL_image.h>
+#include <SDL3_mixer/SDL_mixer.h>
 #include <string>
 
 #include "OptionManager.hpp"
@@ -18,14 +18,16 @@ private:
     Theme theme;
     Theme music_theme;
 
-    Mix_Music * music = NULL;
-    SDL_Texture * background = NULL;
+    MIX_Mixer * mixer = nullptr;
+    MIX_Audio * music = nullptr;
+    MIX_Track * music_track = nullptr;
+    SDL_Texture * background = nullptr;
 
     bool paused = false;
 
     bool change_music_on_switch;
-    int volume;
-    int current_volume = 0;
+    float volume;
+    float current_volume = 0;
 
     void load(Theme theme);
     void loadBackground(Theme theme);
@@ -36,7 +38,7 @@ private:
 
     SDL_Texture * createBackgroundTexture(std::string filename);
 public:
-    ThemeManager(SDL_Renderer * renderer, OptionManager * options, Theme theme);
+    ThemeManager(SDL_Renderer * renderer, MIX_Mixer * mixer, OptionManager * options, Theme theme);
     ~ThemeManager();
 
     void update();

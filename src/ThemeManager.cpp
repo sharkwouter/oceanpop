@@ -2,19 +2,20 @@
 
 #include "utils.hpp"
 
-ThemeManager::ThemeManager(SDL_Renderer * renderer, OptionManager * options, Theme theme) : renderer(renderer), options(options) {
+ThemeManager::ThemeManager(SDL_Renderer * renderer, MIX_Mixer * mixer, OptionManager * options, Theme theme) : renderer(renderer), mixer(mixer), options(options) {
     this->change_music_on_switch = this->options->getChangeMusicOnSwitch();
-    this->volume = MIX_MAX_VOLUME/8*this->options->getMusicVolume();
+    this->volume = 0.125f * (float) this->options->getMusicVolume();
     this->current_volume = this->volume;
-    Mix_VolumeMusic(this->current_volume);
+    this->music_track = MIX_CreateTrack(this->mixer);
+    MIX_SetTrackGain(this->music_track, this->current_volume);
 
     load(theme);
 }
 
 ThemeManager::~ThemeManager() {
-    Mix_HaltMusic();
+    MIX_StopTrack(this->music_track, 0);
     if (this->music != NULL) {
-        Mix_FreeMusic(this->music);
+        MIX_DestroyAudio(this->music);
     }
     SDL_DestroyTexture(this->background);
 }
@@ -57,13 +58,13 @@ void ThemeManager::loadMusic(Theme theme) {
     }
 
     if (this->music != NULL) {
-        Mix_HaltMusic();
-        Mix_FreeMusic(this->music);
+        MIX_StopTrack(this->music_track, 0);
+        MIX_DestroyAudio(this->music);
     }
 
     this->music_theme = theme;
 
-#ifdef __PS2__
+#ifdef SDL_PLATFORM_PS2
     std::string music_file_type = "wav";
 #else
     std::string music_file_type = "mp3";
@@ -71,16 +72,16 @@ void ThemeManager::loadMusic(Theme theme) {
 
     switch (this->music_theme) {
         case Theme::THEME1:
-            this->music = Mix_LoadMUS(getResourcePath("assets/music/song1." + music_file_type).c_str());
+            this->music = MIX_LoadAudio(this->mixer, getResourcePath("assets/music/song1." + music_file_type).c_str(), false);
             break;
         case Theme::THEME2:
-            this->music = Mix_LoadMUS(getResourcePath("assets/music/song2." + music_file_type).c_str());
+            this->music = MIX_LoadAudio(this->mixer, getResourcePath("assets/music/song2." + music_file_type).c_str(), false);
             break;
         case Theme::THEME3:
-            this->music = Mix_LoadMUS(getResourcePath("assets/music/song3." + music_file_type).c_str());
+            this->music = MIX_LoadAudio(this->mixer, getResourcePath("assets/music/song3." + music_file_type).c_str(), false);
             break;
         case Theme::THEME4:
-            this->music = Mix_LoadMUS(getResourcePath("assets/music/song4." + music_file_type).c_str());
+            this->music = MIX_LoadAudio(this->mixer, getResourcePath("assets/music/song4." + music_file_type).c_str(), false);
             break;
         default:
             this->music = NULL;
@@ -89,7 +90,8 @@ void ThemeManager::loadMusic(Theme theme) {
     }
 
     this->current_volume = 0;
-    Mix_PlayMusic(this->music, 0);
+    MIX_SetTrackAudio(this->music_track, this->music);
+    MIX_PlayTrack(this->music_track, 0);
 }
 
 void ThemeManager::update() {
@@ -97,19 +99,19 @@ void ThemeManager::update() {
         return;
     }
 
-    if (!Mix_PlayingMusic()) {
+    if (!MIX_TrackPlaying(this->music_track)) {
         nextSong();
     }
 
     if(this->current_volume < this->volume) {
-        this->current_volume++;
-        Mix_VolumeMusic(this->current_volume);
+        this->current_volume += 0.125f;
+        MIX_SetTrackGain(this->music_track, this->current_volume);
     }
 }
 
 void ThemeManager::draw(SDL_Renderer * renderer) {
     if (this->background) {
-        SDL_RenderCopy(renderer, this->background, NULL, NULL);
+        SDL_RenderTexture(renderer, this->background, NULL, NULL);
     }
 }
 
@@ -162,8 +164,8 @@ void ThemeManager::switchTheme(int theme) {
 
 void ThemeManager::pause() {
     if (!this->paused) {
-        this->current_volume = 0;
-        Mix_VolumeMusic(this->current_volume);
+        this->current_volume = 0.0f;
+        MIX_SetTrackGain(this->music_track, this->current_volume);
         this->paused = true;
     }
 }
@@ -171,7 +173,7 @@ void ThemeManager::pause() {
 void ThemeManager::unpause() {
     if (this->paused) {
         this->current_volume = this->volume;
-        Mix_VolumeMusic(this->current_volume);
+        MIX_SetTrackGain(this->music_track, this->current_volume);
         this->paused = false;
     }
 }
@@ -182,16 +184,16 @@ SDL_Texture * ThemeManager::createBackgroundTexture(std::string filename) {
     SDL_Surface *img = IMG_Load(path.c_str());
 
     if (img == nullptr) {
-        panic("couldn't load image: " + std::string(IMG_GetError()));
+        panic("couldn't load image: " + std::string(SDL_GetError()));
     }
 
     SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer, img);
-    SDL_FreeSurface(img);
+    SDL_DestroySurface(img);
 
     if (texture == nullptr) {
         panic("couldn't create texture from surface: " + std::string(SDL_GetError()));
     }
-    SDL_SetTextureScaleMode(texture, SDL_ScaleModeBest);
+    SDL_SetTextureScaleMode(texture, SDL_SCALEMODE_LINEAR);
 
     return texture;
 }

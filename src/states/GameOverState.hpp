@@ -1,7 +1,7 @@
 #ifndef GAMEOVERSTATE_HPP
 #define GAMEOVERSTATE_HPP
 
-#include <SDL.h>
+#include <SDL3/SDL.h>
 
 #include <vector>
 #include <filesystem>

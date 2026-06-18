@@ -2,7 +2,8 @@
 #include <stdexcept>
 #include <vector>
 
-#include <SDL.h>
+#include <SDL3/SDL.h>
+#include <SDL3/SDL_main.h>
 #include <json/json.h>
 
 #include "Window.hpp"
@@ -16,10 +17,8 @@
 #include "constants.hpp"
 #include "states/MenuState.hpp"
 
-#ifdef TRANSLATION_SUPPORT
-    // Create global TranslationManager object set in utils.h
-    TranslationManager translation_manager;
-#endif
+// Create global TranslationManager object set in utils.h
+TranslationManager translation_manager;
 
 void run() {
     OptionManager option_manager;

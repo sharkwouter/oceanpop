@@ -1,7 +1,7 @@
 #ifndef BASESTATE_HPP
 #define BASESTATE_HPP
 
-#include <SDL.h>
+#include <SDL3/SDL.h>
 
 #include "../Event.hpp"
 #include "State.hpp"

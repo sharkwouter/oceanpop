@@ -10,7 +10,7 @@
 #include <iostream>
 
 CreditsState::CreditsState(SDL_Renderer * renderer, FontManager * fonts, SoundManager * sounds, OptionManager * options) : renderer(renderer), fonts(fonts), sounds(sounds), options(options),
-    theme(renderer, options, Theme::MENU)
+    theme(renderer, sounds->getMixer(), options, Theme::MENU)
 {
     this->loadTitles();
     this->loadCredits();
@@ -90,21 +90,21 @@ void CreditsState::draw(SDL_Renderer * renderer) {
     }
 
     // Draw title
-    SDL_Rect rect_title = {this->options->getScreenWidth() / 2, this->options->getScreenHeight() / 8, 0, 0};
-    SDL_QueryTexture(text_title, NULL, NULL, &rect_title.w, &rect_title.h);
+    SDL_FRect rect_title = {(float) this->options->getScreenWidth() / 2.0f, (float) this->options->getScreenHeight() / 8.0f, 0, 0};
+    SDL_GetTextureSize(text_title, &rect_title.w, &rect_title.h);
     rect_title.x -= rect_title.w/2;
     rect_title.y -= rect_title.h/2;
-    SDL_RenderCopy(renderer, text_title, NULL, &rect_title);
+    SDL_RenderTexture(renderer, text_title, NULL, &rect_title);
 
     // Draw bottom text
-    SDL_Rect rect_bottom = {this->options->getScreenWidth()/2, this->options->getScreenHeight(), 0, 0};
-    SDL_QueryTexture(text_bottom, NULL, NULL, &rect_bottom.w, &rect_bottom.h);
+    SDL_FRect rect_bottom = {(float) this->options->getScreenWidth() / 2.0f, (float) this->options->getScreenHeight(), 0, 0};
+    SDL_GetTextureSize(text_bottom, &rect_bottom.w, &rect_bottom.h);
     rect_bottom.x -= rect_bottom.w/2;
     rect_bottom.y -= rect_bottom.h * 1.5;
-    SDL_RenderCopy(renderer, text_bottom, NULL, &rect_bottom);
+    SDL_RenderTexture(renderer, text_bottom, NULL, &rect_bottom);
 
     // Draw background
-    SDL_Rect rect_background;
+    SDL_FRect rect_background;
     rect_background.x = 0;
     rect_background.y = this->options->getScreenHeight()/4;
     rect_background.w = this->options->getScreenWidth();
@@ -114,7 +114,7 @@ void CreditsState::draw(SDL_Renderer * renderer) {
     SDL_RenderFillRect(renderer, &rect_background);
 
     // Draw scroll bar pointer
-    SDL_Rect rect_pointer;
+    SDL_FRect rect_pointer;
     rect_pointer.w = this->options->getShellSize() / 4;
     rect_pointer.x = this->options->getScreenWidth() - rect_pointer.w;
     rect_pointer.y = rect_background.y + ((float) rect_background.h / (float) this->credits.size() * this->position);
@@ -124,19 +124,19 @@ void CreditsState::draw(SDL_Renderer * renderer) {
     SDL_RenderFillRect(renderer, &rect_pointer);
 
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
-    SDL_RenderDrawLine(renderer,
+    SDL_RenderLine(renderer,
         rect_pointer.x,
         rect_background.y,
         rect_pointer.x,
         rect_background.y + rect_background.h
     );
-    SDL_RenderDrawLine(renderer,
+    SDL_RenderLine(renderer,
         0,
         rect_background.y,
         this->options->getScreenWidth(),
         rect_background.y
     );
-    SDL_RenderDrawLine(renderer,
+    SDL_RenderLine(renderer,
         0,
         rect_background.y + rect_background.h,
         this->options->getScreenWidth() + rect_background.w,
@@ -144,7 +144,7 @@ void CreditsState::draw(SDL_Renderer * renderer) {
     );
 
     // Draw credits text
-    int current_y = this->options->getScreenHeight()/4;
+    float current_y = (float) this->options->getScreenHeight() / 4.0f;
     for(int i = this->position; i < (int) this->credits.size(); i++) {
         if (this->credits[i].empty()) {
             current_y += empty_line_height;
@@ -160,9 +160,9 @@ void CreditsState::draw(SDL_Renderer * renderer) {
             }
         }
 
-        SDL_Rect rect = {this->options->getScreenWidth()/2, current_y, 0, 0};
-        SDL_QueryTexture(this->texts[i], NULL, NULL, &rect.w, &rect.h);
-        rect.x -= rect.w/2;
+        SDL_FRect rect = {(float) this->options->getScreenWidth() / 2.0f, (float) current_y, 0, 0};
+        SDL_GetTextureSize(this->texts[i], &rect.w, &rect.h);
+        rect.x -= rect.w / 2.0f;
 
         // Break loop if there is no space left to draw
         current_y += rect.h;
@@ -172,7 +172,7 @@ void CreditsState::draw(SDL_Renderer * renderer) {
         }
 
         // Render the option text
-        SDL_RenderCopy(renderer, this->texts[i], NULL, &rect);
+        SDL_RenderTexture(renderer, this->texts[i], NULL, &rect);
 
         // Also allow the last line to be set as the last line visible
         if (i == (int) this->credits.size() - 1) {

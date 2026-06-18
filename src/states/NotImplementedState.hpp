@@ -1,7 +1,7 @@
 #ifndef NOTIMPLEMENTEDSTATE_HPP
 #define NOTIMPLEMENTEDSTATE_HPP
 
-#include <SDL.h>
+#include <SDL3/SDL.h>
 
 #include <vector>
 
