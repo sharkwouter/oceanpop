@@ -3,7 +3,8 @@
 Creator Wouter (Sharkwouter) Wijsman
 Support initial setup by ProTheory8 on GitHub
 Contributions and support by Naddoska on GitHub
-Wii Port by mardy on GitHub
+Wii port by mardy on GitHub
+PS2 port by Wolf3s on GitHub
 
 # Assets
 
